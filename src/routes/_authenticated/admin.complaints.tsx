@@ -54,7 +54,7 @@ function ComplaintsAdmin() {
                 </div>
               </div>
               <p className="text-sm mb-3">{c.complaint_text}</p>
-              {c.ai_result && typeof c.ai_result === "object" && (
+              {Boolean(c.ai_result) && typeof c.ai_result === "object" && (
                 <div className="rounded bg-secondary/40 p-3 mb-3 text-xs">
                   <div className="mono text-[0.55rem] text-cyber mb-1">AI ANALYSIS</div>
                   <div><b>Explanation:</b> {(c.ai_result as { explanation?: string }).explanation}</div>
