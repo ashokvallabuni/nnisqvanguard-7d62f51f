@@ -15,7 +15,7 @@ function BookingsAdmin() {
     },
   });
 
-  const update = async (id: string, patch: Record<string, unknown>) => {
+  const update = async (id: string, patch: { status?: string; scheduled_at?: string | null; notes?: string | null }) => {
     const { error } = await supabase.from("bookings").update(patch).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Updated");
