@@ -70,6 +70,35 @@ function Dashboard() {
         </div>
 
         <section className="mb-10">
+          <h2 className="display text-2xl mb-3">My Learning</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {(courses ?? []).map((c) => {
+              const pct = pctByCourse(c.id);
+              const locked = c.tier === "paid";
+              return (
+                <Link key={c.id} to="/learn/$slug" params={{ slug: c.slug }} className="glass rounded-xl p-5 hover:glow-cyber transition">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded bg-primary/10 border border-primary/40 flex items-center justify-center text-cyber">
+                      {locked ? <Lock className="w-4 h-4" /> : <BookOpen className="w-4 h-4" />}
+                    </div>
+                    <span className={`mono text-[0.5rem] px-2 py-1 rounded border ${locked ? "text-accent border-accent/40" : "text-success border-success/40"}`}>{locked ? "PREMIUM" : "FREE"}</span>
+                  </div>
+                  <div className="display text-lg mb-2">{c.title}</div>
+                  {!locked && (
+                    <>
+                      <div className="h-1 bg-border rounded-full overflow-hidden mb-1"><div className="h-full bg-primary" style={{ width: `${pct}%` }} /></div>
+                      <div className="mono text-[0.55rem] text-muted-foreground">{pct}% COMPLETE</div>
+                    </>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+
+
+        <section className="mb-10">
           <h2 className="display text-2xl mb-3">My Bookings</h2>
           <div className="glass rounded-xl overflow-hidden">
             {(!bookings || bookings.length === 0) ? (
