@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ScanSearch, AlertTriangle, GraduationCap } from "lucide-react";
+import { ScanSearch, AlertTriangle, GraduationCap, BookOpen, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "My Account — CyberShield India" }] }),
