@@ -27,6 +27,34 @@ function Dashboard() {
     },
     enabled: !!user,
   });
+  const { data: courses } = useQuery({
+    queryKey: ["dash-courses"],
+    queryFn: async () => {
+      const { data } = await supabase.from("courses").select("id,slug,title,tier,description").order("sort_order");
+      return data ?? [];
+    },
+  });
+  const { data: progress } = useQuery({
+    queryKey: ["dash-progress", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("module_progress").select("module_id,completed,modules(course_id)").eq("user_id", user!.id);
+      return data ?? [];
+    },
+    enabled: !!user,
+  });
+  const { data: allModules } = useQuery({
+    queryKey: ["dash-modules"],
+    queryFn: async () => {
+      const { data } = await supabase.from("modules").select("id,course_id");
+      return data ?? [];
+    },
+  });
+  const pctByCourse = (cid: string) => {
+    const total = (allModules ?? []).filter((m) => m.course_id === cid).length;
+    if (!total) return 0;
+    const done = (progress ?? []).filter((p) => p.completed && (p.modules as { course_id: string } | null)?.course_id === cid).length;
+    return Math.round((done / total) * 100);
+  };
 
   return (
     <main className="pt-24 pb-20 px-4 md:px-8">
