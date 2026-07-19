@@ -16,6 +16,8 @@ import { Route as ComplaintRouteImport } from './routes/complaint'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LearnIndexRouteImport } from './routes/learn.index'
+import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -24,6 +26,7 @@ import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
 import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
+import { Route as AuthenticatedLearnSlugModuleSlugRouteImport } from './routes/_authenticated/learn.$slug.$moduleSlug'
 
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
@@ -57,6 +60,16 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnIndexRoute = LearnIndexRouteImport.update({
+  id: '/learn/',
+  path: '/learn/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnSlugRoute = LearnSlugRouteImport.update({
+  id: '/learn/$slug',
+  path: '/learn/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -103,6 +116,12 @@ const AuthenticatedAdminBookingsRoute =
     path: '/bookings',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedLearnSlugModuleSlugRoute =
+  AuthenticatedLearnSlugModuleSlugRouteImport.update({
+    id: '/learn/$slug/$moduleSlug',
+    path: '/learn/$slug/$moduleSlug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -113,12 +132,15 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn/$slug': typeof LearnSlugRoute
+  '/learn/': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -128,12 +150,15 @@ export interface FileRoutesByTo {
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn/$slug': typeof LearnSlugRoute
+  '/learn': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -146,12 +171,15 @@ export interface FileRoutesById {
   '/team': typeof TeamRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn/$slug': typeof LearnSlugRoute
+  '/learn/': typeof LearnIndexRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/_authenticated/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/_authenticated/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -164,12 +192,15 @@ export interface FileRouteTypes {
     | '/team'
     | '/admin'
     | '/dashboard'
+    | '/learn/$slug'
+    | '/learn/'
     | '/admin/bookings'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
     | '/admin/'
+    | '/learn/$slug/$moduleSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -179,12 +210,15 @@ export interface FileRouteTypes {
     | '/programs'
     | '/team'
     | '/dashboard'
+    | '/learn/$slug'
+    | '/learn'
     | '/admin/bookings'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
     | '/admin'
+    | '/learn/$slug/$moduleSlug'
   id:
     | '__root__'
     | '/'
@@ -196,12 +230,15 @@ export interface FileRouteTypes {
     | '/team'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/learn/$slug'
+    | '/learn/'
     | '/_authenticated/admin/bookings'
     | '/_authenticated/admin/colleges'
     | '/_authenticated/admin/complaints'
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/team'
     | '/_authenticated/admin/'
+    | '/_authenticated/learn/$slug/$moduleSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -212,6 +249,8 @@ export interface RootRouteChildren {
   FraudCheckRoute: typeof FraudCheckRoute
   ProgramsRoute: typeof ProgramsRoute
   TeamRoute: typeof TeamRoute
+  LearnSlugRoute: typeof LearnSlugRoute
+  LearnIndexRoute: typeof LearnIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -263,6 +302,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/': {
+      id: '/learn/'
+      path: '/learn'
+      fullPath: '/learn/'
+      preLoaderRoute: typeof LearnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/$slug': {
+      id: '/learn/$slug'
+      path: '/learn/$slug'
+      fullPath: '/learn/$slug'
+      preLoaderRoute: typeof LearnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -321,6 +374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/learn/$slug/$moduleSlug': {
+      id: '/_authenticated/learn/$slug/$moduleSlug'
+      path: '/learn/$slug/$moduleSlug'
+      fullPath: '/learn/$slug/$moduleSlug'
+      preLoaderRoute: typeof AuthenticatedLearnSlugModuleSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -348,11 +408,13 @@ const AuthenticatedAdminRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedLearnSlugModuleSlugRoute: typeof AuthenticatedLearnSlugModuleSlugRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedLearnSlugModuleSlugRoute: AuthenticatedLearnSlugModuleSlugRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -366,6 +428,8 @@ const rootRouteChildren: RootRouteChildren = {
   FraudCheckRoute: FraudCheckRoute,
   ProgramsRoute: ProgramsRoute,
   TeamRoute: TeamRoute,
+  LearnSlugRoute: LearnSlugRoute,
+  LearnIndexRoute: LearnIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

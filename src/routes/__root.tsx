@@ -108,6 +108,7 @@ function TopNav() {
 
   const links = [
     { to: "/", label: "Home" },
+    { to: "/learn", label: "Learn" },
     { to: "/programs", label: "Programs" },
     { to: "/fraud-check", label: "Fraud Check" },
     { to: "/complaint", label: "File Complaint" },

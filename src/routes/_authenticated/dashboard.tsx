@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ScanSearch, AlertTriangle, GraduationCap } from "lucide-react";
+import { ScanSearch, AlertTriangle, GraduationCap, BookOpen, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "My Account — CyberShield India" }] }),
@@ -27,6 +27,34 @@ function Dashboard() {
     },
     enabled: !!user,
   });
+  const { data: courses } = useQuery({
+    queryKey: ["dash-courses"],
+    queryFn: async () => {
+      const { data } = await supabase.from("courses").select("id,slug,title,tier,description").order("sort_order");
+      return data ?? [];
+    },
+  });
+  const { data: progress } = useQuery({
+    queryKey: ["dash-progress", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("module_progress").select("module_id,completed,modules(course_id)").eq("user_id", user!.id);
+      return data ?? [];
+    },
+    enabled: !!user,
+  });
+  const { data: allModules } = useQuery({
+    queryKey: ["dash-modules"],
+    queryFn: async () => {
+      const { data } = await supabase.from("modules").select("id,course_id");
+      return data ?? [];
+    },
+  });
+  const pctByCourse = (cid: string) => {
+    const total = (allModules ?? []).filter((m) => m.course_id === cid).length;
+    if (!total) return 0;
+    const done = (progress ?? []).filter((p) => p.completed && (p.modules as { course_id: string } | null)?.course_id === cid).length;
+    return Math.round((done / total) * 100);
+  };
 
   return (
     <main className="pt-24 pb-20 px-4 md:px-8">
@@ -40,6 +68,35 @@ function Dashboard() {
           <QuickCard to="/complaint" icon={<AlertTriangle className="w-5 h-5" />} label="File Complaint" />
           <QuickCard to="/programs" icon={<GraduationCap className="w-5 h-5" />} label="Book Program" />
         </div>
+
+        <section className="mb-10">
+          <h2 className="display text-2xl mb-3">My Learning</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {(courses ?? []).map((c) => {
+              const pct = pctByCourse(c.id);
+              const locked = c.tier === "paid";
+              return (
+                <Link key={c.id} to="/learn/$slug" params={{ slug: c.slug }} className="glass rounded-xl p-5 hover:glow-cyber transition">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded bg-primary/10 border border-primary/40 flex items-center justify-center text-cyber">
+                      {locked ? <Lock className="w-4 h-4" /> : <BookOpen className="w-4 h-4" />}
+                    </div>
+                    <span className={`mono text-[0.5rem] px-2 py-1 rounded border ${locked ? "text-accent border-accent/40" : "text-success border-success/40"}`}>{locked ? "PREMIUM" : "FREE"}</span>
+                  </div>
+                  <div className="display text-lg mb-2">{c.title}</div>
+                  {!locked && (
+                    <>
+                      <div className="h-1 bg-border rounded-full overflow-hidden mb-1"><div className="h-full bg-primary" style={{ width: `${pct}%` }} /></div>
+                      <div className="mono text-[0.55rem] text-muted-foreground">{pct}% COMPLETE</div>
+                    </>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+
 
         <section className="mb-10">
           <h2 className="display text-2xl mb-3">My Bookings</h2>
