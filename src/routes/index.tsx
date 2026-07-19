@@ -11,8 +11,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "CyberShield India — AI Fraud Detection & College Cyber Awareness" },
       { name: "description", content: "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India." },
-      { property: "og:title", content: "CyberShield India" },
-      { property: "og:description", content: "AI fraud detection + cyber awareness outreach for Indian colleges." },
+      { property: "og:title", content: "CyberShield India — AI Fraud Detection & College Cyber Awareness" },
+      { property: "og:description", content: "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India." },
     ],
   }),
   component: Home,
