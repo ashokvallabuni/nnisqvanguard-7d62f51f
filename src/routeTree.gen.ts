@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
+import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -63,6 +64,11 @@ const IndexRoute = IndexRouteImport.update({
 const LearnIndexRoute = LearnIndexRouteImport.update({
   id: '/learn/',
   path: '/learn/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnSlugRoute = LearnSlugRouteImport.update({
+  id: '/learn/$slug',
+  path: '/learn/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn/$slug': typeof LearnSlugRoute
   '/learn/': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn/$slug': typeof LearnSlugRoute
   '/learn': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
@@ -154,6 +162,7 @@ export interface FileRoutesById {
   '/team': typeof TeamRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn/$slug': typeof LearnSlugRoute
   '/learn/': typeof LearnIndexRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/_authenticated/admin/colleges': typeof AuthenticatedAdminCollegesRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/admin'
     | '/dashboard'
+    | '/learn/$slug'
     | '/learn/'
     | '/admin/bookings'
     | '/admin/colleges'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/programs'
     | '/team'
     | '/dashboard'
+    | '/learn/$slug'
     | '/learn'
     | '/admin/bookings'
     | '/admin/colleges'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/learn/$slug'
     | '/learn/'
     | '/_authenticated/admin/bookings'
     | '/_authenticated/admin/colleges'
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   FraudCheckRoute: typeof FraudCheckRoute
   ProgramsRoute: typeof ProgramsRoute
   TeamRoute: typeof TeamRoute
+  LearnSlugRoute: typeof LearnSlugRoute
   LearnIndexRoute: typeof LearnIndexRoute
 }
 
@@ -283,6 +296,13 @@ declare module '@tanstack/react-router' {
       path: '/learn'
       fullPath: '/learn/'
       preLoaderRoute: typeof LearnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/$slug': {
+      id: '/learn/$slug'
+      path: '/learn/$slug'
+      fullPath: '/learn/$slug'
+      preLoaderRoute: typeof LearnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -386,6 +406,7 @@ const rootRouteChildren: RootRouteChildren = {
   FraudCheckRoute: FraudCheckRoute,
   ProgramsRoute: ProgramsRoute,
   TeamRoute: TeamRoute,
+  LearnSlugRoute: LearnSlugRoute,
   LearnIndexRoute: LearnIndexRoute,
 }
 export const routeTree = rootRouteImport
