@@ -116,6 +116,42 @@ function Home() {
         </div>
       </section>
 
+      {/* FOUNDER */}
+      <section className="px-4 md:px-8 py-20 border-t border-primary/10">
+        <div className="max-w-5xl mx-auto">
+          <div className="mono text-xs text-cyber mb-2 text-center">// LEADERSHIP</div>
+          <h2 className="display text-4xl md:text-5xl mb-10 text-center">Meet the Founder</h2>
+          <div className="glass rounded-2xl p-6 md:p-10 grid md:grid-cols-[auto_1fr] gap-8 items-center glow-cyber">
+            <div className="relative mx-auto">
+              <div className="w-48 h-48 md:w-56 md:h-56 rounded-2xl overflow-hidden border-2 border-primary/40 glow-cyber">
+                <img src={ashokPhoto.url} alt="Ashok Vallabhuni — Founder, NISQ Vanguard" className="w-full h-full object-cover" />
+              </div>
+              <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-full overflow-hidden border border-primary/40 bg-background">
+                <img src={nisqLogo.url} alt="NISQ Vanguard" className="w-full h-full object-cover" />
+              </div>
+            </div>
+            <div>
+              <div className="mono text-[0.65rem] text-cyber mb-2">FOUNDER · CHIEF ARCHITECT</div>
+              <h3 className="display text-3xl md:text-4xl mb-3">Ashok Vallabhuni</h3>
+              <p className="text-muted-foreground mb-4">
+                Founder of <span className="text-cyber">NISQ Vanguard</span> — an independent cybersecurity awareness
+                and protection initiative dedicated to safeguarding India's students, colleges, and digital citizens
+                from evolving cyber threats.
+              </p>
+              <p className="text-sm text-muted-foreground mb-6">
+                Driving a mission to make cyber safety accessible: real-time scam alerts, AI-assisted fraud detection,
+                incident reporting, and campus-scale awareness programs.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <span className="mono text-[0.6rem] px-3 py-1 rounded-full border border-primary/40 text-cyber">CYBER STRATEGY</span>
+                <span className="mono text-[0.6rem] px-3 py-1 rounded-full border border-primary/40 text-cyber">AI · SECURITY</span>
+                <span className="mono text-[0.6rem] px-3 py-1 rounded-full border border-primary/40 text-cyber">COLLEGE OUTREACH</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="px-4 md:px-8 py-20 border-t border-primary/10">
         <div className="max-w-3xl mx-auto glass rounded-2xl p-10 text-center glow-cyber">
@@ -126,9 +162,13 @@ function Home() {
         </div>
       </section>
 
-      <footer className="px-4 md:px-8 py-10 border-t border-primary/10 text-center mono text-[0.65rem] text-muted-foreground">
-        © CYBERSHIELD INDIA · NATIONAL DIGITAL SAFETY INITIATIVE
+      <footer className="px-4 md:px-8 py-10 border-t border-primary/10 text-center mono text-[0.65rem] text-muted-foreground space-y-2">
+        <div>© NISQ VANGUARD · CYBER PROTECTION & AWARENESS PLATFORM · FOUNDED BY ASHOK VALLABHUNI</div>
+        <div className="text-muted-foreground/70 normal-case tracking-normal font-sans text-xs max-w-2xl mx-auto">
+          This is an independent cybersecurity awareness platform and not affiliated with any government authority.
+        </div>
       </footer>
+
     </main>
   );
 }
