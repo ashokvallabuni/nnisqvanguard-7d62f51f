@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { GraduationCap, Lock, CheckCircle2 } from "lucide-react";
 
-export const Route = createFileRoute("/learn")({
+export const Route = createFileRoute("/learn/")({
   head: () => ({
     meta: [
       { title: "Learn Cybersecurity — NISQ Vanguard" },
