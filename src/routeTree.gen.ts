@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as FraudCheckRouteImport } from './routes/fraud-check'
 import { Route as ComplaintRouteImport } from './routes/complaint'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -33,6 +34,11 @@ const TeamRoute = TeamRouteImport.update({
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FraudCheckRoute = FraudCheckRouteImport.update({
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/complaint': typeof ComplaintRoute
   '/fraud-check': typeof FraudCheckRoute
+  '/learn': typeof LearnRoute
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/complaint': typeof ComplaintRoute
   '/fraud-check': typeof FraudCheckRoute
+  '/learn': typeof LearnRoute
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/complaint': typeof ComplaintRoute
   '/fraud-check': typeof FraudCheckRoute
+  '/learn': typeof LearnRoute
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/complaint'
     | '/fraud-check'
+    | '/learn'
     | '/programs'
     | '/team'
     | '/admin'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/complaint'
     | '/fraud-check'
+    | '/learn'
     | '/programs'
     | '/team'
     | '/dashboard'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/complaint'
     | '/fraud-check'
+    | '/learn'
     | '/programs'
     | '/team'
     | '/_authenticated/admin'
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ComplaintRoute: typeof ComplaintRoute
   FraudCheckRoute: typeof FraudCheckRoute
+  LearnRoute: typeof LearnRoute
   ProgramsRoute: typeof ProgramsRoute
   TeamRoute: typeof TeamRoute
 }
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/programs'
       fullPath: '/programs'
       preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fraud-check': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ComplaintRoute: ComplaintRoute,
   FraudCheckRoute: FraudCheckRoute,
+  LearnRoute: LearnRoute,
   ProgramsRoute: ProgramsRoute,
   TeamRoute: TeamRoute,
 }
