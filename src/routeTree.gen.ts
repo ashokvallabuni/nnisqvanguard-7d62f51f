@@ -18,6 +18,11 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as ApiScoreRouteImport } from './routes/api/score'
+import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
+import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -70,6 +75,31 @@ const LearnIndexRoute = LearnIndexRouteImport.update({
 const LearnSlugRoute = LearnSlugRouteImport.update({
   id: '/learn/$slug',
   path: '/learn/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiScoreRoute = ApiScoreRouteImport.update({
+  id: '/api/score',
+  path: '/api/score',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLiveThreatsRoute = ApiLiveThreatsRouteImport.update({
+  id: '/api/live-threats',
+  path: '/api/live-threats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckUrlRoute = ApiCheckUrlRouteImport.update({
+  id: '/api/check-url',
+  path: '/api/check-url',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -132,6 +162,11 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/check-url': typeof ApiCheckUrlRoute
+  '/api/live-threats': typeof ApiLiveThreatsRoute
+  '/api/score': typeof ApiScoreRoute
+  '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
   '/learn/': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
@@ -150,6 +185,11 @@ export interface FileRoutesByTo {
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/check-url': typeof ApiCheckUrlRoute
+  '/api/live-threats': typeof ApiLiveThreatsRoute
+  '/api/score': typeof ApiScoreRoute
+  '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
   '/learn': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
@@ -171,6 +211,11 @@ export interface FileRoutesById {
   '/team': typeof TeamRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/check-url': typeof ApiCheckUrlRoute
+  '/api/live-threats': typeof ApiLiveThreatsRoute
+  '/api/score': typeof ApiScoreRoute
+  '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
   '/learn/': typeof LearnIndexRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
@@ -192,6 +237,11 @@ export interface FileRouteTypes {
     | '/team'
     | '/admin'
     | '/dashboard'
+    | '/api/chat'
+    | '/api/check-url'
+    | '/api/live-threats'
+    | '/api/score'
+    | '/api/upload'
     | '/learn/$slug'
     | '/learn/'
     | '/admin/bookings'
@@ -210,6 +260,11 @@ export interface FileRouteTypes {
     | '/programs'
     | '/team'
     | '/dashboard'
+    | '/api/chat'
+    | '/api/check-url'
+    | '/api/live-threats'
+    | '/api/score'
+    | '/api/upload'
     | '/learn/$slug'
     | '/learn'
     | '/admin/bookings'
@@ -230,6 +285,11 @@ export interface FileRouteTypes {
     | '/team'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/api/chat'
+    | '/api/check-url'
+    | '/api/live-threats'
+    | '/api/score'
+    | '/api/upload'
     | '/learn/$slug'
     | '/learn/'
     | '/_authenticated/admin/bookings'
@@ -249,6 +309,11 @@ export interface RootRouteChildren {
   FraudCheckRoute: typeof FraudCheckRoute
   ProgramsRoute: typeof ProgramsRoute
   TeamRoute: typeof TeamRoute
+  ApiChatRoute: typeof ApiChatRoute
+  ApiCheckUrlRoute: typeof ApiCheckUrlRoute
+  ApiLiveThreatsRoute: typeof ApiLiveThreatsRoute
+  ApiScoreRoute: typeof ApiScoreRoute
+  ApiUploadRoute: typeof ApiUploadRoute
   LearnSlugRoute: typeof LearnSlugRoute
   LearnIndexRoute: typeof LearnIndexRoute
 }
@@ -316,6 +381,41 @@ declare module '@tanstack/react-router' {
       path: '/learn/$slug'
       fullPath: '/learn/$slug'
       preLoaderRoute: typeof LearnSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/score': {
+      id: '/api/score'
+      path: '/api/score'
+      fullPath: '/api/score'
+      preLoaderRoute: typeof ApiScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/live-threats': {
+      id: '/api/live-threats'
+      path: '/api/live-threats'
+      fullPath: '/api/live-threats'
+      preLoaderRoute: typeof ApiLiveThreatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/check-url': {
+      id: '/api/check-url'
+      path: '/api/check-url'
+      fullPath: '/api/check-url'
+      preLoaderRoute: typeof ApiCheckUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -428,6 +528,11 @@ const rootRouteChildren: RootRouteChildren = {
   FraudCheckRoute: FraudCheckRoute,
   ProgramsRoute: ProgramsRoute,
   TeamRoute: TeamRoute,
+  ApiChatRoute: ApiChatRoute,
+  ApiCheckUrlRoute: ApiCheckUrlRoute,
+  ApiLiveThreatsRoute: ApiLiveThreatsRoute,
+  ApiScoreRoute: ApiScoreRoute,
+  ApiUploadRoute: ApiUploadRoute,
   LearnSlugRoute: LearnSlugRoute,
   LearnIndexRoute: LearnIndexRoute,
 }
