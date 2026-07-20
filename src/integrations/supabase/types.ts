@@ -70,6 +70,30 @@ export type Database = {
           },
         ]
       }
+      chat_history: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          reply: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          reply: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          reply?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       colleges: {
         Row: {
           city: string | null
@@ -181,6 +205,36 @@ export type Database = {
           tier?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      logs: {
+        Row: {
+          created_at: string
+          id: string
+          input: string | null
+          result: Json | null
+          risk_level: string | null
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          input?: string | null
+          result?: Json | null
+          risk_level?: string | null
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          input?: string | null
+          result?: Json | null
+          risk_level?: string | null
+          type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
