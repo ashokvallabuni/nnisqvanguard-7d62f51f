@@ -2,8 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, ShieldCheck, ScanSearch, GraduationCap, AlertTriangle } from "lucide-react";
-import ashokPhoto from "@/assets/ashok-founder.asset.json";
-import nisqLogo from "@/assets/nisq-logo.asset.json";
+
+
 
 
 export const Route = createFileRoute("/")({
