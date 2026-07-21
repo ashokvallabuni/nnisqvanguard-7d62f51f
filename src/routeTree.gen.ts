@@ -20,17 +20,21 @@ import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as ApiScoreRouteImport } from './routes/api/score'
+import { Route as ApiProgressRouteImport } from './routes/api/progress'
 import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
 import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as ApiQuizModuleIdRouteImport } from './routes/api/quiz.$moduleId'
+import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
 import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
 import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
 import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
+import { Route as ApiLessonsSlugModuleSlugRouteImport } from './routes/api/lessons.$slug.$moduleSlug'
 import { Route as AuthenticatedLearnSlugModuleSlugRouteImport } from './routes/_authenticated/learn.$slug.$moduleSlug'
 
 const TeamRoute = TeamRouteImport.update({
@@ -87,6 +91,11 @@ const ApiScoreRoute = ApiScoreRouteImport.update({
   path: '/api/score',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiProgressRoute = ApiProgressRouteImport.update({
+  id: '/api/progress',
+  path: '/api/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiLiveThreatsRoute = ApiLiveThreatsRouteImport.update({
   id: '/api/live-threats',
   path: '/api/live-threats',
@@ -117,6 +126,16 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const ApiQuizModuleIdRoute = ApiQuizModuleIdRouteImport.update({
+  id: '/api/quiz/$moduleId',
+  path: '/api/quiz/$moduleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLessonsSlugRoute = ApiLessonsSlugRouteImport.update({
+  id: '/api/lessons/$slug',
+  path: '/api/lessons/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -146,6 +165,12 @@ const AuthenticatedAdminBookingsRoute =
     path: '/bookings',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const ApiLessonsSlugModuleSlugRoute =
+  ApiLessonsSlugModuleSlugRouteImport.update({
+    id: '/$moduleSlug',
+    path: '/$moduleSlug',
+    getParentRoute: () => ApiLessonsSlugRoute,
+  } as any)
 const AuthenticatedLearnSlugModuleSlugRoute =
   AuthenticatedLearnSlugModuleSlugRouteImport.update({
     id: '/learn/$slug/$moduleSlug',
@@ -165,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
+  '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
@@ -174,8 +200,11 @@ export interface FileRoutesByFullPath {
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
+  '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
+  '/api/lessons/$slug/$moduleSlug': typeof ApiLessonsSlugModuleSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -188,6 +217,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
+  '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
@@ -197,8 +227,11 @@ export interface FileRoutesByTo {
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
+  '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
+  '/api/lessons/$slug/$moduleSlug': typeof ApiLessonsSlugModuleSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -214,6 +247,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
+  '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
@@ -223,8 +257,11 @@ export interface FileRoutesById {
   '/_authenticated/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
+  '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
+  '/api/lessons/$slug/$moduleSlug': typeof ApiLessonsSlugModuleSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -240,6 +277,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
+    | '/api/progress'
     | '/api/score'
     | '/api/upload'
     | '/learn/$slug'
@@ -249,8 +287,11 @@ export interface FileRouteTypes {
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
+    | '/api/lessons/$slug'
+    | '/api/quiz/$moduleId'
     | '/admin/'
     | '/learn/$slug/$moduleSlug'
+    | '/api/lessons/$slug/$moduleSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -263,6 +304,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
+    | '/api/progress'
     | '/api/score'
     | '/api/upload'
     | '/learn/$slug'
@@ -272,8 +314,11 @@ export interface FileRouteTypes {
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
+    | '/api/lessons/$slug'
+    | '/api/quiz/$moduleId'
     | '/admin'
     | '/learn/$slug/$moduleSlug'
+    | '/api/lessons/$slug/$moduleSlug'
   id:
     | '__root__'
     | '/'
@@ -288,6 +333,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
+    | '/api/progress'
     | '/api/score'
     | '/api/upload'
     | '/learn/$slug'
@@ -297,8 +343,11 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/complaints'
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/team'
+    | '/api/lessons/$slug'
+    | '/api/quiz/$moduleId'
     | '/_authenticated/admin/'
     | '/_authenticated/learn/$slug/$moduleSlug'
+    | '/api/lessons/$slug/$moduleSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -312,10 +361,13 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   ApiCheckUrlRoute: typeof ApiCheckUrlRoute
   ApiLiveThreatsRoute: typeof ApiLiveThreatsRoute
+  ApiProgressRoute: typeof ApiProgressRoute
   ApiScoreRoute: typeof ApiScoreRoute
   ApiUploadRoute: typeof ApiUploadRoute
   LearnSlugRoute: typeof LearnSlugRoute
   LearnIndexRoute: typeof LearnIndexRoute
+  ApiLessonsSlugRoute: typeof ApiLessonsSlugRouteWithChildren
+  ApiQuizModuleIdRoute: typeof ApiQuizModuleIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -397,6 +449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiScoreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/progress': {
+      id: '/api/progress'
+      path: '/api/progress'
+      fullPath: '/api/progress'
+      preLoaderRoute: typeof ApiProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/live-threats': {
       id: '/api/live-threats'
       path: '/api/live-threats'
@@ -439,6 +498,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/api/quiz/$moduleId': {
+      id: '/api/quiz/$moduleId'
+      path: '/api/quiz/$moduleId'
+      fullPath: '/api/quiz/$moduleId'
+      preLoaderRoute: typeof ApiQuizModuleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lessons/$slug': {
+      id: '/api/lessons/$slug'
+      path: '/api/lessons/$slug'
+      fullPath: '/api/lessons/$slug'
+      preLoaderRoute: typeof ApiLessonsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin/team': {
       id: '/_authenticated/admin/team'
       path: '/team'
@@ -473,6 +546,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/bookings'
       preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/api/lessons/$slug/$moduleSlug': {
+      id: '/api/lessons/$slug/$moduleSlug'
+      path: '/$moduleSlug'
+      fullPath: '/api/lessons/$slug/$moduleSlug'
+      preLoaderRoute: typeof ApiLessonsSlugModuleSlugRouteImport
+      parentRoute: typeof ApiLessonsSlugRoute
     }
     '/_authenticated/learn/$slug/$moduleSlug': {
       id: '/_authenticated/learn/$slug/$moduleSlug'
@@ -520,6 +600,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface ApiLessonsSlugRouteChildren {
+  ApiLessonsSlugModuleSlugRoute: typeof ApiLessonsSlugModuleSlugRoute
+}
+
+const ApiLessonsSlugRouteChildren: ApiLessonsSlugRouteChildren = {
+  ApiLessonsSlugModuleSlugRoute: ApiLessonsSlugModuleSlugRoute,
+}
+
+const ApiLessonsSlugRouteWithChildren = ApiLessonsSlugRoute._addFileChildren(
+  ApiLessonsSlugRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -531,10 +623,13 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   ApiCheckUrlRoute: ApiCheckUrlRoute,
   ApiLiveThreatsRoute: ApiLiveThreatsRoute,
+  ApiProgressRoute: ApiProgressRoute,
   ApiScoreRoute: ApiScoreRoute,
   ApiUploadRoute: ApiUploadRoute,
   LearnSlugRoute: LearnSlugRoute,
   LearnIndexRoute: LearnIndexRoute,
+  ApiLessonsSlugRoute: ApiLessonsSlugRouteWithChildren,
+  ApiQuizModuleIdRoute: ApiQuizModuleIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

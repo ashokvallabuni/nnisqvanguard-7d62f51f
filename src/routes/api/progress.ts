@@ -54,15 +54,19 @@ export const Route = createFileRoute("/api/progress")({
         } catch (e) {
           return json({ error: (e as Error).message }, 400);
         }
-        const patch: Record<string, unknown> = {
+        const patch = {
           user_id: ctx.userId,
           module_id: body.module_id,
+          ...(typeof body.completed === "boolean"
+            ? {
+                completed: body.completed,
+                completed_at: body.completed ? new Date().toISOString() : null,
+              }
+            : {}),
+          ...(typeof body.quiz_score === "number" ? { quiz_score: body.quiz_score } : {}),
         };
-        if (typeof body.completed === "boolean") {
-          patch.completed = body.completed;
-          patch.completed_at = body.completed ? new Date().toISOString() : null;
-        }
-        if (typeof body.quiz_score === "number") patch.quiz_score = body.quiz_score;
+
+
 
         const { data, error } = await ctx.supabase
           .from("module_progress")
