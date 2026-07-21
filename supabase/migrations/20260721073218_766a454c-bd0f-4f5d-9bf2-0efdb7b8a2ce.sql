@@ -1,0 +1,1 @@
+ALTER TABLE public.modules ADD COLUMN IF NOT EXISTS practice_md text;
