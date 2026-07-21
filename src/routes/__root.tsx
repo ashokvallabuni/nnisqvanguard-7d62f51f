@@ -17,7 +17,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Shield, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
-import nisqLogo from "@/assets/nisq-logo.asset.json";
+
 
 
 function NotFoundComponent() {
@@ -122,14 +122,15 @@ function TopNav() {
   return (
     <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 glass border-b">
       <Link to="/" className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-full overflow-hidden border border-primary/40 glow-cyber bg-background">
-          <img src={nisqLogo.url} alt="NISQ Vanguard logo" className="w-full h-full object-cover" />
+        <div className="w-10 h-10 rounded-md border border-primary/40 glow-cyber bg-background flex items-center justify-center">
+          <span className="display text-cyber text-sm tracking-wider">NV</span>
         </div>
         <div className="leading-tight">
           <div className="display text-lg tracking-widest text-cyber">NISQ VANGUARD</div>
           <div className="mono text-[0.55rem] text-muted-foreground">CYBER PROTECTION · INDIA</div>
         </div>
       </Link>
+
 
       <ul className="hidden lg:flex gap-6 items-center">
         {links.map((l) => (

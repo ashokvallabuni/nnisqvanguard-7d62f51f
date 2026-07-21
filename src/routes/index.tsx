@@ -2,8 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, ShieldCheck, ScanSearch, GraduationCap, AlertTriangle } from "lucide-react";
-import ashokPhoto from "@/assets/ashok-founder.asset.json";
-import nisqLogo from "@/assets/nisq-logo.asset.json";
+
+
 
 
 export const Route = createFileRoute("/")({
@@ -123,13 +123,14 @@ function Home() {
           <h2 className="display text-4xl md:text-5xl mb-10 text-center">Meet the Founder</h2>
           <div className="glass rounded-2xl p-6 md:p-10 grid md:grid-cols-[auto_1fr] gap-8 items-center glow-cyber">
             <div className="relative mx-auto">
-              <div className="w-48 h-48 md:w-56 md:h-56 rounded-2xl overflow-hidden border-2 border-primary/40 glow-cyber">
-                <img src={ashokPhoto.url} alt="Ashok Vallabhuni — Founder, NISQ Vanguard" className="w-full h-full object-cover" />
+              <div className="w-48 h-48 md:w-56 md:h-56 rounded-2xl border-2 border-primary/40 glow-cyber bg-gradient-to-br from-primary/20 via-background to-accent/20 flex items-center justify-center">
+                <span className="display text-6xl md:text-7xl text-cyber tracking-widest">AV</span>
               </div>
-              <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-full overflow-hidden border border-primary/40 bg-background">
-                <img src={nisqLogo.url} alt="NISQ Vanguard" className="w-full h-full object-cover" />
+              <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-md border border-primary/40 bg-background flex items-center justify-center glow-cyber">
+                <span className="display text-cyber text-sm tracking-wider">NV</span>
               </div>
             </div>
+
             <div>
               <div className="mono text-[0.65rem] text-cyber mb-2">FOUNDER · CHIEF ARCHITECT</div>
               <h3 className="display text-3xl md:text-4xl mb-3">Ashok Vallabhuni</h3>
