@@ -286,6 +286,7 @@ export type Database = {
           id: string
           locked: boolean
           notes_md: string | null
+          practice_md: string | null
           quiz: Json | null
           slug: string
           sort_order: number
@@ -299,6 +300,7 @@ export type Database = {
           id?: string
           locked?: boolean
           notes_md?: string | null
+          practice_md?: string | null
           quiz?: Json | null
           slug: string
           sort_order?: number
@@ -312,6 +314,7 @@ export type Database = {
           id?: string
           locked?: boolean
           notes_md?: string | null
+          practice_md?: string | null
           quiz?: Json | null
           slug?: string
           sort_order?: number
