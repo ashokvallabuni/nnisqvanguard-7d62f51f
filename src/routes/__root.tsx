@@ -17,7 +17,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Shield, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
-import nisqLogo from "@/assets/nisq-logo.asset.json";
+
 
 
 function NotFoundComponent() {
