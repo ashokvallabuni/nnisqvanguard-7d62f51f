@@ -18,7 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shield, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 
-
+const nisqLogoUrl = "/__l5e/assets-v1/de49a1d5-d302-4a1d-8ef0-607a51b69399/nisq-logo.jpg";
 
 function NotFoundComponent() {
   return (
@@ -122,8 +122,8 @@ function TopNav() {
   return (
     <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 glass border-b">
       <Link to="/" className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-md border border-primary/40 glow-cyber bg-background flex items-center justify-center">
-          <span className="display text-cyber text-sm tracking-wider">NV</span>
+        <div className="w-10 h-10 rounded-md border border-primary/40 glow-cyber bg-background overflow-hidden">
+          <img src={nisqLogoUrl} alt="NISQ Vanguard logo" className="w-full h-full object-cover" />
         </div>
         <div className="leading-tight">
           <div className="display text-lg tracking-widest text-cyber">NISQ VANGUARD</div>
