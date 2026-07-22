@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, ShieldCheck, ScanSearch, GraduationCap, AlertTriangle } from "lucide-react";
 
-const founderImageUrl = "/__l5e/assets-v1/3cbbee79-dd9e-4135-8bfd-56ffa42b29eb/ashok-founder.jpg";
-const logoImageUrl = "/__l5e/assets-v1/de49a1d5-d302-4a1d-8ef0-607a51b69399/nisq-logo.jpg";
+const founderImageUrl = "/assets/founder.jpeg";
+const logoImageUrl = "/assets/nisq-logo.jpeg";
 
 
 export const Route = createFileRoute("/")({

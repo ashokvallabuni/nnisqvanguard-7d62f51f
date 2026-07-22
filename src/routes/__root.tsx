@@ -18,7 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shield, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 
-const nisqLogoUrl = "/__l5e/assets-v1/de49a1d5-d302-4a1d-8ef0-607a51b69399/nisq-logo.jpg";
+const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 
 function NotFoundComponent() {
   return (
