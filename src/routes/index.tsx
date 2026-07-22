@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, ShieldCheck, ScanSearch, GraduationCap, AlertTriangle } from "lucide-react";
 
-
+const founderImageUrl = "/__l5e/assets-v1/3cbbee79-dd9e-4135-8bfd-56ffa42b29eb/ashok-founder.jpg";
+const logoImageUrl = "/__l5e/assets-v1/de49a1d5-d302-4a1d-8ef0-607a51b69399/nisq-logo.jpg";
 
 
 export const Route = createFileRoute("/")({
@@ -36,8 +37,17 @@ function Home() {
   return (
     <main className="pt-16">
       {/* HERO */}
-      <section className="relative min-h-[85vh] flex items-center px-4 md:px-8 overflow-hidden">
-        <div className="max-w-6xl mx-auto w-full py-16 grid lg:grid-cols-2 gap-12 items-center">
+      <section
+        className="relative min-h-[85vh] flex items-center px-4 md:px-8 overflow-hidden"
+        style={{
+          backgroundImage: `url(${logoImageUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="relative max-w-6xl mx-auto w-full py-16 grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <div className="mono text-[0.7rem] text-cyber mb-4 inline-block px-3 py-1 rounded-full border border-primary/40 bg-primary/5">
               ● SYSTEM ONLINE · NATIONAL CYBERSHIELD
@@ -123,11 +133,11 @@ function Home() {
           <h2 className="display text-4xl md:text-5xl mb-10 text-center">Meet the Founder</h2>
           <div className="glass rounded-2xl p-6 md:p-10 grid md:grid-cols-[auto_1fr] gap-8 items-center glow-cyber">
             <div className="relative mx-auto">
-              <div className="w-48 h-48 md:w-56 md:h-56 rounded-2xl border-2 border-primary/40 glow-cyber bg-gradient-to-br from-primary/20 via-background to-accent/20 flex items-center justify-center">
-                <span className="display text-6xl md:text-7xl text-cyber tracking-widest">AV</span>
+              <div className="w-48 h-48 md:w-56 md:h-56 rounded-2xl border-2 border-primary/40 glow-cyber overflow-hidden">
+                <img src={founderImageUrl} alt="Ashok Vallabhuni" className="w-full h-full object-cover" />
               </div>
-              <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-md border border-primary/40 bg-background flex items-center justify-center glow-cyber">
-                <span className="display text-cyber text-sm tracking-wider">NV</span>
+              <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-md border border-primary/40 bg-background flex items-center justify-center glow-cyber overflow-hidden">
+                <img src={logoImageUrl} alt="NISQ Vanguard logo" className="w-full h-full object-contain p-1" />
               </div>
             </div>
 
