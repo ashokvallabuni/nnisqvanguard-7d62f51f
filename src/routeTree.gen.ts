@@ -9,56 +9,39 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as ComplaintRouteImport } from './routes/complaint'
-import { Route as FraudCheckRouteImport } from './routes/fraud-check'
-import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as TeamRouteImport } from './routes/team'
-import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
-import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
-import { Route as ApiProgressRouteImport } from './routes/api/progress'
-import { Route as ApiScoreRouteImport } from './routes/api/score'
-import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as FraudCheckRouteImport } from './routes/fraud-check'
+import { Route as ComplaintRouteImport } from './routes/complaint'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as ApiScoreRouteImport } from './routes/api/score'
+import { Route as ApiProgressRouteImport } from './routes/api/progress'
+import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
+import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
-import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
-import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
-import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
-import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
-import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
-import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
 import { Route as ApiQuizModuleIdRouteImport } from './routes/api/quiz.$moduleId'
-import { Route as AuthenticatedLearnSlugModuleSlugRouteImport } from './routes/_authenticated/learn.$slug.$moduleSlug'
+import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
+import { Route as ApiAgentsReportRouteImport } from './routes/api/agents.report'
+import { Route as ApiAgentsAnalyzeRouteImport } from './routes/api/agents.analyze'
+import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
+import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
+import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
+import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
+import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
 import { Route as ApiLessonsSlugModuleSlugRouteImport } from './routes/api/lessons.$slug.$moduleSlug'
+import { Route as AuthenticatedLearnSlugModuleSlugRouteImport } from './routes/_authenticated/learn.$slug.$moduleSlug'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ComplaintRoute = ComplaintRouteImport.update({
-  id: '/complaint',
-  path: '/complaint',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FraudCheckRoute = FraudCheckRouteImport.update({
-  id: '/fraud-check',
-  path: '/fraud-check',
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgramsRoute = ProgramsRouteImport.update({
@@ -66,49 +49,28 @@ const ProgramsRoute = ProgramsRouteImport.update({
   path: '/programs',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TeamRoute = TeamRouteImport.update({
-  id: '/team',
-  path: '/team',
+const FraudCheckRoute = FraudCheckRouteImport.update({
+  id: '/fraud-check',
+  path: '/fraud-check',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
+const ComplaintRoute = ComplaintRouteImport.update({
+  id: '/complaint',
+  path: '/complaint',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiCheckUrlRoute = ApiCheckUrlRouteImport.update({
-  id: '/api/check-url',
-  path: '/api/check-url',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiLiveThreatsRoute = ApiLiveThreatsRouteImport.update({
-  id: '/api/live-threats',
-  path: '/api/live-threats',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiProgressRoute = ApiProgressRouteImport.update({
-  id: '/api/progress',
-  path: '/api/progress',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiScoreRoute = ApiScoreRouteImport.update({
-  id: '/api/score',
-  path: '/api/score',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiUploadRoute = ApiUploadRouteImport.update({
-  id: '/api/upload',
-  path: '/api/upload',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnIndexRoute = LearnIndexRouteImport.update({
@@ -121,21 +83,80 @@ const LearnSlugRoute = LearnSlugRouteImport.update({
   path: '/learn/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiScoreRoute = ApiScoreRouteImport.update({
+  id: '/api/score',
+  path: '/api/score',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProgressRoute = ApiProgressRouteImport.update({
+  id: '/api/progress',
+  path: '/api/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLiveThreatsRoute = ApiLiveThreatsRouteImport.update({
+  id: '/api/live-threats',
+  path: '/api/live-threats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckUrlRoute = ApiCheckUrlRouteImport.update({
+  id: '/api/check-url',
+  path: '/api/check-url',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
-const AuthenticatedAdminBookingsRoute =
-  AuthenticatedAdminBookingsRouteImport.update({
-    id: '/bookings',
-    path: '/bookings',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminCollegesRoute =
-  AuthenticatedAdminCollegesRouteImport.update({
-    id: '/colleges',
-    path: '/colleges',
+const ApiQuizModuleIdRoute = ApiQuizModuleIdRouteImport.update({
+  id: '/api/quiz/$moduleId',
+  path: '/api/quiz/$moduleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLessonsSlugRoute = ApiLessonsSlugRouteImport.update({
+  id: '/api/lessons/$slug',
+  path: '/api/lessons/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsReportRoute = ApiAgentsReportRouteImport.update({
+  id: '/api/agents/report',
+  path: '/api/agents/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsAnalyzeRoute = ApiAgentsAnalyzeRouteImport.update({
+  id: '/api/agents/analyze',
+  path: '/api/agents/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminContentRoute =
+  AuthenticatedAdminContentRouteImport.update({
+    id: '/content',
+    path: '/content',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminComplaintsRoute =
@@ -144,38 +165,29 @@ const AuthenticatedAdminComplaintsRoute =
     path: '/complaints',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
-const AuthenticatedAdminContentRoute =
-  AuthenticatedAdminContentRouteImport.update({
-    id: '/content',
-    path: '/content',
+const AuthenticatedAdminCollegesRoute =
+  AuthenticatedAdminCollegesRouteImport.update({
+    id: '/colleges',
+    path: '/colleges',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
-const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
-  id: '/team',
-  path: '/team',
-  getParentRoute: () => AuthenticatedAdminRoute,
-} as any)
-const ApiLessonsSlugRoute = ApiLessonsSlugRouteImport.update({
-  id: '/api/lessons/$slug',
-  path: '/api/lessons/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiQuizModuleIdRoute = ApiQuizModuleIdRouteImport.update({
-  id: '/api/quiz/$moduleId',
-  path: '/api/quiz/$moduleId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedLearnSlugModuleSlugRoute =
-  AuthenticatedLearnSlugModuleSlugRouteImport.update({
-    id: '/learn/$slug/$moduleSlug',
-    path: '/learn/$slug/$moduleSlug',
-    getParentRoute: () => AuthenticatedRouteRoute,
+const AuthenticatedAdminBookingsRoute =
+  AuthenticatedAdminBookingsRouteImport.update({
+    id: '/bookings',
+    path: '/bookings',
+    getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const ApiLessonsSlugModuleSlugRoute =
   ApiLessonsSlugModuleSlugRouteImport.update({
     id: '/$moduleSlug',
     path: '/$moduleSlug',
     getParentRoute: () => ApiLessonsSlugRoute,
+  } as any)
+const AuthenticatedLearnSlugModuleSlugRoute =
+  AuthenticatedLearnSlugModuleSlugRouteImport.update({
+    id: '/learn/$slug/$moduleSlug',
+    path: '/learn/$slug/$moduleSlug',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -200,6 +212,8 @@ export interface FileRoutesByFullPath {
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
+  '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -227,6 +241,8 @@ export interface FileRoutesByTo {
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
+  '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -257,6 +273,8 @@ export interface FileRoutesById {
   '/_authenticated/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
+  '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -287,6 +305,8 @@ export interface FileRouteTypes {
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
+    | '/api/agents/analyze'
+    | '/api/agents/report'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
     | '/admin/'
@@ -314,6 +334,8 @@ export interface FileRouteTypes {
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
+    | '/api/agents/analyze'
+    | '/api/agents/report'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
     | '/admin'
@@ -343,6 +365,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/complaints'
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/team'
+    | '/api/agents/analyze'
+    | '/api/agents/report'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
     | '/_authenticated/admin/'
@@ -366,45 +390,19 @@ export interface RootRouteChildren {
   ApiUploadRoute: typeof ApiUploadRoute
   LearnSlugRoute: typeof LearnSlugRoute
   LearnIndexRoute: typeof LearnIndexRoute
+  ApiAgentsAnalyzeRoute: typeof ApiAgentsAnalyzeRoute
+  ApiAgentsReportRoute: typeof ApiAgentsReportRoute
   ApiLessonsSlugRoute: typeof ApiLessonsSlugRouteWithChildren
   ApiQuizModuleIdRoute: typeof ApiQuizModuleIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/complaint': {
-      id: '/complaint'
-      path: '/complaint'
-      fullPath: '/complaint'
-      preLoaderRoute: typeof ComplaintRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/fraud-check': {
-      id: '/fraud-check'
-      path: '/fraud-check'
-      fullPath: '/fraud-check'
-      preLoaderRoute: typeof FraudCheckRouteImport
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/programs': {
@@ -414,67 +412,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/team': {
-      id: '/team'
-      path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof TeamRouteImport
+    '/fraud-check': {
+      id: '/fraud-check'
+      path: '/fraud-check'
+      fullPath: '/fraud-check'
+      preLoaderRoute: typeof FraudCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
+    '/complaint': {
+      id: '/complaint'
+      path: '/complaint'
+      fullPath: '/complaint'
+      preLoaderRoute: typeof ComplaintRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/check-url': {
-      id: '/api/check-url'
-      path: '/api/check-url'
-      fullPath: '/api/check-url'
-      preLoaderRoute: typeof ApiCheckUrlRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/live-threats': {
-      id: '/api/live-threats'
-      path: '/api/live-threats'
-      fullPath: '/api/live-threats'
-      preLoaderRoute: typeof ApiLiveThreatsRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/progress': {
-      id: '/api/progress'
-      path: '/api/progress'
-      fullPath: '/api/progress'
-      preLoaderRoute: typeof ApiProgressRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/score': {
-      id: '/api/score'
-      path: '/api/score'
-      fullPath: '/api/score'
-      preLoaderRoute: typeof ApiScoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/upload': {
-      id: '/api/upload'
-      path: '/api/upload'
-      fullPath: '/api/upload'
-      preLoaderRoute: typeof ApiUploadRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn/': {
@@ -491,6 +461,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/score': {
+      id: '/api/score'
+      path: '/api/score'
+      fullPath: '/api/score'
+      preLoaderRoute: typeof ApiScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/progress': {
+      id: '/api/progress'
+      path: '/api/progress'
+      fullPath: '/api/progress'
+      preLoaderRoute: typeof ApiProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/live-threats': {
+      id: '/api/live-threats'
+      path: '/api/live-threats'
+      fullPath: '/api/live-threats'
+      preLoaderRoute: typeof ApiLiveThreatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/check-url': {
+      id: '/api/check-url'
+      path: '/api/check-url'
+      fullPath: '/api/check-url'
+      preLoaderRoute: typeof ApiCheckUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/'
@@ -498,25 +524,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/_authenticated/admin/bookings': {
-      id: '/_authenticated/admin/bookings'
-      path: '/bookings'
-      fullPath: '/admin/bookings'
-      preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
+    '/api/quiz/$moduleId': {
+      id: '/api/quiz/$moduleId'
+      path: '/api/quiz/$moduleId'
+      fullPath: '/api/quiz/$moduleId'
+      preLoaderRoute: typeof ApiQuizModuleIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin/colleges': {
-      id: '/_authenticated/admin/colleges'
-      path: '/colleges'
-      fullPath: '/admin/colleges'
-      preLoaderRoute: typeof AuthenticatedAdminCollegesRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
+    '/api/lessons/$slug': {
+      id: '/api/lessons/$slug'
+      path: '/api/lessons/$slug'
+      fullPath: '/api/lessons/$slug'
+      preLoaderRoute: typeof ApiLessonsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin/complaints': {
-      id: '/_authenticated/admin/complaints'
-      path: '/complaints'
-      fullPath: '/admin/complaints'
-      preLoaderRoute: typeof AuthenticatedAdminComplaintsRouteImport
+    '/api/agents/report': {
+      id: '/api/agents/report'
+      path: '/api/agents/report'
+      fullPath: '/api/agents/report'
+      preLoaderRoute: typeof ApiAgentsReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agents/analyze': {
+      id: '/api/agents/analyze'
+      path: '/api/agents/analyze'
+      fullPath: '/api/agents/analyze'
+      preLoaderRoute: typeof ApiAgentsAnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/team': {
+      id: '/_authenticated/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AuthenticatedAdminTeamRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/content': {
@@ -526,33 +566,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/_authenticated/admin/team': {
-      id: '/_authenticated/admin/team'
-      path: '/team'
-      fullPath: '/admin/team'
-      preLoaderRoute: typeof AuthenticatedAdminTeamRouteImport
+    '/_authenticated/admin/complaints': {
+      id: '/_authenticated/admin/complaints'
+      path: '/complaints'
+      fullPath: '/admin/complaints'
+      preLoaderRoute: typeof AuthenticatedAdminComplaintsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/api/lessons/$slug': {
-      id: '/api/lessons/$slug'
-      path: '/api/lessons/$slug'
-      fullPath: '/api/lessons/$slug'
-      preLoaderRoute: typeof ApiLessonsSlugRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/admin/colleges': {
+      id: '/_authenticated/admin/colleges'
+      path: '/colleges'
+      fullPath: '/admin/colleges'
+      preLoaderRoute: typeof AuthenticatedAdminCollegesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/api/quiz/$moduleId': {
-      id: '/api/quiz/$moduleId'
-      path: '/api/quiz/$moduleId'
-      fullPath: '/api/quiz/$moduleId'
-      preLoaderRoute: typeof ApiQuizModuleIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/learn/$slug/$moduleSlug': {
-      id: '/_authenticated/learn/$slug/$moduleSlug'
-      path: '/learn/$slug/$moduleSlug'
-      fullPath: '/learn/$slug/$moduleSlug'
-      preLoaderRoute: typeof AuthenticatedLearnSlugModuleSlugRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/_authenticated/admin/bookings': {
+      id: '/_authenticated/admin/bookings'
+      path: '/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/api/lessons/$slug/$moduleSlug': {
       id: '/api/lessons/$slug/$moduleSlug'
@@ -560,6 +593,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/lessons/$slug/$moduleSlug'
       preLoaderRoute: typeof ApiLessonsSlugModuleSlugRouteImport
       parentRoute: typeof ApiLessonsSlugRoute
+    }
+    '/_authenticated/learn/$slug/$moduleSlug': {
+      id: '/_authenticated/learn/$slug/$moduleSlug'
+      path: '/learn/$slug/$moduleSlug'
+      fullPath: '/learn/$slug/$moduleSlug'
+      preLoaderRoute: typeof AuthenticatedLearnSlugModuleSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
@@ -628,6 +668,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiUploadRoute: ApiUploadRoute,
   LearnSlugRoute: LearnSlugRoute,
   LearnIndexRoute: LearnIndexRoute,
+  ApiAgentsAnalyzeRoute: ApiAgentsAnalyzeRoute,
+  ApiAgentsReportRoute: ApiAgentsReportRoute,
   ApiLessonsSlugRoute: ApiLessonsSlugRouteWithChildren,
   ApiQuizModuleIdRoute: ApiQuizModuleIdRoute,
 }
