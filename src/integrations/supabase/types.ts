@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_analyses: {
+        Row: {
+          analysis_result: Json | null
+          created_at: string | null
+          detection_result: Json | null
+          findings_count: number | null
+          id: string
+          input_data: string | null
+          input_type: string | null
+          request_id: string | null
+          response_result: Json | null
+          risk_result: Json | null
+          risk_score: number | null
+          severity: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          analysis_result?: Json | null
+          created_at?: string | null
+          detection_result?: Json | null
+          findings_count?: number | null
+          id?: string
+          input_data?: string | null
+          input_type?: string | null
+          request_id?: string | null
+          response_result?: Json | null
+          risk_result?: Json | null
+          risk_score?: number | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          analysis_result?: Json | null
+          created_at?: string | null
+          detection_result?: Json | null
+          findings_count?: number | null
+          id?: string
+          input_data?: string | null
+          input_type?: string | null
+          request_id?: string | null
+          response_result?: Json | null
+          risk_result?: Json | null
+          risk_score?: number | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           college_id: string | null
@@ -416,265 +470,6 @@ export type Database = {
         }
         Relationships: []
       }
-      ai_analyses: {
-        Row: {
-          id: string
-          request_id: string
-          user_id: string | null
-          input_type: string
-          input_data: string
-          input_metadata: Json | null
-          detection_result: Json | null
-          analysis_result: Json | null
-          risk_result: Json | null
-          response_result: Json | null
-          report_result: Json | null
-          risk_score: number | null
-          severity: string | null
-          findings_count: number | null
-          status: string
-          error_message: string | null
-          processing_time_ms: number | null
-          created_at: string
-          completed_at: string | null
-        }
-        Insert: {
-          id?: string
-          request_id: string
-          user_id?: string | null
-          input_type: string
-          input_data: string
-          input_metadata?: Json | null
-          detection_result?: Json | null
-          analysis_result?: Json | null
-          risk_result?: Json | null
-          response_result?: Json | null
-          report_result?: Json | null
-          risk_score?: number | null
-          severity?: string | null
-          findings_count?: number | null
-          status?: string
-          error_message?: string | null
-          processing_time_ms?: number | null
-          created_at?: string
-          completed_at?: string | null
-        }
-        Update: {
-          id?: string
-          request_id?: string
-          user_id?: string | null
-          input_type?: string
-          input_data?: string
-          input_metadata?: Json | null
-          detection_result?: Json | null
-          analysis_result?: Json | null
-          risk_result?: Json | null
-          response_result?: Json | null
-          report_result?: Json | null
-          risk_score?: number | null
-          severity?: string | null
-          findings_count?: number | null
-          status?: string
-          error_message?: string | null
-          processing_time_ms?: number | null
-          created_at?: string
-          completed_at?: string | null
-        }
-        Relationships: []
-      }
-      incidents: {
-        Row: {
-          id: string
-          user_id: string | null
-          organization_id: string | null
-          title: string
-          description: string
-          severity: string
-          status: string
-          source: string
-          risk_score: number | null
-          attack_pattern: string | null
-          kill_chain_phase: string | null
-          mitre_techniques: string[] | null
-          affected_assets: string[] | null
-          indicators: string[] | null
-          analysis_id: string | null
-          assigned_to: string | null
-          resolution_notes: string | null
-          resolved_at: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id?: string | null
-          organization_id?: string | null
-          title: string
-          description: string
-          severity?: string
-          status?: string
-          source?: string
-          risk_score?: number | null
-          attack_pattern?: string | null
-          kill_chain_phase?: string | null
-          mitre_techniques?: string[] | null
-          affected_assets?: string[] | null
-          indicators?: string[] | null
-          analysis_id?: string | null
-          assigned_to?: string | null
-          resolution_notes?: string | null
-          resolved_at?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string | null
-          organization_id?: string | null
-          title?: string
-          description?: string
-          severity?: string
-          status?: string
-          source?: string
-          risk_score?: number | null
-          attack_pattern?: string | null
-          kill_chain_phase?: string | null
-          mitre_techniques?: string[] | null
-          affected_assets?: string[] | null
-          indicators?: string[] | null
-          analysis_id?: string | null
-          assigned_to?: string | null
-          resolution_notes?: string | null
-          resolved_at?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "incidents_analysis_id_fkey"
-            columns: ["analysis_id"]
-            isOneToOne: false
-            referencedRelation: "ai_analyses"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      reports: {
-        Row: {
-          id: string
-          user_id: string | null
-          organization_id: string | null
-          title: string
-          report_type: string
-          format: string
-          incident_id: string | null
-          analysis_id: string | null
-          executive_summary: string | null
-          technical_details: string | null
-          risk_analysis: string | null
-          recommendations: string[] | null
-          timeline: Json | null
-          report_content: string | null
-          risk_score: number | null
-          severity: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id?: string | null
-          organization_id?: string | null
-          title: string
-          report_type?: string
-          format?: string
-          incident_id?: string | null
-          analysis_id?: string | null
-          executive_summary?: string | null
-          technical_details?: string | null
-          risk_analysis?: string | null
-          recommendations?: string[] | null
-          timeline?: Json | null
-          report_content?: string | null
-          risk_score?: number | null
-          severity?: string | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string | null
-          organization_id?: string | null
-          title?: string
-          report_type?: string
-          format?: string
-          incident_id?: string | null
-          analysis_id?: string | null
-          executive_summary?: string | null
-          technical_details?: string | null
-          risk_analysis?: string | null
-          recommendations?: string[] | null
-          timeline?: Json | null
-          report_content?: string | null
-          risk_score?: number | null
-          severity?: string | null
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reports_incident_id_fkey"
-            columns: ["incident_id"]
-            isOneToOne: false
-            referencedRelation: "incidents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reports_analysis_id_fkey"
-            columns: ["analysis_id"]
-            isOneToOne: false
-            referencedRelation: "ai_analyses"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      notifications: {
-        Row: {
-          id: string
-          user_id: string | null
-          title: string
-          message: string
-          type: string
-          incident_id: string | null
-          read: boolean
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id?: string | null
-          title: string
-          message: string
-          type: string
-          incident_id?: string | null
-          read?: boolean
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string | null
-          title?: string
-          message?: string
-          type?: string
-          incident_id?: string | null
-          read?: boolean
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_incident_id_fkey"
-            columns: ["incident_id"]
-            isOneToOne: false
-            referencedRelation: "incidents"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
       [_ in never]: never
@@ -705,12 +500,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -734,11 +529,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -759,11 +554,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -784,11 +579,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -801,11 +596,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }

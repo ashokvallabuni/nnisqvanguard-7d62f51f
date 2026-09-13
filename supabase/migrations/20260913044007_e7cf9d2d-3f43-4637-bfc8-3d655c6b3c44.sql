@@ -1,0 +1,2 @@
+REVOKE EXECUTE ON FUNCTION public.update_updated_at_column() FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.update_updated_at_column() FROM anon;
