@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_analyses: {
+        Row: {
+          analysis_result: Json | null
+          created_at: string | null
+          detection_result: Json | null
+          findings_count: number | null
+          id: string
+          input_data: string | null
+          input_type: string | null
+          request_id: string | null
+          response_result: Json | null
+          risk_result: Json | null
+          risk_score: number | null
+          severity: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          analysis_result?: Json | null
+          created_at?: string | null
+          detection_result?: Json | null
+          findings_count?: number | null
+          id?: string
+          input_data?: string | null
+          input_type?: string | null
+          request_id?: string | null
+          response_result?: Json | null
+          risk_result?: Json | null
+          risk_score?: number | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          analysis_result?: Json | null
+          created_at?: string | null
+          detection_result?: Json | null
+          findings_count?: number | null
+          id?: string
+          input_data?: string | null
+          input_type?: string | null
+          request_id?: string | null
+          response_result?: Json | null
+          risk_result?: Json | null
+          risk_score?: number | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           college_id: string | null
