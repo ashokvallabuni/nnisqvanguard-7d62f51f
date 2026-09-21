@@ -163,11 +163,12 @@ function TopNav() {
 
   const links = [
     { to: "/", label: "Home" },
-    { to: "/learn", label: "Learn" },
-    { to: "/programs", label: "Programs" },
-    { to: "/fraud-check", label: "Fraud Check" },
-    { to: "/complaint", label: "File Complaint" },
-    { to: "/team", label: "Team" },
+    { to: "/solutions", label: "Solutions" },
+    { to: "/cyber-range", label: "Cyber Range" },
+    { to: "/academy", label: "Academy" },
+    { to: "/campus", label: "Campus" },
+    { to: "/intelligence", label: "Intelligence" },
+    { to: "/complaint", label: "Report" },
   ];
 
   return (
