@@ -256,6 +256,246 @@ export type Database = {
         };
         Relationships: [];
       };
+      campus_consultations: {
+        Row: {
+          college_id: string;
+          contact_name: string;
+          created_at: string;
+          email: string;
+          id: string;
+          message: string | null;
+          organization_role: string | null;
+          phone: string | null;
+          requested_program_type: string;
+          status: string;
+          student_count: number | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          college_id: string;
+          contact_name: string;
+          created_at?: string;
+          email: string;
+          id?: string;
+          message?: string | null;
+          organization_role?: string | null;
+          phone?: string | null;
+          requested_program_type: string;
+          status?: string;
+          student_count?: number | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          college_id?: string;
+          contact_name?: string;
+          created_at?: string;
+          email?: string;
+          id?: string;
+          message?: string | null;
+          organization_role?: string | null;
+          phone?: string | null;
+          requested_program_type?: string;
+          status?: string;
+          student_count?: number | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campus_consultations_college_id_fkey";
+            columns: ["college_id"];
+            isOneToOne: false;
+            referencedRelation: "campus_programs";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      campus_programs: {
+        Row: {
+          application_deadline: string;
+          city: string;
+          college_name: string;
+          country: string;
+          created_at: string;
+          description: string | null;
+          dynamic_tier: string;
+          enrolled_students: number;
+          id: string;
+          is_active: boolean;
+          program_type: string;
+          seats: number;
+          security_level: string;
+          state: string;
+          updated_at: string;
+        };
+        Insert: {
+          application_deadline: string;
+          city: string;
+          college_name: string;
+          country?: string;
+          created_at?: string;
+          description?: string | null;
+          dynamic_tier: string;
+          enrolled_students?: number;
+          id?: string;
+          is_active?: boolean;
+          program_type: string;
+          seats?: number;
+          security_level: string;
+          state: string;
+          updated_at?: string;
+        };
+        Update: {
+          application_deadline?: string;
+          city?: string;
+          college_name?: string;
+          country?: string;
+          created_at?: string;
+          description?: string | null;
+          dynamic_tier?: string;
+          enrolled_students?: number;
+          id?: string;
+          is_active?: boolean;
+          program_type?: string;
+          seats?: number;
+          security_level?: string;
+          state?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      assignments: {
+        Row: {
+          created_at: string;
+          expected_answer: string | null;
+          id: string;
+          instructions: string;
+          module_id: string;
+          sort_order: number;
+          task_type: string;
+          title: string;
+        };
+        Insert: {
+          created_at?: string;
+          expected_answer?: string | null;
+          id?: string;
+          instructions: string;
+          module_id: string;
+          sort_order?: number;
+          task_type?: string;
+          title: string;
+        };
+        Update: {
+          created_at?: string;
+          expected_answer?: string | null;
+          id?: string;
+          instructions?: string;
+          module_id?: string;
+          sort_order?: number;
+          task_type?: string;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "assignments_module_id_fkey";
+            columns: ["module_id"];
+            isOneToOne: false;
+            referencedRelation: "modules";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      quizzes: {
+        Row: {
+          correct_option: number;
+          created_at: string;
+          explanation: string | null;
+          id: string;
+          module_id: string;
+          options: Json;
+          question: string;
+          sort_order: number;
+        };
+        Insert: {
+          correct_option: number;
+          created_at?: string;
+          explanation?: string | null;
+          id?: string;
+          module_id: string;
+          options?: Json;
+          question: string;
+          sort_order?: number;
+        };
+        Update: {
+          correct_option?: number;
+          created_at?: string;
+          explanation?: string | null;
+          id?: string;
+          module_id?: string;
+          options?: Json;
+          question?: string;
+          sort_order?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_module_id_fkey";
+            columns: ["module_id"];
+            isOneToOne: false;
+            referencedRelation: "modules";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user_course_progress: {
+        Row: {
+          assignment_id: string | null;
+          completed: boolean;
+          completed_at: string | null;
+          course_id: string;
+          created_at: string;
+          id: string;
+          module_id: string;
+          progress_type: string;
+          quiz_id: string | null;
+          response: string | null;
+          score: number | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          assignment_id?: string | null;
+          completed?: boolean;
+          completed_at?: string | null;
+          course_id: string;
+          created_at?: string;
+          id?: string;
+          module_id: string;
+          progress_type: string;
+          quiz_id?: string | null;
+          response?: string | null;
+          score?: number | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          assignment_id?: string | null;
+          completed?: boolean;
+          completed_at?: string | null;
+          course_id?: string;
+          created_at?: string;
+          id?: string;
+          module_id?: string;
+          progress_type?: string;
+          quiz_id?: string | null;
+          response?: string | null;
+          score?: number | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       logs: {
         Row: {
           created_at: string;
@@ -335,6 +575,10 @@ export type Database = {
           locked: boolean;
           notes_md: string | null;
           practice_md: string | null;
+          tags: string[];
+          difficulty: string;
+          duration_minutes: number;
+          practice_labs: string[];
           quiz: Json | null;
           slug: string;
           sort_order: number;
@@ -349,6 +593,10 @@ export type Database = {
           locked?: boolean;
           notes_md?: string | null;
           practice_md?: string | null;
+          tags?: string[];
+          difficulty?: string;
+          duration_minutes?: number;
+          practice_labs?: string[];
           quiz?: Json | null;
           slug: string;
           sort_order?: number;
@@ -363,6 +611,10 @@ export type Database = {
           locked?: boolean;
           notes_md?: string | null;
           practice_md?: string | null;
+          tags?: string[];
+          difficulty?: string;
+          duration_minutes?: number;
+          practice_labs?: string[];
           quiz?: Json | null;
           slug?: string;
           sort_order?: number;
