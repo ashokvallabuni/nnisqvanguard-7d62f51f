@@ -44,6 +44,7 @@ import { Route as ApiScoreRouteImport } from './routes/api/score'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as CyberRangeChallengesRouteImport } from './routes/cyber-range.challenges'
+import { Route as CyberRangeDatasetsRouteImport } from './routes/cyber-range.datasets'
 import { Route as CyberRangeLabsRouteImport } from './routes/cyber-range.labs'
 import { Route as CyberRangeLeaderboardRouteImport } from './routes/cyber-range.leaderboard'
 import { Route as CyberRangeLearningPathsRouteImport } from './routes/cyber-range.learning-paths'
@@ -246,6 +247,11 @@ const CyberRangeChallengesRoute = CyberRangeChallengesRouteImport.update({
   path: '/challenges',
   getParentRoute: () => CyberRangeRoute,
 } as any)
+const CyberRangeDatasetsRoute = CyberRangeDatasetsRouteImport.update({
+  id: '/datasets',
+  path: '/datasets',
+  getParentRoute: () => CyberRangeRoute,
+} as any)
 const CyberRangeLabsRoute = CyberRangeLabsRouteImport.update({
   id: '/labs',
   path: '/labs',
@@ -423,6 +429,7 @@ export interface FileRoutesByFullPath {
   '/api/upload': typeof ApiUploadRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/cyber-range/challenges': typeof CyberRangeChallengesRoute
+  '/cyber-range/datasets': typeof CyberRangeDatasetsRoute
   '/cyber-range/labs': typeof CyberRangeLabsRoute
   '/cyber-range/leaderboard': typeof CyberRangeLeaderboardRoute
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
@@ -484,6 +491,7 @@ export interface FileRoutesByTo {
   '/api/upload': typeof ApiUploadRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/cyber-range/challenges': typeof CyberRangeChallengesRoute
+  '/cyber-range/datasets': typeof CyberRangeDatasetsRoute
   '/cyber-range/labs': typeof CyberRangeLabsRoute
   '/cyber-range/leaderboard': typeof CyberRangeLeaderboardRoute
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
@@ -548,6 +556,7 @@ export interface FileRoutesById {
   '/api/upload': typeof ApiUploadRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/cyber-range/challenges': typeof CyberRangeChallengesRoute
+  '/cyber-range/datasets': typeof CyberRangeDatasetsRoute
   '/cyber-range/labs': typeof CyberRangeLabsRoute
   '/cyber-range/leaderboard': typeof CyberRangeLeaderboardRoute
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
@@ -612,6 +621,7 @@ export interface FileRouteTypes {
     | '/api/upload'
     | '/auth/callback'
     | '/cyber-range/challenges'
+    | '/cyber-range/datasets'
     | '/cyber-range/labs'
     | '/cyber-range/leaderboard'
     | '/cyber-range/learning-paths'
@@ -673,6 +683,7 @@ export interface FileRouteTypes {
     | '/api/upload'
     | '/auth/callback'
     | '/cyber-range/challenges'
+    | '/cyber-range/datasets'
     | '/cyber-range/labs'
     | '/cyber-range/leaderboard'
     | '/cyber-range/learning-paths'
@@ -736,6 +747,7 @@ export interface FileRouteTypes {
     | '/api/upload'
     | '/auth/callback'
     | '/cyber-range/challenges'
+    | '/cyber-range/datasets'
     | '/cyber-range/labs'
     | '/cyber-range/leaderboard'
     | '/cyber-range/learning-paths'
@@ -1049,6 +1061,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CyberRangeChallengesRouteImport
       parentRoute: typeof CyberRangeRoute
     }
+    '/cyber-range/datasets': {
+      id: '/cyber-range/datasets'
+      path: '/datasets'
+      fullPath: '/cyber-range/datasets'
+      preLoaderRoute: typeof CyberRangeDatasetsRouteImport
+      parentRoute: typeof CyberRangeRoute
+    }
     '/cyber-range/labs': {
       id: '/cyber-range/labs'
       path: '/labs'
@@ -1300,6 +1319,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface CyberRangeRouteChildren {
   CyberRangeChallengesRoute: typeof CyberRangeChallengesRoute
+  CyberRangeDatasetsRoute: typeof CyberRangeDatasetsRoute
   CyberRangeLabsRoute: typeof CyberRangeLabsRoute
   CyberRangeLeaderboardRoute: typeof CyberRangeLeaderboardRoute
   CyberRangeLearningPathsRoute: typeof CyberRangeLearningPathsRoute
@@ -1307,6 +1327,7 @@ interface CyberRangeRouteChildren {
 
 const CyberRangeRouteChildren: CyberRangeRouteChildren = {
   CyberRangeChallengesRoute: CyberRangeChallengesRoute,
+  CyberRangeDatasetsRoute: CyberRangeDatasetsRoute,
   CyberRangeLabsRoute: CyberRangeLabsRoute,
   CyberRangeLeaderboardRoute: CyberRangeLeaderboardRoute,
   CyberRangeLearningPathsRoute: CyberRangeLearningPathsRoute,

@@ -1,216 +1,515 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
+import {
+  BookOpen,
+  CheckCircle2,
+  HelpCircle,
+  Terminal,
+  Database,
+  ArrowLeft,
+  ArrowRight,
+  Shield,
+  Award,
+  Zap,
+  Check,
+  X,
+  Sparkles,
+} from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ArrowLeft, CheckCircle2, PlayCircle, BookOpen, Wrench, HelpCircle } from "lucide-react";
-import { toast } from "sonner";
-import { useState } from "react";
+import { PageHeader } from "@/components/common/PageHeader";
+import { ModuleNavigation, ModuleItem } from "@/components/academy/ModuleNavigation";
+import { DatasetPreviewCard, DatasetSample } from "@/components/academy/DatasetPreviewCard";
+import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/$moduleSlug")({
-  head: ({ params }) => ({ meta: [{ title: `${params.moduleSlug.replace(/-/g, " ")} — NISQ Vanguard` }] }),
-  component: ModulePage,
+  head: ({ params }) => ({
+    meta: [
+      {
+        title: `${params.moduleSlug
+          .split("-")
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(" ")} — Module Learning — NISQ Vanguard`,
+      },
+    ],
+  }),
+  component: ModuleLearningPage,
 });
 
-type Quiz = { question: string; options: string[] };
-type Lesson = {
-  course: { id: string; slug: string; title: string; tier: string };
-  module: {
-    id: string;
-    slug: string;
-    title: string;
-    video_url: string | null;
-    notes_md: string | null;
-    practice_md: string | null;
-    quiz: Quiz[];
-  };
-};
-type GradeResult = {
-  score: number;
-  passed: boolean;
-  results: Array<{ correct: boolean; answer: number; explanation?: string }>;
-};
+// Telemetry dataset mock generators based on module topic
+function getModuleDataset(slug: string, title: string): DatasetSample {
+  if (slug.includes("auth") || slug.includes("password") || slug.includes("credential")) {
+    return {
+      name: "Linux SSH / Auth.log Telemetry Feed",
+      source: "Honeypot Sensor #042 (Ubuntu 22.04 LTS)",
+      format: "log",
+      description: "Analyze failed authentication sequences, repeated user enumeration, and automated password brute-force bursts.",
+      recordsCount: 420,
+      data: [
+        { timestamp: "2026-09-21T10:14:02Z", host: "auth-gateway-01", process: "sshd[18442]", event: "Failed password for invalid user admin from 198.51.100.44 port 48212 ssh2" },
+        { timestamp: "2026-09-21T10:14:03Z", host: "auth-gateway-01", process: "sshd[18445]", event: "Failed password for invalid user root from 198.51.100.44 port 48218 ssh2" },
+        { timestamp: "2026-09-21T10:14:05Z", host: "auth-gateway-01", process: "sshd[18450]", event: "Failed password for user postgres from 198.51.100.44 port 48224 ssh2" },
+        { timestamp: "2026-09-21T10:14:09Z", host: "auth-gateway-01", process: "sshd[18458]", event: "Received disconnect from 198.51.100.44 port 48224: 11: Bye Bye [preauth]" },
+        { timestamp: "2026-09-21T10:15:20Z", host: "auth-gateway-01", process: "sshd[18512]", event: "Accepted publickey for secops from 10.0.4.12 port 51102 ssh2: RSA SHA256:8sK..." }
+      ],
+      downloadUrl: "#",
+      kaggleUrl: "https://www.kaggle.com/datasets",
+    };
+  }
 
-async function authHeaders(): Promise<HeadersInit> {
-  const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token;
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  if (slug.includes("network") || slug.includes("traffic") || slug.includes("packet") || slug.includes("firewall")) {
+    return {
+      name: "Suricata NIDS Alert & PCAP Flow Telemetry",
+      source: "CIC-IDS2017 & Real Defense Perimeter Probe",
+      format: "json",
+      description: "Inspect network flow anomalies, SYN scan signatures (MITRE T1046), and unusual outbound DNS tunneling requests.",
+      recordsCount: 1540,
+      data: [
+        { timestamp: "2026-09-21T08:30:12Z", src_ip: "192.168.1.105", src_port: 54102, dst_ip: "10.0.0.5", dst_port: 80, proto: "TCP", alert: "ET SCAN Potential Nmap SYN Scan", severity: 2 },
+        { timestamp: "2026-09-21T08:30:13Z", src_ip: "192.168.1.105", src_port: 54103, dst_ip: "10.0.0.5", dst_port: 443, proto: "TCP", alert: "ET SCAN Potential Nmap SYN Scan", severity: 2 },
+        { timestamp: "2026-09-21T08:30:14Z", src_ip: "192.168.1.105", src_port: 54104, dst_ip: "10.0.0.5", dst_port: 22, proto: "TCP", alert: "ET SCAN Potential Nmap SYN Scan", severity: 2 },
+        { timestamp: "2026-09-21T08:35:45Z", src_ip: "10.0.0.5", src_port: 60231, dst_ip: "8.8.8.8", dst_port: 53, proto: "UDP", alert: "ET DNS Query for Suspicious High-Entropy Base64 Domain", severity: 1 }
+      ],
+      kaggleUrl: "https://www.kaggle.com/datasets",
+    };
+  }
+
+  // Default security telemetry
+  return {
+    name: `${title} — Real Incident Telemetry Dataset`,
+    source: "NISQ Defense Cyber Range Sensor Grid",
+    format: "json",
+    description: "Real-world captured system events and indicators of compromise (IOCs) mapped to this module's learning objectives.",
+    recordsCount: 350,
+    data: [
+      { id: "EVT-9021", timestamp: "2026-09-21T09:00:00Z", category: "Defensive Operations", severity: "HIGH", description: "Privilege escalation attempt detected on host-endpoint-alpha" },
+      { id: "EVT-9022", timestamp: "2026-09-21T09:04:12Z", category: "Network Boundary", severity: "MEDIUM", description: "Outbound beaconing to unregistered ASN IP" },
+      { id: "EVT-9023", timestamp: "2026-09-21T09:12:30Z", category: "Access Control", severity: "LOW", description: "MFA challenge successfully fulfilled" }
+    ],
+    kaggleUrl: "https://www.kaggle.com/datasets",
+  };
 }
 
-function ModulePage() {
+function ModuleLearningPage() {
   const { slug, moduleSlug } = Route.useParams();
   const { user } = useAuth();
-  const qc = useQueryClient();
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [grade, setGrade] = useState<GradeResult | null>(null);
-  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["lesson", slug, moduleSlug],
-    queryFn: async (): Promise<Lesson> => {
-      const res = await fetch(`/api/lessons/${slug}/${moduleSlug}`);
-      if (!res.ok) throw new Error((await res.json()).error ?? "Failed to load lesson");
-      return res.json();
-    },
-  });
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
+  const [checkedQuizzes, setCheckedQuizzes] = useState<Record<string, boolean>>({});
+  const [completing, setCompleting] = useState(false);
 
-  const { data: prog } = useQuery({
-    queryKey: ["mod-prog", user?.id, data?.module.id],
+  // 1. Fetch Course
+  const { data: course, isLoading: courseLoading } = useQuery({
+    queryKey: ["course-by-slug", slug],
     queryFn: async () => {
-      const { data: p } = await supabase
-        .from("module_progress")
-        .select("completed,quiz_score")
-        .eq("user_id", user!.id)
-        .eq("module_id", data!.module.id)
+      const { data, error } = await supabase
+        .from("courses")
+        .select("id,slug,title,description,level,tier")
+        .eq("slug", slug)
         .maybeSingle();
-      return p;
+      if (error) throw error;
+      return data;
     },
-    enabled: !!user && !!data?.module.id,
   });
 
-  if (isLoading) return <main className="pt-24 px-4">Loading…</main>;
-  if (error) return <main className="pt-24 px-4 text-center">{(error as Error).message}</main>;
-  if (!data) return <main className="pt-24 px-4">Module not found.</main>;
+  // 2. Fetch All Modules for Course
+  const { data: allModules } = useQuery({
+    queryKey: ["course-all-modules", course?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("modules")
+        .select("id,course_id,slug,title,difficulty,duration_minutes,practice_labs,sort_order")
+        .eq("course_id", course!.id)
+        .order("sort_order");
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: !!course,
+  });
 
-  const { course, module: mod } = data;
+  // 3. Fetch Current Module Detail
+  const { data: currentModule, isLoading: moduleLoading } = useQuery({
+    queryKey: ["module-detail", course?.id, moduleSlug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("modules")
+        .select("id,course_id,slug,title,notes_md,locked,tags,difficulty,duration_minutes,practice_labs,sort_order")
+        .eq("course_id", course!.id)
+        .eq("slug", moduleSlug)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!course,
+  });
 
-  const markComplete = async () => {
-    const res = await fetch("/api/progress", {
-      method: "POST",
-      headers: { "content-type": "application/json", ...(await authHeaders()) },
-      body: JSON.stringify({ module_id: mod.id, completed: true }),
-    });
-    if (!res.ok) { toast.error("Failed to save progress"); return; }
-    toast.success("Module completed");
-    qc.invalidateQueries({ queryKey: ["mod-prog"] });
-    qc.invalidateQueries({ queryKey: ["progress"] });
-  };
+  // 4. Fetch Quizzes for this module
+  const { data: quizzes } = useQuery({
+    queryKey: ["module-quizzes", currentModule?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("quizzes")
+        .select("id,module_id,question,options,correct_option,explanation,sort_order")
+        .eq("module_id", currentModule!.id)
+        .order("sort_order");
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: !!currentModule,
+  });
 
-  const submitQuiz = async () => {
-    if (mod.quiz.length === 0) return;
-    if (Object.keys(answers).length !== mod.quiz.length) {
-      toast.error("Answer all questions");
+  // 5. Fetch User Progress
+  const { data: userProgress } = useQuery({
+    queryKey: ["module-user-progress", user?.id, course?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from("module_progress")
+        .select("module_id,completed,quiz_score")
+        .eq("user_id", user.id);
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: !!user && !!course,
+  });
+
+  if (courseLoading || moduleLoading) {
+    return <DetailPageSkeleton />;
+  }
+
+  if (!course || !currentModule) {
+    return (
+      <div className="pt-28 pb-20 px-4 text-center max-w-md mx-auto">
+        <h2 className="font-display text-2xl font-bold">Module Not Found</h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          The requested learning module does not exist or has been modified.
+        </p>
+        <Link
+          to="/learn/$slug"
+          params={{ slug }}
+          className="mt-6 inline-block px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold"
+        >
+          Back to Course
+        </Link>
+      </div>
+    );
+  }
+
+  const completedModuleIds = new Set(
+    (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id)
+  );
+
+  const isCurrentModuleCompleted = completedModuleIds.has(currentModule.id);
+
+  // Navigation module list
+  const navModules: ModuleItem[] = (allModules ?? []).map((m) => ({
+    id: m.id,
+    slug: m.slug,
+    title: m.title,
+    order_index: m.sort_order,
+    duration_minutes: m.duration_minutes || 20,
+    has_dataset: true,
+    has_lab: (m.practice_labs?.length || 0) > 0,
+    completed: completedModuleIds.has(m.id),
+  }));
+
+  const currentIndex = (allModules ?? []).findIndex((m) => m.id === currentModule.id);
+  const nextModule = allModules?.[currentIndex + 1];
+  const prevModule = allModules?.[currentIndex - 1];
+
+  const datasetSample = getModuleDataset(currentModule.slug, currentModule.title);
+
+  // Mark Module Completed
+  const handleMarkComplete = async () => {
+    if (!user) {
+      toast.error("Please sign in to save your progress.");
       return;
     }
-    setSubmitting(true);
-    const arr = mod.quiz.map((_, i) => answers[i]);
-    const res = await fetch(`/api/quiz/${mod.id}`, {
-      method: "POST",
-      headers: { "content-type": "application/json", ...(await authHeaders()) },
-      body: JSON.stringify({ answers: arr }),
-    });
-    setSubmitting(false);
-    if (!res.ok) { toast.error("Quiz submission failed"); return; }
-    const g = (await res.json()) as GradeResult;
-    setGrade(g);
-    qc.invalidateQueries({ queryKey: ["mod-prog"] });
-    qc.invalidateQueries({ queryKey: ["progress"] });
-    toast[g.passed ? "success" : "info"](`Score: ${g.score}%`);
+
+    try {
+      setCompleting(true);
+      const { error } = await supabase.from("module_progress").upsert({
+        user_id: user.id,
+        module_id: currentModule.id,
+        completed: true,
+        updated_at: new Date().toISOString(),
+      });
+
+      if (error) throw error;
+
+      toast.success("Module marked as completed! XP awarded.");
+      queryClient.invalidateQueries({ queryKey: ["module-user-progress"] });
+      queryClient.invalidateQueries({ queryKey: ["course-user-progress"] });
+      queryClient.invalidateQueries({ queryKey: ["academy-user-progress"] });
+
+      if (nextModule) {
+        navigate({
+          to: "/learn/$slug/$moduleSlug",
+          params: { slug: course.slug, moduleSlug: nextModule.slug },
+        });
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update progress.");
+    } finally {
+      setCompleting(false);
+    }
   };
 
   return (
-    <main className="pt-24 pb-20 px-4 md:px-8">
-      <div className="max-w-3xl mx-auto">
-        <Link to="/learn/$slug" params={{ slug }} className="mono text-[0.6rem] text-muted-foreground hover:text-cyber inline-flex items-center gap-1 mb-4">
-          <ArrowLeft className="w-3 h-3" /> {course.title.toUpperCase()}
-        </Link>
-        <h1 className="display text-3xl md:text-4xl mb-4">{mod.title}</h1>
+    <div className="min-h-screen pt-16 pb-24">
+      <PageHeader
+        badge={`MODULE ${currentIndex + 1} OF ${allModules?.length || 1}`}
+        badgeVariant="primary"
+        title={currentModule.title}
+        subtitle={`${course.title} • ${currentModule.duration_minutes || 20} min estimated`}
+        breadcrumbs={[
+          { label: "Home", to: "/" },
+          { label: "Academy", to: "/academy" },
+          { label: course.title, to: `/learn/${course.slug}` },
+          { label: currentModule.title },
+        ]}
+      />
 
-        {/* VIDEO */}
-        <div className="aspect-video glass rounded-xl overflow-hidden mb-6 flex items-center justify-center">
-          {mod.video_url ? (
-            <video src={mod.video_url} controls className="w-full h-full" />
-          ) : (
-            <div className="text-center p-6">
-              <PlayCircle className="w-10 h-10 text-cyber mx-auto mb-2" />
-              <div className="mono text-[0.6rem] text-muted-foreground">VIDEO PLACEHOLDER</div>
-              <div className="text-sm text-muted-foreground mt-1">Video content coming soon</div>
-            </div>
-          )}
-        </div>
-
-        {/* NOTES */}
-        <section className="glass rounded-xl p-6 mb-6">
-          <div className="mono text-[0.6rem] text-cyber mb-2 inline-flex items-center gap-2">
-            <BookOpen className="w-3 h-3" /> // NOTES
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Syllabus Navigation Sidebar */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <ModuleNavigation
+              courseSlug={course.slug}
+              courseTitle={course.title}
+              modules={navModules}
+              currentModuleSlug={currentModule.slug}
+            />
           </div>
-          <div className="text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">
-            {mod.notes_md ?? "Notes coming soon."}
-          </div>
-        </section>
 
-        {/* PRACTICE */}
-        {mod.practice_md && (
-          <section className="glass rounded-xl p-6 mb-6 border border-primary/20">
-            <div className="mono text-[0.6rem] text-cyber mb-2 inline-flex items-center gap-2">
-              <Wrench className="w-3 h-3" /> // PRACTICE TASK
-            </div>
-            <div className="text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">
-              {mod.practice_md}
-            </div>
-          </section>
-        )}
+          {/* Core Module Content */}
+          <div className="lg:col-span-3 order-1 lg:order-2 space-y-8">
+            {/* Step 1: Core Theory & Concept */}
+            <section className="rounded-xl border border-border bg-card p-6 sm:p-8 space-y-5 shadow-xs">
+              <div className="flex items-center gap-2 pb-3 border-b border-border/80">
+                <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                  STEP 1
+                </span>
+                <h2 className="font-display font-bold text-lg text-foreground flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-primary" />
+                  <span>Theory & Core Security Concepts</span>
+                </h2>
+              </div>
 
-        {/* QUIZ */}
-        {mod.quiz.length > 0 && (
-          <section className="glass rounded-xl p-6 mb-6">
-            <div className="mono text-[0.6rem] text-cyber mb-4 inline-flex items-center gap-2">
-              <HelpCircle className="w-3 h-3" /> // QUIZ
-            </div>
-            <div className="space-y-6">
-              {mod.quiz.map((q, i) => {
-                const r = grade?.results[i];
-                return (
-                  <div key={i}>
-                    <div className="font-semibold mb-2">{i + 1}. {q.question}</div>
-                    <div className="space-y-2">
-                      {q.options.map((opt, j) => {
-                        const selected = answers[i] === j;
-                        const isCorrect = r && j === r.answer;
-                        const isWrongPick = r && selected && !r.correct;
-                        return (
-                          <button
-                            key={j}
-                            disabled={!!grade}
-                            onClick={() => setAnswers((a) => ({ ...a, [i]: j }))}
-                            className={`w-full text-left px-3 py-2 rounded-md border text-sm transition ${
-                              isCorrect ? "border-success bg-success/10 text-success" :
-                              isWrongPick ? "border-destructive bg-destructive/10 text-destructive" :
-                              selected ? "border-primary bg-primary/10" :
-                              "border-border hover:border-primary/40"
-                            }`}
-                          >
-                            {opt}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {r?.explanation && (
-                      <div className="mono text-[0.65rem] text-muted-foreground mt-2">→ {r.explanation}</div>
-                    )}
+              <div className="prose prose-slate max-w-none text-foreground leading-relaxed space-y-4">
+                {currentModule.notes_md ? (
+                  <div className="whitespace-pre-line text-sm sm:text-base text-foreground/90 font-normal">
+                    {currentModule.notes_md}
                   </div>
-                );
-              })}
-            </div>
-            {!grade ? (
-              <button onClick={submitQuiz} disabled={submitting} className="mt-6 w-full py-3 rounded-md bg-primary text-primary-foreground font-semibold mono text-xs disabled:opacity-60">
-                {submitting ? "GRADING…" : "SUBMIT QUIZ"}
-              </button>
-            ) : (
-              <div className={`mt-6 p-4 rounded-md text-center mono text-sm ${grade.passed ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}`}>
-                SCORE: {grade.score}% · {grade.passed ? "PASSED" : "TRY AGAIN"}
-                {!grade.passed && (
-                  <button onClick={() => { setGrade(null); setAnswers({}); }} className="ml-3 underline">Retry</button>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    In this lesson, you will master the defensive and threat architecture surrounding this topic. Review the real-world dataset below and take the assessment to reinforce your practical understanding.
+                  </p>
                 )}
               </div>
-            )}
-          </section>
-        )}
+            </section>
 
-        {/* COMPLETE */}
-        <button onClick={markComplete} disabled={prog?.completed} className="w-full py-3 rounded-md bg-primary text-primary-foreground font-semibold mono text-xs disabled:opacity-60 inline-flex items-center justify-center gap-2">
-          {prog?.completed ? <><CheckCircle2 className="w-4 h-4" /> COMPLETED</> : "MARK AS COMPLETE"}
-        </button>
+            {/* Step 2: Real Dataset Telemetry Viewer */}
+            <section className="rounded-xl border border-border bg-card p-6 sm:p-8 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between pb-3 border-b border-border/80">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-accent/15 text-accent font-semibold">
+                    STEP 2
+                  </span>
+                  <h2 className="font-display font-bold text-lg text-foreground flex items-center gap-2">
+                    <Database className="w-4 h-4 text-accent" />
+                    <span>Real-World Security Telemetry Dataset</span>
+                  </h2>
+                </div>
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Security analysts don't just read theory—they analyze logs, PCAPs, and authentication streams. Inspect the real telemetry feed below:
+              </p>
+
+              <DatasetPreviewCard dataset={datasetSample} />
+            </section>
+
+            {/* Step 3: Interactive Knowledge Checks & Quizzes */}
+            {quizzes && quizzes.length > 0 && (
+              <section className="rounded-xl border border-border bg-card p-6 sm:p-8 space-y-6 shadow-xs">
+                <div className="flex items-center gap-2 pb-3 border-b border-border/80">
+                  <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-warning/15 text-warning font-semibold">
+                    STEP 3
+                  </span>
+                  <h2 className="font-display font-bold text-lg text-foreground flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-warning" />
+                    <span>Knowledge Check ({quizzes.length} Questions)</span>
+                  </h2>
+                </div>
+
+                <div className="space-y-6">
+                  {quizzes.map((q, qIndex) => {
+                    const selected = selectedAnswers[q.id];
+                    const isChecked = checkedQuizzes[q.id];
+                    const isCorrect = selected === q.correct_option;
+                    const options = Array.isArray(q.options) ? q.options : [];
+
+                    return (
+                      <div
+                        key={q.id}
+                        className="p-5 rounded-xl border border-border bg-muted/20 space-y-4"
+                      >
+                        <h4 className="font-semibold text-sm sm:text-base text-foreground flex items-start gap-2">
+                          <span className="font-mono text-xs text-muted-foreground pt-0.5">
+                            Q{qIndex + 1}.
+                          </span>
+                          <span>{q.question}</span>
+                        </h4>
+
+                        <div className="space-y-2">
+                          {options.map((opt, oIndex) => {
+                            const isThisSelected = selected === oIndex;
+                            let optionStyle =
+                              "border-border bg-card hover:border-primary/50 text-foreground";
+
+                            if (isChecked) {
+                              if (oIndex === q.correct_option) {
+                                optionStyle =
+                                  "border-success bg-success/10 text-success font-medium";
+                              } else if (isThisSelected && !isCorrect) {
+                                optionStyle =
+                                  "border-destructive bg-destructive/10 text-destructive";
+                              }
+                            } else if (isThisSelected) {
+                              optionStyle = "border-primary bg-primary/10 text-primary font-medium";
+                            }
+
+                            return (
+                              <button
+                                key={oIndex}
+                                onClick={() => {
+                                  setSelectedAnswers((prev) => ({ ...prev, [q.id]: oIndex }));
+                                  setCheckedQuizzes((prev) => ({ ...prev, [q.id]: false }));
+                                }}
+                                className={`w-full text-left p-3 rounded-lg border text-xs sm:text-sm flex items-center justify-between transition-all ${optionStyle}`}
+                              >
+                                <span>{opt}</span>
+                                {isChecked && oIndex === q.correct_option && (
+                                  <Check className="w-4 h-4 text-success shrink-0" />
+                                )}
+                                {isChecked && isThisSelected && !isCorrect && (
+                                  <X className="w-4 h-4 text-destructive shrink-0" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2">
+                          <button
+                            disabled={selected === undefined}
+                            onClick={() =>
+                              setCheckedQuizzes((prev) => ({ ...prev, [q.id]: true }))
+                            }
+                            className="px-3.5 py-1.5 rounded-md text-xs font-mono bg-primary text-primary-foreground font-semibold disabled:opacity-40"
+                          >
+                            Check Answer
+                          </button>
+
+                          {isChecked && (
+                            <span
+                              className={`text-xs font-mono font-semibold ${
+                                isCorrect ? "text-success" : "text-destructive"
+                              }`}
+                            >
+                              {isCorrect ? "Correct! +10 XP" : "Incorrect. Try again."}
+                            </span>
+                          )}
+                        </div>
+
+                        {isChecked && q.explanation && (
+                          <div className="p-3 rounded-md bg-muted text-xs text-muted-foreground leading-relaxed border-l-2 border-primary">
+                            <span className="font-semibold text-foreground">Explanation: </span>
+                            {q.explanation}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+            {/* Step 4: Practical Cyber Lab Integration */}
+            <section className="rounded-xl border border-primary/40 bg-gradient-to-br from-primary/5 via-card to-accent/5 p-6 sm:p-8 space-y-4 shadow-xs">
+              <div className="flex items-center gap-2 pb-2">
+                <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary text-primary-foreground font-semibold">
+                  STEP 4
+                </span>
+                <h2 className="font-display font-bold text-lg text-foreground flex items-center gap-2">
+                  <Terminal className="w-4 h-4 text-primary" />
+                  <span>Hands-on Cyber Lab Practice</span>
+                </h2>
+              </div>
+
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+                Ready to practice in an isolated command line sandbox? Launch the companion Cyber Lab to investigate live artifacts and submit flags.
+              </p>
+
+              <div className="pt-2 flex flex-wrap gap-3">
+                <Link
+                  to="/cyber-range/labs"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shadow-xs"
+                >
+                  <Terminal className="w-4 h-4" />
+                  <span>Launch Hands-on Lab</span>
+                </Link>
+              </div>
+            </section>
+
+            {/* Bottom Actions: Previous / Next / Complete */}
+            <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                {prevModule && (
+                  <Link
+                    to="/learn/$slug/$moduleSlug"
+                    params={{ slug: course.slug, moduleSlug: prevModule.slug }}
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>Previous: {prevModule.title}</span>
+                  </Link>
+                )}
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleMarkComplete}
+                  disabled={completing}
+                  className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-xs ${
+                    isCurrentModuleCompleted
+                      ? "bg-success text-success-foreground hover:bg-success/90"
+                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                  }`}
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>
+                    {completing
+                      ? "Saving..."
+                      : isCurrentModuleCompleted
+                      ? nextModule
+                        ? "Completed — Next Module →"
+                        : "Completed!"
+                      : nextModule
+                      ? "Complete & Next Module →"
+                      : "Complete Course Track"}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

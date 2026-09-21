@@ -1,179 +1,314 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import {
+  BookOpen,
+  Clock,
+  Award,
+  CheckCircle2,
+  Circle,
+  Play,
+  Terminal,
+  Database,
+  ArrowRight,
+  Shield,
+  Layers,
+  Lock,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { Lock, PlayCircle, CheckCircle2, ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { PageHeader } from "@/components/common/PageHeader";
+import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
 
 export const Route = createFileRoute("/learn/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — NISQ Vanguard` },
+      {
+        title: `${params.slug
+          .split("-")
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(" ")} — NISQ Vanguard Academy`,
+      },
       {
         name: "description",
-        content: "Course modules on NISQ Vanguard cybersecurity learning platform.",
+        content: "Explore course syllabus, modules, telemetry datasets, and cyber labs.",
       },
     ],
   }),
-  component: CoursePage,
-  errorComponent: ({ error }) => <div className="pt-24 px-4 text-center">{error.message}</div>,
-  notFoundComponent: () => <div className="pt-24 px-4 text-center">Course not found.</div>,
+  component: CourseDetailPage,
+  notFoundComponent: () => (
+    <div className="pt-28 pb-20 px-4 text-center max-w-md mx-auto">
+      <h2 className="font-display text-2xl font-bold">Course Not Found</h2>
+      <p className="text-sm text-muted-foreground mt-2">
+        The course track you are looking for does not exist or has been moved.
+      </p>
+      <Link
+        to="/academy"
+        className="mt-6 inline-block px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold"
+      >
+        Back to Academy
+      </Link>
+    </div>
+  ),
 });
 
-function CoursePage() {
+function CourseDetailPage() {
   const { slug } = Route.useParams();
   const { user } = useAuth();
-  const [showUpsell, setShowUpsell] = useState(false);
 
-  const { data: course, isLoading } = useQuery({
-    queryKey: ["course", slug],
+  const { data: course, isLoading: courseLoading } = useQuery({
+    queryKey: ["course-detail", slug],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("courses")
-        .select("id,slug,title,description,level,tier")
+        .select("id,slug,title,description,level,tier,sort_order")
         .eq("slug", slug)
         .maybeSingle();
+      if (error) throw error;
       if (!data) throw notFound();
       return data;
     },
   });
 
-  const { data: modules } = useQuery({
-    queryKey: ["modules", course?.id],
+  const { data: modules, isLoading: modulesLoading } = useQuery({
+    queryKey: ["course-modules", course?.id],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("modules")
-        .select("id,slug,title,sort_order,locked,notes_md")
+        .select("id,course_id,slug,title,notes_md,difficulty,duration_minutes,tags,practice_labs,sort_order")
         .eq("course_id", course!.id)
         .order("sort_order");
+      if (error) throw error;
       return data ?? [];
     },
     enabled: !!course,
   });
 
-  const { data: progress } = useQuery({
-    queryKey: ["progress", user?.id, course?.id],
+  const { data: userProgress } = useQuery({
+    queryKey: ["course-user-progress", user?.id, course?.id],
     queryFn: async () => {
-      const { data } = await supabase
+      if (!user) return [];
+      const { data, error } = await supabase
         .from("module_progress")
         .select("module_id,completed")
-        .eq("user_id", user!.id);
+        .eq("user_id", user.id);
+      if (error) throw error;
       return data ?? [];
     },
     enabled: !!user && !!course,
   });
 
-  if (isLoading) return <main className="pt-24 px-4 text-muted-foreground">Loading…</main>;
+  if (courseLoading || modulesLoading) {
+    return <DetailPageSkeleton />;
+  }
+
   if (!course) return null;
 
-  const completedIds = new Set((progress ?? []).filter((p) => p.completed).map((p) => p.module_id));
-  const pct =
-    modules && modules.length ? Math.round((completedIds.size / modules.length) * 100) : 0;
-  const isPaid = course.tier === "paid";
+  const completedModuleIds = new Set(
+    (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id)
+  );
+  const totalModules = modules?.length || 0;
+  const completedCount = modules?.filter((m) => completedModuleIds.has(m.id)).length || 0;
+  const progressPercent = totalModules ? Math.round((completedCount / totalModules) * 100) : 0;
+  const totalDuration = (modules ?? []).reduce((acc, m) => acc + (m.duration_minutes || 25), 0);
+
+  // First uncompleted module or the first module
+  const nextModule =
+    modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];
 
   return (
-    <main className="pt-24 pb-20 px-4 md:px-8">
-      <div className="max-w-4xl mx-auto">
-        <Link
-          to="/learn"
-          className="mono text-[0.6rem] text-muted-foreground hover:text-cyber inline-flex items-center gap-1 mb-4"
-        >
-          <ArrowLeft className="w-3 h-3" /> ALL COURSES
-        </Link>
-        <div className="mono text-xs text-cyber mb-2">
-          // {course.level.toUpperCase()} · {isPaid ? "PREMIUM" : "FREE"}
-        </div>
-        <h1 className="display text-4xl md:text-5xl mb-3">{course.title}</h1>
-        <p className="text-muted-foreground mb-6 max-w-2xl">{course.description}</p>
+    <div className="min-h-screen pt-16 pb-24">
+      <PageHeader
+        badge={course.level.toUpperCase()}
+        badgeVariant="primary"
+        title={course.title}
+        subtitle={course.description || "Master critical cybersecurity defense foundations with structured theory and live data analysis."}
+        breadcrumbs={[
+          { label: "Home", to: "/" },
+          { label: "Academy", to: "/academy" },
+          { label: course.title },
+        ]}
+      />
 
-        {user && !isPaid && (
-          <div className="glass rounded-lg p-4 mb-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="mono text-[0.6rem] text-muted-foreground">PROGRESS</span>
-              <span className="mono text-[0.6rem] text-cyber">{pct}%</span>
-            </div>
-            <div className="h-1.5 bg-border rounded-full overflow-hidden">
-              <div
-                className="h-full bg-primary glow-cyber transition-all"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-          </div>
-        )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Course Syllabus & Overview */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Overview Card */}
+            <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+              <h2 className="font-display font-bold text-xl text-foreground">
+                Course Curriculum Overview
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                This curriculum combines fundamental principles with telemetry logs and hands-on exercises. Each module ends with practical knowledge checks and references to isolated Cyber Labs.
+              </p>
 
-        <div className="space-y-2">
-          {(modules ?? []).map((m, i) => {
-            const done = completedIds.has(m.id);
-            const locked = m.locked || isPaid;
-            const inner = (
-              <div className="glass rounded-lg p-4 flex items-center gap-4 hover:glow-cyber transition">
-                <div className="mono text-[0.6rem] text-muted-foreground w-6">
-                  {String(i + 1).padStart(2, "0")}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold truncate">{m.title}</div>
-                  <div className="mono text-[0.55rem] text-muted-foreground line-clamp-1">
-                    {m.notes_md?.slice(0, 90)}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
+                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Duration</div>
+                  <div className="font-semibold text-sm text-foreground flex items-center gap-1.5 mt-0.5">
+                    <Clock className="w-4 h-4 text-primary" />
+                    <span>~{Math.max(1, Math.round(totalDuration / 60))} Hours</span>
                   </div>
                 </div>
-                {locked ? (
-                  <Lock className="w-5 h-5 text-accent" />
-                ) : done ? (
-                  <CheckCircle2 className="w-5 h-5 text-success" />
-                ) : (
-                  <PlayCircle className="w-5 h-5 text-cyber" />
-                )}
+                <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
+                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Structure</div>
+                  <div className="font-semibold text-sm text-foreground flex items-center gap-1.5 mt-0.5">
+                    <BookOpen className="w-4 h-4 text-accent" />
+                    <span>{totalModules} Modules</span>
+                  </div>
+                </div>
+                <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
+                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Practice</div>
+                  <div className="font-semibold text-sm text-foreground flex items-center gap-1.5 mt-0.5">
+                    <Terminal className="w-4 h-4 text-success" />
+                    <span>Cyber Labs</span>
+                  </div>
+                </div>
               </div>
-            );
-            if (locked) {
-              return (
-                <button key={m.id} onClick={() => setShowUpsell(true)} className="w-full text-left">
-                  {inner}
-                </button>
-              );
-            }
-            if (!user) {
-              return (
-                <Link key={m.id} to="/login" search={{ next: `/learn/${slug}/${m.slug}` }}>
-                  {inner}
-                </Link>
-              );
-            }
-            return (
-              <Link key={m.id} to="/learn/$slug/$moduleSlug" params={{ slug, moduleSlug: m.slug }}>
-                {inner}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+            </div>
 
-      {showUpsell && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-          onClick={() => setShowUpsell(false)}
-        >
-          <div
-            className="glass rounded-2xl p-8 max-w-md w-full glow-cyber"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="text-4xl mb-2">🔒</div>
-            <h3 className="display text-2xl text-cyber mb-2">
-              Unlock Practical Cybersecurity Skills
-            </h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Upgrade to access real tools & hacking labs. Payments launching soon — join the
-              waitlist.
-            </p>
-            <button
-              onClick={() => setShowUpsell(false)}
-              className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-md mono text-xs"
-            >
-              GOT IT
-            </button>
+            {/* Modules List */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-primary" />
+                  <span>Syllabus Modules ({totalModules})</span>
+                </h3>
+                <span className="text-xs font-mono text-muted-foreground">
+                  {completedCount} of {totalModules} Completed
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {(modules ?? []).map((m, index) => {
+                  const isCompleted = completedModuleIds.has(m.id);
+                  return (
+                    <div
+                      key={m.id}
+                      className={`rounded-xl border transition-all p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                        isCompleted
+                          ? "border-success/30 bg-card/60"
+                          : "border-border bg-card hover:border-primary/40 hover:shadow-xs"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3.5 min-w-0">
+                        <div className="pt-0.5 shrink-0">
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-5 h-5 text-success" />
+                          ) : (
+                            <div className="w-5 h-5 rounded-full border border-border flex items-center justify-center font-mono text-[0.65rem] text-muted-foreground">
+                              {index + 1}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="space-y-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[0.65rem] font-mono text-muted-foreground uppercase">
+                              Module {index + 1}
+                            </span>
+                            {m.duration_minutes && (
+                              <span className="text-[0.65rem] font-mono text-muted-foreground">
+                                • {m.duration_minutes} min
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="font-display font-bold text-base text-foreground line-clamp-1">
+                            {m.title}
+                          </h4>
+                          {m.tags && m.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 pt-1">
+                              {m.tags.slice(0, 3).map((t, i) => (
+                                <span
+                                  key={i}
+                                  className="text-[0.6rem] font-mono px-2 py-0.5 rounded-xs bg-muted text-muted-foreground"
+                                >
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="shrink-0 flex items-center gap-2 self-end sm:self-center">
+                        <Link
+                          to="/learn/$slug/$moduleSlug"
+                          params={{ slug: course.slug, moduleSlug: m.slug }}
+                          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                            isCompleted
+                              ? "border border-border hover:bg-muted text-foreground"
+                              : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
+                          }`}
+                        >
+                          <span>{isCompleted ? "Review Module" : "Start Module"}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar Action / Progress Widget */}
+          <div className="space-y-6">
+            <div className="rounded-xl border border-border bg-card p-6 space-y-5 sticky top-20 shadow-xs">
+              <div className="space-y-2">
+                <span className="text-[0.65rem] font-mono uppercase px-2.5 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/20 font-medium">
+                  {course.tier === "paid" ? "SPECIALIZATION" : "INCLUDED TRACK"}
+                </span>
+                <h3 className="font-display font-bold text-lg text-foreground">
+                  Track Completion
+                </h3>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs font-mono">
+                  <span className="text-muted-foreground">Course Progress</span>
+                  <span className="font-semibold text-foreground">{progressPercent}%</span>
+                </div>
+                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                  <div
+                    className="h-full bg-primary transition-all duration-300"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+              </div>
+
+              {nextModule && (
+                <div className="pt-2">
+                  <Link
+                    to="/learn/$slug/$moduleSlug"
+                    params={{ slug: course.slug, moduleSlug: nextModule.slug }}
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 shadow-sm transition-all"
+                  >
+                    <Play className="w-4 h-4 fill-primary-foreground" />
+                    <span>{progressPercent > 0 ? "Resume Learning" : "Start First Module"}</span>
+                  </Link>
+                </div>
+              )}
+
+              <div className="border-t border-border/80 pt-4 space-y-3 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-primary shrink-0" />
+                  <span>Real threat actor telemetry & scenario logs</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-4 h-4 text-success shrink-0" />
+                  <span>Hands-on practice labs in NISQ Cyber Labs</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-accent shrink-0" />
+                  <span>Digital Skill Points & Certificate on completion</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      )}
-    </main>
+      </div>
+    </div>
   );
 }

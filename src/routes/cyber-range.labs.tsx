@@ -1,83 +1,376 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
+import {
+  Terminal,
+  Shield,
+  Activity,
+  Filter,
+  Search,
+  Zap,
+  Clock,
+  Layers,
+  Sparkles,
+  ArrowRight,
+  Database,
+  Award,
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { buttonVariants } from "@/components/ui/button";
-import { listPublishedLabs } from "@/lib/cyber-labs";
-import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/common/PageHeader";
+import { LabCard, LabData } from "@/components/cyber-range/LabCard";
+import { GridSkeleton } from "@/components/common/SkeletonLoaders";
 
 export const Route = createFileRoute("/cyber-range/labs")({
-  head: () => ({ meta: [{ title: "Cyber Labs — NISQ Vanguard" }] }),
-  component: CyberLabsPage,
+  head: () => ({
+    meta: [
+      { title: "NISQ Cyber Labs — Hands-on Cyber Range & Incident Workbenches" },
+      {
+        name: "description",
+        content:
+          "Launch isolated Docker sandbox environments to solve real-world cybersecurity tasks, analyze network captures, and submit flags.",
+      },
+    ],
+  }),
+  component: CyberLabsCatalogPage,
 });
 
-function CyberLabsPage() {
-  const { user } = useAuth();
-  const [labs, setLabs] = useState<Awaited<ReturnType<typeof listPublishedLabs>>>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+// Canonical defense & threat investigation labs
+const CANONICAL_LABS: LabData[] = [
+  {
+    id: "lab-ssh-bruteforce",
+    slug: "linux-ssh-brute-force-investigation",
+    title: "Linux SSH Brute Force Investigation",
+    summary: "Analyze live syslog and auth.log streams in an isolated Linux environment to detect automated credential stuffing, identify attacker IP ranges, and construct automated fail2ban rules.",
+    difficulty: "easy",
+    category: "Host Forensics",
+    estimated_minutes: 30,
+    mitre_attack_ids: ["T1110.001", "T1078"],
+    points: 100,
+    skills: ["Syslog Analysis", "Bash Scripting", "Log Parsing"],
+  },
+  {
+    id: "lab-suricata-nids",
+    slug: "suricata-network-threat-hunting",
+    title: "Suricata Network Threat Hunting & PCAP Analysis",
+    summary: "Reconstruct malicious packet streams, isolate command-and-control (C2) beaconing intervals, and extract hidden base64 encoded data exfiltration channels from raw PCAPs.",
+    difficulty: "medium",
+    category: "Network Defense",
+    estimated_minutes: 45,
+    mitre_attack_ids: ["T1046", "T1071.001", "T1041"],
+    points: 150,
+    skills: ["Wireshark / TShark", "Suricata Rules", "Network Forensics"],
+  },
+  {
+    id: "lab-sqli-investigation",
+    slug: "sql-injection-forensics-and-mitigation",
+    title: "SQL Injection Incident Forensics & Hardening",
+    summary: "Investigate database access logs following a data exfiltration incident, identify the vulnerable parameterized query bypass, and remediate the backend application code.",
+    difficulty: "medium",
+    category: "App Security",
+    estimated_minutes: 40,
+    mitre_attack_ids: ["T1190", "T1005"],
+    points: 150,
+    skills: ["SQLi Exploitation & Defense", "Web Log Analysis", "Secure Code Review"],
+  },
+  {
+    id: "lab-ransomware-triage",
+    slug: "ransomware-registry-persistence-triage",
+    title: "Ransomware Registry Persistence & Triage",
+    summary: "Inspect Windows event logs and registry run keys in a simulated enterprise workstation to locate encrypted shadow copies and extract the attacker's staging script.",
+    difficulty: "hard",
+    category: "Endpoint Triage",
+    estimated_minutes: 60,
+    mitre_attack_ids: ["T1547.001", "T1486", "T1059.001"],
+    points: 250,
+    skills: ["Windows Event Logs", "Sysinternals", "Malware Triage"],
+  },
+  {
+    id: "lab-container-security",
+    slug: "docker-container-breakout-defense",
+    title: "Docker Container Security & Escape Defense",
+    summary: "Identify misconfigured privileged container capabilities, audit mounted host sockets, and harden the Docker daemon security profile against privilege escalation.",
+    difficulty: "hard",
+    category: "Cloud Security",
+    estimated_minutes: 50,
+    mitre_attack_ids: ["T1611", "T1068"],
+    points: 200,
+    skills: ["Container Auditing", "Capabilities", "AppArmor / Seccomp"],
+  },
+  {
+    id: "lab-memory-forensics",
+    slug: "volatility-memory-dump-analysis",
+    title: "Memory Forensics with Volatility 3",
+    summary: "Parse raw memory dumps from a compromised domain controller, hunt for injected DLLs, unhooked processes, and recover plaintext credentials from memory.",
+    difficulty: "insane",
+    category: "Threat Hunting",
+    estimated_minutes: 75,
+    mitre_attack_ids: ["T1055", "T1003.001"],
+    points: 300,
+    skills: ["Volatility 3", "Process Injection Analysis", "Memory Forensics"],
+  },
+];
 
-  useEffect(() => {
-    void listPublishedLabs()
-      .then(setLabs)
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
-  }, []);
+function CyberLabsCatalogPage() {
+  const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+
+  // Fetch labs from Supabase
+  const { data: dbLabs, isLoading } = useQuery({
+    queryKey: ["cyber-range-published-labs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("labs")
+        .select("*")
+        .eq("status", "PUBLISHED")
+        .order("created_at", { ascending: false });
+      if (error) return [];
+      return data ?? [];
+    },
+  });
+
+  // Fetch active lab sessions for user
+  const { data: activeSessions } = useQuery({
+    queryKey: ["user-active-lab-sessions", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from("lab_sessions")
+        .select("lab_id,status")
+        .eq("user_id", user.id)
+        .eq("status", "RUNNING");
+      if (error) return [];
+      return data ?? [];
+    },
+    enabled: !!user,
+  });
+
+  // Fetch completed labs
+  const { data: completedLabs } = useQuery({
+    queryKey: ["user-completed-labs", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from("lab_progress")
+        .select("lab_id,completed")
+        .eq("user_id", user.id)
+        .eq("completed", true);
+      if (error) return [];
+      return data ?? [];
+    },
+    enabled: !!user,
+  });
+
+  // Combine DB labs with canonical labs
+  const allLabs: LabData[] = useMemo(() => {
+    const activeLabIds = new Set((activeSessions ?? []).map((s) => s.lab_id));
+    const completedLabIds = new Set((completedLabs ?? []).map((l) => l.lab_id));
+
+    const formattedDbLabs: LabData[] = (dbLabs ?? []).map((l) => ({
+      id: l.id,
+      slug: l.slug,
+      title: l.title,
+      summary: l.description || "Hands-on isolated cybersecurity exercise.",
+      difficulty: (l.difficulty || "medium").toLowerCase(),
+      category: l.lab_type || "Cyber Defense",
+      estimated_minutes: l.estimated_minutes || 45,
+      mitre_attack_ids: (l.mitre_attack_ids as string[]) || [],
+      points: l.reward_points || 100,
+      is_active_session: activeLabIds.has(l.id),
+      completed: completedLabIds.has(l.id),
+    }));
+
+    // If DB labs are present, merge; otherwise use canonical labs
+    const existingSlugs = new Set(formattedDbLabs.map((l) => l.slug));
+    const merged = [
+      ...formattedDbLabs,
+      ...CANONICAL_LABS.filter((c) => !existingSlugs.has(c.slug)),
+    ];
+
+    return merged.map((lab) => ({
+      ...lab,
+      is_active_session: activeLabIds.has(lab.id) || lab.is_active_session,
+      completed: completedLabIds.has(lab.id) || lab.completed,
+    }));
+  }, [dbLabs, activeSessions, completedLabs]);
+
+  // Categories list
+  const categories = useMemo(() => {
+    const set = new Set(allLabs.map((l) => l.category).filter(Boolean));
+    return ["all", ...Array.from(set)];
+  }, [allLabs]);
+
+  // Filtered labs
+  const filteredLabs = useMemo(() => {
+    return allLabs.filter((lab) => {
+      const matchesSearch =
+        lab.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lab.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lab.mitre_attack_ids?.some((m) => m.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      const matchesCategory =
+        selectedCategory === "all" || lab.category?.toLowerCase() === selectedCategory.toLowerCase();
+
+      const matchesDifficulty =
+        selectedDifficulty === "all" || lab.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
+
+      return matchesSearch && matchesCategory && matchesDifficulty;
+    });
+  }, [allLabs, searchQuery, selectedCategory, selectedDifficulty]);
+
+  const activeSessionLab = allLabs.find((l) => l.is_active_session);
 
   return (
-    <main className="pt-16 min-h-screen range-band px-4 md:px-8 py-24">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex items-center gap-4 mb-10">
-          <ShieldCheck className="size-14 text-cyber" />
-          <div>
-            <p className="mono text-xs text-cyber">// PUBLIC TRAINING CATALOG</p>
-            <h1 className="display text-5xl">Cyber Labs</h1>
+    <div className="min-h-screen pt-16 pb-24">
+      <PageHeader
+        badge="NISQ Cyber Labs"
+        badgeVariant="primary"
+        title="Hands-on Cyber Range Workbenches"
+        subtitle="Practice real-world incident investigation, malware triage, and network packet analysis inside isolated sandbox environments."
+        breadcrumbs={[{ label: "Home", to: "/" }, { label: "Cyber Labs" }]}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
+        {/* Active Session Notification Card */}
+        {activeSessionLab && (
+          <div className="rounded-xl border border-primary bg-primary/10 p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm animate-in fade-in">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-lg bg-primary text-primary-foreground animate-pulse">
+                <Activity className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-mono uppercase tracking-wider text-primary font-semibold">
+                  ACTIVE CONTAINER SESSION RUNNING
+                </div>
+                <div className="font-display font-bold text-base text-foreground">
+                  {activeSessionLab.title}
+                </div>
+              </div>
+            </div>
+
+            <Link
+              to="/_authenticated/cyber-range/lab/$slug"
+              params={{ slug: activeSessionLab.slug }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-xs font-mono font-semibold hover:bg-primary/90 transition-colors shadow-xs shrink-0"
+            >
+              <Terminal className="w-4 h-4" />
+              <span>Resume Active Lab</span>
+            </Link>
+          </div>
+        )}
+
+        {/* Labs Workflow Guide */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-5 rounded-xl border border-border bg-card space-y-2">
+            <div className="w-7 h-7 rounded-md bg-primary/10 text-primary flex items-center justify-center font-mono text-xs font-bold">
+              01
+            </div>
+            <h4 className="font-display font-bold text-sm text-foreground">
+              Isolated Execution Sandbox
+            </h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Every lab launches a private Docker container with real forensics tools (TShark, Suricata, GDB, Volatility).
+            </p>
+          </div>
+
+          <div className="p-5 rounded-xl border border-border bg-card space-y-2">
+            <div className="w-7 h-7 rounded-md bg-accent/15 text-accent-foreground flex items-center justify-center font-mono text-xs font-bold">
+              02
+            </div>
+            <h4 className="font-display font-bold text-sm text-foreground">
+              Real Data Telemetry
+            </h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Analyze realistic PCAPs, authentication event logs, and malware registry artifacts derived from real engagements.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-xl border border-border bg-card space-y-2">
+            <div className="w-7 h-7 rounded-md bg-success/15 text-success flex items-center justify-center font-mono text-xs font-bold">
+              03
+            </div>
+            <h4 className="font-display font-bold text-sm text-foreground">
+              Instant Validation & Points
+            </h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Submit your analytical answers or captured security flags to receive automated score grading and skill points.
+            </p>
           </div>
         </div>
-        <section className="glass rounded-lg p-8 md:p-10 border-primary/30">
-          <h2 className="display text-3xl mb-3">Real practice, clearly connected</h2>
-          <p className="text-muted-foreground max-w-2xl">
-            Labs are published only after their dataset source, learning objectives and isolated
-            execution requirements are reviewed.
-          </p>
-        </section>
-        <div className="mt-8 grid md:grid-cols-2 gap-5">
-          {loading && (
-            <p className="mono text-xs text-muted-foreground">LOADING PUBLISHED LABS...</p>
-          )}
-          {error && (
-            <p className="mono text-xs text-warning">
-              LAB CATALOG UNAVAILABLE. PLEASE TRY AGAIN LATER.
-            </p>
-          )}
-          {!loading && !error && labs.length === 0 && (
-            <div className="glass rounded-lg p-8 md:col-span-2">
-              <p className="mono text-xs text-cyber">// NO PUBLISHED LABS</p>
-              <h2 className="display text-2xl mt-2">Labs are being connected</h2>
-              <p className="text-sm text-muted-foreground mt-3">
-                No production lab records are available yet. Dataset-derived content will appear
-                here after validation and review.
+
+        {/* Search & Filters */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
+          <div className="relative flex-1 max-w-md">
+            <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search labs by technique or title (e.g. T1110, Volatility, SSH)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 text-xs font-mono">
+              <span className="px-2 text-muted-foreground">Difficulty:</span>
+              {["all", "easy", "medium", "hard"].map((diff) => (
+                <button
+                  key={diff}
+                  onClick={() => setSelectedDifficulty(diff)}
+                  className={`px-2.5 py-1 rounded-md capitalize transition-colors ${
+                    selectedDifficulty === diff
+                      ? "bg-primary text-primary-foreground font-semibold"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {diff}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Labs Grid */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
+              <Terminal className="w-5 h-5 text-primary" />
+              <span>Available Cyber Range Labs ({filteredLabs.length})</span>
+            </h3>
+          </div>
+
+          {isLoading ? (
+            <GridSkeleton count={6} />
+          ) : filteredLabs.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border p-12 text-center space-y-3">
+              <Terminal className="w-10 h-10 text-muted-foreground mx-auto" />
+              <h4 className="font-semibold text-foreground">No labs match your filter</h4>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                Try clearing your search query or choosing a different difficulty level.
               </p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedDifficulty("all");
+                  setSelectedCategory("all");
+                }}
+                className="text-xs font-mono text-primary underline"
+              >
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredLabs.map((lab) => (
+                <LabCard key={lab.id} lab={lab} />
+              ))}
             </div>
           )}
-          {labs.map((lab) => (
-            <article key={lab.id} className="glass rounded-lg p-6">
-              <p className="mono text-[0.65rem] text-cyber">
-                {lab.difficulty} · {lab.lab_type}
-              </p>
-              <h2 className="display text-2xl mt-2">{lab.title}</h2>
-              <p className="text-sm text-muted-foreground mt-3">{lab.description}</p>
-              <Link
-                to="/cyber-range/lab/$slug"
-                params={{ slug: lab.slug }}
-                className={cn(buttonVariants({ size: "sm" }), "mt-5")}
-              >
-                View lab <ArrowRight />
-              </Link>
-            </article>
-          ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
