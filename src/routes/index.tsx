@@ -1,7 +1,8 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, ShieldCheck, ScanSearch, GraduationCap, AlertTriangle } from "lucide-react";
+import { ArrowRight, ShieldCheck, ScanSearch, GraduationCap, AlertTriangle, BriefcaseBusiness, Building2, BrainCircuit, RadioTower, Shield } from "lucide-react";
+import { CinematicHero } from "@/components/cinematic-hero";
 
 const founderImageUrl = "/assets/founder.jpeg";
 const logoImageUrl = "/assets/nisq-logo.jpeg";
@@ -14,13 +15,14 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India." },
       { property: "og:title", content: "CyberShield India — AI Fraud Detection & College Cyber Awareness" },
       { property: "og:description", content: "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
 });
 
 function Home() {
-  const nav = useNavigate();
   const { data: content } = useQuery({
     queryKey: ["site_content"],
     queryFn: async () => {
@@ -36,64 +38,21 @@ function Home() {
 
   return (
     <main className="pt-16">
-      {/* HERO */}
-      <section
-        className="relative min-h-[85vh] flex items-center px-4 md:px-8 overflow-hidden"
-        style={{
-          backgroundImage: `url(${logoImageUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/70" />
-        <div className="relative max-w-6xl mx-auto w-full py-16 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="mono text-[0.7rem] text-cyber mb-4 inline-block px-3 py-1 rounded-full border border-primary/40 bg-primary/5">
-              ● SYSTEM ONLINE · NATIONAL CYBERSHIELD
-            </div>
-            <h1 className="display text-5xl md:text-7xl leading-none mb-6">
-              {hero?.title ?? "Cyber Awareness, Fraud Detection & College Outreach"}
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-xl mb-8">
-              {hero?.description ?? "A national platform protecting citizens from digital fraud and empowering colleges across India with cybersecurity awareness programs."}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <button onClick={() => nav({ to: "/fraud-check" })} className="glow-cyber bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-md flex items-center gap-2">
-                <ScanSearch className="w-4 h-4" /> Scan a Screenshot
-              </button>
-              <button onClick={() => nav({ to: "/programs" })} className="border border-primary/40 px-6 py-3 rounded-md flex items-center gap-2 hover:bg-primary/10">
-                Book an Awareness Program <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="mt-10 grid grid-cols-3 gap-4 max-w-md">
-              <Stat n="24/7" l="AI DETECTION" />
-              <Stat n="500+" l="COLLEGES" />
-              <Stat n="AI×AI" l="VISION MODEL" />
-            </div>
-          </div>
-          <div className="relative">
-            <div className="glass rounded-2xl p-8 glow-cyber">
-              <div className="mono text-xs text-muted-foreground mb-4">// LIVE THREAT FEED</div>
-              <ThreatRow verdict="Fraud" text="Fake UPI refund request" score={92} />
-              <ThreatRow verdict="Suspicious" text="Unverified job offer" score={68} />
-              <ThreatRow verdict="Fraud" text="OTP phishing SMS" score={95} />
-              <ThreatRow verdict="Safe" text="Genuine bank notification" score={12} />
-              <ThreatRow verdict="Suspicious" text="Investment scheme DM" score={74} />
-            </div>
-          </div>
-        </div>
-      </section>
+      <CinematicHero />
 
-      {/* PILLARS */}
+      {/* PLATFORM CAPABILITIES */}
       <section className="px-4 md:px-8 py-20 border-t border-primary/10">
         <div className="max-w-6xl mx-auto">
-          <div className="mono text-xs text-cyber mb-2">// CAPABILITIES</div>
-          <h2 className="display text-4xl md:text-5xl mb-10">Three shields. One mission.</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <Pillar icon={<ScanSearch />} title="AI Fraud Detection" body="Upload a screenshot. Our vision model returns a fraud score, verdict and next steps in seconds." link={{ to: "/fraud-check", label: "Try it now" }} />
-            <Pillar icon={<AlertTriangle />} title="Complaint Filing" body="Log cybercrime complaints with evidence. Every submission gets AI-triaged before human review." link={{ to: "/complaint", label: "File complaint" }} />
-            <Pillar icon={<GraduationCap />} title="College Awareness" body="Colleges across India can request webinars, seminars and workshops led by cyber experts." link={{ to: "/programs", label: "Book a program" }} />
+          <div className="mono text-xs text-cyber mb-2">// EDUCATE · ASSESS · DEFEND</div>
+          <h2 className="display text-4xl md:text-5xl mb-4">One security mission. Six capabilities.</h2>
+          <p className="text-muted-foreground max-w-2xl mb-10">Practical awareness, assessment and defence for people, campuses and organizations across India.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-grid">
+            <Pillar icon={<BriefcaseBusiness />} title="Cybersecurity Consulting" body="Structured guidance for safer systems, teams and operating practices." link={{ to: "/solutions/consulting", label: "Consult with us" }} />
+            <Pillar icon={<GraduationCap />} title="NISQ Academy" body="Progressive cybersecurity learning paths built for practical understanding." link={{ to: "/learn", label: "Browse academy" }} />
+            <Pillar icon={<RadioTower />} title="NISQ Cyber Range" body="A professional training environment connected to guided learning and labs." link={{ to: "/cyber-range", label: "Explore range" }} />
+            <Pillar icon={<Building2 />} title="CyberSecure Campus" body="Awareness programs for colleges through webinars, seminars and workshops." link={{ to: "/programs", label: "Book a program" }} />
+            <Pillar icon={<BrainCircuit />} title="CyberShieldAI" body="AI-assisted screenshot analysis with clear risk signals and next steps." link={{ to: "/fraud-check", label: "Check a threat" }} />
+            <Pillar icon={<Shield />} title="NISQ Intelligence" body="Actionable cyber awareness designed to help people recognize emerging risks." link={{ to: "/complaint", label: "Report an incident" }} />
           </div>
         </div>
       </section>
@@ -184,26 +143,6 @@ function Home() {
   );
 }
 
-function Stat({ n, l }: { n: string; l: string }) {
-  return (
-    <div>
-      <div className="display text-2xl text-cyber">{n}</div>
-      <div className="mono text-[0.55rem] text-muted-foreground">{l}</div>
-    </div>
-  );
-}
-function ThreatRow({ verdict, text, score }: { verdict: "Safe" | "Suspicious" | "Fraud"; text: string; score: number }) {
-  const color = verdict === "Fraud" ? "text-destructive" : verdict === "Suspicious" ? "text-warning" : "text-success";
-  return (
-    <div className="flex items-center justify-between py-2 border-b border-primary/10 last:border-0">
-      <div>
-        <div className="text-sm">{text}</div>
-        <div className={`mono text-[0.6rem] ${color}`}>{verdict.toUpperCase()}</div>
-      </div>
-      <div className={`mono text-lg ${color}`}>{score}</div>
-    </div>
-  );
-}
 function Pillar({ icon, title, body, link }: { icon: React.ReactNode; title: string; body: string; link: { to: string; label: string } }) {
   return (
     <div className="glass rounded-xl p-6 hover:glow-cyber transition">
