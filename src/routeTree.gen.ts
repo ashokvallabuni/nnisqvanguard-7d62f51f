@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as FraudCheckRouteImport } from './routes/fraud-check'
+import { Route as CyberRangeRouteImport } from './routes/cyber-range'
 import { Route as ComplaintRouteImport } from './routes/complaint'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
+import { Route as SolutionsConsultingRouteImport } from './routes/solutions.consulting'
 import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as ApiScoreRouteImport } from './routes/api/score'
@@ -31,6 +33,7 @@ import { Route as ApiQuizModuleIdRouteImport } from './routes/api/quiz.$moduleId
 import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
 import { Route as ApiAgentsReportRouteImport } from './routes/api/agents.report'
 import { Route as ApiAgentsAnalyzeRouteImport } from './routes/api/agents.analyze'
+import { Route as AuthenticatedCyberRangeLabsRouteImport } from './routes/_authenticated/cyber-range.labs'
 import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
 import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
@@ -52,6 +55,11 @@ const ProgramsRoute = ProgramsRouteImport.update({
 const FraudCheckRoute = FraudCheckRouteImport.update({
   id: '/fraud-check',
   path: '/fraud-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CyberRangeRoute = CyberRangeRouteImport.update({
+  id: '/cyber-range',
+  path: '/cyber-range',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComplaintRoute = ComplaintRouteImport.update({
@@ -76,6 +84,11 @@ const IndexRoute = IndexRouteImport.update({
 const LearnIndexRoute = LearnIndexRouteImport.update({
   id: '/learn/',
   path: '/learn/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsConsultingRoute = SolutionsConsultingRouteImport.update({
+  id: '/solutions/consulting',
+  path: '/solutions/consulting',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnSlugRoute = LearnSlugRouteImport.update({
@@ -148,6 +161,12 @@ const ApiAgentsAnalyzeRoute = ApiAgentsAnalyzeRouteImport.update({
   path: '/api/agents/analyze',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCyberRangeLabsRoute =
+  AuthenticatedCyberRangeLabsRouteImport.update({
+    id: '/cyber-range/labs',
+    path: '/cyber-range/labs',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -194,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/complaint': typeof ComplaintRoute
+  '/cyber-range': typeof CyberRangeRoute
   '/fraud-check': typeof FraudCheckRoute
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
@@ -206,12 +226,14 @@ export interface FileRoutesByFullPath {
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
+  '/solutions/consulting': typeof SolutionsConsultingRoute
   '/learn/': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/cyber-range/labs': typeof AuthenticatedCyberRangeLabsRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
@@ -224,6 +246,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/complaint': typeof ComplaintRoute
+  '/cyber-range': typeof CyberRangeRoute
   '/fraud-check': typeof FraudCheckRoute
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
@@ -235,12 +258,14 @@ export interface FileRoutesByTo {
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
+  '/solutions/consulting': typeof SolutionsConsultingRoute
   '/learn': typeof LearnIndexRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/cyber-range/labs': typeof AuthenticatedCyberRangeLabsRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
@@ -255,6 +280,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/complaint': typeof ComplaintRoute
+  '/cyber-range': typeof CyberRangeRoute
   '/fraud-check': typeof FraudCheckRoute
   '/programs': typeof ProgramsRoute
   '/team': typeof TeamRoute
@@ -267,12 +293,14 @@ export interface FileRoutesById {
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
   '/learn/$slug': typeof LearnSlugRoute
+  '/solutions/consulting': typeof SolutionsConsultingRoute
   '/learn/': typeof LearnIndexRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/_authenticated/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/_authenticated/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/_authenticated/cyber-range/labs': typeof AuthenticatedCyberRangeLabsRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
@@ -287,6 +315,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/complaint'
+    | '/cyber-range'
     | '/fraud-check'
     | '/programs'
     | '/team'
@@ -299,12 +328,14 @@ export interface FileRouteTypes {
     | '/api/score'
     | '/api/upload'
     | '/learn/$slug'
+    | '/solutions/consulting'
     | '/learn/'
     | '/admin/bookings'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
+    | '/cyber-range/labs'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
@@ -317,6 +348,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/complaint'
+    | '/cyber-range'
     | '/fraud-check'
     | '/programs'
     | '/team'
@@ -328,12 +360,14 @@ export interface FileRouteTypes {
     | '/api/score'
     | '/api/upload'
     | '/learn/$slug'
+    | '/solutions/consulting'
     | '/learn'
     | '/admin/bookings'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
+    | '/cyber-range/labs'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
@@ -347,6 +381,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/complaint'
+    | '/cyber-range'
     | '/fraud-check'
     | '/programs'
     | '/team'
@@ -359,12 +394,14 @@ export interface FileRouteTypes {
     | '/api/score'
     | '/api/upload'
     | '/learn/$slug'
+    | '/solutions/consulting'
     | '/learn/'
     | '/_authenticated/admin/bookings'
     | '/_authenticated/admin/colleges'
     | '/_authenticated/admin/complaints'
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/team'
+    | '/_authenticated/cyber-range/labs'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
@@ -379,6 +416,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ComplaintRoute: typeof ComplaintRoute
+  CyberRangeRoute: typeof CyberRangeRoute
   FraudCheckRoute: typeof FraudCheckRoute
   ProgramsRoute: typeof ProgramsRoute
   TeamRoute: typeof TeamRoute
@@ -389,6 +427,7 @@ export interface RootRouteChildren {
   ApiScoreRoute: typeof ApiScoreRoute
   ApiUploadRoute: typeof ApiUploadRoute
   LearnSlugRoute: typeof LearnSlugRoute
+  SolutionsConsultingRoute: typeof SolutionsConsultingRoute
   LearnIndexRoute: typeof LearnIndexRoute
   ApiAgentsAnalyzeRoute: typeof ApiAgentsAnalyzeRoute
   ApiAgentsReportRoute: typeof ApiAgentsReportRoute
@@ -417,6 +456,13 @@ declare module '@tanstack/react-router' {
       path: '/fraud-check'
       fullPath: '/fraud-check'
       preLoaderRoute: typeof FraudCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cyber-range': {
+      id: '/cyber-range'
+      path: '/cyber-range'
+      fullPath: '/cyber-range'
+      preLoaderRoute: typeof CyberRangeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/complaint': {
@@ -452,6 +498,13 @@ declare module '@tanstack/react-router' {
       path: '/learn'
       fullPath: '/learn/'
       preLoaderRoute: typeof LearnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/consulting': {
+      id: '/solutions/consulting'
+      path: '/solutions/consulting'
+      fullPath: '/solutions/consulting'
+      preLoaderRoute: typeof SolutionsConsultingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn/$slug': {
@@ -552,6 +605,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAgentsAnalyzeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/cyber-range/labs': {
+      id: '/_authenticated/cyber-range/labs'
+      path: '/cyber-range/labs'
+      fullPath: '/cyber-range/labs'
+      preLoaderRoute: typeof AuthenticatedCyberRangeLabsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/team': {
       id: '/_authenticated/admin/team'
       path: '/team'
@@ -628,12 +688,14 @@ const AuthenticatedAdminRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedCyberRangeLabsRoute: typeof AuthenticatedCyberRangeLabsRoute
   AuthenticatedLearnSlugModuleSlugRoute: typeof AuthenticatedLearnSlugModuleSlugRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedCyberRangeLabsRoute: AuthenticatedCyberRangeLabsRoute,
   AuthenticatedLearnSlugModuleSlugRoute: AuthenticatedLearnSlugModuleSlugRoute,
 }
 
@@ -657,6 +719,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ComplaintRoute: ComplaintRoute,
+  CyberRangeRoute: CyberRangeRoute,
   FraudCheckRoute: FraudCheckRoute,
   ProgramsRoute: ProgramsRoute,
   TeamRoute: TeamRoute,
@@ -667,6 +730,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiScoreRoute: ApiScoreRoute,
   ApiUploadRoute: ApiUploadRoute,
   LearnSlugRoute: LearnSlugRoute,
+  SolutionsConsultingRoute: SolutionsConsultingRoute,
   LearnIndexRoute: LearnIndexRoute,
   ApiAgentsAnalyzeRoute: ApiAgentsAnalyzeRoute,
   ApiAgentsReportRoute: ApiAgentsReportRoute,
