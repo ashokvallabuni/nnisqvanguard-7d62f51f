@@ -1,5 +1,6 @@
 {
-  "framework": "vite",
+  "version": 2,
+  "outputDirectory": ".output/public",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
