@@ -1,50 +1,84 @@
-export type LabExecutionState = "configuration_required";
+import {
+  createLabSession,
+  executeLabTerminal,
+  getLabSessionStatus,
+  resetLabSession,
+  stopLabSession,
+  submitLabFlag,
+} from "@/lib/lab-runner.functions";
+
+export type LabExecutionState =
+  "configuration_required" | "running" | "stopped" | "completed" | "error";
 
 export type LabSession = {
   id: string | null;
   state: LabExecutionState;
   message: string;
+  stdout?: string;
+  stderr?: string;
+  exitCode?: number;
+  score?: number;
 };
 
 export interface LabExecutionService {
   createSession(labSlug: string): Promise<LabSession>;
-  startLab(sessionId: string): Promise<LabSession>;
-  getSession(sessionId: string): Promise<LabSession>;
-  submitFlag(sessionId: string, flag: string): Promise<LabSession>;
-  submitAnswer(sessionId: string, answer: string): Promise<LabSession>;
-  resetLab(sessionId: string): Promise<LabSession>;
-  terminateSession(sessionId: string): Promise<LabSession>;
+  getSession(labSlug: string, sessionId: string): Promise<LabSession>;
+  executeTerminal(labSlug: string, sessionId: string, command: string): Promise<LabSession>;
+  submitFlag(labSlug: string, sessionId: string, flag: string): Promise<LabSession>;
+  resetLab(labSlug: string, sessionId: string): Promise<LabSession>;
+  terminateSession(labSlug: string, sessionId: string): Promise<LabSession>;
 }
 
 export const labExecutionService: LabExecutionService = {
-  async createSession() {
-    return unavailable();
+  async createSession(labId) {
+    return normalize(await createLabSession({ data: { labId } }));
   },
-  async startLab() {
-    return unavailable();
+  async getSession(labSlug, sessionId) {
+    return normalize(await getLabSessionStatus({ data: { labId: labSlug, sessionId } }), sessionId);
   },
-  async getSession() {
-    return unavailable();
+  async executeTerminal(labSlug, sessionId, command) {
+    return normalize(
+      await executeLabTerminal({ data: { labId: labSlug, sessionId, command } }),
+      sessionId,
+    );
   },
-  async submitFlag() {
-    return unavailable();
+  async submitFlag(labSlug, sessionId, flag) {
+    return normalize(await submitLabFlag({ data: { labId: labSlug, sessionId, flag } }), sessionId);
   },
-  async submitAnswer() {
-    return unavailable();
+  async resetLab(labSlug, sessionId) {
+    return normalize(await resetLabSession({ data: { labId: labSlug, sessionId } }), sessionId);
   },
-  async resetLab() {
-    return unavailable();
-  },
-  async terminateSession() {
-    return unavailable();
+  async terminateSession(labSlug, sessionId) {
+    return normalize(await stopLabSession({ data: { labId: labSlug, sessionId } }), sessionId);
   },
 };
 
-function unavailable(): LabSession {
+function normalize(result: unknown, id: string | null = null): LabSession {
+  const value = result && typeof result === "object" ? (result as Record<string, unknown>) : {};
+  if (value.error === "LAB_INFRASTRUCTURE_NOT_CONFIGURED") return unavailable(id);
+  if (value.status === "COMPLETED") {
+    return {
+      id: String(value.sessionId ?? ""),
+      state: "completed",
+      message: "Lab completed.",
+      score: Number(value.score ?? 0),
+    };
+  }
   return {
-    id: null,
+    id: typeof value.sessionId === "string" ? value.sessionId : id,
+    state: value.status === "RUNNING" ? "running" : "error",
+    message: typeof value.error === "string" ? value.error : "Lab session updated.",
+    score: typeof value.score === "number" ? value.score : undefined,
+    stdout: typeof value.stdout === "string" ? value.stdout : undefined,
+    stderr: typeof value.stderr === "string" ? value.stderr : undefined,
+    exitCode: typeof value.exitCode === "number" ? value.exitCode : undefined,
+  };
+}
+
+function unavailable(id: string | null = null): LabSession {
+  return {
+    id,
     state: "configuration_required",
-    message:
-      "Cyber Range infrastructure is being connected. Your account is ready, but live lab execution is not yet enabled.",
+    message: "LAB INFRASTRUCTURE NOT CONFIGURED",
   };
 }

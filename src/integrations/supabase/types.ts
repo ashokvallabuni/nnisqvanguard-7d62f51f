@@ -1,4 +1,86 @@
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+﻿export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
+type SimpleTable<Row extends Record<string, unknown>> = {
+  Row: Row;
+  Insert: Partial<Row>;
+  Update: Partial<Row>;
+  Relationships: [];
+};
+
+type LabRow = {
+  id: string;
+  category_id: string | null;
+  dataset_id: string | null;
+  title: string;
+  slug: string;
+  description: string;
+  difficulty: string;
+  lab_type: string;
+  learning_objectives: string[];
+  prerequisites: string[];
+  skills_gained: string[];
+  estimated_time_minutes: number;
+  tools: string[];
+  points: number;
+  completion_criteria: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type DatasetRow = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  source: string;
+  source_url: string | null;
+  license: string;
+  version: string;
+  dataset_type: string;
+  file_format: string;
+  record_count: number;
+  schema_version: string;
+  status: string;
+  storage_path: string | null;
+  checksum: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type LearningPathRow = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type LabProgressRow = {
+  id: string;
+  user_id: string;
+  lab_id: string;
+  tasks_completed: number;
+  total_tasks: number;
+  points: number;
+  completed_at: string | null;
+  updated_at: string;
+};
+
+type LabSessionRow = {
+  id: string;
+  user_id: string;
+  lab_id: string;
+  instance_id: string | null;
+  status: string;
+  started_at: string | null;
+  expires_at: string | null;
+  completed_at: string | null;
+  score: number | null;
+  created_at: string;
+};
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
@@ -734,6 +816,66 @@ export type Database = {
         };
         Relationships: [];
       };
+      datasets: SimpleTable<DatasetRow>;
+      dataset_versions: SimpleTable<{
+        id: string;
+        dataset_id: string;
+        version: string;
+        record_count: number;
+        checksum: string | null;
+        storage_path: string | null;
+        status: string;
+        imported_at: string | null;
+        created_at: string;
+      }>;
+      lab_categories: SimpleTable<{
+        id: string;
+        name: string;
+        slug: string;
+        description: string | null;
+        created_at: string;
+      }>;
+      labs: SimpleTable<LabRow>;
+      lab_tasks: SimpleTable<{
+        id: string;
+        lab_id: string;
+        title: string;
+        description: string;
+        task_type: string;
+        sort_order: number;
+        created_at: string;
+      }>;
+      lab_questions: SimpleTable<{
+        id: string;
+        task_id: string;
+        prompt: string;
+        options: Json;
+        explanation: string | null;
+        sort_order: number;
+        created_at: string;
+      }>;
+      lab_hints: SimpleTable<{
+        id: string;
+        task_id: string;
+        hint: string;
+        sort_order: number;
+        created_at: string;
+      }>;
+      lab_flags: SimpleTable<{
+        id: string;
+        task_id: string;
+        validation_digest: string;
+        points: number;
+        created_at: string;
+      }>;
+      lab_sessions: SimpleTable<LabSessionRow>;
+      lab_progress: SimpleTable<LabProgressRow>;
+      learning_paths: SimpleTable<LearningPathRow>;
+      learning_path_labs: SimpleTable<{
+        learning_path_id: string;
+        lab_id: string;
+        sort_order: number;
+      }>;
     };
     Views: {
       [_ in never]: never;

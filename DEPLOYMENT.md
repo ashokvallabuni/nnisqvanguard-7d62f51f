@@ -26,6 +26,9 @@ Only the anonymous/publishable key belongs in the frontend. Never add a
 Supabase service-role key, Google client secret, or private token to Vite
 variables.
 
+The lab runner variables are server-side only. They are not required for the
+website build and must never be exposed through `VITE_` variables.
+
 ## 2. Apply the Supabase database migration
 
 In the Supabase dashboard, open **SQL Editor** and apply the migration:
