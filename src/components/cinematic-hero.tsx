@@ -1,6 +1,14 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { ArrowRight, BookOpen, Crosshair, Network, Radar, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Crosshair,
+  Network,
+  Radar,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
 import wolfHero from "@/assets/cyber-wolf-hero.jpg";
 import logoAsset from "@/assets/nisq-logo.asset.json";
@@ -12,7 +20,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +45,7 @@ export function CinematicHero() {
   const targetRef = useRef({ x: 0, y: 0, energy: 0 });
   const currentRef = useRef({ x: 0, y: 0, energy: 0 });
   const frameRef = useRef<number | null>(null);
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -49,13 +56,19 @@ export function CinematicHero() {
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (reduced.matches) return;
-    const timer = window.setInterval(() => setQuoteIndex((index) => (index + 1) % QUOTES.length), 5200);
+    const timer = window.setInterval(
+      () => setQuoteIndex((index) => (index + 1) % QUOTES.length),
+      5200,
+    );
     return () => window.clearInterval(timer);
   }, []);
 
-  useEffect(() => () => {
-    if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+    },
+    [],
+  );
 
   const animatePointer = () => {
     const current = currentRef.current;
@@ -69,7 +82,11 @@ export function CinematicHero() {
       hero.style.setProperty("--pointer-y", current.y.toFixed(3));
       hero.style.setProperty("--pointer-energy", current.energy.toFixed(3));
     }
-    const moving = Math.abs(target.x - current.x) + Math.abs(target.y - current.y) + Math.abs(target.energy - current.energy) > 0.01;
+    const moving =
+      Math.abs(target.x - current.x) +
+        Math.abs(target.y - current.y) +
+        Math.abs(target.energy - current.energy) >
+      0.01;
     frameRef.current = moving ? window.requestAnimationFrame(animatePointer) : null;
   };
 
@@ -117,9 +134,8 @@ export function CinematicHero() {
 
   const googleSignIn = async () => {
     setAuthBusy(true);
-    const redirect = `${window.location.origin}/auth?next=${encodeURIComponent("/cyber-range/labs")}`;
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: redirect });
-    if (result.error || !result.redirected) setAuthBusy(false);
+    const result = await signInWithGoogle("/cyber-range/labs");
+    if (result.error) setAuthBusy(false);
   };
 
   return (
@@ -142,16 +158,26 @@ export function CinematicHero() {
         {PARTICLES.map((particle, index) => (
           <i key={index} className="hero-particle" style={particle} />
         ))}
-        {ripple && <i key={ripple.key} className="hero-pointer-ripple" style={{ left: ripple.x, top: ripple.y }} />}
+        {ripple && (
+          <i
+            key={ripple.key}
+            className="hero-pointer-ripple"
+            style={{ left: ripple.x, top: ripple.y }}
+          />
+        )}
       </div>
 
       <div className="hero-hud hero-hud-left" aria-hidden="true">
         <Crosshair />
-        <span><b>Threat visualization</b>Active · Demo interface</span>
+        <span>
+          <b>Threat visualization</b>Active · Demo interface
+        </span>
       </div>
       <div className="hero-hud hero-hud-right" aria-hidden="true">
         <Network />
-        <span><b>Network simulation</b>Secure · Visual mode</span>
+        <span>
+          <b>Network simulation</b>Secure · Visual mode
+        </span>
       </div>
 
       <div className="hero-content">
@@ -161,38 +187,83 @@ export function CinematicHero() {
         </div>
 
         <div className="hero-brand-block">
-          <img src={logoAsset.url} width={220} height={220} alt="NISQ Vanguard official logo" className="hero-official-logo" />
+          <img
+            src={logoAsset.url}
+            width={220}
+            height={220}
+            alt="NISQ Vanguard official logo"
+            className="hero-official-logo"
+          />
           <p className="mono hero-kicker">Cybersecurity · Defence · Intelligence</p>
           <h1>NISQ VANGUARD</h1>
           <div className="hero-division">DEFENCE TECHNOLOGIES</div>
           <p className="hero-motto">Educate. Assess. Defend.</p>
-          <p className="hero-statement">Cybersecurity built around people, organizations and the threats of tomorrow.</p>
+          <p className="hero-statement">
+            Cybersecurity built around people, organizations and the threats of tomorrow.
+          </p>
           <div className="hero-actions">
-            <Link to="/solutions/consulting" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "hero-action")}>Book a consultation <ArrowRight /></Link>
-            <Link to="/cyber-range" className={cn(buttonVariants({ size: "lg" }), "hero-action glow-cyber")}>Explore Cyber Range <Radar /></Link>
-            <Button variant="outline" size="lg" className="hero-action" onClick={enterLabs}>Enter Cyber Labs <ArrowRight /></Button>
+            <Link
+              to="/solutions/consulting"
+              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "hero-action")}
+            >
+              Book a consultation <ArrowRight />
+            </Link>
+            <Link
+              to="/cyber-range"
+              className={cn(buttonVariants({ size: "lg" }), "hero-action glow-cyber")}
+            >
+              Explore Cyber Range <Radar />
+            </Link>
+            <Button variant="outline" size="lg" className="hero-action" onClick={enterLabs}>
+              Enter Cyber Labs <ArrowRight />
+            </Button>
           </div>
         </div>
 
         <div className="hero-pillars" aria-label="NISQ Vanguard principles">
-          <div><BookOpen /><b>Educate</b><span>Build knowledge</span></div>
-          <div><ShieldCheck /><b>Assess</b><span>Find vulnerabilities</span></div>
-          <div><Sparkles /><b>Defend</b><span>Stay secure</span></div>
+          <div>
+            <BookOpen />
+            <b>Educate</b>
+            <span>Build knowledge</span>
+          </div>
+          <div>
+            <ShieldCheck />
+            <b>Assess</b>
+            <span>Find vulnerabilities</span>
+          </div>
+          <div>
+            <Sparkles />
+            <b>Defend</b>
+            <span>Stay secure</span>
+          </div>
         </div>
       </div>
 
-      <div className="hero-transition-curtain" aria-hidden="true"><ShieldCheck /></div>
+      <div className="hero-transition-curtain" aria-hidden="true">
+        <ShieldCheck />
+      </div>
 
       <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
         <DialogContent className="max-w-md glass glow-cyber">
           <DialogHeader>
-            <DialogTitle className="display text-2xl text-cyber">Secure Cyber Labs Access</DialogTitle>
-            <DialogDescription>Sign in with your existing NISQ Vanguard account. You’ll return directly to Cyber Labs.</DialogDescription>
+            <DialogTitle className="display text-2xl text-cyber">
+              Secure Cyber Labs Access
+            </DialogTitle>
+            <DialogDescription>
+              Sign in with your existing NISQ Vanguard account. You’ll return directly to Cyber
+              Labs.
+            </DialogDescription>
           </DialogHeader>
           <Button onClick={googleSignIn} disabled={authBusy} size="lg" className="w-full">
             {authBusy ? "Connecting…" : "Continue with Google"}
           </Button>
-          <Link to="/auth" search={{ next: "/cyber-range/labs" }} className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full")}>Use email instead</Link>
+          <Link
+            to="/login"
+            search={{ next: "/cyber-range/labs" }}
+            className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full")}
+          >
+            Use email instead
+          </Link>
         </DialogContent>
       </Dialog>
     </section>

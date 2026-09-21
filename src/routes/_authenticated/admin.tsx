@@ -1,7 +1,15 @@
-import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
-import { LayoutDashboard, CalendarCheck, ShieldAlert, Users, FileText, School, LogOut, Shield } from "lucide-react";
+import {
+  LayoutDashboard,
+  CalendarCheck,
+  ShieldAlert,
+  Users,
+  FileText,
+  School,
+  LogOut,
+  Shield,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin Console — CyberShield India" }] }),
@@ -19,17 +27,21 @@ const items = [
 
 function AdminLayout() {
   const { profile, loading, signOut } = useAuth();
-  const nav = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  useEffect(() => {
-    if (!loading && profile && profile.role !== "admin") {
-      nav({ to: "/dashboard", replace: true });
-    }
-  }, [profile, loading, nav]);
-
-  if (loading || !profile) return <main className="pt-24 px-6 mono text-xs text-muted-foreground">LOADING SESSION...</main>;
-  if (profile.role !== "admin") return <main className="pt-24 px-6 mono text-xs text-destructive">ACCESS DENIED</main>;
+  if (loading || !profile)
+    return (
+      <main className="pt-24 px-6 mono text-xs text-muted-foreground">LOADING SESSION...</main>
+    );
+  if (profile.role !== "admin")
+    return (
+      <main className="pt-24 min-h-screen flex items-center justify-center">
+        <div className="glass rounded-xl p-10 text-center">
+          <div className="display text-5xl text-destructive">403</div>
+          <p className="mono text-xs mt-3 text-destructive">ACCESS DENIED</p>
+        </div>
+      </main>
+    );
 
   return (
     <div className="min-h-screen flex">
@@ -45,13 +57,20 @@ function AdminLayout() {
           {items.map((i) => {
             const active = i.exact ? pathname === i.to : pathname.startsWith(i.to);
             return (
-              <Link key={i.to} to={i.to} className={`flex items-center gap-2 px-3 py-2 rounded-md mono text-[0.7rem] transition ${active ? "bg-primary/15 text-cyber border border-primary/40" : "text-muted-foreground hover:bg-sidebar-accent"}`}>
+              <Link
+                key={i.to}
+                to={i.to}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md mono text-[0.7rem] transition ${active ? "bg-primary/15 text-cyber border border-primary/40" : "text-muted-foreground hover:bg-sidebar-accent"}`}
+              >
                 <i.icon className="w-4 h-4" /> {i.label}
               </Link>
             );
           })}
         </nav>
-        <button onClick={signOut} className="m-3 flex items-center gap-2 px-3 py-2 rounded-md mono text-[0.7rem] border border-border hover:bg-sidebar-accent">
+        <button
+          onClick={signOut}
+          className="m-3 flex items-center gap-2 px-3 py-2 rounded-md mono text-[0.7rem] border border-border hover:bg-sidebar-accent"
+        >
           <LogOut className="w-4 h-4" /> Sign out
         </button>
       </aside>
@@ -61,11 +80,15 @@ function AdminLayout() {
           <span className="display text-cyber">ADMIN</span>
           <nav className="ml-auto flex gap-1 overflow-auto">
             {items.map((i) => (
-              <Link key={i.to} to={i.to} className="mono text-[0.55rem] px-2 py-1 rounded border">{i.label}</Link>
+              <Link key={i.to} to={i.to} className="mono text-[0.55rem] px-2 py-1 rounded border">
+                {i.label}
+              </Link>
             ))}
           </nav>
         </header>
-        <main className="p-4 md:p-8"><Outlet /></main>
+        <main className="p-4 md:p-8">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

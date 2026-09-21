@@ -9,62 +9,85 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TeamRouteImport } from './routes/team'
-import { Route as ProgramsRouteImport } from './routes/programs'
-import { Route as FraudCheckRouteImport } from './routes/fraud-check'
-import { Route as CyberRangeRouteImport } from './routes/cyber-range'
-import { Route as ComplaintRouteImport } from './routes/complaint'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LearnIndexRouteImport } from './routes/learn.index'
-import { Route as SolutionsConsultingRouteImport } from './routes/solutions.consulting'
-import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
-import { Route as ApiUploadRouteImport } from './routes/api/upload'
-import { Route as ApiScoreRouteImport } from './routes/api/score'
-import { Route as ApiProgressRouteImport } from './routes/api/progress'
-import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
-import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AcademyRouteImport } from './routes/academy'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CampusRouteImport } from './routes/campus'
+import { Route as CaseStudiesRouteImport } from './routes/case-studies'
+import { Route as ComplaintRouteImport } from './routes/complaint'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CyberRangeRouteImport } from './routes/cyber-range'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as FraudCheckRouteImport } from './routes/fraud-check'
+import { Route as InnovationRouteImport } from './routes/innovation'
+import { Route as IntelligenceRouteImport } from './routes/intelligence'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as ResponsibleDisclosureRouteImport } from './routes/responsible-disclosure'
+import { Route as SecurityRouteImport } from './routes/security'
+import { Route as SolutionsRouteImport } from './routes/solutions'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedInstructorRouteImport } from './routes/_authenticated/instructor'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
+import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
+import { Route as ApiProgressRouteImport } from './routes/api/progress'
+import { Route as ApiScoreRouteImport } from './routes/api/score'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as CyberRangeChallengesRouteImport } from './routes/cyber-range.challenges'
+import { Route as CyberRangeLabsRouteImport } from './routes/cyber-range.labs'
+import { Route as CyberRangeLeaderboardRouteImport } from './routes/cyber-range.leaderboard'
+import { Route as CyberRangeLearningPathsRouteImport } from './routes/cyber-range.learning-paths'
+import { Route as InnovationCybershieldaiRouteImport } from './routes/innovation.cybershieldai'
+import { Route as LearnIndexRouteImport } from './routes/learn.index'
+import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
+import { Route as SolutionsConsultingRouteImport } from './routes/solutions.consulting'
+import { Route as SolutionsTrainingRouteImport } from './routes/solutions.training'
+import { Route as VerifyCertificateIdRouteImport } from './routes/verify.$certificateId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
-import { Route as ApiQuizModuleIdRouteImport } from './routes/api/quiz.$moduleId'
-import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
-import { Route as ApiAgentsReportRouteImport } from './routes/api/agents.report'
-import { Route as ApiAgentsAnalyzeRouteImport } from './routes/api/agents.analyze'
-import { Route as AuthenticatedCyberRangeLabsRouteImport } from './routes/_authenticated/cyber-range.labs'
-import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
-import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
-import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
-import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
+import { Route as AuthenticatedAdminSectionRouteImport } from './routes/_authenticated/admin.$section'
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
-import { Route as ApiLessonsSlugModuleSlugRouteImport } from './routes/api/lessons.$slug.$moduleSlug'
+import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
+import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
+import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
+import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
+import { Route as AuthenticatedCyberRangeCtfRouteImport } from './routes/_authenticated/cyber-range.ctf'
+import { Route as AuthenticatedCyberRangeMyProgressRouteImport } from './routes/_authenticated/cyber-range.my-progress'
+import { Route as ApiAgentsAnalyzeRouteImport } from './routes/api/agents.analyze'
+import { Route as ApiAgentsReportRouteImport } from './routes/api/agents.report'
+import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
+import { Route as ApiQuizModuleIdRouteImport } from './routes/api/quiz.$moduleId'
+import { Route as AuthenticatedCyberRangeChallengeSlugRouteImport } from './routes/_authenticated/cyber-range.challenge.$slug'
+import { Route as AuthenticatedCyberRangeLabSlugRouteImport } from './routes/_authenticated/cyber-range.lab.$slug'
 import { Route as AuthenticatedLearnSlugModuleSlugRouteImport } from './routes/_authenticated/learn.$slug.$moduleSlug'
+import { Route as ApiLessonsSlugModuleSlugRouteImport } from './routes/api/lessons.$slug.$moduleSlug'
 
-const TeamRoute = TeamRouteImport.update({
-  id: '/team',
-  path: '/team',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProgramsRoute = ProgramsRouteImport.update({
-  id: '/programs',
-  path: '/programs',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FraudCheckRoute = FraudCheckRouteImport.update({
-  id: '/fraud-check',
-  path: '/fraud-check',
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CyberRangeRoute = CyberRangeRouteImport.update({
-  id: '/cyber-range',
-  path: '/cyber-range',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ComplaintRoute = ComplaintRouteImport.update({
-  id: '/complaint',
-  path: '/complaint',
+const AcademyRoute = AcademyRouteImport.update({
+  id: '/academy',
+  path: '/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -72,48 +95,120 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const CampusRoute = CampusRouteImport.update({
+  id: '/campus',
+  path: '/campus',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const CaseStudiesRoute = CaseStudiesRouteImport.update({
+  id: '/case-studies',
+  path: '/case-studies',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LearnIndexRoute = LearnIndexRouteImport.update({
-  id: '/learn/',
-  path: '/learn/',
+const ComplaintRoute = ComplaintRouteImport.update({
+  id: '/complaint',
+  path: '/complaint',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SolutionsConsultingRoute = SolutionsConsultingRouteImport.update({
-  id: '/solutions/consulting',
-  path: '/solutions/consulting',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LearnSlugRoute = LearnSlugRouteImport.update({
-  id: '/learn/$slug',
-  path: '/learn/$slug',
+const CyberRangeRoute = CyberRangeRouteImport.update({
+  id: '/cyber-range',
+  path: '/cyber-range',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiUploadRoute = ApiUploadRouteImport.update({
-  id: '/api/upload',
-  path: '/api/upload',
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiScoreRoute = ApiScoreRouteImport.update({
-  id: '/api/score',
-  path: '/api/score',
+const FraudCheckRoute = FraudCheckRouteImport.update({
+  id: '/fraud-check',
+  path: '/fraud-check',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiProgressRoute = ApiProgressRouteImport.update({
-  id: '/api/progress',
-  path: '/api/progress',
+const InnovationRoute = InnovationRouteImport.update({
+  id: '/innovation',
+  path: '/innovation',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiLiveThreatsRoute = ApiLiveThreatsRouteImport.update({
-  id: '/api/live-threats',
-  path: '/api/live-threats',
+const IntelligenceRoute = IntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsRoute = ProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResponsibleDisclosureRoute = ResponsibleDisclosureRouteImport.update({
+  id: '/responsible-disclosure',
+  path: '/responsible-disclosure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecurityRoute = SecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsRoute = SolutionsRouteImport.update({
+  id: '/solutions',
+  path: '/solutions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCertificatesRoute =
+  AuthenticatedCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInstructorRoute = AuthenticatedInstructorRouteImport.update({
+  id: '/instructor',
+  path: '/instructor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCheckUrlRoute = ApiCheckUrlRouteImport.update({
@@ -121,73 +216,90 @@ const ApiCheckUrlRoute = ApiCheckUrlRouteImport.update({
   path: '/api/check-url',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
+const ApiLiveThreatsRoute = ApiLiveThreatsRouteImport.update({
+  id: '/api/live-threats',
+  path: '/api/live-threats',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const ApiProgressRoute = ApiProgressRouteImport.update({
+  id: '/api/progress',
+  path: '/api/progress',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const ApiScoreRoute = ApiScoreRouteImport.update({
+  id: '/api/score',
+  path: '/api/score',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
+const CyberRangeChallengesRoute = CyberRangeChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
+  getParentRoute: () => CyberRangeRoute,
+} as any)
+const CyberRangeLabsRoute = CyberRangeLabsRouteImport.update({
+  id: '/labs',
+  path: '/labs',
+  getParentRoute: () => CyberRangeRoute,
+} as any)
+const CyberRangeLeaderboardRoute = CyberRangeLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => CyberRangeRoute,
+} as any)
+const CyberRangeLearningPathsRoute = CyberRangeLearningPathsRouteImport.update({
+  id: '/learning-paths',
+  path: '/learning-paths',
+  getParentRoute: () => CyberRangeRoute,
+} as any)
+const InnovationCybershieldaiRoute = InnovationCybershieldaiRouteImport.update({
+  id: '/cybershieldai',
+  path: '/cybershieldai',
+  getParentRoute: () => InnovationRoute,
+} as any)
+const LearnIndexRoute = LearnIndexRouteImport.update({
+  id: '/learn/',
+  path: '/learn/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnSlugRoute = LearnSlugRouteImport.update({
+  id: '/learn/$slug',
+  path: '/learn/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsConsultingRoute = SolutionsConsultingRouteImport.update({
+  id: '/consulting',
+  path: '/consulting',
+  getParentRoute: () => SolutionsRoute,
+} as any)
+const SolutionsTrainingRoute = SolutionsTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => SolutionsRoute,
+} as any)
+const VerifyCertificateIdRoute = VerifyCertificateIdRouteImport.update({
+  id: '/verify/$certificateId',
+  path: '/verify/$certificateId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
-const ApiQuizModuleIdRoute = ApiQuizModuleIdRouteImport.update({
-  id: '/api/quiz/$moduleId',
-  path: '/api/quiz/$moduleId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiLessonsSlugRoute = ApiLessonsSlugRouteImport.update({
-  id: '/api/lessons/$slug',
-  path: '/api/lessons/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAgentsReportRoute = ApiAgentsReportRouteImport.update({
-  id: '/api/agents/report',
-  path: '/api/agents/report',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAgentsAnalyzeRoute = ApiAgentsAnalyzeRouteImport.update({
-  id: '/api/agents/analyze',
-  path: '/api/agents/analyze',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedCyberRangeLabsRoute =
-  AuthenticatedCyberRangeLabsRouteImport.update({
-    id: '/cyber-range/labs',
-    path: '/cyber-range/labs',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
-  id: '/team',
-  path: '/team',
-  getParentRoute: () => AuthenticatedAdminRoute,
-} as any)
-const AuthenticatedAdminContentRoute =
-  AuthenticatedAdminContentRouteImport.update({
-    id: '/content',
-    path: '/content',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminComplaintsRoute =
-  AuthenticatedAdminComplaintsRouteImport.update({
-    id: '/complaints',
-    path: '/complaints',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminCollegesRoute =
-  AuthenticatedAdminCollegesRouteImport.update({
-    id: '/colleges',
-    path: '/colleges',
+const AuthenticatedAdminSectionRoute =
+  AuthenticatedAdminSectionRouteImport.update({
+    id: '/$section',
+    path: '/$section',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminBookingsRoute =
@@ -196,11 +308,72 @@ const AuthenticatedAdminBookingsRoute =
     path: '/bookings',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
-const ApiLessonsSlugModuleSlugRoute =
-  ApiLessonsSlugModuleSlugRouteImport.update({
-    id: '/$moduleSlug',
-    path: '/$moduleSlug',
-    getParentRoute: () => ApiLessonsSlugRoute,
+const AuthenticatedAdminCollegesRoute =
+  AuthenticatedAdminCollegesRouteImport.update({
+    id: '/colleges',
+    path: '/colleges',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminComplaintsRoute =
+  AuthenticatedAdminComplaintsRouteImport.update({
+    id: '/complaints',
+    path: '/complaints',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminContentRoute =
+  AuthenticatedAdminContentRouteImport.update({
+    id: '/content',
+    path: '/content',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedCyberRangeCtfRoute =
+  AuthenticatedCyberRangeCtfRouteImport.update({
+    id: '/cyber-range/ctf',
+    path: '/cyber-range/ctf',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCyberRangeMyProgressRoute =
+  AuthenticatedCyberRangeMyProgressRouteImport.update({
+    id: '/cyber-range/my-progress',
+    path: '/cyber-range/my-progress',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiAgentsAnalyzeRoute = ApiAgentsAnalyzeRouteImport.update({
+  id: '/api/agents/analyze',
+  path: '/api/agents/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsReportRoute = ApiAgentsReportRouteImport.update({
+  id: '/api/agents/report',
+  path: '/api/agents/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLessonsSlugRoute = ApiLessonsSlugRouteImport.update({
+  id: '/api/lessons/$slug',
+  path: '/api/lessons/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiQuizModuleIdRoute = ApiQuizModuleIdRouteImport.update({
+  id: '/api/quiz/$moduleId',
+  path: '/api/quiz/$moduleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCyberRangeChallengeSlugRoute =
+  AuthenticatedCyberRangeChallengeSlugRouteImport.update({
+    id: '/cyber-range/challenge/$slug',
+    path: '/cyber-range/challenge/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCyberRangeLabSlugRoute =
+  AuthenticatedCyberRangeLabSlugRouteImport.update({
+    id: '/cyber-range/lab/$slug',
+    path: '/cyber-range/lab/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedLearnSlugModuleSlugRoute =
   AuthenticatedLearnSlugModuleSlugRouteImport.update({
@@ -208,69 +381,133 @@ const AuthenticatedLearnSlugModuleSlugRoute =
     path: '/learn/$slug/$moduleSlug',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiLessonsSlugModuleSlugRoute =
+  ApiLessonsSlugModuleSlugRouteImport.update({
+    id: '/$moduleSlug',
+    path: '/$moduleSlug',
+    getParentRoute: () => ApiLessonsSlugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/about': typeof AboutRoute
+  '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/campus': typeof CampusRoute
+  '/case-studies': typeof CaseStudiesRoute
   '/complaint': typeof ComplaintRoute
-  '/cyber-range': typeof CyberRangeRoute
+  '/contact': typeof ContactRoute
+  '/cyber-range': typeof CyberRangeRouteWithChildren
+  '/events': typeof EventsRoute
   '/fraud-check': typeof FraudCheckRoute
+  '/innovation': typeof InnovationRouteWithChildren
+  '/intelligence': typeof IntelligenceRoute
+  '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/responsible-disclosure': typeof ResponsibleDisclosureRoute
+  '/security': typeof SecurityRoute
+  '/solutions': typeof SolutionsRouteWithChildren
   '/team': typeof TeamRoute
+  '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/instructor': typeof AuthenticatedInstructorRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
   '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/cyber-range/challenges': typeof CyberRangeChallengesRoute
+  '/cyber-range/labs': typeof CyberRangeLabsRoute
+  '/cyber-range/leaderboard': typeof CyberRangeLeaderboardRoute
+  '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
+  '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
   '/solutions/consulting': typeof SolutionsConsultingRoute
+  '/solutions/training': typeof SolutionsTrainingRoute
+  '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn/': typeof LearnIndexRoute
+  '/admin/$section': typeof AuthenticatedAdminSectionRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
-  '/cyber-range/labs': typeof AuthenticatedCyberRangeLabsRoute
+  '/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
+  '/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/cyber-range/challenge/$slug': typeof AuthenticatedCyberRangeChallengeSlugRoute
+  '/cyber-range/lab/$slug': typeof AuthenticatedCyberRangeLabSlugRoute
   '/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
   '/api/lessons/$slug/$moduleSlug': typeof ApiLessonsSlugModuleSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/about': typeof AboutRoute
+  '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/campus': typeof CampusRoute
+  '/case-studies': typeof CaseStudiesRoute
   '/complaint': typeof ComplaintRoute
-  '/cyber-range': typeof CyberRangeRoute
+  '/contact': typeof ContactRoute
+  '/cyber-range': typeof CyberRangeRouteWithChildren
+  '/events': typeof EventsRoute
   '/fraud-check': typeof FraudCheckRoute
+  '/innovation': typeof InnovationRouteWithChildren
+  '/intelligence': typeof IntelligenceRoute
+  '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/responsible-disclosure': typeof ResponsibleDisclosureRoute
+  '/security': typeof SecurityRoute
+  '/solutions': typeof SolutionsRouteWithChildren
   '/team': typeof TeamRoute
+  '/terms': typeof TermsRoute
+  '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/instructor': typeof AuthenticatedInstructorRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
   '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/cyber-range/challenges': typeof CyberRangeChallengesRoute
+  '/cyber-range/labs': typeof CyberRangeLabsRoute
+  '/cyber-range/leaderboard': typeof CyberRangeLeaderboardRoute
+  '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
+  '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
   '/solutions/consulting': typeof SolutionsConsultingRoute
+  '/solutions/training': typeof SolutionsTrainingRoute
+  '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn': typeof LearnIndexRoute
+  '/admin/$section': typeof AuthenticatedAdminSectionRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
-  '/cyber-range/labs': typeof AuthenticatedCyberRangeLabsRoute
+  '/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
+  '/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/cyber-range/challenge/$slug': typeof AuthenticatedCyberRangeChallengeSlugRoute
+  '/cyber-range/lab/$slug': typeof AuthenticatedCyberRangeLabSlugRoute
   '/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
   '/api/lessons/$slug/$moduleSlug': typeof ApiLessonsSlugModuleSlugRoute
 }
@@ -278,34 +515,63 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
+  '/about': typeof AboutRoute
+  '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/campus': typeof CampusRoute
+  '/case-studies': typeof CaseStudiesRoute
   '/complaint': typeof ComplaintRoute
-  '/cyber-range': typeof CyberRangeRoute
+  '/contact': typeof ContactRoute
+  '/cyber-range': typeof CyberRangeRouteWithChildren
+  '/events': typeof EventsRoute
   '/fraud-check': typeof FraudCheckRoute
+  '/innovation': typeof InnovationRouteWithChildren
+  '/intelligence': typeof IntelligenceRoute
+  '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/responsible-disclosure': typeof ResponsibleDisclosureRoute
+  '/security': typeof SecurityRoute
+  '/solutions': typeof SolutionsRouteWithChildren
   '/team': typeof TeamRoute
+  '/terms': typeof TermsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/instructor': typeof AuthenticatedInstructorRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
   '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
   '/api/upload': typeof ApiUploadRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/cyber-range/challenges': typeof CyberRangeChallengesRoute
+  '/cyber-range/labs': typeof CyberRangeLabsRoute
+  '/cyber-range/leaderboard': typeof CyberRangeLeaderboardRoute
+  '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
+  '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
   '/solutions/consulting': typeof SolutionsConsultingRoute
+  '/solutions/training': typeof SolutionsTrainingRoute
+  '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn/': typeof LearnIndexRoute
+  '/_authenticated/admin/$section': typeof AuthenticatedAdminSectionRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/_authenticated/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/_authenticated/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
-  '/_authenticated/cyber-range/labs': typeof AuthenticatedCyberRangeLabsRoute
+  '/_authenticated/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
+  '/_authenticated/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/cyber-range/challenge/$slug': typeof AuthenticatedCyberRangeChallengeSlugRoute
+  '/_authenticated/cyber-range/lab/$slug': typeof AuthenticatedCyberRangeLabSlugRoute
   '/_authenticated/learn/$slug/$moduleSlug': typeof AuthenticatedLearnSlugModuleSlugRoute
   '/api/lessons/$slug/$moduleSlug': typeof ApiLessonsSlugModuleSlugRoute
 }
@@ -313,100 +579,187 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/academy'
     | '/auth'
+    | '/campus'
+    | '/case-studies'
     | '/complaint'
+    | '/contact'
     | '/cyber-range'
+    | '/events'
     | '/fraud-check'
+    | '/innovation'
+    | '/intelligence'
+    | '/login'
+    | '/privacy'
     | '/programs'
+    | '/responsible-disclosure'
+    | '/security'
+    | '/solutions'
     | '/team'
+    | '/terms'
     | '/admin'
+    | '/certificates'
     | '/dashboard'
+    | '/instructor'
+    | '/profile'
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
     | '/api/progress'
     | '/api/score'
     | '/api/upload'
+    | '/auth/callback'
+    | '/cyber-range/challenges'
+    | '/cyber-range/labs'
+    | '/cyber-range/leaderboard'
+    | '/cyber-range/learning-paths'
+    | '/innovation/cybershieldai'
     | '/learn/$slug'
     | '/solutions/consulting'
+    | '/solutions/training'
+    | '/verify/$certificateId'
     | '/learn/'
+    | '/admin/$section'
     | '/admin/bookings'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
-    | '/cyber-range/labs'
+    | '/cyber-range/ctf'
+    | '/cyber-range/my-progress'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
     | '/admin/'
+    | '/cyber-range/challenge/$slug'
+    | '/cyber-range/lab/$slug'
     | '/learn/$slug/$moduleSlug'
     | '/api/lessons/$slug/$moduleSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/academy'
     | '/auth'
+    | '/campus'
+    | '/case-studies'
     | '/complaint'
+    | '/contact'
     | '/cyber-range'
+    | '/events'
     | '/fraud-check'
+    | '/innovation'
+    | '/intelligence'
+    | '/login'
+    | '/privacy'
     | '/programs'
+    | '/responsible-disclosure'
+    | '/security'
+    | '/solutions'
     | '/team'
+    | '/terms'
+    | '/certificates'
     | '/dashboard'
+    | '/instructor'
+    | '/profile'
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
     | '/api/progress'
     | '/api/score'
     | '/api/upload'
+    | '/auth/callback'
+    | '/cyber-range/challenges'
+    | '/cyber-range/labs'
+    | '/cyber-range/leaderboard'
+    | '/cyber-range/learning-paths'
+    | '/innovation/cybershieldai'
     | '/learn/$slug'
     | '/solutions/consulting'
+    | '/solutions/training'
+    | '/verify/$certificateId'
     | '/learn'
+    | '/admin/$section'
     | '/admin/bookings'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
     | '/admin/team'
-    | '/cyber-range/labs'
+    | '/cyber-range/ctf'
+    | '/cyber-range/my-progress'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
     | '/admin'
+    | '/cyber-range/challenge/$slug'
+    | '/cyber-range/lab/$slug'
     | '/learn/$slug/$moduleSlug'
     | '/api/lessons/$slug/$moduleSlug'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
+    | '/academy'
     | '/auth'
+    | '/campus'
+    | '/case-studies'
     | '/complaint'
+    | '/contact'
     | '/cyber-range'
+    | '/events'
     | '/fraud-check'
+    | '/innovation'
+    | '/intelligence'
+    | '/login'
+    | '/privacy'
     | '/programs'
+    | '/responsible-disclosure'
+    | '/security'
+    | '/solutions'
     | '/team'
+    | '/terms'
     | '/_authenticated/admin'
+    | '/_authenticated/certificates'
     | '/_authenticated/dashboard'
+    | '/_authenticated/instructor'
+    | '/_authenticated/profile'
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
     | '/api/progress'
     | '/api/score'
     | '/api/upload'
+    | '/auth/callback'
+    | '/cyber-range/challenges'
+    | '/cyber-range/labs'
+    | '/cyber-range/leaderboard'
+    | '/cyber-range/learning-paths'
+    | '/innovation/cybershieldai'
     | '/learn/$slug'
     | '/solutions/consulting'
+    | '/solutions/training'
+    | '/verify/$certificateId'
     | '/learn/'
+    | '/_authenticated/admin/$section'
     | '/_authenticated/admin/bookings'
     | '/_authenticated/admin/colleges'
     | '/_authenticated/admin/complaints'
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/team'
-    | '/_authenticated/cyber-range/labs'
+    | '/_authenticated/cyber-range/ctf'
+    | '/_authenticated/cyber-range/my-progress'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
     | '/_authenticated/admin/'
+    | '/_authenticated/cyber-range/challenge/$slug'
+    | '/_authenticated/cyber-range/lab/$slug'
     | '/_authenticated/learn/$slug/$moduleSlug'
     | '/api/lessons/$slug/$moduleSlug'
   fileRoutesById: FileRoutesById
@@ -414,12 +767,26 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  AboutRoute: typeof AboutRoute
+  AcademyRoute: typeof AcademyRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  CampusRoute: typeof CampusRoute
+  CaseStudiesRoute: typeof CaseStudiesRoute
   ComplaintRoute: typeof ComplaintRoute
-  CyberRangeRoute: typeof CyberRangeRoute
+  ContactRoute: typeof ContactRoute
+  CyberRangeRoute: typeof CyberRangeRouteWithChildren
+  EventsRoute: typeof EventsRoute
   FraudCheckRoute: typeof FraudCheckRoute
+  InnovationRoute: typeof InnovationRouteWithChildren
+  IntelligenceRoute: typeof IntelligenceRoute
+  LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProgramsRoute: typeof ProgramsRoute
+  ResponsibleDisclosureRoute: typeof ResponsibleDisclosureRoute
+  SecurityRoute: typeof SecurityRoute
+  SolutionsRoute: typeof SolutionsRouteWithChildren
   TeamRoute: typeof TeamRoute
+  TermsRoute: typeof TermsRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiCheckUrlRoute: typeof ApiCheckUrlRoute
   ApiLiveThreatsRoute: typeof ApiLiveThreatsRoute
@@ -427,7 +794,7 @@ export interface RootRouteChildren {
   ApiScoreRoute: typeof ApiScoreRoute
   ApiUploadRoute: typeof ApiUploadRoute
   LearnSlugRoute: typeof LearnSlugRoute
-  SolutionsConsultingRoute: typeof SolutionsConsultingRoute
+  VerifyCertificateIdRoute: typeof VerifyCertificateIdRoute
   LearnIndexRoute: typeof LearnIndexRoute
   ApiAgentsAnalyzeRoute: typeof ApiAgentsAnalyzeRoute
   ApiAgentsReportRoute: typeof ApiAgentsReportRoute
@@ -437,46 +804,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/team': {
-      id: '/team'
-      path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof TeamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/programs': {
-      id: '/programs'
-      path: '/programs'
-      fullPath: '/programs'
-      preLoaderRoute: typeof ProgramsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/fraud-check': {
-      id: '/fraud-check'
-      path: '/fraud-check'
-      fullPath: '/fraud-check'
-      preLoaderRoute: typeof FraudCheckRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cyber-range': {
-      id: '/cyber-range'
-      path: '/cyber-range'
-      fullPath: '/cyber-range'
-      preLoaderRoute: typeof CyberRangeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/complaint': {
-      id: '/complaint'
-      path: '/complaint'
-      fullPath: '/complaint'
-      preLoaderRoute: typeof ComplaintRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -486,60 +818,186 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/learn/': {
-      id: '/learn/'
-      path: '/learn'
-      fullPath: '/learn/'
-      preLoaderRoute: typeof LearnIndexRouteImport
+    '/academy': {
+      id: '/academy'
+      path: '/academy'
+      fullPath: '/academy'
+      preLoaderRoute: typeof AcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/solutions/consulting': {
-      id: '/solutions/consulting'
-      path: '/solutions/consulting'
-      fullPath: '/solutions/consulting'
-      preLoaderRoute: typeof SolutionsConsultingRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/learn/$slug': {
-      id: '/learn/$slug'
-      path: '/learn/$slug'
-      fullPath: '/learn/$slug'
-      preLoaderRoute: typeof LearnSlugRouteImport
+    '/campus': {
+      id: '/campus'
+      path: '/campus'
+      fullPath: '/campus'
+      preLoaderRoute: typeof CampusRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/upload': {
-      id: '/api/upload'
-      path: '/api/upload'
-      fullPath: '/api/upload'
-      preLoaderRoute: typeof ApiUploadRouteImport
+    '/case-studies': {
+      id: '/case-studies'
+      path: '/case-studies'
+      fullPath: '/case-studies'
+      preLoaderRoute: typeof CaseStudiesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/score': {
-      id: '/api/score'
-      path: '/api/score'
-      fullPath: '/api/score'
-      preLoaderRoute: typeof ApiScoreRouteImport
+    '/complaint': {
+      id: '/complaint'
+      path: '/complaint'
+      fullPath: '/complaint'
+      preLoaderRoute: typeof ComplaintRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/progress': {
-      id: '/api/progress'
-      path: '/api/progress'
-      fullPath: '/api/progress'
-      preLoaderRoute: typeof ApiProgressRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/live-threats': {
-      id: '/api/live-threats'
-      path: '/api/live-threats'
-      fullPath: '/api/live-threats'
-      preLoaderRoute: typeof ApiLiveThreatsRouteImport
+    '/cyber-range': {
+      id: '/cyber-range'
+      path: '/cyber-range'
+      fullPath: '/cyber-range'
+      preLoaderRoute: typeof CyberRangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fraud-check': {
+      id: '/fraud-check'
+      path: '/fraud-check'
+      fullPath: '/fraud-check'
+      preLoaderRoute: typeof FraudCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/innovation': {
+      id: '/innovation'
+      path: '/innovation'
+      fullPath: '/innovation'
+      preLoaderRoute: typeof InnovationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence': {
+      id: '/intelligence'
+      path: '/intelligence'
+      fullPath: '/intelligence'
+      preLoaderRoute: typeof IntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs': {
+      id: '/programs'
+      path: '/programs'
+      fullPath: '/programs'
+      preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/responsible-disclosure': {
+      id: '/responsible-disclosure'
+      path: '/responsible-disclosure'
+      fullPath: '/responsible-disclosure'
+      preLoaderRoute: typeof ResponsibleDisclosureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/security': {
+      id: '/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof SecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions': {
+      id: '/solutions'
+      path: '/solutions'
+      fullPath: '/solutions'
+      preLoaderRoute: typeof SolutionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/certificates': {
+      id: '/_authenticated/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof AuthenticatedCertificatesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/instructor': {
+      id: '/_authenticated/instructor'
+      path: '/instructor'
+      fullPath: '/instructor'
+      preLoaderRoute: typeof AuthenticatedInstructorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/check-url': {
@@ -549,26 +1007,110 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCheckUrlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
+    '/api/live-threats': {
+      id: '/api/live-threats'
+      path: '/api/live-threats'
+      fullPath: '/api/live-threats'
+      preLoaderRoute: typeof ApiLiveThreatsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/api/progress': {
+      id: '/api/progress'
+      path: '/api/progress'
+      fullPath: '/api/progress'
+      preLoaderRoute: typeof ApiProgressRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/api/score': {
+      id: '/api/score'
+      path: '/api/score'
+      fullPath: '/api/score'
+      preLoaderRoute: typeof ApiScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/cyber-range/challenges': {
+      id: '/cyber-range/challenges'
+      path: '/challenges'
+      fullPath: '/cyber-range/challenges'
+      preLoaderRoute: typeof CyberRangeChallengesRouteImport
+      parentRoute: typeof CyberRangeRoute
+    }
+    '/cyber-range/labs': {
+      id: '/cyber-range/labs'
+      path: '/labs'
+      fullPath: '/cyber-range/labs'
+      preLoaderRoute: typeof CyberRangeLabsRouteImport
+      parentRoute: typeof CyberRangeRoute
+    }
+    '/cyber-range/leaderboard': {
+      id: '/cyber-range/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/cyber-range/leaderboard'
+      preLoaderRoute: typeof CyberRangeLeaderboardRouteImport
+      parentRoute: typeof CyberRangeRoute
+    }
+    '/cyber-range/learning-paths': {
+      id: '/cyber-range/learning-paths'
+      path: '/learning-paths'
+      fullPath: '/cyber-range/learning-paths'
+      preLoaderRoute: typeof CyberRangeLearningPathsRouteImport
+      parentRoute: typeof CyberRangeRoute
+    }
+    '/innovation/cybershieldai': {
+      id: '/innovation/cybershieldai'
+      path: '/cybershieldai'
+      fullPath: '/innovation/cybershieldai'
+      preLoaderRoute: typeof InnovationCybershieldaiRouteImport
+      parentRoute: typeof InnovationRoute
+    }
+    '/learn/': {
+      id: '/learn/'
+      path: '/learn'
+      fullPath: '/learn/'
+      preLoaderRoute: typeof LearnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/$slug': {
+      id: '/learn/$slug'
+      path: '/learn/$slug'
+      fullPath: '/learn/$slug'
+      preLoaderRoute: typeof LearnSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/consulting': {
+      id: '/solutions/consulting'
+      path: '/consulting'
+      fullPath: '/solutions/consulting'
+      preLoaderRoute: typeof SolutionsConsultingRouteImport
+      parentRoute: typeof SolutionsRoute
+    }
+    '/solutions/training': {
+      id: '/solutions/training'
+      path: '/training'
+      fullPath: '/solutions/training'
+      preLoaderRoute: typeof SolutionsTrainingRouteImport
+      parentRoute: typeof SolutionsRoute
+    }
+    '/verify/$certificateId': {
+      id: '/verify/$certificateId'
+      path: '/verify/$certificateId'
+      fullPath: '/verify/$certificateId'
+      preLoaderRoute: typeof VerifyCertificateIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -577,67 +1119,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/api/quiz/$moduleId': {
-      id: '/api/quiz/$moduleId'
-      path: '/api/quiz/$moduleId'
-      fullPath: '/api/quiz/$moduleId'
-      preLoaderRoute: typeof ApiQuizModuleIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/lessons/$slug': {
-      id: '/api/lessons/$slug'
-      path: '/api/lessons/$slug'
-      fullPath: '/api/lessons/$slug'
-      preLoaderRoute: typeof ApiLessonsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/agents/report': {
-      id: '/api/agents/report'
-      path: '/api/agents/report'
-      fullPath: '/api/agents/report'
-      preLoaderRoute: typeof ApiAgentsReportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/agents/analyze': {
-      id: '/api/agents/analyze'
-      path: '/api/agents/analyze'
-      fullPath: '/api/agents/analyze'
-      preLoaderRoute: typeof ApiAgentsAnalyzeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/cyber-range/labs': {
-      id: '/_authenticated/cyber-range/labs'
-      path: '/cyber-range/labs'
-      fullPath: '/cyber-range/labs'
-      preLoaderRoute: typeof AuthenticatedCyberRangeLabsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/admin/team': {
-      id: '/_authenticated/admin/team'
-      path: '/team'
-      fullPath: '/admin/team'
-      preLoaderRoute: typeof AuthenticatedAdminTeamRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/content': {
-      id: '/_authenticated/admin/content'
-      path: '/content'
-      fullPath: '/admin/content'
-      preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/complaints': {
-      id: '/_authenticated/admin/complaints'
-      path: '/complaints'
-      fullPath: '/admin/complaints'
-      preLoaderRoute: typeof AuthenticatedAdminComplaintsRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/colleges': {
-      id: '/_authenticated/admin/colleges'
-      path: '/colleges'
-      fullPath: '/admin/colleges'
-      preLoaderRoute: typeof AuthenticatedAdminCollegesRouteImport
+    '/_authenticated/admin/$section': {
+      id: '/_authenticated/admin/$section'
+      path: '/$section'
+      fullPath: '/admin/$section'
+      preLoaderRoute: typeof AuthenticatedAdminSectionRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/bookings': {
@@ -647,12 +1133,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/api/lessons/$slug/$moduleSlug': {
-      id: '/api/lessons/$slug/$moduleSlug'
-      path: '/$moduleSlug'
-      fullPath: '/api/lessons/$slug/$moduleSlug'
-      preLoaderRoute: typeof ApiLessonsSlugModuleSlugRouteImport
-      parentRoute: typeof ApiLessonsSlugRoute
+    '/_authenticated/admin/colleges': {
+      id: '/_authenticated/admin/colleges'
+      path: '/colleges'
+      fullPath: '/admin/colleges'
+      preLoaderRoute: typeof AuthenticatedAdminCollegesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/complaints': {
+      id: '/_authenticated/admin/complaints'
+      path: '/complaints'
+      fullPath: '/admin/complaints'
+      preLoaderRoute: typeof AuthenticatedAdminComplaintsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/content': {
+      id: '/_authenticated/admin/content'
+      path: '/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/team': {
+      id: '/_authenticated/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AuthenticatedAdminTeamRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/cyber-range/ctf': {
+      id: '/_authenticated/cyber-range/ctf'
+      path: '/cyber-range/ctf'
+      fullPath: '/cyber-range/ctf'
+      preLoaderRoute: typeof AuthenticatedCyberRangeCtfRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cyber-range/my-progress': {
+      id: '/_authenticated/cyber-range/my-progress'
+      path: '/cyber-range/my-progress'
+      fullPath: '/cyber-range/my-progress'
+      preLoaderRoute: typeof AuthenticatedCyberRangeMyProgressRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/agents/analyze': {
+      id: '/api/agents/analyze'
+      path: '/api/agents/analyze'
+      fullPath: '/api/agents/analyze'
+      preLoaderRoute: typeof ApiAgentsAnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agents/report': {
+      id: '/api/agents/report'
+      path: '/api/agents/report'
+      fullPath: '/api/agents/report'
+      preLoaderRoute: typeof ApiAgentsReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lessons/$slug': {
+      id: '/api/lessons/$slug'
+      path: '/api/lessons/$slug'
+      fullPath: '/api/lessons/$slug'
+      preLoaderRoute: typeof ApiLessonsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/quiz/$moduleId': {
+      id: '/api/quiz/$moduleId'
+      path: '/api/quiz/$moduleId'
+      fullPath: '/api/quiz/$moduleId'
+      preLoaderRoute: typeof ApiQuizModuleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/cyber-range/challenge/$slug': {
+      id: '/_authenticated/cyber-range/challenge/$slug'
+      path: '/cyber-range/challenge/$slug'
+      fullPath: '/cyber-range/challenge/$slug'
+      preLoaderRoute: typeof AuthenticatedCyberRangeChallengeSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cyber-range/lab/$slug': {
+      id: '/_authenticated/cyber-range/lab/$slug'
+      path: '/cyber-range/lab/$slug'
+      fullPath: '/cyber-range/lab/$slug'
+      preLoaderRoute: typeof AuthenticatedCyberRangeLabSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/learn/$slug/$moduleSlug': {
       id: '/_authenticated/learn/$slug/$moduleSlug'
@@ -661,10 +1224,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLearnSlugModuleSlugRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/lessons/$slug/$moduleSlug': {
+      id: '/api/lessons/$slug/$moduleSlug'
+      path: '/$moduleSlug'
+      fullPath: '/api/lessons/$slug/$moduleSlug'
+      preLoaderRoute: typeof ApiLessonsSlugModuleSlugRouteImport
+      parentRoute: typeof ApiLessonsSlugRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminSectionRoute: typeof AuthenticatedAdminSectionRoute
   AuthenticatedAdminBookingsRoute: typeof AuthenticatedAdminBookingsRoute
   AuthenticatedAdminCollegesRoute: typeof AuthenticatedAdminCollegesRoute
   AuthenticatedAdminComplaintsRoute: typeof AuthenticatedAdminComplaintsRoute
@@ -674,6 +1245,7 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminSectionRoute: AuthenticatedAdminSectionRoute,
   AuthenticatedAdminBookingsRoute: AuthenticatedAdminBookingsRoute,
   AuthenticatedAdminCollegesRoute: AuthenticatedAdminCollegesRoute,
   AuthenticatedAdminComplaintsRoute: AuthenticatedAdminComplaintsRoute,
@@ -687,20 +1259,88 @@ const AuthenticatedAdminRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedCyberRangeLabsRoute: typeof AuthenticatedCyberRangeLabsRoute
+  AuthenticatedInstructorRoute: typeof AuthenticatedInstructorRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedCyberRangeCtfRoute: typeof AuthenticatedCyberRangeCtfRoute
+  AuthenticatedCyberRangeMyProgressRoute: typeof AuthenticatedCyberRangeMyProgressRoute
+  AuthenticatedCyberRangeChallengeSlugRoute: typeof AuthenticatedCyberRangeChallengeSlugRoute
+  AuthenticatedCyberRangeLabSlugRoute: typeof AuthenticatedCyberRangeLabSlugRoute
   AuthenticatedLearnSlugModuleSlugRoute: typeof AuthenticatedLearnSlugModuleSlugRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedCyberRangeLabsRoute: AuthenticatedCyberRangeLabsRoute,
+  AuthenticatedInstructorRoute: AuthenticatedInstructorRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedCyberRangeCtfRoute: AuthenticatedCyberRangeCtfRoute,
+  AuthenticatedCyberRangeMyProgressRoute:
+    AuthenticatedCyberRangeMyProgressRoute,
+  AuthenticatedCyberRangeChallengeSlugRoute:
+    AuthenticatedCyberRangeChallengeSlugRoute,
+  AuthenticatedCyberRangeLabSlugRoute: AuthenticatedCyberRangeLabSlugRoute,
   AuthenticatedLearnSlugModuleSlugRoute: AuthenticatedLearnSlugModuleSlugRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface CyberRangeRouteChildren {
+  CyberRangeChallengesRoute: typeof CyberRangeChallengesRoute
+  CyberRangeLabsRoute: typeof CyberRangeLabsRoute
+  CyberRangeLeaderboardRoute: typeof CyberRangeLeaderboardRoute
+  CyberRangeLearningPathsRoute: typeof CyberRangeLearningPathsRoute
+}
+
+const CyberRangeRouteChildren: CyberRangeRouteChildren = {
+  CyberRangeChallengesRoute: CyberRangeChallengesRoute,
+  CyberRangeLabsRoute: CyberRangeLabsRoute,
+  CyberRangeLeaderboardRoute: CyberRangeLeaderboardRoute,
+  CyberRangeLearningPathsRoute: CyberRangeLearningPathsRoute,
+}
+
+const CyberRangeRouteWithChildren = CyberRangeRoute._addFileChildren(
+  CyberRangeRouteChildren,
+)
+
+interface InnovationRouteChildren {
+  InnovationCybershieldaiRoute: typeof InnovationCybershieldaiRoute
+}
+
+const InnovationRouteChildren: InnovationRouteChildren = {
+  InnovationCybershieldaiRoute: InnovationCybershieldaiRoute,
+}
+
+const InnovationRouteWithChildren = InnovationRoute._addFileChildren(
+  InnovationRouteChildren,
+)
+
+interface SolutionsRouteChildren {
+  SolutionsConsultingRoute: typeof SolutionsConsultingRoute
+  SolutionsTrainingRoute: typeof SolutionsTrainingRoute
+}
+
+const SolutionsRouteChildren: SolutionsRouteChildren = {
+  SolutionsConsultingRoute: SolutionsConsultingRoute,
+  SolutionsTrainingRoute: SolutionsTrainingRoute,
+}
+
+const SolutionsRouteWithChildren = SolutionsRoute._addFileChildren(
+  SolutionsRouteChildren,
+)
 
 interface ApiLessonsSlugRouteChildren {
   ApiLessonsSlugModuleSlugRoute: typeof ApiLessonsSlugModuleSlugRoute
@@ -717,12 +1357,26 @@ const ApiLessonsSlugRouteWithChildren = ApiLessonsSlugRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
+  AboutRoute: AboutRoute,
+  AcademyRoute: AcademyRoute,
+  AuthRoute: AuthRouteWithChildren,
+  CampusRoute: CampusRoute,
+  CaseStudiesRoute: CaseStudiesRoute,
   ComplaintRoute: ComplaintRoute,
-  CyberRangeRoute: CyberRangeRoute,
+  ContactRoute: ContactRoute,
+  CyberRangeRoute: CyberRangeRouteWithChildren,
+  EventsRoute: EventsRoute,
   FraudCheckRoute: FraudCheckRoute,
+  InnovationRoute: InnovationRouteWithChildren,
+  IntelligenceRoute: IntelligenceRoute,
+  LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
   ProgramsRoute: ProgramsRoute,
+  ResponsibleDisclosureRoute: ResponsibleDisclosureRoute,
+  SecurityRoute: SecurityRoute,
+  SolutionsRoute: SolutionsRouteWithChildren,
   TeamRoute: TeamRoute,
+  TermsRoute: TermsRoute,
   ApiChatRoute: ApiChatRoute,
   ApiCheckUrlRoute: ApiCheckUrlRoute,
   ApiLiveThreatsRoute: ApiLiveThreatsRoute,
@@ -730,7 +1384,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiScoreRoute: ApiScoreRoute,
   ApiUploadRoute: ApiUploadRoute,
   LearnSlugRoute: LearnSlugRoute,
-  SolutionsConsultingRoute: SolutionsConsultingRoute,
+  VerifyCertificateIdRoute: VerifyCertificateIdRoute,
   LearnIndexRoute: LearnIndexRoute,
   ApiAgentsAnalyzeRoute: ApiAgentsAnalyzeRoute,
   ApiAgentsReportRoute: ApiAgentsReportRoute,

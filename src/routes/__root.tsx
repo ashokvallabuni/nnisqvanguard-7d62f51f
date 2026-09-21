@@ -27,7 +27,12 @@ function NotFoundComponent() {
         <h1 className="display text-7xl text-cyber">404</h1>
         <p className="mono text-xs text-muted-foreground mt-2">SIGNAL LOST</p>
         <h2 className="mt-4 text-xl font-semibold">Page not found</h2>
-        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Return home</Link>
+        <Link
+          to="/"
+          className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+        >
+          Return home
+        </Link>
       </div>
     </div>
   );
@@ -35,15 +40,27 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
-  useEffect(() => { reportLovableError(error, { boundary: "tanstack_root_error_component" }); }, [error]);
+  useEffect(() => {
+    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+  }, [error]);
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center glass rounded-xl p-8">
         <h1 className="display text-2xl text-cyber">SYSTEM FAULT</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message.slice(0, 200)}</p>
         <div className="mt-6 flex gap-2 justify-center">
-          <button onClick={() => { router.invalidate(); reset(); }} className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Retry</button>
-          <a href="/" className="rounded-md border px-4 py-2 text-sm">Home</a>
+          <button
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
+            className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Retry
+          </button>
+          <a href="/" className="rounded-md border px-4 py-2 text-sm">
+            Home
+          </a>
         </div>
       </div>
     </div>
@@ -56,23 +73,52 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "CyberShield India — AI Fraud Detection & College Cyber Awareness" },
-      { name: "description", content: "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India." },
+      {
+        name: "description",
+        content:
+          "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India.",
+      },
       { name: "author", content: "CyberShield India" },
-      { property: "og:title", content: "CyberShield India — AI Fraud Detection & College Cyber Awareness" },
-      { property: "og:description", content: "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India." },
+      {
+        property: "og:title",
+        content: "CyberShield India — AI Fraud Detection & College Cyber Awareness",
+      },
+      {
+        property: "og:description",
+        content:
+          "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "CyberShield India — AI Fraud Detection & College Cyber Awareness" },
-      { name: "twitter:description", content: "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7644f823-8e64-4f93-a61d-f9212f6ef494" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7644f823-8e64-4f93-a61d-f9212f6ef494" },
+      {
+        name: "twitter:title",
+        content: "CyberShield India — AI Fraud Detection & College Cyber Awareness",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "AI-powered scam screenshot analysis, cybercrime complaint filing, and cyber-awareness programs booked by colleges across India.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7644f823-8e64-4f93-a61d-f9212f6ef494",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7644f823-8e64-4f93-a61d-f9212f6ef494",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -84,8 +130,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head><HeadContent /></head>
-      <body>{children}<Scripts /></body>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }
@@ -131,23 +182,43 @@ function TopNav() {
         </div>
       </Link>
 
-
       <ul className="hidden lg:flex gap-6 items-center">
         {links.map((l) => (
           <li key={l.to}>
-            <Link to={l.to} className="mono text-[0.7rem] text-muted-foreground hover:text-cyber transition">{l.label}</Link>
+            <Link
+              to={l.to}
+              className="mono text-[0.7rem] text-muted-foreground hover:text-cyber transition"
+            >
+              {l.label}
+            </Link>
           </li>
         ))}
       </ul>
       <div className="hidden lg:flex gap-2 items-center">
         {user ? (
           <>
-            {isAdmin && <Link to="/admin" className="mono text-[0.7rem] px-3 py-2 rounded-md border border-accent/40 text-accent hover:bg-accent/10">ADMIN</Link>}
-            <Link to="/dashboard" className="mono text-[0.7rem] px-3 py-2 rounded-md border">Account</Link>
-            <button onClick={signOut} className="p-2 rounded-md hover:bg-muted"><LogOut className="w-4 h-4" /></button>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="mono text-[0.7rem] px-3 py-2 rounded-md border border-accent/40 text-accent hover:bg-accent/10"
+              >
+                ADMIN
+              </Link>
+            )}
+            <Link to="/dashboard" className="mono text-[0.7rem] px-3 py-2 rounded-md border">
+              Account
+            </Link>
+            <button onClick={signOut} className="p-2 rounded-md hover:bg-muted">
+              <LogOut className="w-4 h-4" />
+            </button>
           </>
         ) : (
-          <Link to="/auth" className="mono text-[0.7rem] px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold glow-cyber">SIGN IN</Link>
+          <Link
+            to="/login"
+            className="mono text-[0.7rem] px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold glow-cyber"
+          >
+            SIGN IN
+          </Link>
         )}
       </div>
       <button className="lg:hidden p-2" onClick={() => setOpen((o) => !o)} aria-label="Menu">
@@ -156,17 +227,52 @@ function TopNav() {
       {open && (
         <div className="lg:hidden absolute top-16 inset-x-0 glass border-b p-4 flex flex-col gap-3">
           {links.map((l) => (
-            <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="mono text-xs text-muted-foreground hover:text-cyber">{l.label}</Link>
+            <Link
+              key={l.to}
+              to={l.to}
+              onClick={() => setOpen(false)}
+              className="mono text-xs text-muted-foreground hover:text-cyber"
+            >
+              {l.label}
+            </Link>
           ))}
           <div className="border-t pt-3 flex gap-2 flex-wrap">
             {user ? (
               <>
-                {isAdmin && <Link to="/admin" onClick={() => setOpen(false)} className="mono text-[0.7rem] px-3 py-2 rounded-md border border-accent/40 text-accent">ADMIN</Link>}
-                <Link to="/dashboard" onClick={() => setOpen(false)} className="mono text-[0.7rem] px-3 py-2 rounded-md border">Account</Link>
-                <button onClick={() => { setOpen(false); void signOut(); }} className="mono text-[0.7rem] px-3 py-2 rounded-md border">Sign out</button>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setOpen(false)}
+                    className="mono text-[0.7rem] px-3 py-2 rounded-md border border-accent/40 text-accent"
+                  >
+                    ADMIN
+                  </Link>
+                )}
+                <Link
+                  to="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="mono text-[0.7rem] px-3 py-2 rounded-md border"
+                >
+                  Account
+                </Link>
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    void signOut();
+                  }}
+                  className="mono text-[0.7rem] px-3 py-2 rounded-md border"
+                >
+                  Sign out
+                </button>
               </>
             ) : (
-              <Link to="/auth" onClick={() => setOpen(false)} className="mono text-[0.7rem] px-4 py-2 rounded-md bg-primary text-primary-foreground">SIGN IN</Link>
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="mono text-[0.7rem] px-4 py-2 rounded-md bg-primary text-primary-foreground"
+              >
+                SIGN IN
+              </Link>
             )}
           </div>
         </div>
