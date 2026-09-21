@@ -46,7 +46,7 @@ function AchievementsPage() {
       if (!user) return [];
       const { data, error } = await supabase
         .from("user_badges")
-        .select("badge_id,awarded_at,badges(name,description)")
+        .select("badge_id,awarded_at")
         .eq("user_id", user.id);
       if (error) return [];
       return data ?? [];
@@ -69,10 +69,8 @@ function AchievementsPage() {
     enabled: !!user,
   });
 
-  const earnedNames = useMemo(() => {
-    return new Set(
-      (userBadges ?? []).map((ub) => (ub.badges as { name: string } | null)?.name).filter(Boolean)
-    );
+  const earnedBadgeIds = useMemo(() => {
+    return new Set((userBadges ?? []).map((ub) => ub.badge_id).filter(Boolean));
   }, [userBadges]);
 
   const completedModulesCount = progress?.length || 0;
@@ -80,7 +78,7 @@ function AchievementsPage() {
   // Compute status for each badge
   const badgesWithStatus = useMemo(() => {
     return ACADEMY_BADGES.map((b, idx) => {
-      const isEarned = earnedNames.has(b.name) || (completedModulesCount > 0 && idx === 0);
+      const isEarned = earnedBadgeIds.has(b.id) || (completedModulesCount > 0 && idx === 0);
       const isInProgress = !isEarned && completedModulesCount > 0 && idx === 1;
       const status: "EARNED" | "IN_PROGRESS" | "LOCKED" = isEarned
         ? "EARNED"
@@ -94,7 +92,7 @@ function AchievementsPage() {
         earnedAt: isEarned ? "Verified on Record" : undefined,
       };
     });
-  }, [earnedNames, completedModulesCount]);
+  }, [earnedBadgeIds, completedModulesCount]);
 
   const filteredBadges = useMemo(() => {
     if (selectedTab === "earned") return badgesWithStatus.filter((b) => b.status === "EARNED");

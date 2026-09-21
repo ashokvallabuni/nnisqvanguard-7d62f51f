@@ -168,14 +168,14 @@ function CyberLabsCatalogPage() {
     const activeLabIds = new Set((activeSessions ?? []).map((s) => s.lab_id));
     const completedLabIds = new Set((completedLabs ?? []).map((l) => l.lab_id));
 
-    const formattedDbLabs: LabData[] = (dbLabs ?? []).map((l) => ({
+    const formattedDbLabs: LabData[] = (dbLabs ?? []).map((l: any) => ({
       id: l.id,
       slug: l.slug,
       title: l.title,
       summary: l.description || "Hands-on isolated cybersecurity exercise.",
       difficulty: (l.difficulty || "medium").toLowerCase(),
       category: l.lab_type || "Cyber Defense",
-      estimated_minutes: l.estimated_minutes || 45,
+      estimated_minutes: l.estimated_time_minutes || l.estimated_minutes || 45,
       mitre_attack_ids: (l.mitre_attack_ids as string[]) || [],
       points: l.reward_points || 100,
       is_active_session: activeLabIds.has(l.id),
@@ -251,7 +251,7 @@ function CyberLabsCatalogPage() {
             </div>
 
             <Link
-              to="/_authenticated/cyber-range/lab/$slug"
+              to="/cyber-range/lab/$slug"
               params={{ slug: activeSessionLab.slug }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-xs font-mono font-semibold hover:bg-primary/90 transition-colors shadow-xs shrink-0"
             >

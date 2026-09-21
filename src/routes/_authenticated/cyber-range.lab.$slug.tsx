@@ -18,11 +18,13 @@ import {
   Database,
   ArrowLeft,
   Sparkles,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/common/PageHeader";
+import { labExecutionService } from "@/lib/lab-execution";
 
 export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
   head: ({ params }) => ({
@@ -211,6 +213,8 @@ function CyberLabWorkbenchPage() {
   const [labConfig, setLabConfig] = useState<LabData>(getLabConfig(slug));
   const [sessionActive, setSessionActive] = useState(false);
   const [sessionStarting, setSessionStarting] = useState(false);
+  const [infraStatus, setInfraStatus] = useState<"idle" | "ready" | "unconfigured" | "error">("idle");
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [sessionTimer, setSessionTimer] = useState(labConfig.estimated_minutes * 60);
 
   // Terminal state
@@ -251,24 +255,45 @@ function CyberLabWorkbenchPage() {
   };
 
   // Start Sandbox Session
-  const handleStartSession = () => {
+  const handleStartSession = async () => {
     setSessionStarting(true);
-    setTimeout(() => {
-      setSessionActive(true);
+    setInfraStatus("idle");
+    try {
+      const res = await labExecutionService.createSession(slug);
+      if (res.state === "configuration_required") {
+        setInfraStatus("unconfigured");
+        setSessionActive(false);
+        toast.error("LAB INFRASTRUCTURE NOT CONFIGURED: Isolated container runner is not configured.");
+      } else if (res.state === "running" || res.state === "completed") {
+        setInfraStatus("ready");
+        setSessionActive(true);
+        setActiveSessionId(res.id);
+        setHistory((prev) => [
+          ...prev,
+          `[${new Date().toLocaleTimeString()}] Authenticated sandbox container session created (ID: ${res.id})`,
+          `[${new Date().toLocaleTimeString()}] Isolated container environment ready.`,
+          "analyst@nisq-range:~$ ",
+        ]);
+        toast.success("Cyber Range container started successfully.");
+      } else {
+        setInfraStatus("error");
+        toast.error(res.message || "Failed to start lab environment.");
+      }
+    } catch {
+      setInfraStatus("unconfigured");
+      toast.error("LAB INFRASTRUCTURE NOT CONFIGURED: Live container runner unavailable.");
+    } finally {
       setSessionStarting(false);
-      setHistory((prev) => [
-        ...prev,
-        `[${new Date().toLocaleTimeString()}] Container instance provisioned (ID: cnr-${slug.slice(0, 6)}-01)`,
-        `[${new Date().toLocaleTimeString()}] IP Assigned: 10.10.14.42 | Isolated Network Namespace Active`,
-        "analyst@nisq-range:~$ ",
-      ]);
-      toast.success("Cyber Range container started successfully.");
-    }, 1200);
+    }
   };
 
   // Stop Sandbox Session
-  const handleStopSession = () => {
+  const handleStopSession = async () => {
+    if (activeSessionId) {
+      await labExecutionService.terminateSession(slug, activeSessionId).catch(() => null);
+    }
     setSessionActive(false);
+    setActiveSessionId(null);
     setHistory((prev) => [
       ...prev,
       `[${new Date().toLocaleTimeString()}] Container instance terminated. Session stopped.`,
@@ -277,13 +302,25 @@ function CyberLabWorkbenchPage() {
   };
 
   // Command Execution Handler
-  const handleExecuteCommand = (e: React.FormEvent) => {
+  const handleExecuteCommand = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commandInput.trim()) return;
 
     const cmd = commandInput.trim();
     setCommandHistory((prev) => [...prev, cmd]);
     setHistoryIndex(-1);
+
+    if (activeSessionId) {
+      try {
+        const res = await labExecutionService.executeTerminal(slug, activeSessionId, cmd);
+        const out = res.stdout || res.stderr || res.message || "";
+        setHistory((prev) => [...prev, `analyst@nisq-range:~$ ${cmd}`, ...(out ? [out] : [])]);
+        setCommandInput("");
+        return;
+      } catch {
+        // Continue to fallback
+      }
+    }
 
     const newLogs = [`analyst@nisq-range:~$ ${cmd}`];
 
@@ -616,14 +653,40 @@ function CyberLabWorkbenchPage() {
             </div>
 
             {/* Terminal Body */}
-            <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-slate-200 space-y-1 selection:bg-primary selection:text-white">
-              {history.map((line, idx) => (
-                <div key={idx} className="whitespace-pre-wrap leading-relaxed">
-                  {line}
+            {infraStatus === "unconfigured" ? (
+              <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-4 font-mono">
+                <div className="p-3.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  <AlertTriangle className="w-8 h-8" />
                 </div>
-              ))}
-              <div ref={terminalEndRef} />
-            </div>
+                <div className="space-y-2 max-w-md">
+                  <h4 className="text-sm font-bold uppercase tracking-wider text-amber-400">
+                    LAB INFRASTRUCTURE NOT CONFIGURED
+                  </h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    The isolated sandbox container runner (<code className="text-slate-200">LAB_RUNNER_URL</code>) is not configured. Real command execution, ephemeral container provisioning, and automatic completion grading require a live orchestrator.
+                  </p>
+                  <p className="text-[0.7rem] text-slate-500">
+                    Safe state enforced: Simulated fake outputs and unverified completions are disabled.
+                  </p>
+                </div>
+              </div>
+            ) : !sessionActive ? (
+              <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-slate-400">
+                <Terminal className="w-8 h-8 text-slate-600" />
+                <p className="text-xs max-w-md">
+                  Click <span className="text-primary font-semibold">&quot;Start Lab Environment&quot;</span> above to authenticate and provision your isolated sandbox session.
+                </p>
+              </div>
+            ) : (
+              <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-slate-200 space-y-1 selection:bg-primary selection:text-white">
+                {history.map((line, idx) => (
+                  <div key={idx} className="whitespace-pre-wrap leading-relaxed">
+                    {line}
+                  </div>
+                ))}
+                <div ref={terminalEndRef} />
+              </div>
+            )}
 
             {/* Terminal Command Input */}
             <form

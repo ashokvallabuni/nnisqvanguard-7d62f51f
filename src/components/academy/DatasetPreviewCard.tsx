@@ -120,7 +120,7 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-850">
-              {dataset.data.map((row, rIdx) => (
+              {Array.isArray(dataset.data) && dataset.data.map((row: Record<string, any>, rIdx: number) => (
                 <tr key={rIdx} className="hover:bg-slate-900/60 transition-colors">
                   {headers.map((h) => (
                     <td key={h} className="p-2 whitespace-nowrap text-slate-300">

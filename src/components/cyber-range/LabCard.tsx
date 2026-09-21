@@ -99,7 +99,7 @@ export function LabCard({ lab }: LabCardProps) {
         </div>
 
         <Link
-          to="/_authenticated/cyber-range/lab/$slug"
+          to="/cyber-range/lab/$slug"
           params={{ slug: lab.slug }}
           className={`inline-flex items-center gap-1.5 text-xs font-mono px-3.5 py-1.5 rounded-md font-semibold transition-all ${
             lab.is_active_session

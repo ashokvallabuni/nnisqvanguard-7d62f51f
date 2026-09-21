@@ -650,11 +650,31 @@ function ModuleLearningPage() {
 
               <div className="pt-2 flex flex-wrap gap-3">
                 <Link
-                  to="/cyber-range/labs"
+                  to="/cyber-range/lab/$slug"
+                  params={{
+                    slug:
+                      (currentModule?.practice_labs && currentModule.practice_labs[0]) ||
+                      "linux-security-fundamentals",
+                  }}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shadow-xs"
                 >
                   <Terminal className="w-4 h-4" />
-                  <span>Launch Practice Lab</span>
+                  <span>
+                    Launch Dedicated Lab:{" "}
+                    {(
+                      (currentModule?.practice_labs && currentModule.practice_labs[0]) ||
+                      "linux-security-fundamentals"
+                    )
+                      .split("-")
+                      .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
+                      .join(" ")}
+                  </span>
+                </Link>
+                <Link
+                  to="/cyber-range/labs"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-card text-foreground font-semibold text-xs hover:bg-muted transition-colors shadow-xs"
+                >
+                  <span>Browse All Cyber Labs</span>
                 </Link>
               </div>
             </section>

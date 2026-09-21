@@ -59,15 +59,16 @@ type LearningPathRow = {
 };
 
 type LabProgressRow = {
-  id: string;
+  id?: string;
   user_id: string;
   lab_id: string;
-  tasks_completed: number;
-  total_tasks: number;
-  points: number;
+  tasks_completed?: number;
+  total_tasks?: number;
+  points?: number;
+  score?: number;
   completed?: boolean;
-  completed_at: string | null;
-  updated_at: string;
+  completed_at?: string | null;
+  updated_at?: string;
 };
 
 type BadgeRow = {
@@ -83,10 +84,11 @@ type BadgeRow = {
 };
 
 type UserBadgeRow = {
-  id: string;
+  id?: string;
   user_id: string;
   badge_id: string;
-  earned_at: string;
+  earned_at?: string;
+  awarded_at?: string;
   metadata?: Json;
   badges?: BadgeRow;
 };
