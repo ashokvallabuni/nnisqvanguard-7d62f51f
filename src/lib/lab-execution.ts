@@ -1,14 +1,21 @@
 import {
+  checkLabRunnerHealth,
   createLabSession,
   executeLabTerminal,
   getLabSessionStatus,
   resetLabSession,
   stopLabSession,
   submitLabFlag,
+  type LabRunnerHealthResult,
 } from "@/lib/lab-runner.functions";
 
 export type LabExecutionState =
-  "configuration_required" | "running" | "stopped" | "completed" | "error";
+  | "configuration_required"
+  | "connecting"
+  | "running"
+  | "stopped"
+  | "completed"
+  | "error";
 
 export type LabSession = {
   id: string | null;
@@ -22,6 +29,7 @@ export type LabSession = {
 };
 
 export interface LabExecutionService {
+  checkHealth(): Promise<LabRunnerHealthResult>;
   createSession(labSlug: string): Promise<LabSession>;
   getSession(labSlug: string, sessionId: string): Promise<LabSession>;
   executeTerminal(labSlug: string, sessionId: string, command: string): Promise<LabSession>;
@@ -31,6 +39,9 @@ export interface LabExecutionService {
 }
 
 export const labExecutionService: LabExecutionService = {
+  async checkHealth() {
+    return checkLabRunnerHealth();
+  },
   async createSession(labId) {
     return normalize(await createLabSession({ data: { labId } }));
   },
@@ -56,7 +67,18 @@ export const labExecutionService: LabExecutionService = {
 
 function normalize(result: unknown, id: string | null = null): LabSession {
   const value = result && typeof result === "object" ? (result as Record<string, unknown>) : {};
-  if (value.error === "LAB_INFRASTRUCTURE_NOT_CONFIGURED") return unavailable(id);
+  if (
+    value.error === "LAB_INFRASTRUCTURE_NOT_CONFIGURED" ||
+    value.error === "RUNNER_URL_MISSING" ||
+    value.error === "RUNNER_SECRET_MISSING"
+  ) {
+    return {
+      id,
+      state: "configuration_required",
+      message: String(value.error),
+      error: String(value.error),
+    };
+  }
   if (value.status === "COMPLETED") {
     return {
       id: String(value.sessionId ?? ""),
@@ -74,13 +96,5 @@ function normalize(result: unknown, id: string | null = null): LabSession {
     stdout: typeof value.stdout === "string" ? value.stdout : undefined,
     stderr: typeof value.stderr === "string" ? value.stderr : undefined,
     exitCode: typeof value.exitCode === "number" ? value.exitCode : undefined,
-  };
-}
-
-function unavailable(id: string | null = null): LabSession {
-  return {
-    id,
-    state: "configuration_required",
-    message: "LAB INFRASTRUCTURE NOT CONFIGURED",
   };
 }

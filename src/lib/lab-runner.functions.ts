@@ -22,6 +22,19 @@ type RunnerResponse = {
   correct?: boolean;
 };
 
+export type LabRunnerHealthResult = {
+  configured: boolean;
+  runnerUrlConfigured: boolean;
+  runnerSecretConfigured: boolean;
+  reachable: boolean;
+  status?: string;
+  docker?: string;
+  image?: string;
+  execution?: string;
+  network?: string;
+  error?: string;
+};
+
 async function callRunner(
   path: string,
   userId: string,
@@ -30,25 +43,105 @@ async function callRunner(
 ): Promise<RunnerResponse> {
   const runnerUrl = process.env.LAB_RUNNER_URL;
   const runnerSecret = process.env.LAB_RUNNER_SECRET;
-  if (!runnerUrl || !runnerSecret) {
-    return { error: "LAB_INFRASTRUCTURE_NOT_CONFIGURED" };
+  if (!runnerUrl) {
+    return { error: "RUNNER_URL_MISSING" };
+  }
+  if (!runnerSecret) {
+    return { error: "RUNNER_SECRET_MISSING" };
   }
 
-  const response = await fetch(`${runnerUrl.replace(/\/$/, "")}${path}`, {
-    method,
-    headers: {
-      "content-type": "application/json",
-      "x-lab-runner-secret": runnerSecret,
-      "x-authenticated-user-id": userId,
-    },
-    body: method === "POST" ? JSON.stringify(body ?? {}) : undefined,
-  });
-  const result = (await response.json().catch(() => ({}))) as RunnerResponse;
-  if (!response.ok) {
-    return { error: typeof result.error === "string" ? result.error : "LAB_EXECUTION_UNAVAILABLE" };
+  try {
+    const response = await fetch(`${runnerUrl.replace(/\/$/, "")}${path}`, {
+      method,
+      headers: {
+        "content-type": "application/json",
+        "x-lab-runner-secret": runnerSecret,
+        "x-authenticated-user-id": userId,
+      },
+      body: method === "POST" ? JSON.stringify(body ?? {}) : undefined,
+    });
+
+    if (response.status === 401 || response.status === 403) {
+      return { error: "RUNNER_AUTH_FAILED" };
+    }
+
+    const result = (await response.json().catch(() => ({}))) as RunnerResponse;
+    if (!response.ok) {
+      return { error: typeof result.error === "string" ? result.error : "LAB_EXECUTION_UNAVAILABLE" };
+    }
+    return result;
+  } catch {
+    return { error: "RUNNER_UNREACHABLE" };
   }
-  return result;
 }
+
+export const checkLabRunnerHealth = createServerFn({ method: "GET" })
+  .handler(async (): Promise<LabRunnerHealthResult> => {
+    const runnerUrl = process.env.LAB_RUNNER_URL;
+    const runnerSecret = process.env.LAB_RUNNER_SECRET;
+
+    const runnerUrlConfigured = Boolean(runnerUrl);
+    const runnerSecretConfigured = Boolean(runnerSecret);
+
+    if (!runnerUrlConfigured) {
+      return {
+        configured: false,
+        runnerUrlConfigured: false,
+        runnerSecretConfigured,
+        reachable: false,
+        error: "RUNNER_URL_MISSING",
+      };
+    }
+    if (!runnerSecretConfigured) {
+      return {
+        configured: false,
+        runnerUrlConfigured: true,
+        runnerSecretConfigured: false,
+        reachable: false,
+        error: "RUNNER_SECRET_MISSING",
+      };
+    }
+
+    try {
+      const res = await fetch(`${runnerUrl!.replace(/\/$/, "")}/health`, {
+        method: "GET",
+        headers: {
+          "x-lab-runner-secret": runnerSecret!,
+        },
+      });
+
+      if (!res.ok) {
+        return {
+          configured: true,
+          runnerUrlConfigured: true,
+          runnerSecretConfigured: true,
+          reachable: true,
+          error: res.status === 401 || res.status === 403 ? "RUNNER_AUTH_FAILED" : "RUNNER_NOT_READY",
+        };
+      }
+
+      const data = await res.json().catch(() => ({}));
+      return {
+        configured: true,
+        runnerUrlConfigured: true,
+        runnerSecretConfigured: true,
+        reachable: true,
+        status: data.status,
+        docker: data.docker,
+        image: data.image,
+        execution: data.execution,
+        network: data.network,
+      };
+    } catch {
+      return {
+        configured: true,
+        runnerUrlConfigured: true,
+        runnerSecretConfigured: true,
+        reachable: false,
+        error: "RUNNER_UNREACHABLE",
+      };
+    }
+  });
 
 export const createLabSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

@@ -48,7 +48,21 @@ export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
 // ─── Safe error code → user message mapping ────────────────────────────────
 const ERROR_MESSAGES: Record<string, string> = {
   LAB_INFRASTRUCTURE_NOT_CONFIGURED:
-    "The lab container runner is not reachable. Please start the Lab Runner (scripts/start-nisq-labs.ps1) and try again.",
+    "The lab container runner is not reachable. Please verify the Cloudflare tunnel and local runner.",
+  RUNNER_URL_MISSING:
+    "LAB_RUNNER_URL is not configured in Vercel environment variables.",
+  RUNNER_SECRET_MISSING:
+    "LAB_RUNNER_SECRET is not configured in Vercel environment variables.",
+  RUNNER_UNREACHABLE:
+    "Cannot reach the Lab Runner over the Cloudflare tunnel. Please ensure cloudflared and Docker are running.",
+  RUNNER_AUTH_FAILED:
+    "Authentication to the Lab Runner failed (LAB_RUNNER_SECRET mismatch).",
+  RUNNER_NOT_READY:
+    "The Lab Runner is online but Docker or image dependencies are not ready.",
+  DOCKER_NOT_RUNNING:
+    "Docker Engine is not running on the lab host.",
+  LAB_IMAGE_NOT_FOUND:
+    "The required Docker lab image (nisqvanguard/linux-security:latest) was not found.",
   LAB_EXECUTION_UNAVAILABLE:
     "The lab execution service is temporarily unavailable. Please try again in a moment.",
   UNAUTHORIZED: "Your session has expired. Please sign out and sign back in.",
@@ -63,7 +77,7 @@ const ERROR_MESSAGES: Record<string, string> = {
 
 function safeErrorMessage(code?: string): string {
   if (!code) return "An unexpected error occurred. Please try again.";
-  return ERROR_MESSAGES[code] ?? "An error occurred. Please try again.";
+  return ERROR_MESSAGES[code] ?? ERROR_MESSAGES["LAB_INFRASTRUCTURE_NOT_CONFIGURED"];
 }
 
 interface TaskItem {
@@ -304,16 +318,21 @@ function CyberLabWorkbenchPage() {
     return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
+  const [lastError, setLastError] = useState<string | null>(null);
+
   // ── Session management ────────────────────────────────────────────────────
   const handleStartSession = async () => {
     setSessionStarting(true);
     setInfraStatus("idle");
+    setLastError(null);
     try {
       const res = await labExecutionService.createSession(slug);
       if (res.state === "configuration_required") {
         setInfraStatus("unconfigured");
         setSessionActive(false);
-        toast.error(safeErrorMessage("LAB_INFRASTRUCTURE_NOT_CONFIGURED"));
+        const errCode = res.error || "LAB_INFRASTRUCTURE_NOT_CONFIGURED";
+        setLastError(errCode);
+        toast.error(safeErrorMessage(errCode));
       } else if (res.state === "running" || res.state === "completed") {
         setInfraStatus("ready");
         setSessionActive(true);
@@ -329,11 +348,14 @@ function CyberLabWorkbenchPage() {
         setMobileTab("terminal");
       } else {
         setInfraStatus("error");
-        toast.error(safeErrorMessage(res.message));
+        const errCode = res.error || res.message;
+        setLastError(errCode);
+        toast.error(safeErrorMessage(errCode));
       }
     } catch {
       setInfraStatus("unconfigured");
-      toast.error(safeErrorMessage("LAB_INFRASTRUCTURE_NOT_CONFIGURED"));
+      setLastError("RUNNER_UNREACHABLE");
+      toast.error(safeErrorMessage("RUNNER_UNREACHABLE"));
     } finally {
       setSessionStarting(false);
     }
@@ -715,25 +737,43 @@ function CyberLabWorkbenchPage() {
           <span className="font-mono text-xs text-slate-300 ml-2">analyst@nisq-range-sandbox</span>
         </div>
         <div className="flex items-center gap-3 text-[0.65rem] font-mono text-slate-400">
-          <span className="flex items-center gap-1">
-            <Activity className="w-3 h-3 text-green-400" />
-            {sessionActive ? "CONTAINER ONLINE" : "OFFLINE"}
+          <span className="flex items-center gap-1.5">
+            <span
+              className={`inline-block w-2 h-2 rounded-full ${
+                sessionStarting
+                  ? "bg-amber-400 animate-ping"
+                  : sessionActive
+                  ? "bg-green-400 animate-pulse"
+                  : infraStatus === "unconfigured" || infraStatus === "error"
+                  ? "bg-red-400"
+                  : "bg-slate-500"
+              }`}
+            />
+            <span>
+              {sessionStarting
+                ? "CONNECTING..."
+                : sessionActive
+                ? "CONTAINER ONLINE"
+                : infraStatus === "unconfigured" || infraStatus === "error"
+                ? "RUNNER OFFLINE"
+                : "OFFLINE"}
+            </span>
           </span>
         </div>
       </div>
 
       {/* Terminal body */}
-      {infraStatus === "unconfigured" ? (
+      {infraStatus === "unconfigured" || infraStatus === "error" ? (
         <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-4 font-mono">
           <div className="p-3.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
             <AlertTriangle className="w-8 h-8" />
           </div>
           <div className="space-y-2 max-w-md">
             <h4 className="text-sm font-bold uppercase tracking-wider text-amber-400">
-              Lab Infrastructure Not Configured
+              Lab Infrastructure Notice
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              {safeErrorMessage("LAB_INFRASTRUCTURE_NOT_CONFIGURED")}
+              {safeErrorMessage(lastError ?? "LAB_INFRASTRUCTURE_NOT_CONFIGURED")}
             </p>
           </div>
         </div>
