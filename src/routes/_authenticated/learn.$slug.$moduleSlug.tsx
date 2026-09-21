@@ -34,7 +34,8 @@ import { LinuxPermissionsVisualizer } from "@/components/diagrams/LinuxPermissio
 import { CiaTriadSecurityDiagram } from "@/components/diagrams/CiaTriadSecurityDiagram";
 import { SocPipelineDiagram } from "@/components/diagrams/SocPipelineDiagram";
 import { NETWORKING_MODULES, LINUX_MODULES } from "@/data/courses-curriculum";
-import { evaluateAndAwardBadge } from "@/lib/badge-engine";
+import { completeModule } from "@/lib/academy.functions";
+import { submitQuizAnswer } from "@/lib/quiz.functions";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/$moduleSlug")({
   head: ({ params }) => ({
@@ -106,6 +107,7 @@ function ModuleLearningPage() {
 
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [checkedQuizzes, setCheckedQuizzes] = useState<Record<string, boolean>>({});
+  const [quizResults, setQuizResults] = useState<Record<string, { is_correct: boolean; score: number; explanation: string }>>({});
   const [completing, setCompleting] = useState(false);
 
   // 1. Fetch Course
@@ -397,7 +399,7 @@ function ModuleLearningPage() {
     practical: "Security analysts correlate these packet fields in SIEM queries to isolate indicators of compromise (IOCs).",
   };
 
-  // Complete Module & Evaluate Badges
+  // Complete Module — server-side validation and badge/certificate evaluation
   const handleMarkComplete = async () => {
     if (!user) {
       toast.error("Please sign in to save your learning progress.");
@@ -406,23 +408,23 @@ function ModuleLearningPage() {
 
     try {
       setCompleting(true);
-      const { error } = await supabase.from("module_progress").upsert({
-        user_id: user.id,
-        module_id: currentModule.id,
-        completed: true,
-        updated_at: new Date().toISOString(),
+
+      // Server function verifies course/module, persists completion,
+      // evaluates badges, and issues certificate — browser cannot forge this
+      const result = await completeModule({
+        data: { courseSlug: course.slug, moduleSlug: currentModule.slug },
       });
 
-      if (error) throw error;
+      if (result.error) {
+        throw new Error(result.error);
+      }
 
-      // Server-side badge evaluation
-      const badgeResult = await evaluateAndAwardBadge(user.id, "network-navigator");
-      if (badgeResult.eligible && !badgeResult.alreadyEarned) {
-        toast.success(`🏅 New Badge Awarded: ${badgeResult.badge?.name}!`, {
-          duration: 5000,
-        });
+      if (result.awardedBadges && result.awardedBadges.length > 0) {
+        toast.success(`🏅 New Badge Awarded: ${result.awardedBadges[0]}!`, { duration: 5000 });
+      } else if (result.certificateNumber) {
+        toast.success(`🎓 Course Complete! Certificate issued: ${result.certificateNumber}`, { duration: 7000 });
       } else {
-        toast.success("Module marked as completed! XP awarded.");
+        toast.success("Module completed! XP awarded.");
       }
 
       queryClient.invalidateQueries({ queryKey: ["module-user-progress"] });
@@ -435,9 +437,55 @@ function ModuleLearningPage() {
         });
       }
     } catch (err: any) {
-      toast.error(err.message || "Failed to update progress.");
+      const msg: string = err?.message ?? "";
+      if (msg.includes("COURSE_NOT_FOUND")) {
+        toast.error("Course not found. Please refresh and try again.");
+      } else if (msg.includes("MODULE_NOT_FOUND")) {
+        toast.error("Module not found. Please refresh and try again.");
+      } else {
+        toast.error(msg || "Failed to save progress. Please try again.");
+      }
     } finally {
       setCompleting(false);
+    }
+  };
+
+  // Quiz answer submission — server-side scoring only
+  const handleCheckQuiz = async (quizId: string, moduleId: string) => {
+    const selectedOption = selectedAnswers[quizId];
+    if (selectedOption === undefined) return;
+
+    try {
+      const result = await submitQuizAnswer({
+        data: {
+          quizId,
+          moduleId,
+          courseId: course.id,
+          selectedOption,
+        },
+      });
+
+      if (result.error) {
+        toast.error("Failed to check answer. Please try again.");
+        return;
+      }
+
+      setQuizResults((prev) => ({
+        ...prev,
+        [quizId]: {
+          is_correct: result.is_correct,
+          score: result.score,
+          explanation: result.explanation ?? "",
+        },
+      }));
+      // Mark as checked for UI state (but correctness comes from server)
+      setCheckedQuizzes((prev) => ({ ...prev, [quizId]: true }));
+
+      if (result.is_correct) {
+        toast.success("Correct answer! +10 XP");
+      }
+    } catch {
+      toast.error("Unable to verify answer. Please try again.");
     }
   };
 
@@ -600,31 +648,37 @@ function ModuleLearningPage() {
                         <div className="flex items-center justify-between pt-2">
                           <button
                             disabled={selected === undefined}
-                            onClick={() =>
-                              setCheckedQuizzes((prev) => ({ ...prev, [q.id]: true }))
-                            }
+                            onClick={() => handleCheckQuiz(q.id, currentModule.id)}
                             className="px-3.5 py-1.5 rounded-md text-xs font-mono bg-primary text-primary-foreground font-semibold disabled:opacity-40"
                           >
                             Check Answer
                           </button>
 
-                          {isChecked && (
-                            <span
-                              className={`text-xs font-mono font-semibold ${
-                                isCorrect ? "text-success" : "text-destructive"
-                              }`}
-                            >
-                              {isCorrect ? "Correct! +10 XP" : "Incorrect. Try again."}
-                            </span>
-                          )}
+                          {isChecked && (() => {
+                            const serverResult = quizResults[q.id];
+                            const correct = serverResult?.is_correct ?? false;
+                            return (
+                              <span
+                                className={`text-xs font-mono font-semibold ${
+                                  correct ? "text-success" : "text-destructive"
+                                }`}
+                              >
+                                {correct ? "Correct! +10 XP" : "Incorrect. Try again."}
+                              </span>
+                            );
+                          })()}
                         </div>
 
-                        {isChecked && q.explanation && (
-                          <div className="p-3 rounded-md bg-muted text-xs text-muted-foreground leading-relaxed border-l-2 border-primary">
-                            <span className="font-semibold text-foreground">Explanation: </span>
-                            {q.explanation}
-                          </div>
-                        )}
+                        {isChecked && (() => {
+                          const serverResult = quizResults[q.id];
+                          const explanation = serverResult?.explanation ?? q.explanation;
+                          return explanation ? (
+                            <div className="p-3 rounded-md bg-muted text-xs text-muted-foreground leading-relaxed border-l-2 border-primary">
+                              <span className="font-semibold text-foreground">Explanation: </span>
+                              {explanation}
+                            </div>
+                          ) : null;
+                        })()}
                       </div>
                     );
                   })}

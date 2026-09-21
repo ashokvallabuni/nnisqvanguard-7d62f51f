@@ -48,8 +48,14 @@ class FakeProvider {
   }
 }
 
+class OfflineProvider extends FakeProvider {
+  async isDockerAvailable() {
+    return false;
+  }
+}
+
 test("health check returns NOT_CONFIGURED when docker is offline", async (t) => {
-  const server = createRunnerServer();
+  const server = createRunnerServer({ provider: new OfflineProvider() });
   t.after(() => server.close());
   const baseUrl = await listen(server);
 

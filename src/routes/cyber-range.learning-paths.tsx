@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
   Compass,
   CheckCircle2,
@@ -12,8 +14,10 @@ import {
   Database,
   Sparkles,
   Zap,
+  BookmarkCheck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
 
 export const Route = createFileRoute("/cyber-range/learning-paths")({
@@ -104,12 +108,57 @@ const CAREER_PATHS: CareerPath[] = [
 ];
 
 function LearningPathsPage() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
   const stepTypeBadges = {
     theory: { label: "Theory", class: "bg-primary/10 text-primary border-primary/20" },
     data: { label: "Real Data", class: "bg-accent/15 text-accent border-accent/30" },
     lab: { label: "Cyber Lab", class: "bg-success/15 text-success border-success/30" },
     assessment: { label: "Exam / Quiz", class: "bg-warning/15 text-warning border-warning/30" },
   };
+
+  // Fetch enrolled paths for this user
+  const { data: enrolledSlugs = [] } = useQuery({
+    queryKey: ["user-learning-paths", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data } = await supabase
+        .from("user_learning_paths")
+        .select("path_slug")
+        .eq("user_id", user.id);
+      return (data ?? [])
+        .map((r) => r.path_slug)
+        .filter((slug): slug is string => Boolean(slug));
+    },
+    enabled: !!user,
+  });
+
+  // Enroll mutation
+  const enrollMutation = useMutation({
+    mutationFn: async (pathSlug: string) => {
+      if (!user) throw new Error("Not signed in");
+      const { error } = await supabase.from("user_learning_paths").upsert(
+        { user_id: user.id, path_slug: pathSlug, enrolled_at: new Date().toISOString() },
+        { onConflict: "user_id,path_slug" },
+      );
+      if (error) throw error;
+      return pathSlug;
+    },
+    onSuccess: (pathSlug) => {
+      queryClient.invalidateQueries({ queryKey: ["user-learning-paths"] });
+      toast.success(`Enrolled in learning path! Your progress will be tracked.`);
+    },
+    onError: () => {
+      toast.error("Failed to enroll. Please try again.");
+    },
+  });
+
+  const isEnrolled = useCallback(
+    (slug: string) => enrolledSlugs.includes(slug),
+    [enrolledSlugs],
+  );
+
 
   return (
     <div className="min-h-screen pt-16 pb-24">
@@ -161,14 +210,20 @@ function LearningPathsPage() {
                   <Clock className="w-4 h-4 text-primary" />
                   <span>~{path.totalDurationHours} Hours Total</span>
                 </div>
-                {path.steps[0]?.linkTo && (
-                  <Link
-                    to={path.steps[0].linkTo}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shadow-xs"
+                {isEnrolled(path.slug) ? (
+                  <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-success/10 border border-success/30 text-success font-semibold text-xs">
+                    <BookmarkCheck className="w-4 h-4" />
+                    Enrolled
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => enrollMutation.mutate(path.slug)}
+                    disabled={enrollMutation.isPending || !user}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shadow-xs disabled:opacity-50"
                   >
                     <span>Start This Path</span>
                     <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  </button>
                 )}
               </div>
             </div>

@@ -14,6 +14,7 @@ export type LabSession = {
   id: string | null;
   state: LabExecutionState;
   message: string;
+  error?: string;
   stdout?: string;
   stderr?: string;
   exitCode?: number;
@@ -68,6 +69,7 @@ function normalize(result: unknown, id: string | null = null): LabSession {
     id: typeof value.sessionId === "string" ? value.sessionId : id,
     state: value.status === "RUNNING" ? "running" : "error",
     message: typeof value.error === "string" ? value.error : "Lab session updated.",
+    error: typeof value.error === "string" ? value.error : undefined,
     score: typeof value.score === "number" ? value.score : undefined,
     stdout: typeof value.stdout === "string" ? value.stdout : undefined,
     stderr: typeof value.stderr === "string" ? value.stderr : undefined,

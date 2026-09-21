@@ -107,7 +107,7 @@ $labRunnerDir = Join-Path $PSScriptRoot "..\lab-runner"
 
 # Compile and start
 Write-Host "[4/4] Starting server process..." -ForegroundColor Yellow
-Start-Process -FilePath "npm" -ArgumentList "start" -WorkingDirectory $labRunnerDir -NoNewWindow
+Start-Process -FilePath "npm.cmd" -ArgumentList "start" -WorkingDirectory $labRunnerDir -NoNewWindow
 
 Start-Sleep -Seconds 2
 

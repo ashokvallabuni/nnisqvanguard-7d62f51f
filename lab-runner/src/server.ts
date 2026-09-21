@@ -113,7 +113,7 @@ export function createRunnerServer(
 
     if (url.pathname === "/health") {
       let dockerReady = false;
-      if (provider instanceof DockerProvider) {
+      if (typeof provider.isDockerAvailable === "function") {
         dockerReady = await provider.isDockerAvailable();
       } else {
         dockerReady = true;

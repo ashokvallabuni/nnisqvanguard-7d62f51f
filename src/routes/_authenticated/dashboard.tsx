@@ -95,7 +95,7 @@ function StudentDashboard() {
       if (!user) return [];
       const { data, error } = await supabase
         .from("lab_progress")
-        .select("lab_id,completed,score,updated_at")
+        .select("lab_id,completed,points,updated_at")
         .eq("user_id", user.id);
       if (error) return [];
       return data ?? [];
