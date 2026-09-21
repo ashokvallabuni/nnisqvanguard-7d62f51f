@@ -1,4 +1,4 @@
-﻿export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 type SimpleTable<Row extends Record<string, unknown>> = {
   Row: Row;
@@ -65,8 +65,44 @@ type LabProgressRow = {
   tasks_completed: number;
   total_tasks: number;
   points: number;
+  completed?: boolean;
   completed_at: string | null;
   updated_at: string;
+};
+
+type BadgeRow = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon_url: string | null;
+  category: string;
+  rarity: string;
+  criteria?: Json;
+  created_at: string;
+};
+
+type UserBadgeRow = {
+  id: string;
+  user_id: string;
+  badge_id: string;
+  earned_at: string;
+  metadata?: Json;
+  badges?: BadgeRow;
+};
+
+type CertificateRow = {
+  id: string;
+  user_id: string;
+  course_id?: string;
+  course_slug: string;
+  course_title: string;
+  recipient_name: string;
+  recipient_email?: string;
+  completion_date: string;
+  verification_checksum: string;
+  skills: string[];
+  issued_at: string;
 };
 
 type LabSessionRow = {
@@ -876,6 +912,9 @@ export type Database = {
         lab_id: string;
         sort_order: number;
       }>;
+      badges: SimpleTable<BadgeRow>;
+      user_badges: SimpleTable<UserBadgeRow>;
+      certificates: SimpleTable<CertificateRow>;
     };
     Views: {
       [_ in never]: never;

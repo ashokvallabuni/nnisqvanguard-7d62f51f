@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AcademyRouteImport } from './routes/academy'
+import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CampusRouteImport } from './routes/campus'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
@@ -36,6 +37,7 @@ import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInstructorRouteImport } from './routes/_authenticated/instructor'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AcademyGlossaryRouteImport } from './routes/academy.glossary'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
 import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
@@ -89,6 +91,11 @@ const AboutRoute = AboutRouteImport.update({
 const AcademyRoute = AcademyRouteImport.update({
   id: '/academy',
   path: '/academy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AchievementsRoute = AchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -206,6 +213,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AcademyGlossaryRoute = AcademyGlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => AcademyRoute,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
@@ -397,7 +409,8 @@ const ApiLessonsSlugModuleSlugRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
+  '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
   '/campus': typeof CampusRoute
   '/case-studies': typeof CaseStudiesRoute
@@ -421,6 +434,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/instructor': typeof AuthenticatedInstructorRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
@@ -460,7 +474,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
+  '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
   '/campus': typeof CampusRoute
   '/case-studies': typeof CaseStudiesRoute
@@ -483,6 +498,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/instructor': typeof AuthenticatedInstructorRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
@@ -524,7 +540,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/academy': typeof AcademyRoute
+  '/academy': typeof AcademyRouteWithChildren
+  '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
   '/campus': typeof CampusRoute
   '/case-studies': typeof CaseStudiesRoute
@@ -548,6 +565,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/instructor': typeof AuthenticatedInstructorRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
@@ -590,6 +608,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academy'
+    | '/achievements'
     | '/auth'
     | '/campus'
     | '/case-studies'
@@ -613,6 +632,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/instructor'
     | '/profile'
+    | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
@@ -653,6 +673,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academy'
+    | '/achievements'
     | '/auth'
     | '/campus'
     | '/case-studies'
@@ -675,6 +696,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/instructor'
     | '/profile'
+    | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
@@ -716,6 +738,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/academy'
+    | '/achievements'
     | '/auth'
     | '/campus'
     | '/case-studies'
@@ -739,6 +762,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/instructor'
     | '/_authenticated/profile'
+    | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
     | '/api/live-threats'
@@ -780,7 +804,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  AcademyRoute: typeof AcademyRoute
+  AcademyRoute: typeof AcademyRouteWithChildren
+  AchievementsRoute: typeof AchievementsRoute
   AuthRoute: typeof AuthRouteWithChildren
   CampusRoute: typeof CampusRoute
   CaseStudiesRoute: typeof CaseStudiesRoute
@@ -842,6 +867,13 @@ declare module '@tanstack/react-router' {
       path: '/academy'
       fullPath: '/academy'
       preLoaderRoute: typeof AcademyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/achievements': {
+      id: '/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AchievementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1004,6 +1036,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/academy/glossary': {
+      id: '/academy/glossary'
+      path: '/glossary'
+      fullPath: '/academy/glossary'
+      preLoaderRoute: typeof AcademyGlossaryRouteImport
+      parentRoute: typeof AcademyRoute
     }
     '/api/chat': {
       id: '/api/chat'
@@ -1307,6 +1346,17 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AcademyRouteChildren {
+  AcademyGlossaryRoute: typeof AcademyGlossaryRoute
+}
+
+const AcademyRouteChildren: AcademyRouteChildren = {
+  AcademyGlossaryRoute: AcademyGlossaryRoute,
+}
+
+const AcademyRouteWithChildren =
+  AcademyRoute._addFileChildren(AcademyRouteChildren)
+
 interface AuthRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
 }
@@ -1379,7 +1429,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  AcademyRoute: AcademyRoute,
+  AcademyRoute: AcademyRouteWithChildren,
+  AchievementsRoute: AchievementsRoute,
   AuthRoute: AuthRouteWithChildren,
   CampusRoute: CampusRoute,
   CaseStudiesRoute: CaseStudiesRoute,

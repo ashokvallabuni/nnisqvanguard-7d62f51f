@@ -166,7 +166,8 @@ function TopNav() {
     { to: "/cyber-range/labs", label: "Cyber Labs", badge: "Hands-on" },
     { to: "/cyber-range/learning-paths", label: "Learning Paths" },
     { to: "/cyber-range/datasets", label: "Datasets", badge: "Real Data" },
-    { to: "/campus", label: "Campus" },
+    { to: "/achievements", label: "Badges", badge: "Verified" },
+    { to: "/academy/glossary", label: "Glossary" },
   ];
 
   return (
