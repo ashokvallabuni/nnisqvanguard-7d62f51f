@@ -204,7 +204,10 @@ export function CinematicHero() {
           <div className="hero-actions">
             <Link
               to="/solutions/consulting"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "hero-action")}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "hero-action border-white/40 bg-white/5 text-white hover:bg-white/15 hover:text-white",
+              )}
             >
               Book a consultation <ArrowRight />
             </Link>
@@ -214,7 +217,12 @@ export function CinematicHero() {
             >
               Explore Cyber Range <Radar />
             </Link>
-            <Button variant="outline" size="lg" className="hero-action" onClick={enterLabs}>
+            <Button
+              variant="outline"
+              size="lg"
+              className="hero-action border-white/40 bg-white/5 text-white hover:bg-white/15 hover:text-white"
+              onClick={enterLabs}
+            >
               Enter Cyber Labs <ArrowRight />
             </Button>
           </div>

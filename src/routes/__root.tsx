@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -171,13 +171,13 @@ function TopNav() {
   ];
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 glass border-b">
+    <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 glass border-b border-border/80">
       <Link to="/" className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-md border border-primary/40 glow-cyber bg-background overflow-hidden">
+        <div className="w-10 h-10 rounded-md border border-primary/30 bg-white overflow-hidden shadow-sm">
           <img src={nisqLogoUrl} alt="NISQ Vanguard logo" className="w-full h-full object-cover" />
         </div>
         <div className="leading-tight">
-          <div className="display text-lg tracking-widest text-cyber">NISQ VANGUARD</div>
+          <div className="display text-lg tracking-widest text-primary">NISQ VANGUARD</div>
           <div className="mono text-[0.55rem] text-muted-foreground">CYBER PROTECTION · INDIA</div>
         </div>
       </Link>
@@ -225,7 +225,7 @@ function TopNav() {
         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
       {open && (
-        <div className="lg:hidden absolute top-16 inset-x-0 glass border-b p-4 flex flex-col gap-3">
+        <div className="lg:hidden absolute top-16 inset-x-0 glass border-b p-4 flex flex-col gap-3 shadow-lg">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -294,7 +294,7 @@ function RootComponent() {
             <Outlet />
           </div>
         </div>
-        <Toaster theme="dark" />
+        <Toaster theme="light" />
       </AuthProvider>
     </QueryClientProvider>
   );
