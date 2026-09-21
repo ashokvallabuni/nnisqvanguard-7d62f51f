@@ -24,15 +24,14 @@ function AuthCallback() {
           window.history.replaceState({}, document.title, window.location.pathname);
         }
         await ensureUserProfile(user);
+      } catch (err) {
+        console.warn("Profile sync non-blocking warning:", err);
+      } finally {
         const storedNext = sessionStorage.getItem("nisq:auth-next");
         sessionStorage.removeItem("nisq:auth-next");
         const next = storedNext?.startsWith("/") ? storedNext : "/dashboard";
         if (active) {
           void navigate({ to: next, replace: true });
-        }
-      } catch {
-        if (active) {
-          void navigate({ to: "/dashboard", replace: true });
         }
       }
     };
