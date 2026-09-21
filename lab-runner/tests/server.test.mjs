@@ -11,28 +11,13 @@ function listen(server) {
   });
 }
 
-test("runner contract is intentionally disabled without configuration", async (t) => {
-  const server = createRunnerServer();
-  t.after(() => server.close());
-  const baseUrl = await listen(server);
-
-  const health = await fetch(`${baseUrl}/health`);
-  assert.equal(health.status, 200);
-  assert.equal((await health.json()).execution, "disabled");
-
-  const disabled = await fetch(`${baseUrl}/api/labs/lab/session`, {
-    method: "POST",
-    headers: { "x-lab-runner-secret": "test-secret" },
-  });
-  assert.equal(disabled.status, 401);
-
-  const unknown = await fetch(`${baseUrl}/api/execute`, { method: "POST" });
-  assert.equal(unknown.status, 404);
-});
-
 class FakeProvider {
   environments = new Map();
   nextId = 1;
+
+  async isDockerAvailable() {
+    return true;
+  }
 
   async createEnvironment() {
     const id = `fake-${this.nextId++}`;
@@ -63,7 +48,28 @@ class FakeProvider {
   }
 }
 
-test("session ownership, terminal execution, flag validation, and cleanup", async (t) => {
+test("health check returns NOT_CONFIGURED when docker is offline", async (t) => {
+  const server = createRunnerServer();
+  t.after(() => server.close());
+  const baseUrl = await listen(server);
+
+  const health = await fetch(`${baseUrl}/health`);
+  // When Docker engine is offline, health returns 503 NOT_CONFIGURED without faking
+  assert.equal(health.status, 503);
+  const json = await health.json();
+  assert.equal(json.status, "NOT_CONFIGURED");
+
+  const unauth = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session`, {
+    method: "POST",
+    headers: { "x-lab-runner-secret": "invalid-secret" },
+  });
+  assert.equal(unauth.status, 401);
+
+  const unknown = await fetch(`${baseUrl}/api/unknown`, { method: "POST" });
+  assert.equal(unknown.status, 404);
+});
+
+test("session ownership, terminal execution, flag validation, reset and cleanup", async (t) => {
   const server = createRunnerServer({
     runnerSecret: "runner-secret",
     executionEnabled: true,
@@ -77,53 +83,73 @@ test("session ownership, terminal execution, flag validation, and cleanup", asyn
     "x-authenticated-user-id": "user-a",
   };
 
-  const created = await fetch(`${baseUrl}/api/labs/linux/session`, {
+  // Check healthy runner
+  const health = await fetch(`${baseUrl}/health`);
+  assert.equal(health.status, 200);
+  const healthJson = await health.json();
+  assert.equal(healthJson.status, "READY");
+
+  // Create session
+  const created = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session`, {
     method: "POST",
     headers,
   });
   assert.equal(created.status, 201);
   const session = await created.json();
+  assert.ok(session.sessionId);
+  assert.equal(session.status, "RUNNING");
 
-  const crossUser = await fetch(`${baseUrl}/api/labs/linux/session/${session.sessionId}/status`, {
+  // Cross user isolation
+  const crossUser = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/status`, {
     headers: { ...headers, "x-authenticated-user-id": "user-b" },
   });
   assert.equal(crossUser.status, 404);
 
-  const terminal = await fetch(`${baseUrl}/api/labs/linux/session/${session.sessionId}/terminal`, {
+  // Terminal execution
+  const terminal = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ command: "pwd" }),
+    body: JSON.stringify({ command: "whoami" }),
   });
   assert.equal(terminal.status, 200);
-  assert.equal((await terminal.json()).stdout, "ran: pwd");
+  assert.equal((await terminal.json()).stdout, "ran: whoami");
 
-  const incorrect = await fetch(`${baseUrl}/api/labs/linux/session/${session.sessionId}/submit`, {
+  // Incorrect flag submission
+  const incorrect = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/submit`, {
     method: "POST",
     headers,
     body: JSON.stringify({ flag: "wrong" }),
   });
   assert.deepEqual(await incorrect.json(), { correct: false });
 
-  const correct = await fetch(`${baseUrl}/api/labs/linux/session/${session.sessionId}/submit`, {
+  // Correct flag submission
+  const correct = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/submit`, {
     method: "POST",
     headers,
     body: JSON.stringify({ flag: "NISQ{linux_permissions_basics}" }),
   });
   assert.deepEqual(await correct.json(), { correct: true, score: 100 });
 
-  const second = await fetch(`${baseUrl}/api/labs/linux/session`, {
+  // Reset session
+  const reset = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/reset`, {
     method: "POST",
     headers,
   });
-  const secondSession = await second.json();
-  const stopped = await fetch(`${baseUrl}/api/labs/linux/session/${secondSession.sessionId}/stop`, {
+  assert.equal(reset.status, 200);
+  assert.equal((await reset.json()).status, "RUNNING");
+
+  // Stop session
+  const stopped = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/stop`, {
     method: "POST",
     headers,
   });
   assert.equal(stopped.status, 200);
+  assert.equal((await stopped.json()).status, "STOPPED");
+
+  // Post-stop terminal execution should fail with 409
   const stoppedTerminal = await fetch(
-    `${baseUrl}/api/labs/linux/session/${secondSession.sessionId}/terminal`,
-    { method: "POST", headers, body: JSON.stringify({ command: "pwd" }) },
+    `${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`,
+    { method: "POST", headers, body: JSON.stringify({ command: "whoami" }) },
   );
   assert.equal(stoppedTerminal.status, 409);
 });
