@@ -41,7 +41,12 @@ function AcademyPage() {
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-  const { data: courses, isLoading: coursesLoading } = useQuery({
+  const {
+    data: courses,
+    isLoading: coursesLoading,
+    isError: coursesError,
+    error: courseError,
+  } = useQuery({
     queryKey: ["academy-courses"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -264,6 +269,25 @@ function AcademyPage() {
 
           {coursesLoading ? (
             <GridSkeleton count={6} />
+          ) : coursesError ? (
+            <div className="rounded-xl border border-destructive/40 bg-destructive/5 p-12 text-center space-y-3">
+              <Shield className="w-10 h-10 text-destructive mx-auto" />
+              <h4 className="font-semibold text-foreground">Database Connection Error</h4>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                Unable to load curriculum courses from the production database. Please ensure migrations have been applied.
+              </p>
+              <div className="text-xs font-mono text-destructive/80">
+                {courseError instanceof Error ? courseError.message : "Error connecting to Supabase"}
+              </div>
+            </div>
+          ) : !courses || courses.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border p-12 text-center space-y-3">
+              <GraduationCap className="w-10 h-10 text-muted-foreground mx-auto" />
+              <h4 className="font-semibold text-foreground">No courses published yet</h4>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                The database curriculum tables are currently being prepared. Check back shortly.
+              </p>
+            </div>
           ) : filteredCourses.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border p-12 text-center space-y-3">
               <GraduationCap className="w-10 h-10 text-muted-foreground mx-auto" />
@@ -275,6 +299,7 @@ function AcademyPage() {
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedLevel("all");
+                  setSelectedCategory("all");
                 }}
                 className="text-xs font-mono text-primary underline"
               >

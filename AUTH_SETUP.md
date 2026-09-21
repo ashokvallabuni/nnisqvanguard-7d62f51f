@@ -1,87 +1,92 @@
-# NISQ Vanguard authentication setup
+# NISQ Vanguard — Production Google OAuth & Authentication Configuration
 
-The frontend uses Supabase Auth with the Google provider. No Google secret or
-service-role key belongs in this repository.
+## 1. Supabase Project Details
+- **Project Ref**: `cbyoozhtubavksiolgxz`
+- **Project URL**: `https://cbyoozhtubavksiolgxz.supabase.co`
 
-## Frontend environment variables
+---
 
-Create `.env.local` in the repository root:
+## 2. Distinction Between Callback URIs
 
+### A. Google Cloud Console → Supabase Auth Broker
+This is the **Authorized Redirect URI** configured inside the **Google Cloud Console (Credentials → OAuth 2.0 Client IDs)**:
 ```text
-VITE_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
-VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY
+https://cbyoozhtubavksiolgxz.supabase.co/auth/v1/callback
+```
+> [!IMPORTANT]
+> Do NOT set your frontend `/auth/callback` in Google Cloud Console. Google talks directly to the Supabase Auth server broker (`...supabase.co/auth/v1/callback`).
+
+### B. Supabase Dashboard → Frontend Application Redirect
+This is configured inside **Supabase Dashboard → Authentication → URL Configuration**:
+- **Site URL**:
+  ```text
+  https://<your-vercel-domain>.vercel.app
+  ```
+- **Redirect URLs** (Add all of the following):
+  ```text
+  http://localhost:5173/auth/callback
+  http://localhost:3000/auth/callback
+  https://<your-vercel-domain>.vercel.app/auth/callback
+  ```
+
+---
+
+## 3. Google Cloud Console Setup Step-by-Step
+
+1. Open [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services** → **Credentials**.
+2. Create or open an **OAuth 2.0 Client ID** (Application type: *Web application*).
+3. **Authorized JavaScript origins**:
+   - `http://localhost:5173`
+   - `https://<your-vercel-domain>.vercel.app`
+4. **Authorized redirect URIs**:
+   - `https://cbyoozhtubavksiolgxz.supabase.co/auth/v1/callback`
+5. Copy the **Client ID** and **Client Secret**.
+
+---
+
+## 4. Supabase Provider Configuration
+
+1. In Supabase Dashboard for `cbyoozhtubavksiolgxz`:
+2. Navigate to **Authentication** → **Providers** → **Google**.
+3. Toggle Google to **Enabled**.
+4. Paste the **Client ID** and **Client Secret** from Google Cloud.
+5. Save changes.
+
+---
+
+## 5. Vercel & Local Environment Variables
+
+### Frontend Environment Variables (Vercel & `.env.local`):
+```bash
+VITE_SUPABASE_URL=https://cbyoozhtubavksiolgxz.supabase.co
+VITE_SUPABASE_ANON_KEY=<your-anon-publishable-key-from-supabase-dashboard>
 ```
 
-Find both values in **Supabase → Project Settings → API**:
-
-- `VITE_SUPABASE_URL`: Project URL
-- `VITE_SUPABASE_ANON_KEY`: publishable key or legacy anon public key
-
-Never put a `service_role` key, Google client secret, database password, or
-private token in `.env.local`, Vercel, or frontend code.
-
-## Database migration
-
-In **Supabase → SQL Editor**, create a new query and run the complete contents
-of:
-
-```text
-supabase/migrations/20260921000000_auth_profiles_roles.sql
+### Server / Lab Runner Environment Variables (Never add `VITE_` prefix):
+```bash
+SUPABASE_URL=https://cbyoozhtubavksiolgxz.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key-from-supabase-dashboard>
+LAB_RUNNER_URL=http://127.0.0.1:8080
+LAB_RUNNER_SECRET=<your-lab-runner-secret>
 ```
 
-Verify the migration:
+---
 
-```sql
-select schemaname, tablename, rowsecurity
-from pg_tables
-where schemaname = 'public'
-  and tablename in ('profiles', 'user_roles');
+## 6. End-to-End Authentication Flow
 ```
-
-Both tables should return `rowsecurity = true`.
-
-## Supabase
-
-1. In the Supabase dashboard, open **Authentication → Providers → Google**.
-2. Enable Google and paste the Google OAuth **Client ID** and **Client Secret**
-   created in Google Cloud.
-3. Set the Supabase callback URL shown by the provider configuration as the
-   Google Cloud **Authorized redirect URI**. It normally has this form:
-   `https://<project-ref>.supabase.co/auth/v1/callback`.
-4. In **Authentication → URL Configuration**, set the production **Site URL**
-   to your deployed origin and add these redirect URLs:
-   `http://localhost:5173/auth/callback` and
-   `https://your-production-domain.example/auth/callback`.
-   Replace the local port if Vite reports a different one.
-
-## Google Cloud
-
-Create an OAuth 2.0 Web application client. Configure:
-
-- **Authorized JavaScript origins**: the local development origin and the
-  production origin, such as `http://localhost:5173` and
-  `https://your-production-domain.example`.
-- **Authorized redirect URI**: the Supabase callback URL from the provider
-  settings, not the frontend callback route.
-
-Use the real Client ID and Client Secret only in the Supabase dashboard.
-Never commit them or put the Client Secret in Vite environment variables.
-
-## Frontend environment
-
-Copy `.env.example` to `.env.local` and provide the Supabase project URL and
-publishable/anonymous key. The frontend accepts only `VITE_SUPABASE_URL` and
-`VITE_SUPABASE_ANON_KEY` as the documented configuration.
-
-## Optional first administrator
-
-After signing in once, assign a trusted account an application role from
-Supabase SQL Editor. Replace the email before running:
-
-```sql
-insert into public.user_roles (user_id, role)
-select id, 'SUPER_ADMIN'
-from auth.users
-where email = 'your-email@example.com'
-on conflict (user_id, role) do nothing;
+1. User clicks "Continue with Google"
+   ↓
+2. Supabase SDK redirects to Google OAuth Consent screen
+   ↓
+3. Google validates credentials & redirects to:
+   https://cbyoozhtubavksiolgxz.supabase.co/auth/v1/callback
+   ↓
+4. Supabase exchanges token and redirects user to:
+   https://<your-app>/auth/callback#access_token=... (or ?code=...)
+   ↓
+5. /auth/callback restores Supabase session, strips tokens from URL
+   ↓
+6. ensureUserProfile(user) upserts record into public.profiles
+   ↓
+7. User is seamlessly redirected to /dashboard or their intended destination.
 ```
