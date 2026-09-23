@@ -59,27 +59,83 @@ function CourseDetailPage() {
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ["course-detail", slug],
     queryFn: async () => {
+      // 1. Check if it's a locked Coming Soon course
+      const { LOCKED_COURSES, AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
+      const lockedFound = LOCKED_COURSES.find((c) => c.slug === slug);
+      if (lockedFound) {
+        return {
+          id: lockedFound.id,
+          slug: lockedFound.slug,
+          title: lockedFound.title,
+          description: `The ${lockedFound.title} curriculum is currently in production and under review by our Chief Architect. Direct access is restricted.`,
+          level: lockedFound.difficulty,
+          tier: "pro",
+          sort_order: 99,
+          isLocked: true,
+          comingSoon: true,
+        };
+      }
+
+      // 2. Query Supabase
       const { data, error } = await supabase
         .from("courses")
         .select("id,slug,title,description,level,tier,sort_order")
         .eq("slug", slug)
         .maybeSingle();
-      if (error) throw error;
-      if (!data) throw notFound();
-      return data;
+
+      if (data) return { ...data, isLocked: false, comingSoon: false };
+
+      // 3. Fallback to canonical available courses
+      const canonical = AVAILABLE_COURSES.find((c) => c.slug === slug);
+      if (canonical) {
+        return {
+          id: canonical.id,
+          slug: canonical.slug,
+          title: canonical.title,
+          description: canonical.description,
+          level: canonical.level,
+          tier: canonical.tier,
+          sort_order: 1,
+          isLocked: false,
+          comingSoon: false,
+        };
+      }
+
+      throw notFound();
     },
   });
 
   const { data: modules, isLoading: modulesLoading } = useQuery({
-    queryKey: ["course-modules", course?.id],
+    queryKey: ["course-modules", course?.id, slug],
     queryFn: async () => {
-      const { data, error } = await supabase
+      if (course?.isLocked) return [];
+
+      const { data } = await supabase
         .from("modules")
         .select("id,course_id,slug,title,notes_md,difficulty,duration_minutes,tags,practice_labs,sort_order")
         .eq("course_id", course!.id)
         .order("sort_order");
-      if (error) throw error;
-      return data ?? [];
+
+      if (data && data.length > 0) return data;
+
+      const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
+      const found = AVAILABLE_COURSES.find((c) => c.slug === slug);
+      if (found) {
+        return found.modules.map((m) => ({
+          id: m.id,
+          course_id: found.id,
+          slug: m.slug,
+          title: m.title,
+          notes_md: m.notes_md,
+          difficulty: m.difficulty,
+          duration_minutes: m.duration_minutes,
+          tags: m.tags,
+          practice_labs: m.companion_lab_slug ? [m.companion_lab_slug] : [],
+          sort_order: m.order_index,
+        }));
+      }
+
+      return [];
     },
     enabled: !!course,
   });

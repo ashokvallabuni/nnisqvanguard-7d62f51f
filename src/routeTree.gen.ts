@@ -37,6 +37,7 @@ import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInstructorRouteImport } from './routes/_authenticated/instructor'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AboutFounderRouteImport } from './routes/about.founder'
 import { Route as AcademyGlossaryRouteImport } from './routes/academy.glossary'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
@@ -213,6 +214,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AboutFounderRoute = AboutFounderRouteImport.update({
+  id: '/founder',
+  path: '/founder',
+  getParentRoute: () => AboutRoute,
 } as any)
 const AcademyGlossaryRoute = AcademyGlossaryRouteImport.update({
   id: '/glossary',
@@ -408,7 +414,7 @@ const ApiLessonsSlugModuleSlugRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/academy': typeof AcademyRouteWithChildren
   '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
@@ -434,6 +440,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/instructor': typeof AuthenticatedInstructorRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/about/founder': typeof AboutFounderRoute
   '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
@@ -473,7 +480,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/academy': typeof AcademyRouteWithChildren
   '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
@@ -498,6 +505,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/instructor': typeof AuthenticatedInstructorRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/about/founder': typeof AboutFounderRoute
   '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
@@ -539,7 +547,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/academy': typeof AcademyRouteWithChildren
   '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
@@ -565,6 +573,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/instructor': typeof AuthenticatedInstructorRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/about/founder': typeof AboutFounderRoute
   '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
@@ -632,6 +641,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/instructor'
     | '/profile'
+    | '/about/founder'
     | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
@@ -696,6 +706,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/instructor'
     | '/profile'
+    | '/about/founder'
     | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
@@ -762,6 +773,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/instructor'
     | '/_authenticated/profile'
+    | '/about/founder'
     | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
@@ -803,7 +815,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AboutRoute: typeof AboutRoute
+  AboutRoute: typeof AboutRouteWithChildren
   AcademyRoute: typeof AcademyRouteWithChildren
   AchievementsRoute: typeof AchievementsRoute
   AuthRoute: typeof AuthRouteWithChildren
@@ -1036,6 +1048,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/about/founder': {
+      id: '/about/founder'
+      path: '/founder'
+      fullPath: '/about/founder'
+      preLoaderRoute: typeof AboutFounderRouteImport
+      parentRoute: typeof AboutRoute
     }
     '/academy/glossary': {
       id: '/academy/glossary'
@@ -1346,6 +1365,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AboutRouteChildren {
+  AboutFounderRoute: typeof AboutFounderRoute
+}
+
+const AboutRouteChildren: AboutRouteChildren = {
+  AboutFounderRoute: AboutFounderRoute,
+}
+
+const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
+
 interface AcademyRouteChildren {
   AcademyGlossaryRoute: typeof AcademyGlossaryRoute
 }
@@ -1428,7 +1457,7 @@ const ApiLessonsSlugRouteWithChildren = ApiLessonsSlugRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AboutRoute: AboutRoute,
+  AboutRoute: AboutRouteWithChildren,
   AcademyRoute: AcademyRouteWithChildren,
   AchievementsRoute: AchievementsRoute,
   AuthRoute: AuthRouteWithChildren,

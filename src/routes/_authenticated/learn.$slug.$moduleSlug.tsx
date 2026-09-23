@@ -465,8 +465,20 @@ function ModuleLearningPage() {
         },
       });
 
+      // Handle structured error codes returned by the server function
+      if (result.error === "SESSION_EXPIRED") {
+        toast.error("Your session has expired. Please sign in again to submit assessments.", {
+          duration: 7000,
+          action: {
+            label: "Sign In",
+            onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+          },
+        });
+        return;
+      }
+
       if (result.error) {
-        toast.error("Failed to check answer. Please try again.");
+        toast.error(result.explanation ?? "Unable to verify answer. Please refresh and try again.");
         return;
       }
 
@@ -478,16 +490,44 @@ function ModuleLearningPage() {
           explanation: result.explanation ?? "",
         },
       }));
-      // Mark as checked for UI state (but correctness comes from server)
       setCheckedQuizzes((prev) => ({ ...prev, [quizId]: true }));
 
       if (result.is_correct) {
         toast.success("Correct answer! +10 XP");
+        // Warn if session expired but result still computed
+        if ((result as any).warning === "SESSION_EXPIRED") {
+          toast.warning("Your session has expired. Sign in again to save your progress.", {
+            duration: 6000,
+            action: {
+              label: "Sign In",
+              onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+            },
+          });
+        }
       }
-    } catch {
-      toast.error("Unable to verify answer. Please try again.");
+    } catch (err: any) {
+      const msg = err?.message || "";
+      if (
+        msg.includes("Unauthorized") ||
+        msg.includes("Invalid token") ||
+        msg.includes("No user ID") ||
+        msg.includes("SESSION_EXPIRED") ||
+        msg.includes("JWT expired") ||
+        msg.includes("token is expired")
+      ) {
+        toast.error("Your session has expired. Please sign in again to continue.", {
+          duration: 7000,
+          action: {
+            label: "Sign In",
+            onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+          },
+        });
+      } else {
+        toast.error("Unable to verify answer. Please check your connection and try again.");
+      }
     }
   };
+
 
   return (
     <div className="min-h-screen pt-16 pb-24">
