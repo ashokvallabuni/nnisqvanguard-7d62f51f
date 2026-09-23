@@ -448,6 +448,14 @@ function ModuleLearningPage() {
         toast.error("Course not found. Please refresh and try again.");
       } else if (msg.includes("MODULE_NOT_FOUND")) {
         toast.error("Module not found. Please refresh and try again.");
+      } else if (msg.includes("Invalid token") || msg.includes("Unauthorized")) {
+        toast.error("Your session has expired. Please sign in again.", {
+          duration: 7000,
+          action: {
+            label: "Sign In",
+            onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+          },
+        });
       } else {
         toast.error(msg || "Failed to save progress. Please try again.");
       }
