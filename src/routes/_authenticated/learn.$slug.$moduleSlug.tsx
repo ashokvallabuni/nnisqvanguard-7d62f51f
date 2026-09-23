@@ -114,6 +114,12 @@ function ModuleLearningPage() {
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ["course-by-slug", slug],
     queryFn: async () => {
+      // Security Check: Enforce course locking for direct URL access
+      const { LOCKED_COURSES } = await import("@/data/courses-curriculum");
+      if (LOCKED_COURSES.some((c) => c.slug === slug)) {
+        throw notFound();
+      }
+
       const { data } = await supabase
         .from("courses")
         .select("id,slug,title,description,level,tier")

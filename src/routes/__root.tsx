@@ -165,7 +165,6 @@ function TopNav() {
     { to: "/academy", label: "Academy", badge: "Theory" },
     { to: "/cyber-range/labs", label: "Cyber Labs", badge: "Hands-on" },
     { to: "/cyber-range/learning-paths", label: "Learning Paths" },
-    { to: "/cyber-range/datasets", label: "Datasets", badge: "Real Data" },
     { to: "/achievements", label: "Badges", badge: "Verified" },
     { to: "/academy/glossary", label: "Glossary" },
   ];
@@ -180,7 +179,7 @@ function TopNav() {
           <div className="font-display font-bold text-sm md:text-base tracking-wider text-foreground group-hover:text-primary transition-colors">
             NISQ <span className="text-primary">VANGUARD</span>
           </div>
-          <div className="font-mono text-[0.6rem] text-muted-foreground tracking-tight">DEFENCE TECHNOLOGIES</div>
+          <div className="font-mono text-[0.6rem] text-muted-foreground tracking-tight">ACADEMY</div>
         </div>
       </Link>
 

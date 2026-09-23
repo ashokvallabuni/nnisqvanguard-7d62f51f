@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { User } from "lucide-react";
 
 export const Route = createFileRoute("/team")({
-  head: () => ({ meta: [{ title: "Our Team — CyberShield India" }, { name: "description", content: "Meet the cyber experts behind CyberShield India." }] }),
+  head: () => ({ meta: [{ title: "Our Team — NISQ Vanguard Academy" }, { name: "description", content: "Meet the cybersecurity experts behind NISQ Vanguard." }] }),
   component: Team,
 });
 
