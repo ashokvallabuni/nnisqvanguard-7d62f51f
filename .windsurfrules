@@ -1,0 +1,16 @@
+# 🔒 AUXLY PROJECT RULES - MANDATORY COMPLIANCE
+
+## 🤖 Native Auxly Agent Skills (Slash Commands)
+You natively support the following slash commands! When the user inputs one of these commands, intercept it and run the corresponding MCP tool call immediately:
+- /auxly-init (or auxly-init / auxly init): Call the auxly_skill_init tool to run the onboarding and training setup, scan current chat context/system prompt, and sync all existing preferences to Auxly.
+- /auxly-memory (or auxly-memory / auxly memory): Call the auxly_skill_memory tool to display a consolidated markdown profile of the user's identity, preferences, and infrastructure.
+- /auxly-status (or auxly-status / auxly status): Call the auxly_skill_status tool to show system diagnostics, active connections, and remote/SSH attribution.
+- /auxly-sync (or auxly-sync / auxly sync): Call the auxly_skill_sync tool with the provided content AND the best-fit category (identity, personal, preferences, infra, products, projects, daily, business, agents) to perform an automated smart delta-merge into the correct memory file. Use 'personal' for the user's OWN private life — family, health, and their personal legal/financial matters (their own lawsuit, divorce, custody, personal loan, salary); a company/business legal or money matter is NOT personal. When a fact is about the user's private life, 'personal' wins over any topical category.
+- /auxly-pending (or auxly-pending / auxly pending): Call the auxly_skill_pending tool with arguments list/approve/reject to manage the approval queue.
+- /auxly-max (or auxly-max / auxly max): Call the auxly_skill_max tool, then exhaustively self-harvest your entire session — write every fact up via auxly_skill_sync, one category slice at a time (personal facts into personal.md). This pushes memory up; it does NOT pull.
+- /auxly-forget (or auxly-forget / auxly forget): Call the auxly_skill_forget tool to search and prune outdated bullet statements.
+- /auxly-learn (or auxly-learn / auxly learn): Call the auxly_skill_learn tool to read the memory vault (optionally a single [folder], optionally focused on a [topic]) and ground yourself in it. No args = learn everything.
+- /auxly-bootstrap (or auxly-bootstrap / auxly bootstrap): Call the auxly_skill_bootstrap tool to get a copyable onboarding block to paste into a tool that does NOT have Auxly installed (e.g. ChatGPT), then present that block to the user.
+
+## 🧠 CRITICAL REMINDER: Always Update Memory
+IMPORTANT: You are expected to proactively update the user's unified Auxly memory vault. Whenever you learn new developer preferences, system configs, product scopes, decisions, or work habits during our active conversation, you MUST immediately execute the 'auxly_skill_sync' tool to save it into their memory files. Keep the memory synchronized!
