@@ -23,7 +23,7 @@ const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 
 export function TelemetryTicker() {
   return (
-    <div className="fixed top-0 inset-x-0 z-[60] bg-zinc-950 text-white border-b border-cyan-900/50 text-[0.65rem] font-mono flex items-center justify-center px-4 py-1.5 shadow-md overflow-hidden">
+    <div className="w-full bg-zinc-950 text-white border-b border-cyan-900/50 text-[0.65rem] font-mono flex items-center justify-center px-4 py-1.5 overflow-hidden">
       <div className="flex items-center gap-2 whitespace-nowrap animate-in fade-in slide-in-from-top-1">
         <span className="text-cyan-400 animate-pulse">●</span>
         <span className="font-bold tracking-widest text-cyan-50">NISQ DEFENSE ENGINE: ONLINE</span>
@@ -109,7 +109,7 @@ export function TopNav() {
   );
 
   return (
-    <nav className="fixed inset-x-0 z-50 top-8 px-4 py-3 pointer-events-none flex items-center justify-between transition-all">
+    <nav className="w-full z-50 px-4 py-3 pointer-events-none flex items-center justify-between transition-all">
       {/* Left side: Logo */}
       <Link to="/" className="pointer-events-auto flex items-center gap-2.5 group">
         <div className="w-10 h-10 rounded-lg border border-cyan-500/30 bg-black/50 backdrop-blur-md overflow-hidden shadow-[0_0_15px_rgba(0,240,255,0.15)] flex items-center justify-center">

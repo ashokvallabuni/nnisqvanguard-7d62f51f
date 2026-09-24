@@ -200,7 +200,7 @@ function AdminTacticalPreviewBar() {
   if (!isAdmin) return null;
 
   return (
-    <div className="fixed top-7 inset-x-0 z-[55] bg-zinc-950/90 backdrop-blur-md text-white border-b border-zinc-800 text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5 shadow-md">
+    <div className="w-full bg-zinc-950/90 text-white border-b border-zinc-800 text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5">
       <div className="flex items-center gap-2 text-accent">
         <Shield className="w-3.5 h-3.5" />
         <span className="font-bold tracking-wider text-cyan-400">ADMIN CONSOLE ACTIVE</span>
@@ -254,14 +254,16 @@ function RootComponent() {
 function AdminTacticalPreviewBarWrapper() {
   const { isAdmin } = useAuth();
   return (
-    <div className={`min-h-screen relative pb-12 md:pb-0 ${isAdmin ? "pt-[8rem]" : "pt-16"}`}>
-      <TelemetryTicker />
+    <div className="min-h-screen relative pb-12 md:pb-0">
+      <header className="sticky top-0 z-50 w-full flex flex-col bg-[#070A0F]/90 backdrop-blur-md shadow-md border-b border-slate-800/50">
+        {isAdmin && <AdminTacticalPreviewBar />}
+        <TelemetryTicker />
+        <TopNav />
+      </header>
       <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
-      <AdminTacticalPreviewBar />
-      <TopNav />
       <BottomNav />
       <CommandPalette />
-      <div className="relative z-10">
+      <div className="relative z-10 pt-4">
         <Outlet />
       </div>
     </div>
