@@ -14,16 +14,19 @@ export type Profile = {
   bio: string | null;
   country: string | null;
   role: "user" | "admin";
+  account_type?: "STUDENT" | "ORGANIZATION" | "COLLEGE" | null;
 };
 
 export async function ensureUserProfile(user: User): Promise<Profile | null> {
   const metadata = user.user_metadata ?? {};
+  const intent = typeof window !== "undefined" ? sessionStorage.getItem("nisq:intent") : null;
   const profile = {
     id: user.id,
     email: user.email ?? null,
     phone: user.phone ?? null,
     full_name: (metadata.full_name ?? metadata.name ?? null) as string | null,
     avatar_url: (metadata.avatar_url ?? metadata.picture ?? null) as string | null,
+    ...(intent ? { account_type: intent } : {}),
   };
 
   let lastError: unknown = null;
@@ -41,7 +44,7 @@ export async function ensureUserProfile(user: User): Promise<Profile | null> {
       const { data, error: readError } = await supabase
         .from("profiles")
         .select(
-          "id,email,phone,full_name,avatar_url,organization,designation,college,bio,country,role",
+          "id,email,phone,full_name,avatar_url,organization,designation,college,bio,country,role,account_type",
         )
         .eq("id", user.id)
         .maybeSingle();

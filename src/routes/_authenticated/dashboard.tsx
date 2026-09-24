@@ -51,9 +51,11 @@ function StudentDashboard() {
   const rawRole = (profile as any)?.role?.toString()?.toUpperCase();
   const activeRole: "STUDENT" | "ORGANIZATION" | "COLLEGE" | "ADMIN" = isAdmin
     ? "ADMIN"
-    : rawRole === "ORGANIZATION" || profile?.organization
+    : profile?.account_type === "ORGANIZATION" ||
+        rawRole === "ORGANIZATION" ||
+        profile?.organization
       ? "ORGANIZATION"
-      : rawRole === "COLLEGE" || profile?.college
+      : profile?.account_type === "COLLEGE" || rawRole === "COLLEGE" || profile?.college
         ? "COLLEGE"
         : "STUDENT";
 

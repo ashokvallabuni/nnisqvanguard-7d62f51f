@@ -66,6 +66,7 @@ import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
 import { Route as AuthenticatedCyberRangeCtfRouteImport } from './routes/_authenticated/cyber-range.ctf'
 import { Route as AuthenticatedCyberRangeMyProgressRouteImport } from './routes/_authenticated/cyber-range.my-progress'
+import { Route as AuthenticatedOrganizationDashboardRouteImport } from './routes/_authenticated/organization.dashboard'
 import { Route as ApiAgentsAnalyzeRouteImport } from './routes/api/agents.analyze'
 import { Route as ApiAgentsReportRouteImport } from './routes/api/agents.report'
 import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
@@ -367,6 +368,12 @@ const AuthenticatedCyberRangeMyProgressRoute =
     path: '/cyber-range/my-progress',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOrganizationDashboardRoute =
+  AuthenticatedOrganizationDashboardRouteImport.update({
+    id: '/organization/dashboard',
+    path: '/organization/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiAgentsAnalyzeRoute = ApiAgentsAnalyzeRouteImport.update({
   id: '/api/agents/analyze',
   path: '/api/agents/analyze',
@@ -468,6 +475,7 @@ export interface FileRoutesByFullPath {
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
   '/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
+  '/organization/dashboard': typeof AuthenticatedOrganizationDashboardRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
@@ -533,6 +541,7 @@ export interface FileRoutesByTo {
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
   '/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
+  '/organization/dashboard': typeof AuthenticatedOrganizationDashboardRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
@@ -601,6 +610,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
   '/_authenticated/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
   '/_authenticated/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
+  '/_authenticated/organization/dashboard': typeof AuthenticatedOrganizationDashboardRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
@@ -669,6 +679,7 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/cyber-range/ctf'
     | '/cyber-range/my-progress'
+    | '/organization/dashboard'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
@@ -734,6 +745,7 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/cyber-range/ctf'
     | '/cyber-range/my-progress'
+    | '/organization/dashboard'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
@@ -801,6 +813,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/team'
     | '/_authenticated/cyber-range/ctf'
     | '/_authenticated/cyber-range/my-progress'
+    | '/_authenticated/organization/dashboard'
     | '/api/agents/analyze'
     | '/api/agents/report'
     | '/api/lessons/$slug'
@@ -1252,6 +1265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCyberRangeMyProgressRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/organization/dashboard': {
+      id: '/_authenticated/organization/dashboard'
+      path: '/organization/dashboard'
+      fullPath: '/organization/dashboard'
+      preLoaderRoute: typeof AuthenticatedOrganizationDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/agents/analyze': {
       id: '/api/agents/analyze'
       path: '/api/agents/analyze'
@@ -1342,6 +1362,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedCyberRangeCtfRoute: typeof AuthenticatedCyberRangeCtfRoute
   AuthenticatedCyberRangeMyProgressRoute: typeof AuthenticatedCyberRangeMyProgressRoute
+  AuthenticatedOrganizationDashboardRoute: typeof AuthenticatedOrganizationDashboardRoute
   AuthenticatedCyberRangeChallengeSlugRoute: typeof AuthenticatedCyberRangeChallengeSlugRoute
   AuthenticatedCyberRangeLabSlugRoute: typeof AuthenticatedCyberRangeLabSlugRoute
   AuthenticatedLearnSlugModuleSlugRoute: typeof AuthenticatedLearnSlugModuleSlugRoute
@@ -1356,6 +1377,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCyberRangeCtfRoute: AuthenticatedCyberRangeCtfRoute,
   AuthenticatedCyberRangeMyProgressRoute:
     AuthenticatedCyberRangeMyProgressRoute,
+  AuthenticatedOrganizationDashboardRoute:
+    AuthenticatedOrganizationDashboardRoute,
   AuthenticatedCyberRangeChallengeSlugRoute:
     AuthenticatedCyberRangeChallengeSlugRoute,
   AuthenticatedCyberRangeLabSlugRoute: AuthenticatedCyberRangeLabSlugRoute,
