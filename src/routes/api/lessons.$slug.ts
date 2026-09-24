@@ -42,11 +42,23 @@ export const Route = createFileRoute("/api/lessons/$slug")({
         const supabase = publicClient();
         const { data: course, error: cErr } = await supabase
           .from("courses")
-          .select("id,slug,title,description,level,tier,sort_order")
+          .select("id,slug,title,description,level,tier,sort_order,status")
           .eq("slug", params.slug)
           .maybeSingle();
         if (cErr) return json({ error: cErr.message }, 500);
         if (!course) return json({ error: "Course not found" }, 404);
+
+        const status = (course.status || "").trim().toLowerCase();
+        if (status !== "published" && status !== "public" && status !== "live") {
+          return json(
+            {
+              error:
+                "This course is currently locked. It can only be made accessible when published from the Admin Console.",
+              isLocked: true,
+            },
+            403,
+          );
+        }
 
         const { data: modules, error: mErr } = await supabase
           .from("modules")

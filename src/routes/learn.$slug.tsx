@@ -19,7 +19,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
 import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
-import { isCourseAccessible, getLockedComingSoonCoursesStatic, describeAccessError } from "@/lib/course-accessibility";
+import {
+  isCourseAccessible,
+  getLockedComingSoonCoursesStatic,
+  describeAccessError,
+} from "@/lib/course-accessibility";
 
 export const Route = createFileRoute("/learn/$slug")({
   head: ({ params }) => ({

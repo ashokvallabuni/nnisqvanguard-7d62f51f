@@ -31,11 +31,7 @@ const APPROVED_PUBLIC_TEAM: ReadonlyArray<{ name: string; role: string }> = [
   { name: "Sannith Reddy", role: "CPO · Product Marketer" },
 ] as const;
 
-const REMOVED_PUBLIC_NAMES = new Set([
-  "Sai Tanaku",
-  "Pulijala Bhavani",
-  "Bhavani Pulijala",
-]);
+const REMOVED_PUBLIC_NAMES = new Set(["Sai Tanaku", "Pulijala Bhavani", "Bhavani Pulijala"]);
 
 const normalize = (value: string) => value.replace(/\s+/g, " ").trim().toLowerCase();
 

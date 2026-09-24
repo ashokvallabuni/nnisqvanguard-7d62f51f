@@ -553,11 +553,12 @@ WHERE NOT EXISTS (
 -- ============================================================
 -- FINAL: Make sure has_role() helper exists (required for admin policies)
 -- ============================================================
-DO $$ BEGIN
-  CREATE FUNCTION public.has_role(user_id uuid, role text) RETURNS boolean
-    LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public
-    AS $$ SELECT EXISTS (
+CREATE OR REPLACE FUNCTION public.has_role(user_id uuid, role text) RETURNS boolean
+  LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public
+  AS $func$
+    SELECT EXISTS (
       SELECT 1 FROM public.profiles p
       WHERE p.id = user_id AND p.role = role
-    ); $$;
-EXCEPTION WHEN duplicate_function THEN NULL; END $$;
+    );
+  $func$;
+

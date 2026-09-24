@@ -227,8 +227,7 @@ function CyberLabsCatalogPage() {
     const available = allLabs.length;
     const inProgress = allLabs.filter((l) => l.is_active_session).length;
     const completed = allLabs.filter((l) => l.completed).length;
-    const learningPaths =
-      categories.length > 1 ? categories.length - 1 : 0;
+    const learningPaths = categories.length > 1 ? categories.length - 1 : 0;
     return { available, inProgress, completed, learningPaths };
   }, [allLabs, categories]);
 
@@ -255,7 +254,9 @@ function CyberLabsCatalogPage() {
   const activeSessionLab = allLabs.find((l) => l.is_active_session);
 
   const existingCategoryNorm = new Set(
-    (categories.slice(1).filter(Boolean) as string[]).map((c) => c.toLowerCase().replace(/[\s\-_]/g, ""))
+    (categories.slice(1).filter(Boolean) as string[]).map((c) =>
+      c.toLowerCase().replace(/[\s\-_]/g, ""),
+    ),
   );
 
   return (
@@ -270,12 +271,26 @@ function CyberLabsCatalogPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10 pb-24">
         {/* ── KPI STAT ROW ─────────────────────────────────────────────── */}
-        <section aria-label="Cyber labs statistics" className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <section
+          aria-label="Cyber labs statistics"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
+        >
           {[
             { label: "AVAILABLE LABS", value: stats.available, icon: Layers, variant: "primary" },
-            { label: "IN PROGRESS", value: stats.inProgress, icon: Activity, variant: "warning", showPulse: stats.inProgress > 0 },
+            {
+              label: "IN PROGRESS",
+              value: stats.inProgress,
+              icon: Activity,
+              variant: "warning",
+              showPulse: stats.inProgress > 0,
+            },
             { label: "COMPLETED", value: stats.completed, icon: Award, variant: "success" },
-            { label: "LEARNING PATHS", value: stats.learningPaths, icon: Sparkles, variant: "accent" },
+            {
+              label: "LEARNING PATHS",
+              value: stats.learningPaths,
+              icon: Sparkles,
+              variant: "accent",
+            },
           ].map((stat, i) => {
             const Icon = stat.icon;
             const variantClasses: Record<string, string> = {
@@ -293,7 +308,9 @@ function CyberLabsCatalogPage() {
                   <span className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-muted-foreground font-semibold">
                     {stat.label}
                   </span>
-                  <div className={`p-1.5 rounded-md border ${variantClasses[stat.variant]} ${stat.showPulse ? "animate-pulse" : ""}`}>
+                  <div
+                    className={`p-1.5 rounded-md border ${variantClasses[stat.variant]} ${stat.showPulse ? "animate-pulse" : ""}`}
+                  >
                     <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </div>
                 </div>
@@ -346,7 +363,11 @@ function CyberLabsCatalogPage() {
               <Filter className="w-3.5 h-3.5" /> CAPABILITY MAP
             </h2>
             <button
-              onClick={() => { setSelectedCategory("all"); setSelectedDifficulty("all"); setSearchQuery(""); }}
+              onClick={() => {
+                setSelectedCategory("all");
+                setSelectedDifficulty("all");
+                setSearchQuery("");
+              }}
               className="font-mono text-[0.65rem] uppercase tracking-wider text-primary font-semibold hover:underline"
             >
               Reset filters
@@ -366,16 +387,18 @@ function CyberLabsCatalogPage() {
             </button>
             {STANDARD_CATEGORIES.map((std) => {
               const stdKey = std.toLowerCase().replace(/[\s\-_]/g, "");
-              const match = (categories.slice(1).filter(Boolean) as string[])
-                .find(
-                  (c) => c.toLowerCase().replace(/[\s\-_]/g, "") === stdKey
-                );
+              const match = (categories.slice(1).filter(Boolean) as string[]).find(
+                (c) => c.toLowerCase().replace(/[\s\-_]/g, "") === stdKey,
+              );
               const hasContent = !!match || existingCategoryNorm.has(stdKey);
               const isSelected =
                 match && selectedCategory.toLowerCase().replace(/[\s\-_]/g, "") === stdKey;
-              const count = hasContent && match
-                ? allLabs.filter((l) => (l.category || "").toLowerCase().replace(/[\s\-_]/g, "") === stdKey).length
-                : 0;
+              const count =
+                hasContent && match
+                  ? allLabs.filter(
+                      (l) => (l.category || "").toLowerCase().replace(/[\s\-_]/g, "") === stdKey,
+                    ).length
+                  : 0;
               return (
                 <button
                   key={std}
@@ -385,15 +408,17 @@ function CyberLabsCatalogPage() {
                     isSelected
                       ? "bg-primary text-primary-foreground border-primary shadow-xs"
                       : hasContent
-                      ? "bg-card text-foreground border-border hover:border-primary/50 hover:bg-muted/40 disabled:opacity-50"
-                      : "bg-muted/30 text-muted-foreground border-dashed border-border/80"
+                        ? "bg-card text-foreground border-border hover:border-primary/50 hover:bg-muted/40 disabled:opacity-50"
+                        : "bg-muted/30 text-muted-foreground border-dashed border-border/80"
                   }`}
                 >
                   <span>{std}</span>
                   {hasContent ? (
-                    <span className={`px-1.5 py-0.5 rounded-xs text-[0.6rem] ${
-                      isSelected ? "bg-primary-foreground/20" : "bg-muted"
-                    }`}>
+                    <span
+                      className={`px-1.5 py-0.5 rounded-xs text-[0.6rem] ${
+                        isSelected ? "bg-primary-foreground/20" : "bg-muted"
+                      }`}
+                    >
                       {count}
                     </span>
                   ) : (
@@ -459,7 +484,9 @@ function CyberLabsCatalogPage() {
           ) : filteredLabs.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border p-10 md:p-14 text-center space-y-4">
               <Database className="w-10 h-10 text-muted-foreground mx-auto" />
-              <h4 className="font-semibold text-foreground text-lg">No labs match your current filters</h4>
+              <h4 className="font-semibold text-foreground text-lg">
+                No labs match your current filters
+              </h4>
               <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
                 Try clearing your search query, choosing a different difficulty level, or browse all
                 categories using the capability chips above.

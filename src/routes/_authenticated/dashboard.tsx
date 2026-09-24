@@ -47,7 +47,15 @@ interface SkillLevel {
 }
 
 function StudentDashboard() {
-  const { user, profile } = useAuth();
+  const { user, profile, isAdmin, signOut } = useAuth();
+  const rawRole = (profile as any)?.role?.toString()?.toUpperCase();
+  const activeRole: "STUDENT" | "ORGANIZATION" | "COLLEGE" | "ADMIN" = isAdmin
+    ? "ADMIN"
+    : rawRole === "ORGANIZATION" || profile?.organization
+      ? "ORGANIZATION"
+      : rawRole === "COLLEGE" || profile?.college
+        ? "COLLEGE"
+        : "STUDENT";
 
   // 1. Fetch courses
   const { data: courses } = useQuery({
@@ -230,6 +238,259 @@ function StudentDashboard() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
+        {/* Role-Specific Action Strip */}
+        <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-xs">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-border/60">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+                ROLE WORKSPACE: <span className="text-primary font-bold">{activeRole}</span>
+              </span>
+            </div>
+            <span className="font-mono text-[0.65rem] text-muted-foreground uppercase">
+              Authenticated Session
+            </span>
+          </div>
+
+          <div className="flex flex-wrap gap-2 sm:gap-2.5 items-center">
+            {activeRole === "STUDENT" && (
+              <>
+                <Link
+                  to="/"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  HOME
+                </Link>
+                <Link
+                  to="/academy"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
+                >
+                  ACADEMY
+                </Link>
+                <Link
+                  to="/cyber-range/labs"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  CYBER LABS
+                </Link>
+                <Link
+                  to="/cyber-range/my-progress"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  PROGRESS
+                </Link>
+                <Link
+                  to="/achievements"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  BADGES
+                </Link>
+                <Link
+                  to="/certificates"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  CERTIFICATES
+                </Link>
+                <Link
+                  to="/complaint"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
+                >
+                  REPORT INCIDENT
+                </Link>
+                <Link
+                  to="/solutions/consulting"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  APPOINTMENTS
+                </Link>
+                <Link
+                  to="/profile"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  PROFILE
+                </Link>
+                <button
+                  onClick={() => void signOut()}
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
+                >
+                  LOGOUT
+                </button>
+              </>
+            )}
+
+            {activeRole === "ORGANIZATION" && (
+              <>
+                <Link
+                  to="/"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  HOME
+                </Link>
+                <Link
+                  to="/solutions"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
+                >
+                  SERVICES
+                </Link>
+                <Link
+                  to="/solutions/consulting"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 transition-colors"
+                >
+                  REQUEST CONSULTATION
+                </Link>
+                <Link
+                  to="/complaint"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
+                >
+                  REPORT INCIDENT
+                </Link>
+                <Link
+                  to="/solutions/consulting"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  APPOINTMENTS
+                </Link>
+                <Link
+                  to="/profile"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  PROFILE
+                </Link>
+                <button
+                  onClick={() => void signOut()}
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
+                >
+                  LOGOUT
+                </button>
+              </>
+            )}
+
+            {activeRole === "COLLEGE" && (
+              <>
+                <Link
+                  to="/"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  HOME
+                </Link>
+                <Link
+                  to="/campus"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
+                >
+                  CAMPUS
+                </Link>
+                <Link
+                  to="/programs"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  PROGRAMS
+                </Link>
+                <Link
+                  to="/campus"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 transition-colors"
+                >
+                  REQUEST WORKSHOP
+                </Link>
+                <Link
+                  to="/complaint"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
+                >
+                  REPORT INCIDENT
+                </Link>
+                <Link
+                  to="/campus"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  APPOINTMENTS
+                </Link>
+                <Link
+                  to="/profile"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  PROFILE
+                </Link>
+                <button
+                  onClick={() => void signOut()}
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
+                >
+                  LOGOUT
+                </button>
+              </>
+            )}
+
+            {activeRole === "ADMIN" && (
+              <>
+                <Link
+                  to="/"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  HOME
+                </Link>
+                <Link
+                  to="/admin"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
+                >
+                  ADMIN CONSOLE
+                </Link>
+                <Link
+                  to="/admin/content"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  COURSES
+                </Link>
+                <Link
+                  to="/admin/content"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  ASSESSMENTS
+                </Link>
+                <Link
+                  to="/admin"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  PROGRESS
+                </Link>
+                <Link
+                  to="/admin/team"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  STUDENTS
+                </Link>
+                <Link
+                  to="/admin/colleges"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  COLLEGES
+                </Link>
+                <Link
+                  to="/admin/complaints"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
+                >
+                  COMPLAINTS
+                </Link>
+                <Link
+                  to="/admin/bookings"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  BOOKINGS
+                </Link>
+                <Link
+                  to="/profile"
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                >
+                  SETTINGS
+                </Link>
+                <button
+                  onClick={() => void signOut()}
+                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
+                >
+                  LOGOUT
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
         {/* Metric Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">

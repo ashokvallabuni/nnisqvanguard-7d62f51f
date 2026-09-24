@@ -15,7 +15,19 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider, useAuth } from "../lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Shield, LogOut, Menu, X, Home, BookOpen, Terminal, Radar, User, Award, LineChart } from "lucide-react";
+import {
+  Shield,
+  LogOut,
+  Menu,
+  X,
+  Home,
+  BookOpen,
+  Terminal,
+  Radar,
+  User,
+  Award,
+  LineChart,
+} from "lucide-react";
 import { useState } from "react";
 
 const nisqLogoUrl = "/assets/nisq-logo.jpeg";
@@ -194,11 +206,13 @@ function TopNav() {
     { to: "/events", label: "COMMUNITY", icon: User },
   ];
 
-  const authedNav = user ? [
-    { to: "/cyber-range/my-progress", label: "PROGRESS", icon: LineChart },
-    { to: "/certificates", label: "CERTIFICATES", icon: Award },
-    { to: "/profile", label: "PROFILE", icon: User },
-  ] : [];
+  const authedNav = user
+    ? [
+        { to: "/cyber-range/my-progress", label: "PROGRESS", icon: LineChart },
+        { to: "/certificates", label: "CERTIFICATES", icon: Award },
+        { to: "/profile", label: "PROFILE", icon: User },
+      ]
+    : [];
 
   return (
     <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 bg-card/90 backdrop-blur-md border-b border-border/80 shadow-xs">
@@ -239,8 +253,7 @@ function TopNav() {
         })}
         {authedNav.map((item) => {
           const Icon = item.icon;
-          const isActive =
-            pathname === item.to || pathname.startsWith(item.to);
+          const isActive = pathname === item.to || pathname.startsWith(item.to);
           return (
             <li key={item.to}>
               <Link
@@ -347,8 +360,7 @@ function TopNav() {
               </div>
               {authedNav.map((item) => {
                 const Icon = item.icon;
-                const isActive =
-                  pathname === item.to || pathname.startsWith(item.to);
+                const isActive = pathname === item.to || pathname.startsWith(item.to);
                 return (
                   <Link
                     key={item.to}
@@ -444,15 +456,14 @@ function BottomNav() {
         {items.map((item) => {
           const Icon = item.icon;
           const isActive =
-            pathname === item.to || (item.to !== "/" && item.to !== "/login" && pathname.startsWith(item.to));
+            pathname === item.to ||
+            (item.to !== "/" && item.to !== "/login" && pathname.startsWith(item.to));
           return (
             <li key={item.to} className="h-full">
               <Link
                 to={item.to}
                 className={`h-full w-full flex flex-col items-center justify-center gap-0.5 transition-colors ${
-                  isActive
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`}
                 aria-current={isActive ? "page" : undefined}
               >

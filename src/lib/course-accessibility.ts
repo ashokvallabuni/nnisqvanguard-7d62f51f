@@ -1,8 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import {
-  AVAILABLE_COURSES,
-  LOCKED_COURSES,
-} from "@/data/courses-curriculum";
+import { AVAILABLE_COURSES, LOCKED_COURSES } from "@/data/courses-curriculum";
 
 export const APPROVED_BEGINNER_COURSE_SLUGS = [
   "cybersecurity-foundations",
@@ -10,15 +7,10 @@ export const APPROVED_BEGINNER_COURSE_SLUGS = [
   "basics-in-networking",
 ] as const;
 
-export type ApprovedBeginnerSlug =
-  (typeof APPROVED_BEGINNER_COURSE_SLUGS)[number];
+export type ApprovedBeginnerSlug = (typeof APPROVED_BEGINNER_COURSE_SLUGS)[number];
 
 export type CourseAccessDeniedReason =
-  | "locked"
-  | "unpublished"
-  | "requires_authentication"
-  | "admin_only"
-  | "unknown_course";
+  "locked" | "unpublished" | "requires_authentication" | "admin_only" | "unknown_course";
 
 export type CourseAccessResult =
   | { ok: true; reason?: undefined }
@@ -32,9 +24,7 @@ export type UserRoleLike = {
 
 const ADMIN_ROLE_TOKENS = new Set(["admin", "super_admin", "owner", "staff"]);
 
-const PUBLIC_APPROVED_SET = new Set<string>(
-  APPROVED_BEGINNER_COURSE_SLUGS as unknown as string[],
-);
+const PUBLIC_APPROVED_SET = new Set<string>(APPROVED_BEGINNER_COURSE_SLUGS as unknown as string[]);
 
 const LOCKED_SLUG_SET = new Set<string>(LOCKED_COURSES.map((c) => c.slug));
 
@@ -85,9 +75,7 @@ export function isLockedComingSoonSlug(slug: string): boolean {
 }
 
 export function getApprovedBeginnerCoursesStatic() {
-  const approved = AVAILABLE_COURSES.filter((c) =>
-    PUBLIC_APPROVED_SET.has(c.slug),
-  );
+  const approved = AVAILABLE_COURSES.filter((c) => PUBLIC_APPROVED_SET.has(c.slug));
   if (approved.length > 0) return approved;
   return AVAILABLE_COURSES.filter(
     (c) =>
@@ -153,7 +141,7 @@ export async function isCourseAccessible(
   try {
     const { data, error } = await supabase
       .from("courses")
-      .select("id,slug,tier")
+      .select("id, slug, tier, status")
       .eq("slug", slug)
       .maybeSingle();
 
@@ -162,38 +150,34 @@ export async function isCourseAccessible(
     }
 
     if (data) {
-      return { ok: true };
+      const status = (data.status || "").trim().toLowerCase();
+      if (status === "published" || status === "public" || status === "live") {
+        return { ok: true };
+      }
+      return {
+        ok: false,
+        reason: "locked",
+        message:
+          "This course is currently LOCKED. It can only be made accessible when published from the Admin Console.",
+      };
     }
   } catch (err) {
     console.warn("[course-accessibility] supabase query failed, fallback", err);
   }
 
-  if (PUBLIC_APPROVED_SET.has(slug)) {
-    return { ok: true };
-  }
-
-  if (AVAILABLE_COURSES.some((c) => c.slug === slug)) {
-    return {
-      ok: false,
-      reason: "locked",
-      message:
-        "This course has been restricted from public access. It will unlock after Chief Architect review.",
-    };
-  }
-
   return {
     ok: false,
-    reason: "unknown_course",
-    message: "The requested course track does not exist on this platform.",
+    reason: "locked",
+    message: "This course is currently LOCKED. Only Admin Console publishing makes it accessible.",
   };
 }
 
-export async function getAccessibleCourseSlugs(
-  opts?: { user?: UserRoleLike | null },
-): Promise<Set<string>> {
+export async function getAccessibleCourseSlugs(opts?: {
+  user?: UserRoleLike | null;
+}): Promise<Set<string>> {
   const { user } = opts ?? {};
   const { isAdmin } = normalizeRole(user);
-  const result = new Set<string>(PUBLIC_APPROVED_SET);
+  const result = new Set<string>();
 
   if (isAdmin) {
     for (const c of AVAILABLE_COURSES) result.add(c.slug);
@@ -201,13 +185,11 @@ export async function getAccessibleCourseSlugs(
   }
 
   try {
-    const { data } = await supabase
-      .from("courses")
-      .select("slug")
-      .limit(500);
+    const { data } = await supabase.from("courses").select("slug, status").limit(500);
     if (data) {
       for (const row of data) {
-        if (isAdmin || PUBLIC_APPROVED_SET.has(row.slug)) {
+        const s = (row.status || "").trim().toLowerCase();
+        if (isAdmin || s === "published" || s === "public" || s === "live") {
           result.add(row.slug);
         }
       }

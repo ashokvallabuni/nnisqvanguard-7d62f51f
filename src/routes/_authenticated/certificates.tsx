@@ -19,8 +19,8 @@ function CertificatesPage() {
           <p className="mono text-xs text-cyber">// CERTIFICATE VAULT</p>
           <h2 className="display text-2xl md:text-3xl mt-2 font-bold">Issued certificates</h2>
           <p className="text-muted-foreground mt-4 leading-relaxed">
-            Certificates issued to your authenticated account will appear here.
-            Complete an academy course and pass the final assessment to earn your first verified credential.
+            Certificates issued to your authenticated account will appear here. Complete an academy
+            course and pass the final assessment to earn your first verified credential.
           </p>
         </div>
       </div>

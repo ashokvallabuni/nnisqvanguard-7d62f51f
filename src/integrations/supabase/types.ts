@@ -6,6 +6,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5";
   };
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       ai_analyses: {
@@ -199,7 +224,7 @@ export type Database = {
           scheduled_at: string | null;
           status: string;
           topic: string;
-          user_id: string;
+          user_id: string | null;
         };
         Insert: {
           college_id?: string | null;
@@ -214,7 +239,7 @@ export type Database = {
           scheduled_at?: string | null;
           status?: string;
           topic: string;
-          user_id: string;
+          user_id?: string | null;
         };
         Update: {
           college_id?: string | null;
@@ -229,7 +254,7 @@ export type Database = {
           scheduled_at?: string | null;
           status?: string;
           topic?: string;
-          user_id?: string;
+          user_id?: string | null;
         };
         Relationships: [
           {
@@ -497,6 +522,7 @@ export type Database = {
           level: string;
           slug: string;
           sort_order: number;
+          status: string;
           tier: string;
           title: string;
           updated_at: string;
@@ -509,6 +535,7 @@ export type Database = {
           level?: string;
           slug: string;
           sort_order?: number;
+          status?: string;
           tier?: string;
           title: string;
           updated_at?: string;
@@ -521,6 +548,7 @@ export type Database = {
           level?: string;
           slug?: string;
           sort_order?: number;
+          status?: string;
           tier?: string;
           title?: string;
           updated_at?: string;
@@ -1541,6 +1569,50 @@ export type Database = {
         };
         Relationships: [];
       };
+      lessons: {
+        Row: {
+          content_md: string | null;
+          created_at: string;
+          duration_minutes: number;
+          id: string;
+          module_id: string;
+          slug: string;
+          sort_order: number;
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          content_md?: string | null;
+          created_at?: string;
+          duration_minutes?: number;
+          id?: string;
+          module_id: string;
+          slug: string;
+          sort_order?: number;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          content_md?: string | null;
+          created_at?: string;
+          duration_minutes?: number;
+          id?: string;
+          module_id?: string;
+          slug?: string;
+          sort_order?: number;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey";
+            columns: ["module_id"];
+            isOneToOne: false;
+            referencedRelation: "modules";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       logs: {
         Row: {
           created_at: string;
@@ -2124,6 +2196,63 @@ export type Database = {
           },
         ];
       };
+      user_progress: {
+        Row: {
+          completed: boolean;
+          course_id: string | null;
+          created_at: string;
+          id: string;
+          module_id: string | null;
+          payload: Json;
+          progress_type: string;
+          ref_id: string | null;
+          score: number | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          completed?: boolean;
+          course_id?: string | null;
+          created_at?: string;
+          id?: string;
+          module_id?: string | null;
+          payload?: Json;
+          progress_type: string;
+          ref_id?: string | null;
+          score?: number | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          completed?: boolean;
+          course_id?: string | null;
+          created_at?: string;
+          id?: string;
+          module_id?: string | null;
+          payload?: Json;
+          progress_type?: string;
+          ref_id?: string | null;
+          score?: number | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "courses";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_progress_module_id_fkey";
+            columns: ["module_id"];
+            isOneToOne: false;
+            referencedRelation: "modules";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       user_roles: {
         Row: {
           created_at: string;
@@ -2216,13 +2345,15 @@ export type Database = {
       };
     };
     Functions: {
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"];
-          _user_id: string;
-        };
-        Returns: boolean;
-      };
+      has_role:
+        | {
+            Args: {
+              _role: Database["public"]["Enums"]["app_role"];
+              _user_id: string;
+            };
+            Returns: boolean;
+          }
+        | { Args: { role: string; user_id: string }; Returns: boolean };
     };
     Enums: {
       app_role: "user" | "admin";
@@ -2350,6 +2481,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       app_role: ["user", "admin"],

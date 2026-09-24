@@ -47,10 +47,22 @@ export const Route = createFileRoute("/api/lessons/$slug/$moduleSlug")({
 
         const { data: course } = await supabase
           .from("courses")
-          .select("id,slug,title,tier")
+          .select("id,slug,title,tier,status")
           .eq("slug", params.slug)
           .maybeSingle();
         if (!course) return json({ error: "Course not found" }, 404);
+
+        const status = (course.status || "").trim().toLowerCase();
+        if (status !== "published" && status !== "public" && status !== "live") {
+          return json(
+            {
+              error:
+                "This course is currently locked. It can only be made accessible when published from the Admin Console.",
+              isLocked: true,
+            },
+            403,
+          );
+        }
 
         const { data: mod, error } = await supabase
           .from("modules")
@@ -63,9 +75,10 @@ export const Route = createFileRoute("/api/lessons/$slug/$moduleSlug")({
         if (mod.locked || course.tier === "paid") return json({ error: "Module locked" }, 403);
 
         const quiz = Array.isArray(mod.quiz) ? (mod.quiz as unknown as QuizItem[]) : [];
-        const safeQuiz = withAnswers
-          ? quiz
-          : quiz.map((q) => ({ question: q.question, options: q.options }));
+        const safeQuiz = quiz.map((q) => ({
+          question: q.question,
+          options: q.options,
+        }));
 
         return json({
           course,

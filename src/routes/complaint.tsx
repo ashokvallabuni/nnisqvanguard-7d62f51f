@@ -29,13 +29,22 @@ function mapError(e: unknown, context: "upload" | "submit" | "analyze"): string 
   const message = e instanceof Error ? e.message : String(e ?? "unknown error");
   const lower = message.toLowerCase();
   if (context === "upload") {
-    if (lower.includes("bucket") || lower.includes("not found") || lower.includes("does not exist")) {
+    if (
+      lower.includes("bucket") ||
+      lower.includes("not found") ||
+      lower.includes("does not exist")
+    ) {
       return UPLOAD_ERROR_MESSAGE;
     }
     if (lower.includes("jwt") || lower.includes("expired") || lower.includes("session")) {
       return "Your session has expired. Sign in again and try uploading your evidence.";
     }
-    if (lower.includes("policy") || lower.includes("row level") || lower.includes("401") || lower.includes("403")) {
+    if (
+      lower.includes("policy") ||
+      lower.includes("row level") ||
+      lower.includes("401") ||
+      lower.includes("403")
+    ) {
       return "Evidence upload permission check failed. Your report can still be submitted text-only.";
     }
     return UPLOAD_ERROR_MESSAGE;
@@ -82,9 +91,10 @@ function Complaint() {
         const ext = (file.name.split(".").pop() || "png").toLowerCase();
         const safeName = `${Date.now()}.${ext}`;
         storagePath = `${user.id}/${safeName}`;
-        const { error: upErr } = await supabase.storage
-          .from("evidence")
-          .upload(storagePath, file, { contentType: file.type || "application/octet-stream", upsert: false });
+        const { error: upErr } = await supabase.storage.from("evidence").upload(storagePath, file, {
+          contentType: file.type || "application/octet-stream",
+          upsert: false,
+        });
         if (upErr) {
           throw upErr;
         }
@@ -161,7 +171,8 @@ function Complaint() {
             </div>
             <h2 className="display text-2xl md:text-3xl mt-3 font-bold">REPORT ACCEPTED</h2>
             <p className="text-muted-foreground mt-3 max-w-md mx-auto leading-relaxed">
-              Our analysts are triaging your report. Reference the identifier below in all follow-up communication.
+              Our analysts are triaging your report. Reference the identifier below in all follow-up
+              communication.
             </p>
             <div className="mt-5">
               <p className="font-mono text-[0.65rem] text-muted-foreground uppercase tracking-wider mb-1">
@@ -260,8 +271,8 @@ function Complaint() {
                   </div>
                 )}
                 <p className="mt-2 text-[0.7rem] text-muted-foreground leading-relaxed font-mono">
-                  Attachments are encrypted and optional. If evidence upload is unavailable,
-                  your report still proceeds as text-only with the same priority.
+                  Attachments are encrypted and optional. If evidence upload is unavailable, your
+                  report still proceeds as text-only with the same priority.
                 </p>
               </div>
 
@@ -275,13 +286,17 @@ function Complaint() {
                     ? "UPLOADING EVIDENCE & SUBMITTING REPORT…"
                     : "SUBMITTING REPORT…"
                   : uploading
-                  ? "UPLOADING EVIDENCE…"
-                  : "SUBMIT REPORT"}
+                    ? "UPLOADING EVIDENCE…"
+                    : "SUBMIT REPORT"}
               </button>
               {!user && (
                 <p className="text-center text-xs text-muted-foreground leading-relaxed pt-2">
                   You must be signed in to submit an incident report.{" "}
-                  <Link to="/login" search={{ next: "/complaint" }} className="text-primary font-semibold hover:underline">
+                  <Link
+                    to="/login"
+                    search={{ next: "/complaint" }}
+                    className="text-primary font-semibold hover:underline"
+                  >
                     Sign in here
                   </Link>
                   .
@@ -310,7 +325,9 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">{label}</label>
+      <label className="mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">
+        {label}
+      </label>
       <input
         type={type}
         value={value}

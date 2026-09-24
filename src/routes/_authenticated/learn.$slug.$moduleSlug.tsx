@@ -249,9 +249,7 @@ function ModuleLearningPage() {
       if (data && data.length > 0) return data;
 
       const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
-      const staticCourse = AVAILABLE_COURSES.find(
-        (c) => c.slug === slug || c.id === course!.id,
-      );
+      const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug || c.id === course!.id);
       if (staticCourse) {
         return staticCourse.modules.map((m) => ({
           id: m.id,
@@ -295,11 +293,8 @@ function ModuleLearningPage() {
       if (data) return data;
 
       const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
-      const staticCourse = AVAILABLE_COURSES.find(
-        (c) => c.slug === slug || c.id === course!.id,
-      );
-      const staticMod =
-        staticCourse?.modules?.find((m) => m.slug === moduleSlug);
+      const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug || c.id === course!.id);
+      const staticMod = staticCourse?.modules?.find((m) => m.slug === moduleSlug);
 
       if (staticMod) {
         return {
@@ -385,11 +380,8 @@ function ModuleLearningPage() {
       if (data && data.length > 0) return data;
 
       const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
-      const staticCourse = AVAILABLE_COURSES.find(
-        (c) => c.slug === slug || c.id === course?.id,
-      );
-      const staticMod =
-        staticCourse?.modules?.find((m) => m.slug === moduleSlug);
+      const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug || c.id === course?.id);
+      const staticMod = staticCourse?.modules?.find((m) => m.slug === moduleSlug);
       if (staticMod?.quizzes?.length) {
         return staticMod.quizzes.map((q, idx) => ({
           id: q.id ?? `q-${moduleSlug}-${idx}`,
