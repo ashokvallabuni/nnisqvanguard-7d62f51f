@@ -1,4 +1,4 @@
-export { supabase } from "@/integrations/supabase/client";
+export { supabase, warmUpSupabaseSession } from "@/integrations/supabase/client";
 import { supabase } from "@/integrations/supabase/client";
 import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 

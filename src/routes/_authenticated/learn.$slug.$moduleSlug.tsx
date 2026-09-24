@@ -200,18 +200,19 @@ function ModuleLearningPage() {
 
       if (data) return data;
 
-      // Fallback to static catalog if DB is empty
-      if (slug === "networking-fundamentals") {
+      const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
+      const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug);
+      if (staticCourse) {
         return {
-          id: "c-net-fund",
-          slug: "networking-fundamentals",
-          title: "Networking Fundamentals",
-          description:
-            "Master TCP/IP, OSI layers, packet flows, routing, and network forensics from first principles.",
-          level: "Beginner",
-          tier: "free",
+          id: staticCourse.id,
+          slug: staticCourse.slug,
+          title: staticCourse.title,
+          description: staticCourse.description,
+          level: staticCourse.level,
+          tier: staticCourse.tier,
         };
       }
+
       return {
         id: `c-${slug}`,
         slug,
@@ -238,11 +239,14 @@ function ModuleLearningPage() {
 
       if (data && data.length > 0) return data;
 
-      // Fallback to static curated modules
-      if (slug === "networking-fundamentals") {
-        return NETWORKING_MODULES.map((m) => ({
+      const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
+      const staticCourse = AVAILABLE_COURSES.find(
+        (c) => c.slug === slug || c.id === course!.id,
+      );
+      if (staticCourse) {
+        return staticCourse.modules.map((m) => ({
           id: m.id,
-          course_id: "c-net-fund",
+          course_id: staticCourse.id,
           slug: m.slug,
           title: m.title,
           difficulty: m.difficulty,
@@ -281,7 +285,29 @@ function ModuleLearningPage() {
 
       if (data) return data;
 
-      // Check curriculum data
+      const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
+      const staticCourse = AVAILABLE_COURSES.find(
+        (c) => c.slug === slug || c.id === course!.id,
+      );
+      const staticMod =
+        staticCourse?.modules?.find((m) => m.slug === moduleSlug);
+
+      if (staticMod) {
+        return {
+          id: staticMod.id,
+          course_id: course!.id,
+          slug: staticMod.slug,
+          title: staticMod.title,
+          notes_md: staticMod.notes_md,
+          locked: false,
+          tags: staticMod.tags,
+          difficulty: staticMod.difficulty,
+          duration_minutes: staticMod.duration_minutes,
+          practice_labs: staticMod.companion_lab_slug ? [staticMod.companion_lab_slug] : [],
+          sort_order: staticMod.order_index,
+        };
+      }
+
       const foundInNet = NETWORKING_MODULES.find((m) => m.slug === moduleSlug);
       if (foundInNet) {
         return {
@@ -349,11 +375,41 @@ function ModuleLearningPage() {
 
       if (data && data.length > 0) return data;
 
-      // Fallback from static curriculum
+      const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
+      const staticCourse = AVAILABLE_COURSES.find(
+        (c) => c.slug === slug || c.id === course?.id,
+      );
+      const staticMod =
+        staticCourse?.modules?.find((m) => m.slug === moduleSlug);
+      if (staticMod?.quizzes?.length) {
+        return staticMod.quizzes.map((q, idx) => ({
+          id: q.id ?? `q-${moduleSlug}-${idx}`,
+          module_id: currentModule!.id,
+          question: q.question,
+          options: q.options,
+          correct_option: q.correct_option,
+          explanation: q.explanation,
+          sort_order: idx + 1,
+        }));
+      }
+
       const foundInNet = NETWORKING_MODULES.find((m) => m.slug === moduleSlug);
       if (foundInNet?.quizzes) {
         return foundInNet.quizzes.map((q, idx) => ({
           id: `q-${moduleSlug}-${idx}`,
+          module_id: currentModule!.id,
+          question: q.question,
+          options: q.options,
+          correct_option: q.correct_option,
+          explanation: q.explanation,
+          sort_order: idx + 1,
+        }));
+      }
+
+      const foundInLin = LINUX_MODULES.find((m) => m.slug === moduleSlug);
+      if (foundInLin?.quizzes) {
+        return foundInLin.quizzes.map((q, idx) => ({
+          id: `q-${moduleSlug}-lin-${idx}`,
           module_id: currentModule!.id,
           question: q.question,
           options: q.options,

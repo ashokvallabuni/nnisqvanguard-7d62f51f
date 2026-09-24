@@ -112,10 +112,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon-32x32.jpeg", type: "image/jpeg", sizes: "32x32" },
+      { rel: "icon", href: "/favicon-16x16.jpeg", type: "image/jpeg", sizes: "16x16" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "icon", href: "/assets/nisq-logo.jpeg", type: "image/jpeg" },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      { rel: "apple-touch-icon", href: "/assets/nisq-logo.jpeg" },
       { rel: "shortcut icon", href: "/assets/nisq-logo.jpeg", type: "image/jpeg" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.jpeg", sizes: "180x180" },
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

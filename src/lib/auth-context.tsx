@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import type { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import type { AuthChangeEvent, Session, User } from "@supabase/supabase-js";
+import { supabase, warmUpSupabaseSession } from "@/lib/supabase";
 
 export type Profile = {
   id: string;
@@ -26,22 +26,36 @@ export async function ensureUserProfile(user: User): Promise<Profile | null> {
     avatar_url: (metadata.avatar_url ?? metadata.picture ?? null) as string | null,
   };
 
-  const { error } = await supabase.from("profiles").upsert(profile, { onConflict: "id" });
-  if (error) {
-    console.error("Unable to create or update the authenticated profile", error);
-    return null;
+  let lastError: unknown = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const { error } = await supabase.from("profiles").upsert(profile, { onConflict: "id" });
+      if (error) {
+        lastError = error;
+        if (error.code === "PGRST301" || /Invalid|JWT|token/i.test(error.message)) {
+          const refreshed = await supabase.auth.refreshSession().catch(() => ({ error: true }));
+          if (!refreshed.error) continue;
+        }
+        break;
+      }
+      const { data, error: readError } = await supabase
+        .from("profiles")
+        .select(
+          "id,email,phone,full_name,avatar_url,organization,designation,college,bio,country,role",
+        )
+        .eq("id", user.id)
+        .maybeSingle();
+      if (readError) {
+        lastError = readError;
+        continue;
+      }
+      return (data as Profile | null) ?? null;
+    } catch (err) {
+      lastError = err;
+    }
   }
-
-  const { data, error: readError } = await supabase
-    .from("profiles")
-    .select("id,email,phone,full_name,avatar_url,organization,designation,college,bio,country,role")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (readError) {
-    console.error("Unable to load the authenticated profile", readError);
-    return null;
-  }
-  return (data as Profile | null) ?? null;
+  console.error("Unable to create or update the authenticated profile", lastError);
+  return null;
 }
 
 type AuthCtx = {
@@ -56,6 +70,7 @@ type AuthCtx = {
   getCurrentUser: () => Promise<User | null>;
   getSession: () => Promise<Session | null>;
   refreshProfile: () => Promise<void>;
+  refreshSession: () => Promise<Session | null>;
 };
 
 const Ctx = createContext<AuthCtx | undefined>(undefined);
@@ -65,36 +80,76 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const mountedRef = useRef(true);
 
   const loadProfile = async (currentUser: User | null) => {
     if (!currentUser) {
       setProfile(null);
       return;
     }
-    setProfile(await ensureUserProfile(currentUser));
+    const nextProfile = await ensureUserProfile(currentUser);
+    if (mountedRef.current) setProfile(nextProfile);
   };
 
   useEffect(() => {
-    let mounted = true;
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      if (!mounted) return;
+    mountedRef.current = true;
+    let refreshTimer: number | undefined;
+
+    const scheduleRefresh = (s: Session | null) => {
+      if (refreshTimer) window.clearTimeout(refreshTimer);
+      if (!s?.expires_at) return;
+      const refreshMs = Math.max(
+        30 * 1000,
+        Math.min((s.expires_at * 1000 - Date.now()) / 2, 10 * 60 * 1000),
+      );
+      refreshTimer = window.setTimeout(() => {
+        void supabase.auth.refreshSession().catch(() => null);
+      }, refreshMs);
+    };
+
+    const handleAuthChange = async (event: AuthChangeEvent, nextSession: Session | null) => {
+      if (!mountedRef.current) return;
+      if (event === "SIGNED_OUT") {
+        setSession(null);
+        setUser(null);
+        setProfile(null);
+        return;
+      }
+      if (event === "TOKEN_REFRESHED") {
+        try {
+          const { data: userData } = await supabase.auth.getUser();
+          if (!mountedRef.current) return;
+          setSession(nextSession);
+          setUser(userData.user ?? nextSession?.user ?? null);
+          void loadProfile(userData.user ?? nextSession?.user ?? null);
+          scheduleRefresh(nextSession);
+          return;
+        } catch {
+          // Fall through and treat like SIGNED_IN
+        }
+      }
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
       void loadProfile(nextSession?.user ?? null);
-    });
+      scheduleRefresh(nextSession);
+    };
 
-    void supabase.auth.getSession().then(async ({ data, error }) => {
-      if (error) console.error("Unable to restore the Supabase session", error);
-      if (!mounted) return;
-      setSession(data.session);
-      setUser(data.session?.user ?? null);
-      await loadProfile(data.session?.user ?? null);
-      setLoading(false);
-    });
+    const { data: subscription } = supabase.auth.onAuthStateChange(handleAuthChange);
+
+    void (async () => {
+      const initial = await warmUpSupabaseSession();
+      if (!mountedRef.current) return;
+      setSession(initial);
+      setUser(initial?.user ?? null);
+      await loadProfile(initial?.user ?? null);
+      scheduleRefresh(initial);
+      if (mountedRef.current) setLoading(false);
+    })();
 
     return () => {
-      mounted = false;
+      mountedRef.current = false;
       subscription.subscription.unsubscribe();
+      if (refreshTimer) window.clearTimeout(refreshTimer);
     };
   }, []);
 
@@ -125,10 +180,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAdmin: profile?.role === "admin",
         signInWithGoogle,
         signOut,
-        getCurrentUser: async () => (await supabase.auth.getUser()).data.user,
-        getSession: async () => (await supabase.auth.getSession()).data.session,
+        getCurrentUser: async () => {
+          const { data, error } = await supabase.auth.getUser();
+          if (error) {
+            const refreshed = await supabase.auth.refreshSession().catch(() => ({ error: true }));
+            if (!refreshed.error) {
+              return (await supabase.auth.getUser()).data.user ?? null;
+            }
+          }
+          return data.user ?? null;
+        },
+        getSession: async () => {
+          const { data } = await supabase.auth.getSession();
+          return data.session ?? null;
+        },
         refreshProfile: async () => {
           if (user) setProfile(await ensureUserProfile(user));
+        },
+        refreshSession: async () => {
+          const { data } = await supabase.auth.refreshSession();
+          return data.session ?? null;
         },
       }}
     >
