@@ -50,43 +50,43 @@
 
 :root {
   --radius: 0.5rem;
-  --background: #f4fafc;
-  --foreground: #16212b;
-  --card: #ffffff;
-  --card-foreground: #16212b;
-  --popover: #ffffff;
-  --popover-foreground: #16212b;
-  --primary: #1677a8;
-  --primary-foreground: #ffffff;
-  --secondary: #eaf5f9;
-  --secondary-foreground: #0b1f33;
-  --muted: #eaf5f9;
-  --muted-foreground: #5b6b78;
-  --accent: #08a9d1;
-  --accent-foreground: #0b1f33;
-  --destructive: #c24141;
-  --destructive-foreground: #ffffff;
-  --success: #16806a;
-  --warning: #a16207;
-  --border: #d5e5ec;
-  --input: #d5e5ec;
-  --ring: #08a9d1;
-  --cyber: #1677a8;
-  --cyber-2: #08a9d1;
-  --violet-accent: #315b9a;
-  --sidebar: #0b1f33;
-  --sidebar-foreground: #f4fafc;
-  --sidebar-primary: #08a9d1;
-  --sidebar-primary-foreground: #0b1f33;
-  --sidebar-accent: #163a52;
-  --sidebar-accent-foreground: #f4fafc;
-  --sidebar-border: #28506a;
-  --sidebar-ring: #08a9d1;
+  --background: #070A0F;
+  --foreground: #F8FAFC;
+  --card: #0E1420;
+  --card-foreground: #F8FAFC;
+  --popover: #0E1420;
+  --popover-foreground: #F8FAFC;
+  --primary: #00F0FF;
+  --primary-foreground: #070A0F;
+  --secondary: #1E293B;
+  --secondary-foreground: #F8FAFC;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #8B5CF6;
+  --accent-foreground: #F8FAFC;
+  --destructive: #EF4444;
+  --destructive-foreground: #F8FAFC;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --border: #1E293B;
+  --input: #1E293B;
+  --ring: #00F0FF;
+  --cyber: #00F0FF;
+  --cyber-2: #8B5CF6;
+  --violet-accent: #8B5CF6;
+  --sidebar: #0E1420;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #00F0FF;
+  --sidebar-primary-foreground: #070A0F;
+  --sidebar-accent: #1E293B;
+  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #00F0FF;
 }
 
 .dark {
-  --background: oklch(0.14 0.03 250);
-  --foreground: oklch(0.97 0.02 240);
+  --background: #070A0F;
+  --foreground: #F8FAFC;
 }
 
 @layer base {
@@ -121,16 +121,17 @@
 }
 
 @utility glass {
-  background: color-mix(in oklab, var(--color-card) 88%, transparent);
-  backdrop-filter: blur(18px);
+  background: color-mix(in oklab, var(--color-card) 75%, transparent);
+  backdrop-filter: blur(24px);
   border: 1px solid var(--color-border);
-  box-shadow: 0 12px 40px rgb(11 31 51 / 0.06);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+  transition: all 300ms ease;
 }
 
 @utility glow-cyber {
   box-shadow:
-    0 0 0 1px rgb(8 169 209 / 0.2),
-    0 12px 28px rgb(8 169 209 / 0.14);
+    0 0 0 1px rgb(0 240 255 / 0.2),
+    0 12px 28px rgb(0 240 255 / 0.14);
 }
 
 @utility text-cyber {

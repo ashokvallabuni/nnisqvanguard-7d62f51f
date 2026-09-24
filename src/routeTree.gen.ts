@@ -14,10 +14,10 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AchievementsRouteImport } from './routes/achievements'
+import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CampusRouteImport } from './routes/campus'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
-import { Route as ComplaintRouteImport } from './routes/complaint'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CyberRangeRouteImport } from './routes/cyber-range'
 import { Route as EventsRouteImport } from './routes/events'
@@ -27,9 +27,10 @@ import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as ReportingRouteImport } from './routes/reporting'
 import { Route as ResponsibleDisclosureRouteImport } from './routes/responsible-disclosure'
 import { Route as SecurityRouteImport } from './routes/security'
-import { Route as SolutionsRouteImport } from './routes/solutions'
+import { Route as ServicesRouteImport } from './routes/services'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -54,8 +55,6 @@ import { Route as CyberRangeLearningPathsRouteImport } from './routes/cyber-rang
 import { Route as InnovationCybershieldaiRouteImport } from './routes/innovation.cybershieldai'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
-import { Route as SolutionsConsultingRouteImport } from './routes/solutions.consulting'
-import { Route as SolutionsTrainingRouteImport } from './routes/solutions.training'
 import { Route as VerifyCertificateIdRouteImport } from './routes/verify.$certificateId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminSectionRouteImport } from './routes/_authenticated/admin.$section'
@@ -101,6 +100,11 @@ const AchievementsRoute = AchievementsRouteImport.update({
   path: '/achievements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppointmentsRoute = AppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -114,11 +118,6 @@ const CampusRoute = CampusRouteImport.update({
 const CaseStudiesRoute = CaseStudiesRouteImport.update({
   id: '/case-studies',
   path: '/case-studies',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ComplaintRoute = ComplaintRouteImport.update({
-  id: '/complaint',
-  path: '/complaint',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -166,6 +165,11 @@ const ProgramsRoute = ProgramsRouteImport.update({
   path: '/programs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportingRoute = ReportingRouteImport.update({
+  id: '/reporting',
+  path: '/reporting',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResponsibleDisclosureRoute = ResponsibleDisclosureRouteImport.update({
   id: '/responsible-disclosure',
   path: '/responsible-disclosure',
@@ -176,9 +180,9 @@ const SecurityRoute = SecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SolutionsRoute = SolutionsRouteImport.update({
-  id: '/solutions',
-  path: '/solutions',
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TeamRoute = TeamRouteImport.update({
@@ -302,16 +306,6 @@ const LearnSlugRoute = LearnSlugRouteImport.update({
   path: '/learn/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SolutionsConsultingRoute = SolutionsConsultingRouteImport.update({
-  id: '/consulting',
-  path: '/consulting',
-  getParentRoute: () => SolutionsRoute,
-} as any)
-const SolutionsTrainingRoute = SolutionsTrainingRouteImport.update({
-  id: '/training',
-  path: '/training',
-  getParentRoute: () => SolutionsRoute,
-} as any)
 const VerifyCertificateIdRoute = VerifyCertificateIdRouteImport.update({
   id: '/verify/$certificateId',
   path: '/verify/$certificateId',
@@ -431,10 +425,10 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRouteWithChildren
   '/academy': typeof AcademyRouteWithChildren
   '/achievements': typeof AchievementsRoute
+  '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRouteWithChildren
   '/campus': typeof CampusRoute
   '/case-studies': typeof CaseStudiesRoute
-  '/complaint': typeof ComplaintRoute
   '/contact': typeof ContactRoute
   '/cyber-range': typeof CyberRangeRouteWithChildren
   '/events': typeof EventsRoute
@@ -444,9 +438,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/reporting': typeof ReportingRoute
   '/responsible-disclosure': typeof ResponsibleDisclosureRoute
   '/security': typeof SecurityRoute
-  '/solutions': typeof SolutionsRouteWithChildren
+  '/services': typeof ServicesRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -470,8 +465,6 @@ export interface FileRoutesByFullPath {
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
   '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
-  '/solutions/consulting': typeof SolutionsConsultingRoute
-  '/solutions/training': typeof SolutionsTrainingRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn/': typeof LearnIndexRoute
   '/admin/$section': typeof AuthenticatedAdminSectionRoute
@@ -499,10 +492,10 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRouteWithChildren
   '/academy': typeof AcademyRouteWithChildren
   '/achievements': typeof AchievementsRoute
+  '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRouteWithChildren
   '/campus': typeof CampusRoute
   '/case-studies': typeof CaseStudiesRoute
-  '/complaint': typeof ComplaintRoute
   '/contact': typeof ContactRoute
   '/cyber-range': typeof CyberRangeRouteWithChildren
   '/events': typeof EventsRoute
@@ -512,9 +505,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/reporting': typeof ReportingRoute
   '/responsible-disclosure': typeof ResponsibleDisclosureRoute
   '/security': typeof SecurityRoute
-  '/solutions': typeof SolutionsRouteWithChildren
+  '/services': typeof ServicesRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
@@ -537,8 +531,6 @@ export interface FileRoutesByTo {
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
   '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
-  '/solutions/consulting': typeof SolutionsConsultingRoute
-  '/solutions/training': typeof SolutionsTrainingRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn': typeof LearnIndexRoute
   '/admin/$section': typeof AuthenticatedAdminSectionRoute
@@ -568,10 +560,10 @@ export interface FileRoutesById {
   '/about': typeof AboutRouteWithChildren
   '/academy': typeof AcademyRouteWithChildren
   '/achievements': typeof AchievementsRoute
+  '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRouteWithChildren
   '/campus': typeof CampusRoute
   '/case-studies': typeof CaseStudiesRoute
-  '/complaint': typeof ComplaintRoute
   '/contact': typeof ContactRoute
   '/cyber-range': typeof CyberRangeRouteWithChildren
   '/events': typeof EventsRoute
@@ -581,9 +573,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
+  '/reporting': typeof ReportingRoute
   '/responsible-disclosure': typeof ResponsibleDisclosureRoute
   '/security': typeof SecurityRoute
-  '/solutions': typeof SolutionsRouteWithChildren
+  '/services': typeof ServicesRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -607,8 +600,6 @@ export interface FileRoutesById {
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
   '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
-  '/solutions/consulting': typeof SolutionsConsultingRoute
-  '/solutions/training': typeof SolutionsTrainingRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn/': typeof LearnIndexRoute
   '/_authenticated/admin/$section': typeof AuthenticatedAdminSectionRoute
@@ -638,10 +629,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/achievements'
+    | '/appointments'
     | '/auth'
     | '/campus'
     | '/case-studies'
-    | '/complaint'
     | '/contact'
     | '/cyber-range'
     | '/events'
@@ -651,9 +642,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/programs'
+    | '/reporting'
     | '/responsible-disclosure'
     | '/security'
-    | '/solutions'
+    | '/services'
     | '/team'
     | '/terms'
     | '/admin'
@@ -677,8 +669,6 @@ export interface FileRouteTypes {
     | '/cyber-range/learning-paths'
     | '/innovation/cybershieldai'
     | '/learn/$slug'
-    | '/solutions/consulting'
-    | '/solutions/training'
     | '/verify/$certificateId'
     | '/learn/'
     | '/admin/$section'
@@ -706,10 +696,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/achievements'
+    | '/appointments'
     | '/auth'
     | '/campus'
     | '/case-studies'
-    | '/complaint'
     | '/contact'
     | '/cyber-range'
     | '/events'
@@ -719,9 +709,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/programs'
+    | '/reporting'
     | '/responsible-disclosure'
     | '/security'
-    | '/solutions'
+    | '/services'
     | '/team'
     | '/terms'
     | '/certificates'
@@ -744,8 +735,6 @@ export interface FileRouteTypes {
     | '/cyber-range/learning-paths'
     | '/innovation/cybershieldai'
     | '/learn/$slug'
-    | '/solutions/consulting'
-    | '/solutions/training'
     | '/verify/$certificateId'
     | '/learn'
     | '/admin/$section'
@@ -774,10 +763,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/achievements'
+    | '/appointments'
     | '/auth'
     | '/campus'
     | '/case-studies'
-    | '/complaint'
     | '/contact'
     | '/cyber-range'
     | '/events'
@@ -787,9 +776,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/programs'
+    | '/reporting'
     | '/responsible-disclosure'
     | '/security'
-    | '/solutions'
+    | '/services'
     | '/team'
     | '/terms'
     | '/_authenticated/admin'
@@ -813,8 +803,6 @@ export interface FileRouteTypes {
     | '/cyber-range/learning-paths'
     | '/innovation/cybershieldai'
     | '/learn/$slug'
-    | '/solutions/consulting'
-    | '/solutions/training'
     | '/verify/$certificateId'
     | '/learn/'
     | '/_authenticated/admin/$section'
@@ -844,10 +832,10 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRouteWithChildren
   AcademyRoute: typeof AcademyRouteWithChildren
   AchievementsRoute: typeof AchievementsRoute
+  AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRouteWithChildren
   CampusRoute: typeof CampusRoute
   CaseStudiesRoute: typeof CaseStudiesRoute
-  ComplaintRoute: typeof ComplaintRoute
   ContactRoute: typeof ContactRoute
   CyberRangeRoute: typeof CyberRangeRouteWithChildren
   EventsRoute: typeof EventsRoute
@@ -857,9 +845,10 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   ProgramsRoute: typeof ProgramsRoute
+  ReportingRoute: typeof ReportingRoute
   ResponsibleDisclosureRoute: typeof ResponsibleDisclosureRoute
   SecurityRoute: typeof SecurityRoute
-  SolutionsRoute: typeof SolutionsRouteWithChildren
+  ServicesRoute: typeof ServicesRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -914,6 +903,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AchievementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/appointments': {
+      id: '/appointments'
+      path: '/appointments'
+      fullPath: '/appointments'
+      preLoaderRoute: typeof AppointmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -933,13 +929,6 @@ declare module '@tanstack/react-router' {
       path: '/case-studies'
       fullPath: '/case-studies'
       preLoaderRoute: typeof CaseStudiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/complaint': {
-      id: '/complaint'
-      path: '/complaint'
-      fullPath: '/complaint'
-      preLoaderRoute: typeof ComplaintRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -1005,6 +994,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reporting': {
+      id: '/reporting'
+      path: '/reporting'
+      fullPath: '/reporting'
+      preLoaderRoute: typeof ReportingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/responsible-disclosure': {
       id: '/responsible-disclosure'
       path: '/responsible-disclosure'
@@ -1019,11 +1015,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SecurityRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/solutions': {
-      id: '/solutions'
-      path: '/solutions'
-      fullPath: '/solutions'
-      preLoaderRoute: typeof SolutionsRouteImport
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/team': {
@@ -1193,20 +1189,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/learn/$slug'
       preLoaderRoute: typeof LearnSlugRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/solutions/consulting': {
-      id: '/solutions/consulting'
-      path: '/consulting'
-      fullPath: '/solutions/consulting'
-      preLoaderRoute: typeof SolutionsConsultingRouteImport
-      parentRoute: typeof SolutionsRoute
-    }
-    '/solutions/training': {
-      id: '/solutions/training'
-      path: '/training'
-      fullPath: '/solutions/training'
-      preLoaderRoute: typeof SolutionsTrainingRouteImport
-      parentRoute: typeof SolutionsRoute
     }
     '/verify/$certificateId': {
       id: '/verify/$certificateId'
@@ -1473,20 +1455,6 @@ const InnovationRouteWithChildren = InnovationRoute._addFileChildren(
   InnovationRouteChildren,
 )
 
-interface SolutionsRouteChildren {
-  SolutionsConsultingRoute: typeof SolutionsConsultingRoute
-  SolutionsTrainingRoute: typeof SolutionsTrainingRoute
-}
-
-const SolutionsRouteChildren: SolutionsRouteChildren = {
-  SolutionsConsultingRoute: SolutionsConsultingRoute,
-  SolutionsTrainingRoute: SolutionsTrainingRoute,
-}
-
-const SolutionsRouteWithChildren = SolutionsRoute._addFileChildren(
-  SolutionsRouteChildren,
-)
-
 interface ApiLessonsSlugRouteChildren {
   ApiLessonsSlugModuleSlugRoute: typeof ApiLessonsSlugModuleSlugRoute
 }
@@ -1505,10 +1473,10 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRouteWithChildren,
   AcademyRoute: AcademyRouteWithChildren,
   AchievementsRoute: AchievementsRoute,
+  AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRouteWithChildren,
   CampusRoute: CampusRoute,
   CaseStudiesRoute: CaseStudiesRoute,
-  ComplaintRoute: ComplaintRoute,
   ContactRoute: ContactRoute,
   CyberRangeRoute: CyberRangeRouteWithChildren,
   EventsRoute: EventsRoute,
@@ -1518,9 +1486,10 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   ProgramsRoute: ProgramsRoute,
+  ReportingRoute: ReportingRoute,
   ResponsibleDisclosureRoute: ResponsibleDisclosureRoute,
   SecurityRoute: SecurityRoute,
-  SolutionsRoute: SolutionsRouteWithChildren,
+  ServicesRoute: ServicesRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   ApiChatRoute: ApiChatRoute,

@@ -15,6 +15,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider, useAuth } from "../lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { TopNav, BottomNav, TelemetryTicker } from "@/components/common/Navigation";
+import { CommandPalette } from "@/components/common/CommandPalette";
 import {
   Shield,
   LogOut,
@@ -191,313 +193,26 @@ function AuthListener() {
   return null;
 }
 
-function TopNav() {
-  const { user, isAdmin, signOut } = useAuth();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const [open, setOpen] = useState(false);
-  if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
-
-  const mainNav = [
-    { to: "/", label: "HOME", icon: Home },
-    { to: "/academy", label: "ACADEMY", icon: BookOpen },
-    { to: "/cyber-range/labs", label: "CYBER LABS", icon: Terminal },
-    { to: "/intelligence", label: "THREAT INTEL", icon: Radar },
-    { to: "/solutions", label: "SERVICES", icon: Shield },
-    { to: "/events", label: "COMMUNITY", icon: User },
-  ];
-
-  const authedNav = user
-    ? [
-        { to: "/cyber-range/my-progress", label: "PROGRESS", icon: LineChart },
-        { to: "/certificates", label: "CERTIFICATES", icon: Award },
-        { to: "/profile", label: "PROFILE", icon: User },
-      ]
-    : [];
-
-  return (
-    <nav className={`fixed inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 bg-card/90 backdrop-blur-md border-b border-border/80 shadow-xs transition-all ${isAdmin ? 'top-8' : 'top-0'}`}>
-      <Link to="/" className="flex items-center gap-2.5 group">
-        <div className="w-9 h-9 rounded-md border border-primary/40 bg-white overflow-hidden shadow-xs flex items-center justify-center">
-          <img src={nisqLogoUrl} alt="NISQ Vanguard logo" className="w-full h-full object-cover" />
-        </div>
-        <div className="leading-tight">
-          <div className="font-display font-bold text-sm md:text-base tracking-wider text-foreground group-hover:text-primary transition-colors">
-            NISQ <span className="text-primary">VANGUARD</span>
-          </div>
-          <div className="font-mono text-[0.6rem] text-muted-foreground tracking-tight">
-            DEFENCE TECHNOLOGIES
-          </div>
-        </div>
-      </Link>
-
-      <ul className="hidden xl:flex gap-0.5 items-center">
-        {mainNav.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
-          return (
-            <li key={item.to}>
-              <Link
-                to={item.to}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-md font-semibold text-[0.7rem] tracking-wide transition-colors ${
-                  isActive
-                    ? "bg-primary/10 text-primary border border-primary/20"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          );
-        })}
-        {authedNav.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.to || pathname.startsWith(item.to);
-          return (
-            <li key={item.to}>
-              <Link
-                to={item.to}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-md font-semibold text-[0.7rem] tracking-wide transition-colors ${
-                  isActive
-                    ? "bg-accent/10 text-accent border border-accent/20"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-
-      <div className="hidden xl:flex gap-2 items-center">
-        {user ? (
-          <>
-            {isAdmin && (
-              <Link
-                to="/admin"
-                className="font-mono text-[0.65rem] px-2.5 py-1.5 rounded-md border border-accent/40 text-accent hover:bg-accent/10 transition-colors font-semibold tracking-wide"
-              >
-                ADMIN CONSOLE
-              </Link>
-            )}
-            <Link
-              to="/dashboard"
-              className={`font-mono text-[0.65rem] px-3.5 py-1.5 rounded-md border transition-all flex items-center gap-1.5 font-semibold tracking-wide ${
-                pathname === "/dashboard"
-                  ? "bg-primary text-primary-foreground border-primary shadow-xs"
-                  : "bg-background border-border text-foreground hover:border-primary/50"
-              }`}
-            >
-              <span>DASHBOARD</span>
-            </Link>
-            <button
-              onClick={() => void signOut()}
-              className="p-2 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-              title="Sign Out"
-              aria-label="Sign Out"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </>
-        ) : (
-          <div className="flex gap-2">
-            <Link
-              to="/login"
-              className="font-mono text-[0.65rem] px-4 py-2 rounded-md border border-border text-foreground font-semibold hover:bg-muted transition-colors tracking-wide"
-            >
-              SIGN IN
-            </Link>
-            <Link
-              to="/auth"
-              className="font-mono text-[0.65rem] px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors shadow-xs tracking-wide"
-            >
-              CREATE ACCOUNT
-            </Link>
-          </div>
-        )}
-      </div>
-
-      <button
-        className="xl:hidden p-2 rounded-md text-foreground hover:bg-muted"
-        onClick={() => setOpen((o) => !o)}
-        aria-label={open ? "Close menu" : "Open menu"}
-      >
-        {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-      </button>
-
-      {open && (
-        <div className="xl:hidden absolute top-16 inset-x-0 bg-card/95 backdrop-blur-md border-b border-border p-4 flex flex-col gap-1 shadow-lg animate-in slide-in-from-top-2 max-h-[80vh] overflow-y-auto">
-          <div className="font-mono text-[0.6rem] text-muted-foreground uppercase px-2 py-1 tracking-wider">
-            Platform
-          </div>
-          {mainNav.map((item) => {
-            const Icon = item.icon;
-            const isActive =
-              pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 px-3 py-3 rounded-md text-sm font-semibold transition-colors ${
-                  isActive
-                    ? "bg-primary/10 text-primary border border-primary/20"
-                    : "text-foreground hover:bg-muted"
-                }`}
-              >
-                <Icon className="w-4.5 h-4.5" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-          {authedNav.length > 0 && (
-            <>
-              <div className="font-mono text-[0.6rem] text-muted-foreground uppercase px-2 py-1 mt-2 tracking-wider border-t border-border pt-3">
-                My Workspace
-              </div>
-              {authedNav.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.to || pathname.startsWith(item.to);
-                return (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-md text-sm font-semibold transition-colors ${
-                      isActive
-                        ? "bg-accent/10 text-accent border border-accent/20"
-                        : "text-foreground hover:bg-muted"
-                    }`}
-                  >
-                    <Icon className="w-4.5 h-4.5" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </>
-          )}
-          <div className="border-t border-border pt-3 mt-2 flex flex-col gap-2">
-            {user ? (
-              <>
-                <Link
-                  to="/dashboard"
-                  onClick={() => setOpen(false)}
-                  className="w-full text-center py-3 rounded-md bg-primary text-primary-foreground font-mono text-xs font-semibold tracking-wide"
-                >
-                  OPEN DASHBOARD
-                </Link>
-                {isAdmin && (
-                  <Link
-                    to="/admin"
-                    onClick={() => setOpen(false)}
-                    className="w-full text-center py-3 rounded-md border border-accent/40 text-accent font-mono text-xs font-semibold tracking-wide"
-                  >
-                    ADMIN CONSOLE
-                  </Link>
-                )}
-                <button
-                  onClick={() => {
-                    setOpen(false);
-                    void signOut();
-                  }}
-                  className="w-full text-center py-3 rounded-md border border-border text-muted-foreground hover:text-destructive font-mono text-xs font-semibold tracking-wide"
-                >
-                  SIGN OUT
-                </button>
-              </>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <Link
-                  to="/login"
-                  onClick={() => setOpen(false)}
-                  className="w-full text-center py-3 rounded-md border border-border text-foreground font-mono text-xs font-semibold tracking-wide"
-                >
-                  SIGN IN
-                </Link>
-                <Link
-                  to="/auth"
-                  onClick={() => setOpen(false)}
-                  className="w-full text-center py-3 rounded-md bg-primary text-primary-foreground font-mono text-xs font-semibold tracking-wide"
-                >
-                  CREATE ACCOUNT
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </nav>
-  );
-}
-
-function BottomNav() {
-  const { user } = useAuth();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
-
-  const items = [
-    { to: "/", label: "HOME", icon: Home },
-    { to: "/academy", label: "ACADEMY", icon: BookOpen },
-    { to: "/cyber-range/labs", label: "LABS", icon: Terminal },
-    { to: "/intelligence", label: "INTEL", icon: Radar },
-    { to: user ? "/profile" : "/login", label: user ? "PROFILE" : "SIGN IN", icon: User },
-  ];
-
-  return (
-    <nav
-      className="fixed bottom-0 inset-x-0 z-50 h-12 md:hidden bg-card/95 backdrop-blur-md border-t border-border/80 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]"
-      role="navigation"
-      aria-label="Mobile primary navigation"
-    >
-      <ul className="h-full grid grid-cols-5 items-center">
-        {items.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.to ||
-            (item.to !== "/" && item.to !== "/login" && pathname.startsWith(item.to));
-          return (
-            <li key={item.to} className="h-full">
-              <Link
-                to={item.to}
-                className={`h-full w-full flex flex-col items-center justify-center gap-0.5 transition-colors ${
-                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                }`}
-                aria-current={isActive ? "page" : undefined}
-              >
-                <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} />
-                <span className="font-mono text-[9px] font-semibold tracking-wider leading-none">
-                  {item.label}
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
-  );
-}
+// Removed TopNav and BottomNav, imported from Navigation.tsx
 
 function AdminTacticalPreviewBar() {
   const { isAdmin, adminView, setAdminView } = useAuth();
   if (!isAdmin) return null;
 
   return (
-    <div className="fixed top-0 inset-x-0 z-[60] bg-zinc-950 text-white border-b border-zinc-800 text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5 shadow-md">
+    <div className="fixed top-7 inset-x-0 z-[55] bg-zinc-950/90 backdrop-blur-md text-white border-b border-zinc-800 text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5 shadow-md">
       <div className="flex items-center gap-2 text-accent">
         <Shield className="w-3.5 h-3.5" />
-        <span className="font-bold tracking-wider">ADMIN CONSOLE ACTIVE</span>
+        <span className="font-bold tracking-wider text-cyan-400">ADMIN CONSOLE ACTIVE</span>
       </div>
       <div className="flex items-center gap-4">
-        <span className="text-zinc-400">VIEWING AS:</span>
+        <span className="text-zinc-400 hidden sm:inline">VIEWING AS:</span>
         <div className="flex items-center gap-3">
           {(["ADMIN", "LEARNER", "ORGANIZATION"] as const).map((view) => (
             <label
               key={view}
               className={`flex items-center gap-1.5 cursor-pointer transition-colors ${
-                adminView === view ? "text-accent font-semibold" : "text-zinc-300 hover:text-white"
+                adminView === view ? "text-cyan-400 font-semibold" : "text-zinc-500 hover:text-white"
               }`}
             >
               <input
@@ -506,14 +221,14 @@ function AdminTacticalPreviewBar() {
                 value={view}
                 checked={adminView === view}
                 onChange={() => setAdminView(view)}
-                className="w-3 h-3 accent-accent"
+                className="w-3 h-3 accent-cyan-400"
               />
               <span>
                 {view === "ADMIN"
-                  ? "Admin View"
+                  ? "Admin"
                   : view === "LEARNER"
-                  ? "Learner View"
-                  : "Organization View"}
+                  ? "Learner"
+                  : "Organization"}
               </span>
             </label>
           ))}
@@ -539,13 +254,13 @@ function RootComponent() {
 function AdminTacticalPreviewBarWrapper() {
   const { isAdmin } = useAuth();
   return (
-    <div className={`min-h-screen relative pb-12 md:pb-0 ${isAdmin ? "pt-[5.5rem]" : "pt-16"}`}>
+    <div className={`min-h-screen relative pb-12 md:pb-0 ${isAdmin ? "pt-[8rem]" : "pt-16"}`}>
+      <TelemetryTicker />
       <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
       <AdminTacticalPreviewBar />
-      <div className={isAdmin ? "pt-8" : ""}>
-        <TopNav />
-      </div>
+      <TopNav />
       <BottomNav />
+      <CommandPalette />
       <div className="relative z-10">
         <Outlet />
       </div>

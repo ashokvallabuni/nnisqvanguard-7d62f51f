@@ -246,7 +246,7 @@ function StudentDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
         {/* Role-Specific Action Strip */}
-        <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-xs">
+        <div className="glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-2xl">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-border/60">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
@@ -299,13 +299,13 @@ function StudentDashboard() {
                   CERTIFICATES
                 </Link>
                 <Link
-                  to="/complaint"
+                  to="/reporting"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
                 >
                   REPORT INCIDENT
                 </Link>
                 <Link
-                  to="/solutions/consulting"
+                  to="/appointments"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
                 >
                   APPOINTMENTS
@@ -334,25 +334,25 @@ function StudentDashboard() {
                   HOME
                 </Link>
                 <Link
-                  to="/solutions"
+                  to="/services"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
                 >
                   SERVICES
                 </Link>
                 <Link
-                  to="/solutions/consulting"
+                  to="/appointments"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 transition-colors"
                 >
                   REQUEST CONSULTATION
                 </Link>
                 <Link
-                  to="/complaint"
+                  to="/reporting"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
                 >
                   REPORT INCIDENT
                 </Link>
                 <Link
-                  to="/solutions/consulting"
+                  to="/appointments"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
                 >
                   APPOINTMENTS
@@ -399,13 +399,13 @@ function StudentDashboard() {
                   REQUEST WORKSHOP
                 </Link>
                 <Link
-                  to="/complaint"
+                  to="/reporting"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
                 >
                   REPORT INCIDENT
                 </Link>
                 <Link
-                  to="/campus"
+                  to="/appointments"
                   className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
                 >
                   APPOINTMENTS
@@ -499,51 +499,62 @@ function StudentDashboard() {
         </div>
 
         {/* Metric Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-            <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-mono uppercase">Verified Skill XP</span>
-              <Zap className="w-4 h-4 text-warning" />
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-xs font-mono uppercase text-amber-500 font-bold">Active Streak</span>
+              <Activity className="w-4 h-4 text-amber-500" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-foreground">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
+              7 <span className="text-sm text-slate-500">Days</span>
+            </div>
+            <div className="text-[0.65rem] font-mono text-slate-500">Keep it up!</div>
+          </div>
+
+          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-xs font-mono uppercase">Verified Skill XP</span>
+              <Zap className="w-4 h-4 text-amber-400" />
+            </div>
+            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
               {totalXp}
             </div>
-            <div className="text-[0.65rem] font-mono text-muted-foreground">Level 1 Defender</div>
+            <div className="text-[0.65rem] font-mono text-slate-500">Level 1 Defender</div>
           </div>
 
-          <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-            <div className="flex items-center justify-between text-muted-foreground">
+          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+            <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase">Lessons Completed</span>
-              <BookOpen className="w-4 h-4 text-primary" />
+              <BookOpen className="w-4 h-4 text-cyan-400" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-foreground">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
               {completedModulesCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-muted-foreground">Across curriculum</div>
+            <div className="text-[0.65rem] font-mono text-slate-500">Across curriculum</div>
           </div>
 
-          <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-            <div className="flex items-center justify-between text-muted-foreground">
+          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+            <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase">Labs Solved</span>
-              <Terminal className="w-4 h-4 text-success" />
+              <Terminal className="w-4 h-4 text-emerald-400" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-foreground">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
               {completedLabsCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-muted-foreground">In Cyber Range</div>
+            <div className="text-[0.65rem] font-mono text-slate-500">In Cyber Range</div>
           </div>
 
-          <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-            <div className="flex items-center justify-between text-muted-foreground">
+          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+            <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase">Badges Earned</span>
-              <Award className="w-4 h-4 text-accent" />
+              <Award className="w-4 h-4 text-purple-400" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-foreground">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
               {totalBadgesEarned}
             </div>
             <Link
               to="/achievements"
-              className="text-[0.65rem] font-mono text-primary hover:underline"
+              className="text-[0.65rem] font-mono text-cyan-400 hover:underline"
             >
               View Portfolio →
             </Link>
@@ -551,20 +562,20 @@ function StudentDashboard() {
         </div>
 
         {/* Dynamic "Next Step Engine" Hero */}
-        <div className="rounded-2xl border border-primary/40 bg-gradient-to-r from-primary/10 via-card to-accent/10 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
+        <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-r from-cyan-500/10 via-slate-900 to-purple-500/10 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-2xl">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary text-primary-foreground font-semibold">
+              <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-cyan-500 text-black font-semibold">
                 {nextStepAction.stage}
               </span>
-              <span className="text-xs font-mono text-muted-foreground">
+              <span className="text-xs font-mono text-slate-400">
                 Automated Recommendation
               </span>
             </div>
-            <h3 className="font-display font-bold text-2xl text-foreground">
+            <h3 className="font-display font-bold text-2xl text-white">
               {nextStepAction.title}
             </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-slate-400 leading-relaxed">
               {nextStepAction.description}
             </p>
           </div>
@@ -572,16 +583,16 @@ function StudentDashboard() {
           <div className="shrink-0 flex items-center gap-3">
             <Link
               to={nextStepAction.linkTo as any}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 shadow-md transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 text-black font-semibold text-sm hover:bg-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
             >
-              <Play className="w-4 h-4 fill-primary-foreground" />
+              <Play className="w-4 h-4 fill-black" />
               <span>{nextStepAction.ctaText}</span>
             </Link>
           </div>
         </div>
 
         {/* Verified Skill Progression Matrix */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
+        <div className="glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl p-6 space-y-4 shadow-2xl">
           <div className="flex items-center justify-between border-b border-border/80 pb-3">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-primary" />
