@@ -12,7 +12,14 @@ export interface CurriculumModule {
   summary: string;
   notes_md: string;
   analogy?: string;
-  diagram_type?: "network_topology" | "tcp_handshake" | "ip_subnet" | "linux_fs" | "linux_perms" | "cia_triad" | "soc_pipeline";
+  diagram_type?:
+    | "network_topology"
+    | "tcp_handshake"
+    | "ip_subnet"
+    | "linux_fs"
+    | "linux_perms"
+    | "cia_triad"
+    | "soc_pipeline";
   dataset_ref?: {
     name: string;
     source: string;
@@ -63,8 +70,10 @@ export const NETWORKING_MODULES: CurriculumModule[] = [
     duration_minutes: 20,
     difficulty: "BEGINNER",
     tags: ["Nodes", "Links", "LAN", "WAN", "Topologies"],
-    analogy: "The Postal System Analogy: Houses (Nodes), Roads (Cables), Local Post Offices (Switches), Interstate Highways (Routers).",
-    summary: "Nodes, links, LAN/WAN classifications, and physical topologies (Star, Bus, Ring, Mesh).",
+    analogy:
+      "The Postal System Analogy: Houses (Nodes), Roads (Cables), Local Post Offices (Switches), Interstate Highways (Routers).",
+    summary:
+      "Nodes, links, LAN/WAN classifications, and physical topologies (Star, Bus, Ring, Mesh).",
     notes_md: `### 1.1 What is a Computer Network?
 At its simplest core, a Computer Network is two or more computing devices linked together using cables or wireless signals so they can exchange digital information, share resources, and talk to one another.
 
@@ -88,15 +97,24 @@ Think of a computer network like a global postal network. The computers are indi
 - **Mesh Topology (Ultra Reliable)**: Every node connects directly to every other node. If one link fails, data reroutes instantly!`,
     diagram_type: "network_topology",
     sources: [
-      { title: "RFC 1122: Requirements for Internet Hosts", type: "RFC", citationNumber: "RFC 1122", url: "https://www.rfc-editor.org/rfc/rfc1122" }
+      {
+        title: "RFC 1122: Requirements for Internet Hosts",
+        type: "RFC",
+        citationNumber: "RFC 1122",
+        url: "https://www.rfc-editor.org/rfc/rfc1122",
+      },
     ],
     explanations: {
       conceptName: "Network Topology",
       quick: "The physical or logical layout of how nodes and links are connected.",
-      beginner: "Just like city maps dictate how cars navigate, topologies dictate how data packets flow between computers.",
-      technical: "Geometric arrangement of network elements including point-to-point links, shared media buses, and distributed mesh graphs.",
-      security: "Star topologies isolate point failures, whereas unsegmented bus and star fabrics without port security allow sniffing and MAC flooding.",
-      practical: "Modern enterprise campus networks deploy hierarchical star-tree architectures with redundant links.",
+      beginner:
+        "Just like city maps dictate how cars navigate, topologies dictate how data packets flow between computers.",
+      technical:
+        "Geometric arrangement of network elements including point-to-point links, shared media buses, and distributed mesh graphs.",
+      security:
+        "Star topologies isolate point failures, whereas unsegmented bus and star fabrics without port security allow sniffing and MAC flooding.",
+      practical:
+        "Modern enterprise campus networks deploy hierarchical star-tree architectures with redundant links.",
     },
     quizzes: [
       {
@@ -104,7 +122,8 @@ Think of a computer network like a global postal network. The computers are indi
         question: "Which network topology connects all nodes to a central central hub box?",
         options: ["Bus Topology", "Star Topology", "Ring Topology", "Peer-to-Peer"],
         correct_option: 1,
-        explanation: "In a Star Topology, all network devices connect into a central switch or hub box.",
+        explanation:
+          "In a Star Topology, all network devices connect into a central switch or hub box.",
       },
     ],
   },
@@ -116,8 +135,10 @@ Think of a computer network like a global postal network. The computers are indi
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["Twisted Pair", "Fiber Optics", "Wi-Fi", "MAC Address", "Ethernet Frame"],
-    analogy: "The Flashlight Analogy: Sending messages across the street using flashlight pulses (Light ON = 1, Light OFF = 0).",
-    summary: "Copper wire, fiber optics, Wi-Fi radio waves, 48-bit MAC addresses, and Ethernet frames.",
+    analogy:
+      "The Flashlight Analogy: Sending messages across the street using flashlight pulses (Light ON = 1, Light OFF = 0).",
+    summary:
+      "Copper wire, fiber optics, Wi-Fi radio waves, 48-bit MAC addresses, and Ethernet frames.",
     notes_md: `### 2.1 Physical Transmission Media
 - **⚡ Twisted Pair Copper**: Electrical voltage pulses. Standard RJ-45 (Cat5e, Cat6). Maximum 100 meters (328 ft) before attenuation.
 - **💡 Fiber Optic Cables**: Laser/LED light pulses inside hair-thin glass strands. Blazing fast, immune to electromagnetic interference, tens of miles range.
@@ -137,14 +158,22 @@ Frames package raw binary bits into structured containers:
 - **Payload (46 - 1500 Bytes)**: The actual message data.
 - **FCS (Frame Check Sequence, 4 Bytes)**: CRC error check math formula.`,
     diagram_type: "network_topology",
-    sources: [{ title: "IEEE 802.3 Ethernet Standard", type: "RFC", citationNumber: "IEEE 802.3", url: "https://standards.ieee.org" }],
+    sources: [
+      {
+        title: "IEEE 802.3 Ethernet Standard",
+        type: "RFC",
+        citationNumber: "IEEE 802.3",
+        url: "https://standards.ieee.org",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-02",
         question: "What address stays permanently built into your network interface card hardware?",
         options: ["Public IP Address", "MAC Address", "DNS Hostname", "Subnet Mask"],
         correct_option: 1,
-        explanation: "The MAC address is a 48-bit physical identifier burned into the NIC at the factory.",
+        explanation:
+          "The MAC address is a 48-bit physical identifier burned into the NIC at the factory.",
       },
     ],
   },
@@ -156,8 +185,10 @@ Frames package raw binary bits into structured containers:
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["Hubs", "Switches", "Routers", "Modems", "CAM Table"],
-    analogy: "A Switch is a private telephone operator; a Router is an International Airport checking IP passports.",
-    summary: "Difference between hubs, switches (CAM table), routers, modems, and all-in-one Wi-Fi router components.",
+    analogy:
+      "A Switch is a private telephone operator; a Router is an International Airport checking IP passports.",
+    summary:
+      "Difference between hubs, switches (CAM table), routers, modems, and all-in-one Wi-Fi router components.",
     notes_md: `### 3.1 Local Hardware: Hubs vs Switches
 - **🚫 Network Hub (Obsolete / Dumb)**: Megaphone in a crowded room. Copies and shouts incoming frames to every connected device! Severe collision and sniffing risk.
 - **✅ Network Switch (Smart / Modern)**: Private telephone operator. Reads Destination MAC address and forwards frames only to the target device's physical port.
@@ -172,14 +203,21 @@ Frames package raw binary bits into structured containers:
   3. IP Router
   4. Firewall & DHCP Server.`,
     diagram_type: "network_topology",
-    sources: [{ title: "Cisco Enterprise Switching & Routing Principles", type: "NIST", url: "https://cisco.com" }],
+    sources: [
+      {
+        title: "Cisco Enterprise Switching & Routing Principles",
+        type: "NIST",
+        url: "https://cisco.com",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-03",
         question: "What device joins computers inside a local network by reading MAC addresses?",
         options: ["Modem", "Switch", "Repeater", "Firewall"],
         correct_option: 1,
-        explanation: "A Switch connects devices in a local area network by reading Layer 2 MAC addresses.",
+        explanation:
+          "A Switch connects devices in a local area network by reading Layer 2 MAC addresses.",
       },
     ],
   },
@@ -191,8 +229,10 @@ Frames package raw binary bits into structured containers:
     duration_minutes: 30,
     difficulty: "BEGINNER",
     tags: ["IPv4", "IPv6", "Subnet Mask", "DHCP", "DORA"],
-    analogy: "MAC address = Social Security Number (follows you everywhere); IP address = Mailing street address (changes when you move).",
-    summary: "IPv4 32-bit format, 4 octets, public vs private IP ranges (RFC 1918), IPv6 128-bit addresses, and DHCP DORA process.",
+    analogy:
+      "MAC address = Social Security Number (follows you everywhere); IP address = Mailing street address (changes when you move).",
+    summary:
+      "IPv4 32-bit format, 4 octets, public vs private IP ranges (RFC 1918), IPv6 128-bit addresses, and DHCP DORA process.",
     notes_md: `### 4.1 Internet Protocol (IP) & IPv4 Structure
 An IPv4 Address is a 32-bit binary number written in Dotted Decimal Notation:
 \`192.168.1.50\`
@@ -212,7 +252,14 @@ An IPv4 Address is a 32-bit binary number written in Dotted Decimal Notation:
   3. Request
   4. Acknowledge`,
     diagram_type: "ip_subnet",
-    sources: [{ title: "RFC 791: Internet Protocol Specification", type: "RFC", citationNumber: "RFC 791", url: "https://www.rfc-editor.org/rfc/rfc791" }],
+    sources: [
+      {
+        title: "RFC 791: Internet Protocol Specification",
+        type: "RFC",
+        citationNumber: "RFC 791",
+        url: "https://www.rfc-editor.org/rfc/rfc791",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-04",
@@ -231,8 +278,10 @@ An IPv4 Address is a 32-bit binary number written in Dotted Decimal Notation:
     duration_minutes: 25,
     difficulty: "INTERMEDIATE",
     tags: ["Packet Switching", "MTU", "TTL", "BGP", "Hop Count"],
-    analogy: "The Jigsaw Puzzle Analogy: Mailing a 1,000-piece puzzle by placing each piece in an envelope with sequence numbers.",
-    summary: "Packet anatomy, MTU (1500 Bytes), routing tables, hop count decrement, Time to Live (TTL), and BGP internet backbone.",
+    analogy:
+      "The Jigsaw Puzzle Analogy: Mailing a 1,000-piece puzzle by placing each piece in an envelope with sequence numbers.",
+    summary:
+      "Packet anatomy, MTU (1500 Bytes), routing tables, hop count decrement, Time to Live (TTL), and BGP internet backbone.",
     notes_md: `### 5.1 Packet Switching & Data Flow
 Modern networks break files into independent data chunks called **Packets** that travel across separate paths simultaneously!
 - **IP Header**: Source IP, Destination IP, TTL (Time to Live), Protocol.
@@ -243,14 +292,27 @@ Modern networks break files into independent data chunks called **Packets** that
 - **Hop Count & TTL**: Every router hop decrements TTL by 1. When TTL hits 0, the router discards the packet and sends an ICMP Time Exceeded message, preventing infinite routing loops!
 - **BGP (Border Gateway Protocol)**: The global routing map used by ISPs worldwide to exchange transit routes.`,
     diagram_type: "network_topology",
-    sources: [{ title: "RFC 4271: A Border Gateway Protocol 4 (BGP-4)", type: "RFC", citationNumber: "RFC 4271", url: "https://www.rfc-editor.org/rfc/rfc4271" }],
+    sources: [
+      {
+        title: "RFC 4271: A Border Gateway Protocol 4 (BGP-4)",
+        type: "RFC",
+        citationNumber: "RFC 4271",
+        url: "https://www.rfc-editor.org/rfc/rfc4271",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-05",
         question: "What happens when a packet's Time to Live (TTL) counter reaches 0?",
-        options: ["It is returned to sender immediately", "It is discarded to prevent infinite routing loops", "It converts into an IPv6 packet", "It bypasses the next router firewall"],
+        options: [
+          "It is returned to sender immediately",
+          "It is discarded to prevent infinite routing loops",
+          "It converts into an IPv6 packet",
+          "It bypasses the next router firewall",
+        ],
         correct_option: 1,
-        explanation: "When TTL reaches 0, the router drops the packet and sends an ICMP Time Exceeded notice.",
+        explanation:
+          "When TTL reaches 0, the router drops the packet and sends an ICMP Time Exceeded notice.",
       },
     ],
   },
@@ -262,8 +324,10 @@ Modern networks break files into independent data chunks called **Packets** that
     duration_minutes: 30,
     difficulty: "INTERMEDIATE",
     tags: ["OSI 7 Layers", "TCP/IP 4 Layers", "Encapsulation", "PDU"],
-    analogy: "Russian Nesting Dolls: Each layer wraps its own header around data on transmission and strips it off on reception.",
-    summary: "7-layer OSI model, 4-layer TCP/IP stack, mnemonic ('All People Seem To Need Data Processing'), and Protocol Data Units.",
+    analogy:
+      "Russian Nesting Dolls: Each layer wraps its own header around data on transmission and strips it off on reception.",
+    summary:
+      "7-layer OSI model, 4-layer TCP/IP stack, mnemonic ('All People Seem To Need Data Processing'), and Protocol Data Units.",
     notes_md: `### 6.1 The OSI 7-Layer Reference Model
 - **Layer 7 - Application**: User interface (HTTP, DNS, SSH, SMTP).
 - **Layer 6 - Presentation**: Formatting, SSL/TLS encryption, compression.
@@ -279,14 +343,26 @@ Modern networks break files into independent data chunks called **Packets** that
 3. **Internet Layer** (OSI 3) -> PDU: Packet
 4. **Network Access Layer** (OSI 2, 1) -> PDU: Frame / Bits`,
     diagram_type: "network_topology",
-    sources: [{ title: "ISO/IEC 7498-1: Open Systems Interconnection", type: "ACADEMIC", url: "https://www.iso.org" }],
+    sources: [
+      {
+        title: "ISO/IEC 7498-1: Open Systems Interconnection",
+        type: "ACADEMIC",
+        url: "https://www.iso.org",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-06",
         question: "What layer of the OSI model handles end-to-end TCP and UDP port delivery?",
-        options: ["Layer 2 - Data Link", "Layer 3 - Network", "Layer 4 - Transport", "Layer 7 - Application"],
+        options: [
+          "Layer 2 - Data Link",
+          "Layer 3 - Network",
+          "Layer 4 - Transport",
+          "Layer 7 - Application",
+        ],
         correct_option: 2,
-        explanation: "Layer 4 (Transport Layer) is responsible for host-to-host communication and ports.",
+        explanation:
+          "Layer 4 (Transport Layer) is responsible for host-to-host communication and ports.",
       },
     ],
   },
@@ -298,8 +374,10 @@ Modern networks break files into independent data chunks called **Packets** that
     duration_minutes: 30,
     difficulty: "INTERMEDIATE",
     tags: ["TCP", "UDP", "3-Way Handshake", "Ports", "Sockets"],
-    analogy: "The Apartment & Room Analogy: IP address = Apartment building address; Port number = Specific apartment room number.",
-    summary: "TCP reliable 3-way handshake (SYN, SYN-ACK, ACK) vs UDP connectionless speed, well-known ports (21, 22, 53, 80, 443, 3389).",
+    analogy:
+      "The Apartment & Room Analogy: IP address = Apartment building address; Port number = Specific apartment room number.",
+    summary:
+      "TCP reliable 3-way handshake (SYN, SYN-ACK, ACK) vs UDP connectionless speed, well-known ports (21, 22, 53, 80, 443, 3389).",
     notes_md: `### 7.1 Transport Layer: TCP vs UDP
 - **TCP (Transmission Control Protocol)**: Connection-oriented (SYN, SYN-ACK, ACK), 100% reliable (retransmits lost packets), 20-byte header. Used for Web, Email, Banking, File downloads.
 - **UDP (User Datagram Protocol)**: Connectionless (fires blindly), ultra-fast & lightweight (8-byte header), no delivery guarantee. Used for Live Video Calls, Gaming, DNS queries.
@@ -314,7 +392,14 @@ Modern networks break files into independent data chunks called **Packets** that
 - **Port 3389**: RDP (Remote Desktop)
 - **Socket**: IP Address + Port Number (e.g. \`192.168.1.50:443\`) uniquely identifies a single connection channel!`,
     diagram_type: "tcp_handshake",
-    sources: [{ title: "RFC 9293: Transmission Control Protocol (TCP)", type: "RFC", citationNumber: "RFC 9293", url: "https://www.rfc-editor.org/rfc/rfc9293" }],
+    sources: [
+      {
+        title: "RFC 9293: Transmission Control Protocol (TCP)",
+        type: "RFC",
+        citationNumber: "RFC 9293",
+        url: "https://www.rfc-editor.org/rfc/rfc9293",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-07",
@@ -333,8 +418,10 @@ Modern networks break files into independent data chunks called **Packets** that
     duration_minutes: 25,
     difficulty: "INTERMEDIATE",
     tags: ["DNS", "HTTP", "HTTPS", "TLS", "SSH", "Records"],
-    analogy: "DNS is the global internet contact book converting human names like google.com to IP phone numbers.",
-    summary: "4-server DNS lookup chain (Resolver, Root, TLD, Authoritative), DNS records (A, AAAA, CNAME, MX, TXT), HTTP vs HTTPS, and SSH security.",
+    analogy:
+      "DNS is the global internet contact book converting human names like google.com to IP phone numbers.",
+    summary:
+      "4-server DNS lookup chain (Resolver, Root, TLD, Authoritative), DNS records (A, AAAA, CNAME, MX, TXT), HTTP vs HTTPS, and SSH security.",
     notes_md: `### 8.1 The Domain Name System (DNS)
 1. **Recursive Resolver**: ISP or public (Cloudflare \`1.1.1.1\`, Google \`8.8.8.8\`).
 2. **Root Nameserver (\`.\`)**: Directs query to proper TLD.
@@ -347,7 +434,14 @@ Modern networks break files into independent data chunks called **Packets** that
 - **HTTPS (Port 443)**: Encrypted with TLS (Transport Layer Security). Look for the padlock!
 - **SSH (Port 22)**: Encrypted CLI terminal access to remote servers. Replaces unsafe Telnet (Port 23).`,
     diagram_type: "network_topology",
-    sources: [{ title: "RFC 1035: Domain Names - Implementation and Specification", type: "RFC", citationNumber: "RFC 1035", url: "https://www.rfc-editor.org/rfc/rfc1035" }],
+    sources: [
+      {
+        title: "RFC 1035: Domain Names - Implementation and Specification",
+        type: "RFC",
+        citationNumber: "RFC 1035",
+        url: "https://www.rfc-editor.org/rfc/rfc1035",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-08",
@@ -366,8 +460,10 @@ Modern networks break files into independent data chunks called **Packets** that
     duration_minutes: 30,
     difficulty: "INTERMEDIATE",
     tags: ["Firewall", "NAT", "VPN", "MitM", "DDoS", "ARP Spoofing"],
-    analogy: "Firewall = Castle guard drawbridge bouncer; VPN = Underground tunnel hiding your car on a public highway.",
-    summary: "Packet filtering vs stateful firewalls, NAT translation, VPN encryption tunnels, and threats (Man-in-the-Middle, DDoS, ARP spoofing).",
+    analogy:
+      "Firewall = Castle guard drawbridge bouncer; VPN = Underground tunnel hiding your car on a public highway.",
+    summary:
+      "Packet filtering vs stateful firewalls, NAT translation, VPN encryption tunnels, and threats (Man-in-the-Middle, DDoS, ARP spoofing).",
     notes_md: `### 9.1 Network Security & Firewalls
 - **🏰 Castle Guard Analogy**: Monitors every packet against Access Control Lists (ACLs).
 - **Packet Filtering**: Checks basic headers (Source/Dest IP, Port) independently.
@@ -381,14 +477,23 @@ Modern networks break files into independent data chunks called **Packets** that
   - **DDoS Attack**: Flooding server bandwidth with millions of requests. Defend with DDoS mitigation (Cloudflare).
   - **ARP Spoofing**: Fake MAC address broadcasts poisoning switch tables. Defend with Dynamic ARP Inspection (DAI).`,
     diagram_type: "cia_triad",
-    sources: [{ title: "NIST SP 800-41: Guidelines on Firewalls and Firewall Policy", type: "NIST", citationNumber: "SP 800-41", url: "https://csrc.nist.gov" }],
+    sources: [
+      {
+        title: "NIST SP 800-41: Guidelines on Firewalls and Firewall Policy",
+        type: "NIST",
+        citationNumber: "SP 800-41",
+        url: "https://csrc.nist.gov",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-09",
-        question: "What network mechanism translates private home IPs into a single public IP to talk to external servers?",
+        question:
+          "What network mechanism translates private home IPs into a single public IP to talk to external servers?",
         options: ["DHCP", "DNS", "NAT (Network Address Translation)", "ARP"],
         correct_option: 2,
-        explanation: "NAT translates local private addresses (192.168.x.x) into one public IP address.",
+        explanation:
+          "NAT translates local private addresses (192.168.x.x) into one public IP address.",
       },
     ],
   },
@@ -400,8 +505,10 @@ Modern networks break files into independent data chunks called **Packets** that
     duration_minutes: 35,
     difficulty: "INTERMEDIATE",
     tags: ["ping", "tracert", "nslookup", "ipconfig", "Troubleshooting"],
-    analogy: "Bottom-Up OSI Troubleshooting: Check cable physical power first before blaming the remote web app.",
-    summary: "Command-line diagnostic tools (`ping`, `tracert`, `nslookup`, `ipconfig`), 4-step OSI troubleshooting method, and 10-question master assessment.",
+    analogy:
+      "Bottom-Up OSI Troubleshooting: Check cable physical power first before blaming the remote web app.",
+    summary:
+      "Command-line diagnostic tools (`ping`, `tracert`, `nslookup`, `ipconfig`), 4-step OSI troubleshooting method, and 10-question master assessment.",
     notes_md: `### 10.1 Command-Line Diagnostic Tools
 - **\`ping google.com\`**: ICMP Echo request measuring latency in milliseconds.
 - **\`tracert 1.1.1.1\` / \`traceroute\`**: Lists every router hop and delay along the path.
@@ -414,11 +521,19 @@ Modern networks break files into independent data chunks called **Packets** that
 3. **Layer 3 (Network)**: Ping Default Gateway (router \`192.168.1.1\`). If it replies, local LAN is fine; problem is ISP!
 4. **Layer 7 (DNS/Apps)**: Ping \`8.8.8.8\`. If IP works but domain fails, DNS server is down!`,
     diagram_type: "network_topology",
-    sources: [{ title: "RFC 792: Internet Control Message Protocol (ICMP)", type: "RFC", citationNumber: "RFC 792", url: "https://www.rfc-editor.org/rfc/rfc792" }],
+    sources: [
+      {
+        title: "RFC 792: Internet Control Message Protocol (ICMP)",
+        type: "RFC",
+        citationNumber: "RFC 792",
+        url: "https://www.rfc-editor.org/rfc/rfc792",
+      },
+    ],
     quizzes: [
       {
         id: "q-net-10",
-        question: "Which CLI command-line tool reveals every intermediate router hop along a path to a server?",
+        question:
+          "Which CLI command-line tool reveals every intermediate router hop along a path to a server?",
         options: ["ipconfig", "ping", "traceroute / tracert", "netstat"],
         correct_option: 2,
         explanation: "tracert (traceroute) displays each hop by incrementing packet TTL values.",
@@ -439,8 +554,10 @@ export const LINUX_MODULES: CurriculumModule[] = [
     duration_minutes: 20,
     difficulty: "BEGINNER",
     tags: ["pwd", "ls -la", "cd", "Directory Tree"],
-    analogy: "Map reading in an unmapped castle dungeon: never drop payloads until you confirm your exact coordinates.",
-    summary: "Move fluidly through the Linux filesystem tree (`pwd`, `ls -la`, `cd`). IVVAB Labs Quest 1: The Hidden Infiltrator.",
+    analogy:
+      "Map reading in an unmapped castle dungeon: never drop payloads until you confirm your exact coordinates.",
+    summary:
+      "Move fluidly through the Linux filesystem tree (`pwd`, `ls -la`, `cd`). IVVAB Labs Quest 1: The Hidden Infiltrator.",
     notes_md: `### Level 1: Map Reading & Territory Navigation
 In cybersecurity, 90% of security servers and offensive tools run on Linux.
 - **\`pwd\` (Print Working Directory)**: Displays current absolute path.
@@ -457,11 +574,18 @@ cd .secret_chamber && pwd
 /tmp/.secret_chamber
 \`\`\``,
     diagram_type: "linux_fs",
-    sources: [{ title: "POSIX.1-2017 Standard: Utilities", type: "LINUX_DOC", url: "https://pubs.opengroup.org" }],
+    sources: [
+      {
+        title: "POSIX.1-2017 Standard: Utilities",
+        type: "LINUX_DOC",
+        url: "https://pubs.opengroup.org",
+      },
+    ],
     quizzes: [
       {
         id: "q-lin-01",
-        question: "Which Linux command displays all files including hidden files starting with a dot?",
+        question:
+          "Which Linux command displays all files including hidden files starting with a dot?",
         options: ["pwd", "ls -la", "cat -h", "find -all"],
         correct_option: 1,
         explanation: "The -a flag in 'ls -la' reveals hidden dotfiles.",
@@ -476,8 +600,10 @@ cd .secret_chamber && pwd
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["mkdir", "touch", "cat", "cp", "mv", "rm -rf"],
-    analogy: "Constructing and relocating evidence containers safely inside digital forensics lockers.",
-    summary: "Construct, copy, relocate, and sanitize files and directories. IVVAB Labs Quest 2: Artifact Extraction.",
+    analogy:
+      "Constructing and relocating evidence containers safely inside digital forensics lockers.",
+    summary:
+      "Construct, copy, relocate, and sanitize files and directories. IVVAB Labs Quest 2: Artifact Extraction.",
     notes_md: `### Level 2: Object Manipulation & File Construction
 - **\`mkdir\` & \`touch\`**: Creates new directories and empty files.
 - **\`cat\`**: Dumps raw file contents to standard output.
@@ -492,7 +618,13 @@ cd ~/investigation && mv config.raw target_config.txt
 cat target_config.txt
 \`\`\``,
     diagram_type: "linux_fs",
-    sources: [{ title: "GNU Coreutils Manual", type: "LINUX_DOC", url: "https://www.gnu.org/software/coreutils/" }],
+    sources: [
+      {
+        title: "GNU Coreutils Manual",
+        type: "LINUX_DOC",
+        url: "https://www.gnu.org/software/coreutils/",
+      },
+    ],
     quizzes: [
       {
         id: "q-lin-02",
@@ -512,7 +644,8 @@ cat target_config.txt
     difficulty: "BEGINNER",
     tags: ["chmod", "chown", "sudo", "rwx", "Permissions"],
     analogy: "The 3 locks on a castle door: Owner, Group members, and World outsiders.",
-    summary: "Linux security model, numeric octal permissions (r=4, w=2, x=1), `chmod`, `chown`, and `sudo`. IVVAB Labs Quest 3.",
+    summary:
+      "Linux security model, numeric octal permissions (r=4, w=2, x=1), `chmod`, `chown`, and `sudo`. IVVAB Labs Quest 3.",
     notes_md: `### Level 3: Access Control & Permission Hardening
 \`- r w x r - x r - - | User: 7 (4+2+1) | Group: 5 (4+0+1) | World: 4 (4+0+0)\`
 - **Read (r = 4)**, **Write (w = 2)**, **Execute (x = 1)**.
@@ -528,7 +661,13 @@ ls -l /var/www/html/db_pass.php
 -rw------- 1 www-data www-data 120 Sep 23 db_pass.php
 \`\`\``,
     diagram_type: "linux_perms",
-    sources: [{ title: "POSIX File Permissions Specification", type: "LINUX_DOC", url: "https://pubs.opengroup.org" }],
+    sources: [
+      {
+        title: "POSIX File Permissions Specification",
+        type: "LINUX_DOC",
+        url: "https://pubs.opengroup.org",
+      },
+    ],
     quizzes: [
       {
         id: "q-lin-03",
@@ -548,7 +687,8 @@ ls -l /var/www/html/db_pass.php
     difficulty: "INTERMEDIATE",
     tags: ["grep", "Pipes |", "tail -f", "find", "Forensics"],
     analogy: "Text radar scanning 1,000,000 log lines to spot 5 attacker footprints.",
-    summary: "Searching massive log files with `grep`, pipes `|`, `tail -f`, and SUID binary searches. IVVAB Labs Quest 4.",
+    summary:
+      "Searching massive log files with `grep`, pipes `|`, `tail -f`, and SUID binary searches. IVVAB Labs Quest 4.",
     notes_md: `### Level 4: Log Forensics & Text Radar
 - **\`grep -i "text" file\`**: Case-insensitive pattern search.
 - **\`|\` (Pipe)**: Feeds stdout of one command as stdin to another.
@@ -562,7 +702,13 @@ grep "Failed password" /var/log/auth.log | grep "192.168.1.105" | wc -l
 128 # Result: 128 failed attack attempts detected!
 \`\`\``,
     diagram_type: "linux_fs",
-    sources: [{ title: "NIST SP 800-92: Guide to Computer Security Log Management", type: "NIST", url: "https://csrc.nist.gov" }],
+    sources: [
+      {
+        title: "NIST SP 800-92: Guide to Computer Security Log Management",
+        type: "NIST",
+        url: "https://csrc.nist.gov",
+      },
+    ],
     quizzes: [
       {
         id: "q-lin-04",
@@ -582,7 +728,8 @@ grep "Failed password" /var/log/auth.log | grep "192.168.1.105" | wc -l
     difficulty: "INTERMEDIATE",
     tags: ["ip a", "ss -tulpn", "curl", "nc", "Sockets"],
     analogy: "Listening radar detecting open radio frequencies and catching inbound transmissions.",
-    summary: "Inspecting network interfaces (`ip a`), listening sockets (`ss -tulpn`), `curl`, and Netcat reverse shells. IVVAB Labs Quest 5.",
+    summary:
+      "Inspecting network interfaces (`ip a`), listening sockets (`ss -tulpn`), `curl`, and Netcat reverse shells. IVVAB Labs Quest 5.",
     notes_md: `### Level 5: Network Diagnostics & Socket Recon
 - **\`ip a\`**: Displays IP interfaces (e.g. IVVAB VPN tunnel \`tun0\`).
 - **\`ss -tulpn\`**: Displays active TCP/UDP listening ports and process IDs.
@@ -598,14 +745,18 @@ whoami
 www-data
 \`\`\``,
     diagram_type: "network_topology",
-    sources: [{ title: "Linux Socket Programming Manual", type: "LINUX_DOC", url: "https://man7.org" }],
+    sources: [
+      { title: "Linux Socket Programming Manual", type: "LINUX_DOC", url: "https://man7.org" },
+    ],
     quizzes: [
       {
         id: "q-lin-05",
-        question: "Which tool listens on a specific TCP port to catch an inbound reverse shell connection?",
+        question:
+          "Which tool listens on a specific TCP port to catch an inbound reverse shell connection?",
         options: ["Netcat (nc -lvnp)", "cat", "chown", "mkdir"],
         correct_option: 0,
-        explanation: "Netcat (nc) configured with -l (listen) and -p (port) catches incoming shells.",
+        explanation:
+          "Netcat (nc) configured with -l (listen) and -p (port) catches incoming shells.",
       },
     ],
   },
@@ -617,22 +768,32 @@ www-data
     duration_minutes: 30,
     difficulty: "INTERMEDIATE",
     tags: ["ps aux", "top", "kill -9", "systemctl", "Processes"],
-    analogy: "Air Traffic Control tower spotting rogue unauthorized aircraft and ordering immediate shutdown.",
-    summary: "Snapshotting processes (`ps aux`), resource monitors (`top`/`htop`), terminating malicious jobs (`kill -9`), and service daemons.",
+    analogy:
+      "Air Traffic Control tower spotting rogue unauthorized aircraft and ordering immediate shutdown.",
+    summary:
+      "Snapshotting processes (`ps aux`), resource monitors (`top`/`htop`), terminating malicious jobs (`kill -9`), and service daemons.",
     notes_md: `### Level 6: Process Management & Warfare
 - **\`ps aux | grep [name]\`**: Complete snapshot of all running processes, users, and CPU/memory usage.
 - **\`top\` / \`htop\`**: Real-time task dashboard.
 - **\`kill -9 [PID]\`**: Forcefully terminates rogue cryptominers or backdoors immediately.
 - **\`systemctl status [service]\`**: Inspects and controls background daemon services.`,
     diagram_type: "linux_perms",
-    sources: [{ title: "Linux Process Management Architecture", type: "LINUX_DOC", url: "https://man7.org" }],
+    sources: [
+      {
+        title: "Linux Process Management Architecture",
+        type: "LINUX_DOC",
+        url: "https://man7.org",
+      },
+    ],
     quizzes: [
       {
         id: "q-lin-06",
-        question: "Which signal forces an immediate and uncatchable termination of a process ID in Linux?",
+        question:
+          "Which signal forces an immediate and uncatchable termination of a process ID in Linux?",
         options: ["kill -9 [PID]", "kill -1 [PID]", "pause [PID]", "stop [PID]"],
         correct_option: 0,
-        explanation: "kill -9 sends SIGKILL, which the Linux kernel handles directly to terminate the process.",
+        explanation:
+          "kill -9 sends SIGKILL, which the Linux kernel handles directly to terminate the process.",
       },
     ],
   },
@@ -644,8 +805,10 @@ www-data
     duration_minutes: 40,
     difficulty: "ADVANCED",
     tags: ["Final Boss", "Flag Capture", "SSH", "Malware Neutralization"],
-    analogy: "Final Mission: Infiltrating the rogue command server, neutralizing malware, and extracting the root cryptographic flag.",
-    summary: "Target range `10.100.99.50` (IVVAB Labs Subnet). Connect via SSH, neutralize rogue task, fix permissions, and extract root flag.",
+    analogy:
+      "Final Mission: Infiltrating the rogue command server, neutralizing malware, and extracting the root cryptographic flag.",
+    summary:
+      "Target range `10.100.99.50` (IVVAB Labs Subnet). Connect via SSH, neutralize rogue task, fix permissions, and extract root flag.",
     notes_md: `### Level 7: Boss Battle — Operation Dark Horizon
 🎯 **TARGET RANGE: 10.100.99.50 (IVVAB LABS SUBNET)**
 **Mission Briefing**: A rogue process on target server \`10.100.99.50\` is actively exfiltrating sensitive data. Connect via SSH, neutralize the rogue task, inspect malware logs, fix permissions, and extract the cryptographic root flag.
@@ -668,7 +831,13 @@ FLAG{IVVAB_LINUX_COMMAND_MASTER_2026}
 
 🏆 **OFFICIAL CERTIFICATION SEAL**: Students mastering all 7 levels earn the Junior Cyber Defense Operative Certification issued by NISQ Vanguard Cyber Academy.`,
     diagram_type: "soc_pipeline",
-    sources: [{ title: "IVVAB LABS Engine Range Benchmark Specification", type: "ACADEMIC", url: "https://ivvab.labs" }],
+    sources: [
+      {
+        title: "IVVAB LABS Engine Range Benchmark Specification",
+        type: "ACADEMIC",
+        url: "https://ivvab.labs",
+      },
+    ],
     quizzes: [
       {
         id: "q-lin-07",
@@ -677,10 +846,11 @@ FLAG{IVVAB_LINUX_COMMAND_MASTER_2026}
           "FLAG{IVVAB_LINUX_COMMAND_MASTER_2026}",
           "FLAG{ADMIN_ROOT_ACCESS_GRANTED}",
           "FLAG{DEFAULT_TEST_1234}",
-          "FLAG{NETWORK_SOLVED_2026}"
+          "FLAG{NETWORK_SOLVED_2026}",
         ],
         correct_option: 0,
-        explanation: "The cryptographic flag in the vault is FLAG{IVVAB_LINUX_COMMAND_MASTER_2026}.",
+        explanation:
+          "The cryptographic flag in the vault is FLAG{IVVAB_LINUX_COMMAND_MASTER_2026}.",
       },
     ],
   },
@@ -698,8 +868,10 @@ export const CYBER_FOUNDATIONS_MODULES: CurriculumModule[] = [
     duration_minutes: 20,
     difficulty: "BEGINNER",
     tags: ["Asset", "Vulnerability", "Threat", "Risk Equation"],
-    analogy: "The Digital Castle Analogy: Locking the front door, closing windows, safe storage, and verifying knocks before opening.",
-    summary: "The digital castle analogy, Asset vs Vulnerability vs Threat, and the master Risk Formula (Risk = Threat × Vulnerability × Impact).",
+    analogy:
+      "The Digital Castle Analogy: Locking the front door, closing windows, safe storage, and verifying knocks before opening.",
+    summary:
+      "The digital castle analogy, Asset vs Vulnerability vs Threat, and the master Risk Formula (Risk = Threat × Vulnerability × Impact).",
     notes_md: `### Lesson 1: What is Cybersecurity?
 Cybersecurity is not magic or rocket science—it is simply the practice of making digital environments safe.
 - **Asset**: Anything valuable you want to protect (photos, bank details, passwords).
@@ -710,12 +882,20 @@ Cybersecurity is not magic or rocket science—it is simply the practice of maki
 $$\\text{Risk} = \\text{Threat} \\times \\text{Vulnerability} \\times \\text{Impact}$$
 If there is high threat (active hackers) and high vulnerability (no password), the risk is extreme!`,
     diagram_type: "cia_triad",
-    sources: [{ title: "NIST Computer Security Handbook", type: "NIST", url: "https://csrc.nist.gov" }],
+    sources: [
+      { title: "NIST Computer Security Handbook", type: "NIST", url: "https://csrc.nist.gov" },
+    ],
     quizzes: [
       {
         id: "q-cf-01",
-        question: "If you leave your phone on a café table without a passcode, what is the vulnerability?",
-        options: ["The café Wi-Fi", "The lack of a passcode", "Your bank account", "The person sitting nearby"],
+        question:
+          "If you leave your phone on a café table without a passcode, what is the vulnerability?",
+        options: [
+          "The café Wi-Fi",
+          "The lack of a passcode",
+          "Your bank account",
+          "The person sitting nearby",
+        ],
         correct_option: 1,
         explanation: "The absence of a passcode lock is the security flaw (vulnerability).",
       },
@@ -729,8 +909,10 @@ If there is high threat (active hackers) and high vulnerability (no password), t
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["Confidentiality", "Integrity", "Availability"],
-    analogy: "Confidentiality = Sealed diary; Integrity = Unaltered grade report; Availability = Electricity staying on 24/7.",
-    summary: "Confidentiality (encryption/access), Integrity (hashing/signatures), and Availability (redundancy/load balancers).",
+    analogy:
+      "Confidentiality = Sealed diary; Integrity = Unaltered grade report; Availability = Electricity staying on 24/7.",
+    summary:
+      "Confidentiality (encryption/access), Integrity (hashing/signatures), and Availability (redundancy/load balancers).",
     notes_md: `### Lesson 2: The CIA Triad - The 3 Pillars
 Every security decision at top tech companies follows three core pillars:
 1. **Confidentiality**: Only authorized people can read data (Sealed personal letter).
@@ -742,14 +924,23 @@ Every security decision at top tech companies follows three core pillars:
 - **Grades altered in college database** -> Integrity breached. Defense: Cryptographic Hashing.
 - **DDoS crashes exam portal during finals** -> Availability breached. Defense: Load Balancers.`,
     diagram_type: "cia_triad",
-    sources: [{ title: "FIPS 199: Standards for Security Categorization", type: "NIST", citationNumber: "FIPS 199", url: "https://csrc.nist.gov" }],
+    sources: [
+      {
+        title: "FIPS 199: Standards for Security Categorization",
+        type: "NIST",
+        citationNumber: "FIPS 199",
+        url: "https://csrc.nist.gov",
+      },
+    ],
     quizzes: [
       {
         id: "q-cf-02",
-        question: "A ransomware virus encrypts your laptop files and demands ransom to access them. Which CIA pillar is directly destroyed first?",
+        question:
+          "A ransomware virus encrypts your laptop files and demands ransom to access them. Which CIA pillar is directly destroyed first?",
         options: ["Confidentiality", "Availability", "Integrity", "Accounting"],
         correct_option: 1,
-        explanation: "Ransomware immediately blocks legitimate access to files, destroying Availability first.",
+        explanation:
+          "Ransomware immediately blocks legitimate access to files, destroying Availability first.",
       },
     ],
   },
@@ -761,8 +952,10 @@ Every security decision at top tech companies follows three core pillars:
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["Parkerian Hexad", "Possession", "Authenticity", "Utility", "AAA"],
-    analogy: "The Airport Boarding Analogy: Showing passport (Authentication), showing boarding pass (Authorization), flight log entry (Accounting).",
-    summary: "Expanding beyond CIA with Possession, Authenticity, and Utility. Authentication, Authorization, and Accounting (AAA).",
+    analogy:
+      "The Airport Boarding Analogy: Showing passport (Authentication), showing boarding pass (Authorization), flight log entry (Accounting).",
+    summary:
+      "Expanding beyond CIA with Possession, Authenticity, and Utility. Authentication, Authorization, and Accounting (AAA).",
     notes_md: `### Lesson 3: Parkerian Hexad & AAA Framework
 - **Possession**: Having physical control over the drive/hardware.
 - **Authenticity**: Proving data or user identity is genuine and not forged.
@@ -773,19 +966,28 @@ Every security decision at top tech companies follows three core pillars:
 2. **Authorization**: Determining permitted actions (Role permissions).
 3. **Accounting**: Tracking and logging actions (Audit logs).`,
     diagram_type: "cia_triad",
-    sources: [{ title: "RFC 2904: AAA Authorization Framework", type: "RFC", citationNumber: "RFC 2904", url: "https://www.rfc-editor.org/rfc/rfc2904" }],
+    sources: [
+      {
+        title: "RFC 2904: AAA Authorization Framework",
+        type: "RFC",
+        citationNumber: "RFC 2904",
+        url: "https://www.rfc-editor.org/rfc/rfc2904",
+      },
+    ],
     quizzes: [
       {
         id: "q-cf-03",
-        question: "You enter your username and password correctly, but the app says 'Access Denied: Admins Only'. Which phase of AAA succeeded, and which failed?",
+        question:
+          "You enter your username and password correctly, but the app says 'Access Denied: Admins Only'. Which phase of AAA succeeded, and which failed?",
         options: [
           "Authentication succeeded; Authorization failed",
           "Authorization succeeded; Authentication failed",
           "Accounting succeeded; Authentication failed",
-          "All three failed"
+          "All three failed",
         ],
         correct_option: 0,
-        explanation: "Authentication verified your credentials, but Authorization checked your role and denied admin privileges.",
+        explanation:
+          "Authentication verified your credentials, but Authorization checked your role and denied admin privileges.",
       },
     ],
   },
@@ -797,7 +999,8 @@ Every security decision at top tech companies follows three core pillars:
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["Kill Chain", "Reconnaissance", "Weaponization", "Delivery", "Exploitation"],
-    analogy: "Locksmiths vs Burglars: Burglars need every step to succeed; defenders win by breaking ANY single link.",
+    analogy:
+      "Locksmiths vs Burglars: Burglars need every step to succeed; defenders win by breaking ANY single link.",
     summary: "The 7 stages of the Cyber Kill Chain and the defender's asymmetric advantage.",
     notes_md: `### Lesson 4: The Cyber Attack Lifecycle
 1. **Reconnaissance**: Researching target emails and infrastructure.
@@ -808,11 +1011,18 @@ Every security decision at top tech companies follows three core pillars:
 6. **Command & Control (C2)**: Infiltrated laptop phones home for orders.
 7. **Actions on Objectives**: Exfiltrating data or deploying ransomware.`,
     diagram_type: "soc_pipeline",
-    sources: [{ title: "Lockheed Martin Cyber Kill Chain", type: "NIST", url: "https://www.lockheedmartin.com" }],
+    sources: [
+      {
+        title: "Lockheed Martin Cyber Kill Chain",
+        type: "NIST",
+        url: "https://www.lockheedmartin.com",
+      },
+    ],
     quizzes: [
       {
         id: "q-cf-04",
-        question: "An attacker searches Google and LinkedIn for employee emails before launching an attack. Which Kill Chain step is this?",
+        question:
+          "An attacker searches Google and LinkedIn for employee emails before launching an attack. Which Kill Chain step is this?",
         options: ["Weaponization", "Reconnaissance", "Exploitation", "Installation"],
         correct_option: 1,
         explanation: "Gathering information prior to launching tools is Reconnaissance.",
@@ -827,8 +1037,10 @@ Every security decision at top tech companies follows three core pillars:
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["Phishing", "Spear Phishing", "Vishing", "Pretexting"],
-    analogy: "Manipulating human trust, fear, or urgency rather than breaking 256-bit mathematical encryption.",
-    summary: "Phishing, spear phishing, vishing, smishing, tailgating, and spotting suspicious email red flags.",
+    analogy:
+      "Manipulating human trust, fear, or urgency rather than breaking 256-bit mathematical encryption.",
+    summary:
+      "Phishing, spear phishing, vishing, smishing, tailgating, and spotting suspicious email red flags.",
     notes_md: `### Lesson 5: Social Engineering & Human Hacking
 - **Phishing**: Mass broadcast emails impersonating trusted brands.
 - **Spear Phishing**: Hyper-targeted emails utilizing specific victim research.
@@ -839,8 +1051,14 @@ Every security decision at top tech companies follows three core pillars:
     quizzes: [
       {
         id: "q-cf-05",
-        question: "An attacker calls an accountant posing as the CEO demanding an urgent wire transfer. What type of social engineering is this?",
-        options: ["Spear Phishing via email", "Vishing (Voice Phishing)", "Tailgating", "Dumpster Diving"],
+        question:
+          "An attacker calls an accountant posing as the CEO demanding an urgent wire transfer. What type of social engineering is this?",
+        options: [
+          "Spear Phishing via email",
+          "Vishing (Voice Phishing)",
+          "Tailgating",
+          "Dumpster Diving",
+        ],
         correct_option: 1,
         explanation: "Voice phishing conducted over phone calls is known as Vishing.",
       },
@@ -855,7 +1073,8 @@ Every security decision at top tech companies follows three core pillars:
     difficulty: "BEGINNER",
     tags: ["Virus", "Worm", "Trojan", "Ransomware", "Antivirus"],
     analogy: "Biological viruses requiring physical touch vs airborne self-spreading worms.",
-    summary: "Differences between viruses, worms, Trojans, ransomware, spyware/keyloggers, and how Antivirus heuristic matching functions.",
+    summary:
+      "Differences between viruses, worms, Trojans, ransomware, spyware/keyloggers, and how Antivirus heuristic matching functions.",
     notes_md: `### Lesson 6: Malware Breakdown
 - **Virus**: Requires human interaction (opening infected file) to attach and replicate.
 - **Worm**: Self-replicating; traverses corporate networks automatically without human clicks.
@@ -863,14 +1082,23 @@ Every security decision at top tech companies follows three core pillars:
 - **Ransomware**: Encrypts hard drives and extorts cryptocurrency payments.
 - **Antivirus Mechanics**: Signature matching (known hashes) + Heuristic analysis (watching behavioral anomalies).`,
     diagram_type: "cia_triad",
-    sources: [{ title: "NIST SP 800-83: Guide to Malware Incident Prevention", type: "NIST", citationNumber: "SP 800-83", url: "https://csrc.nist.gov" }],
+    sources: [
+      {
+        title: "NIST SP 800-83: Guide to Malware Incident Prevention",
+        type: "NIST",
+        citationNumber: "SP 800-83",
+        url: "https://csrc.nist.gov",
+      },
+    ],
     quizzes: [
       {
         id: "q-cf-06",
-        question: "What type of malware spreads across an entire corporate network without needing any user to click a file?",
+        question:
+          "What type of malware spreads across an entire corporate network without needing any user to click a file?",
         options: ["Trojan Horse", "Computer Worm", "Adware", "Macro Virus"],
         correct_option: 1,
-        explanation: "Worms are self-propagating and spread automatically across vulnerable network ports.",
+        explanation:
+          "Worms are self-propagating and spread automatically across vulnerable network ports.",
       },
     ],
   },
@@ -882,8 +1110,10 @@ Every security decision at top tech companies follows three core pillars:
     duration_minutes: 25,
     difficulty: "BEGINNER",
     tags: ["Brute-Force", "Credential Stuffing", "MFA", "Authenticator Apps"],
-    analogy: "The myth of complex passwords: changing 'a' to '@' doesn't stop computers testing millions of combinations per second.",
-    summary: "Brute-force vs credential stuffing, and the 3 MFA factor categories (Know, Have, Are).",
+    analogy:
+      "The myth of complex passwords: changing 'a' to '@' doesn't stop computers testing millions of combinations per second.",
+    summary:
+      "Brute-force vs credential stuffing, and the 3 MFA factor categories (Know, Have, Are).",
     notes_md: `### Lesson 7: Passwords & Authentication
 - **Password Attacks**: Brute-force guessing and Credential Stuffing using stolen dumps.
 - **Multi-Factor Authentication (MFA)**:
@@ -892,16 +1122,24 @@ Every security decision at top tech companies follows three core pillars:
   3. **Something You Are**: Fingerprint, Face ID, Retina biometric scan.
 - **NISQ Recommendation**: Prefer Authenticator apps over SMS OTPs (which are vulnerable to SIM-swap attacks).`,
     diagram_type: "cia_triad",
-    sources: [{ title: "NIST SP 800-63B: Digital Identity Guidelines", type: "NIST", citationNumber: "SP 800-63B", url: "https://csrc.nist.gov" }],
+    sources: [
+      {
+        title: "NIST SP 800-63B: Digital Identity Guidelines",
+        type: "NIST",
+        citationNumber: "SP 800-63B",
+        url: "https://csrc.nist.gov",
+      },
+    ],
     quizzes: [
       {
         id: "q-cf-07",
-        question: "Logging into an application using a Password AND a Fingerprint scan uses which two MFA factor categories?",
+        question:
+          "Logging into an application using a Password AND a Fingerprint scan uses which two MFA factor categories?",
         options: [
           "Something You Know + Something You Are",
           "Something You Have + Something You Know",
           "Something You Have + Something You Are",
-          "Two instances of Something You Know"
+          "Two instances of Something You Know",
         ],
         correct_option: 0,
         explanation: "A password is 'Something You Know' and a fingerprint is 'Something You Are'.",
@@ -916,8 +1154,10 @@ Every security decision at top tech companies follows three core pillars:
     duration_minutes: 30,
     difficulty: "INTERMEDIATE",
     tags: ["Encryption", "Hashing", "Symmetric", "Asymmetric", "TLS"],
-    analogy: "The Smoothie Blender: You can blend fruits into a smoothie (one-way hash), but you can never un-blend it back into whole fruits.",
-    summary: "Encryption vs Hashing vs Encoding, symmetric keys vs asymmetric key pairs (Public/Private), and HTTPS lock mechanics.",
+    analogy:
+      "The Smoothie Blender: You can blend fruits into a smoothie (one-way hash), but you can never un-blend it back into whole fruits.",
+    summary:
+      "Encryption vs Hashing vs Encoding, symmetric keys vs asymmetric key pairs (Public/Private), and HTTPS lock mechanics.",
     notes_md: `### Lesson 8: Cryptography 101
 - **Encryption**: Two-way cipher scrambled with keys (AES-256).
 - **Hashing**: One-way cryptographic fingerprint (SHA-256). Ideal for passwords.
@@ -925,19 +1165,28 @@ Every security decision at top tech companies follows three core pillars:
 - **Symmetric**: Single shared key (Fast, used for bulk data).
 - **Asymmetric**: Public key for encryption, Private key for decryption (Used for HTTPS key exchange).`,
     diagram_type: "cia_triad",
-    sources: [{ title: "FIPS 197: Advanced Encryption Standard (AES)", type: "NIST", citationNumber: "FIPS 197", url: "https://csrc.nist.gov" }],
+    sources: [
+      {
+        title: "FIPS 197: Advanced Encryption Standard (AES)",
+        type: "NIST",
+        citationNumber: "FIPS 197",
+        url: "https://csrc.nist.gov",
+      },
+    ],
     quizzes: [
       {
         id: "q-cf-08",
-        question: "Why do secure web applications store hashed passwords instead of encrypted passwords in their database?",
+        question:
+          "Why do secure web applications store hashed passwords instead of encrypted passwords in their database?",
         options: [
           "Hashing saves disk space because hashes are tiny",
           "Hashes are one-way and cannot be decrypted even if the database is leaked",
           "Hashing automatically emails users their passwords",
-          "Hashes require no CPU power to compute"
+          "Hashes require no CPU power to compute",
         ],
         correct_option: 1,
-        explanation: "Hashes are mathematically one-way, protecting user passwords from reverse decryption if breached.",
+        explanation:
+          "Hashes are mathematically one-way, protecting user passwords from reverse decryption if breached.",
       },
     ],
   },
@@ -950,19 +1199,28 @@ Every security decision at top tech companies follows three core pillars:
     difficulty: "INTERMEDIATE",
     tags: ["SOC", "Tier 1", "Tier 2", "SIEM", "Log Correlation"],
     analogy: "The 24/7 Mission Control Room monitoring radar feeds for suspicious enemy movement.",
-    summary: "SOC analyst tier hierarchy (Tier 1 Triage, Tier 2 Incident Response, Tier 3 Threat Hunter) and SIEM log correlation.",
+    summary:
+      "SOC analyst tier hierarchy (Tier 1 Triage, Tier 2 Incident Response, Tier 3 Threat Hunter) and SIEM log correlation.",
     notes_md: `### Lesson 9: Security Operations Center (SOC)
 - **Tier 1 Analyst**: Monitors incoming alerts, filters false positives, escalates true threats.
 - **Tier 2 Analyst**: Performs deep incident response and host isolation.
 - **Tier 3 Hunter**: Proactively hunts for hidden persistent adversaries.
 - **SIEM (Security Information and Event Management)**: Centralizes firewall, Windows security, and network logs to trigger alerts on anomalous behavior (e.g. impossible travel logins).`,
     diagram_type: "soc_pipeline",
-    sources: [{ title: "MITRE ATT&CK for SOC Operations", type: "MITRE", url: "https://attack.mitre.org" }],
+    sources: [
+      { title: "MITRE ATT&CK for SOC Operations", type: "MITRE", url: "https://attack.mitre.org" },
+    ],
     quizzes: [
       {
         id: "q-cf-09",
-        question: "Which entry-level SOC role is primarily responsible for triaging incoming SIEM alerts and eliminating false alarms?",
-        options: ["Tier 1 SOC Analyst", "Tier 3 Threat Hunter", "Chief Information Security Officer", "Lead Cryptographer"],
+        question:
+          "Which entry-level SOC role is primarily responsible for triaging incoming SIEM alerts and eliminating false alarms?",
+        options: [
+          "Tier 1 SOC Analyst",
+          "Tier 3 Threat Hunter",
+          "Chief Information Security Officer",
+          "Lead Cryptographer",
+        ],
         correct_option: 0,
         explanation: "Tier 1 analysts conduct the initial alert triage and eliminate false alarms.",
       },
@@ -976,8 +1234,10 @@ Every security decision at top tech companies follows three core pillars:
     duration_minutes: 30,
     difficulty: "INTERMEDIATE",
     tags: ["NIST", "Preparation", "Containment", "Eradication", "Recovery"],
-    analogy: "The Digital Firefighters: Disciplined 6-step protocol to isolate and extinguish fires safely without spreading.",
-    summary: "The 6 phases of NIST incident response: Preparation, Identification, Containment, Eradication, Recovery, and Lessons Learned.",
+    analogy:
+      "The Digital Firefighters: Disciplined 6-step protocol to isolate and extinguish fires safely without spreading.",
+    summary:
+      "The 6 phases of NIST incident response: Preparation, Identification, Containment, Eradication, Recovery, and Lessons Learned.",
     notes_md: `### Lesson 10: Incident Response Lifecycle (NIST)
 1. **Preparation**: Building playbooks, sensors, and response kits.
 2. **Identification**: Detecting anomalies and analyzing log evidence.
@@ -986,11 +1246,19 @@ Every security decision at top tech companies follows three core pillars:
 5. **Recovery**: Restoring clean operations from trusted backups.
 6. **Lessons Learned**: Writing reports and updating defenses so attacks cannot repeat.`,
     diagram_type: "soc_pipeline",
-    sources: [{ title: "NIST SP 800-61 Rev 2: Computer Security Incident Handling Guide", type: "NIST", citationNumber: "SP 800-61", url: "https://csrc.nist.gov" }],
+    sources: [
+      {
+        title: "NIST SP 800-61 Rev 2: Computer Security Incident Handling Guide",
+        type: "NIST",
+        citationNumber: "SP 800-61",
+        url: "https://csrc.nist.gov",
+      },
+    ],
     quizzes: [
       {
         id: "q-cf-10",
-        question: "Unplugging an infected computer's Ethernet cable to prevent malware spreading belongs to which step?",
+        question:
+          "Unplugging an infected computer's Ethernet cable to prevent malware spreading belongs to which step?",
         options: ["Preparation", "Containment", "Recovery", "Lessons Learned"],
         correct_option: 1,
         explanation: "Physically or logically isolating an infected system is part of Containment.",
@@ -1019,11 +1287,20 @@ export const AVAILABLE_COURSES: CurriculumCourse[] = [
     level: "Beginner",
     tier: "free",
     duration_hours: 8,
-    summary: "Complete 20-lesson foundational curriculum from fundamentals to defender mindset by Founder Ashok Vallabhuni.",
-    description: "The official gateway course for all security defenders. Master foundational threat principles, the CIA Triad, Parkerian Hexad, AAA framework, Lockheed Martin kill chain, password hygiene, cryptography, SOC triage, and incident response.",
+    summary:
+      "Complete 20-lesson foundational curriculum from fundamentals to defender mindset by Founder Ashok Vallabhuni.",
+    description:
+      "The official gateway course for all security defenders. Master foundational threat principles, the CIA Triad, Parkerian Hexad, AAA framework, Lockheed Martin kill chain, password hygiene, cryptography, SOC triage, and incident response.",
     badge_slug: "cybersecurity-foundations-badge",
     badge_name: "Cybersecurity Foundations Badge",
-    skills: ["CIA Triad & Parkerian Hexad", "Kill Chain Analysis", "Social Engineering Triage", "MFA & Authentication", "Cryptography Basics", "SOC & Incident Response"],
+    skills: [
+      "CIA Triad & Parkerian Hexad",
+      "Kill Chain Analysis",
+      "Social Engineering Triage",
+      "MFA & Authentication",
+      "Cryptography Basics",
+      "SOC & Incident Response",
+    ],
     modules: CYBER_FOUNDATIONS_MODULES,
   },
   {
@@ -1033,11 +1310,21 @@ export const AVAILABLE_COURSES: CurriculumCourse[] = [
     level: "Beginner to Intermediate",
     tier: "free",
     duration_hours: 10,
-    summary: "A complete 10-lesson guide (25 Pages) to topologies, media, hardware, IP/subnets, packets, OSI/TCP-IP, ports, DNS/HTTPS, firewalls, and CLI diagnostics.",
-    description: "Understand how computers connect, speak, route, and protect data—explained so simply a beginner can grasp it, yet rigorous enough for junior cyber defenders. Includes command-line labs with ping, tracert, nslookup, and Wireshark PCAPs.",
+    summary:
+      "A complete 10-lesson guide (25 Pages) to topologies, media, hardware, IP/subnets, packets, OSI/TCP-IP, ports, DNS/HTTPS, firewalls, and CLI diagnostics.",
+    description:
+      "Understand how computers connect, speak, route, and protect data—explained so simply a beginner can grasp it, yet rigorous enough for junior cyber defenders. Includes command-line labs with ping, tracert, nslookup, and Wireshark PCAPs.",
     badge_slug: "network-navigator",
     badge_name: "Network Navigator Badge",
-    skills: ["Network Topologies", "Physical Media & MAC Addressing", "Hubs vs Switches (CAM)", "IPv4 / IPv6 Subnetting", "TCP 3-Way Handshake", "DNS & Application Protocols", "CLI Diagnostics"],
+    skills: [
+      "Network Topologies",
+      "Physical Media & MAC Addressing",
+      "Hubs vs Switches (CAM)",
+      "IPv4 / IPv6 Subnetting",
+      "TCP 3-Way Handshake",
+      "DNS & Application Protocols",
+      "CLI Diagnostics",
+    ],
     modules: NETWORKING_MODULES,
   },
   {
@@ -1047,11 +1334,21 @@ export const AVAILABLE_COURSES: CurriculumCourse[] = [
     level: "Intermediate",
     tier: "free",
     duration_hours: 6,
-    summary: "From terminal novice to cyber operative: 7 skill zones, 5 IVVAB Labs quests, and Level 7 Boss Battle Operation Dark Horizon.",
-    description: "In cybersecurity, 90% of security servers and offensive tools run on Linux. Clear 6 practical skill zones (Navigation, File Construction, Permissions, Log Forensics, Sockets, Process Warfare) and defeat the final boss battle by capturing root flags.",
+    summary:
+      "From terminal novice to cyber operative: 7 skill zones, 5 IVVAB Labs quests, and Level 7 Boss Battle Operation Dark Horizon.",
+    description:
+      "In cybersecurity, 90% of security servers and offensive tools run on Linux. Clear 6 practical skill zones (Navigation, File Construction, Permissions, Log Forensics, Sockets, Process Warfare) and defeat the final boss battle by capturing root flags.",
     badge_slug: "linux-foundations",
     badge_name: "Linux Foundations Badge",
-    skills: ["Filesystem Navigation (pwd/ls/cd)", "Object Manipulation", "chmod / chown Permissions", "Log Forensics (grep/pipes)", "Netcat Listeners", "Process Warfare (kill/top)", "Boss Flag Capture"],
+    skills: [
+      "Filesystem Navigation (pwd/ls/cd)",
+      "Object Manipulation",
+      "chmod / chown Permissions",
+      "Log Forensics (grep/pipes)",
+      "Netcat Listeners",
+      "Process Warfare (kill/top)",
+      "Boss Flag Capture",
+    ],
     modules: LINUX_MODULES,
   },
   {
@@ -1061,11 +1358,21 @@ export const AVAILABLE_COURSES: CurriculumCourse[] = [
     level: "Comprehensive",
     tier: "free",
     duration_hours: 24,
-    summary: "150-page master handbook curriculum covering 52 sequential lessons from Reconnaissance & OSINT to Enterprise Active Directory.",
-    description: "The complete 52-lesson beginner-to-analyst roadmap. Spanning 4 modules (Module 1: Recon & OSINT, Module 2: System Exploitation, Module 3: Web Security, Module 4: Active Directory) powered by the IVVAB Labs engine and authorized by Chief Architect Ashok Vallabhuni.",
+    summary:
+      "150-page master handbook curriculum covering 52 sequential lessons from Reconnaissance & OSINT to Enterprise Active Directory.",
+    description:
+      "The complete 52-lesson beginner-to-analyst roadmap. Spanning 4 modules (Module 1: Recon & OSINT, Module 2: System Exploitation, Module 3: Web Security, Module 4: Active Directory) powered by the IVVAB Labs engine and authorized by Chief Architect Ashok Vallabhuni.",
     badge_slug: "soc-analyst-foundations-badge",
     badge_name: "Junior Cyber Defense Operative",
-    skills: ["OSINT & Google Dorking", "Nmap Port Scanning", "Metasploit Exploitation", "SQL Injection & XSS", "Active Directory & Kerberoasting", "Privilege Escalation", "Capstone Enterprise Exam"],
+    skills: [
+      "OSINT & Google Dorking",
+      "Nmap Port Scanning",
+      "Metasploit Exploitation",
+      "SQL Injection & XSS",
+      "Active Directory & Kerberoasting",
+      "Privilege Escalation",
+      "Capstone Enterprise Exam",
+    ],
     modules: MASTER_52_MODULES,
   },
 ];
@@ -1074,21 +1381,126 @@ export const AVAILABLE_COURSES: CurriculumCourse[] = [
 // LOCKED COURSES (Coming Soon)
 // ==========================================
 export const LOCKED_COURSES = [
-  { id: "locked-01", slug: "ethical-hacking", title: "Ethical Hacking", category: "Offensive", duration: "16 Hours", difficulty: "Intermediate" },
-  { id: "locked-02", slug: "penetration-testing", title: "Penetration Testing", category: "Offensive", duration: "20 Hours", difficulty: "Advanced" },
-  { id: "locked-03", slug: "web-security", title: "Web Security", category: "AppSec", duration: "14 Hours", difficulty: "Intermediate" },
-  { id: "locked-04", slug: "owasp-security", title: "OWASP Security", category: "AppSec", duration: "12 Hours", difficulty: "Intermediate" },
-  { id: "locked-05", slug: "soc-analyst", title: "SOC Analyst", category: "Defensive", duration: "22 Hours", difficulty: "Intermediate" },
-  { id: "locked-06", slug: "digital-forensics", title: "Digital Forensics", category: "DFIR", duration: "18 Hours", difficulty: "Advanced" },
-  { id: "locked-07", slug: "threat-intelligence", title: "Threat Intelligence", category: "Intel", duration: "14 Hours", difficulty: "Intermediate" },
-  { id: "locked-08", slug: "malware-analysis", title: "Malware Analysis", category: "Reverse Eng", duration: "24 Hours", difficulty: "Advanced" },
-  { id: "locked-09", slug: "cloud-security", title: "Cloud Security", category: "Cloud", duration: "16 Hours", difficulty: "Intermediate" },
-  { id: "locked-10", slug: "active-directory-security", title: "Active Directory Security", category: "Enterprise", duration: "18 Hours", difficulty: "Advanced" },
-  { id: "locked-11", slug: "osint", title: "OSINT (Open Source Intelligence)", category: "Intel", duration: "10 Hours", difficulty: "Beginner" },
-  { id: "locked-12", slug: "api-security", title: "API Security", category: "AppSec", duration: "12 Hours", difficulty: "Intermediate" },
-  { id: "locked-13", slug: "ai-security", title: "AI Security & LLM Defense", category: "AI Safety", duration: "15 Hours", difficulty: "Advanced" },
-  { id: "locked-14", slug: "incident-response", title: "Incident Response", category: "DFIR", duration: "16 Hours", difficulty: "Intermediate" },
-  { id: "locked-15", slug: "bug-bounty", title: "Bug Bounty Mastery", category: "Bounty", duration: "20 Hours", difficulty: "Advanced" },
+  {
+    id: "locked-01",
+    slug: "ethical-hacking",
+    title: "Ethical Hacking",
+    category: "Offensive",
+    duration: "16 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-02",
+    slug: "penetration-testing",
+    title: "Penetration Testing",
+    category: "Offensive",
+    duration: "20 Hours",
+    difficulty: "Advanced",
+  },
+  {
+    id: "locked-03",
+    slug: "web-security",
+    title: "Web Security",
+    category: "AppSec",
+    duration: "14 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-04",
+    slug: "owasp-security",
+    title: "OWASP Security",
+    category: "AppSec",
+    duration: "12 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-05",
+    slug: "soc-analyst",
+    title: "SOC Analyst",
+    category: "Defensive",
+    duration: "22 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-06",
+    slug: "digital-forensics",
+    title: "Digital Forensics",
+    category: "DFIR",
+    duration: "18 Hours",
+    difficulty: "Advanced",
+  },
+  {
+    id: "locked-07",
+    slug: "threat-intelligence",
+    title: "Threat Intelligence",
+    category: "Intel",
+    duration: "14 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-08",
+    slug: "malware-analysis",
+    title: "Malware Analysis",
+    category: "Reverse Eng",
+    duration: "24 Hours",
+    difficulty: "Advanced",
+  },
+  {
+    id: "locked-09",
+    slug: "cloud-security",
+    title: "Cloud Security",
+    category: "Cloud",
+    duration: "16 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-10",
+    slug: "active-directory-security",
+    title: "Active Directory Security",
+    category: "Enterprise",
+    duration: "18 Hours",
+    difficulty: "Advanced",
+  },
+  {
+    id: "locked-11",
+    slug: "osint",
+    title: "OSINT (Open Source Intelligence)",
+    category: "Intel",
+    duration: "10 Hours",
+    difficulty: "Beginner",
+  },
+  {
+    id: "locked-12",
+    slug: "api-security",
+    title: "API Security",
+    category: "AppSec",
+    duration: "12 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-13",
+    slug: "ai-security",
+    title: "AI Security & LLM Defense",
+    category: "AI Safety",
+    duration: "15 Hours",
+    difficulty: "Advanced",
+  },
+  {
+    id: "locked-14",
+    slug: "incident-response",
+    title: "Incident Response",
+    category: "DFIR",
+    duration: "16 Hours",
+    difficulty: "Intermediate",
+  },
+  {
+    id: "locked-15",
+    slug: "bug-bounty",
+    title: "Bug Bounty Mastery",
+    category: "Bounty",
+    duration: "20 Hours",
+    difficulty: "Advanced",
+  },
 ];
 
 export const COURSES_CATALOG: CurriculumCourse[] = AVAILABLE_COURSES;

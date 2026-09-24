@@ -72,13 +72,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "NISQ Vanguard Academy & Cyber Labs — Advanced Cybersecurity & Threat Intelligence Platform" },
+      { name: "theme-color", content: "#0ea5e9" },
+      {
+        title:
+          "NISQ Vanguard Academy & Cyber Labs — Advanced Cybersecurity & Threat Intelligence Platform",
+      },
       {
         name: "description",
         content:
           "NISQ Vanguard Academy & Cyber Labs: Enterprise-grade cybersecurity training, real data threat investigations, and hands-on cyber range labs.",
       },
       { name: "author", content: "NISQ Vanguard — Defence Technologies" },
+      { name: "application-name", content: "NISQ Vanguard" },
+      { name: "apple-mobile-web-app-title", content: "NISQ Vanguard" },
       {
         property: "og:title",
         content: "NISQ Vanguard Academy & Cyber Labs — Hands-on Cyber Defense",
@@ -89,6 +95,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Real-data cybersecurity learning platform, containerized cyber ranges, and defense intelligence.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "NISQ Vanguard" },
+      { property: "og:image", content: "/assets/nisq-logo.jpeg" },
+      { property: "og:image:type", content: "image/jpeg" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
@@ -99,20 +108,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Master defensive operations, network forensics, and threat hunting with real data and live cyber ranges.",
       },
-      {
-        property: "og:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7644f823-8e64-4f93-a61d-f9212f6ef494",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7644f823-8e64-4f93-a61d-f9212f6ef494",
-      },
+      { name: "twitter:image", content: "/assets/nisq-logo.jpeg" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/assets/nisq-logo.jpeg", type: "image/jpeg" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "apple-touch-icon", href: "/assets/nisq-logo.jpeg" },
+      { rel: "shortcut icon", href: "/assets/nisq-logo.jpeg", type: "image/jpeg" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -179,13 +182,16 @@ function TopNav() {
           <div className="font-display font-bold text-sm md:text-base tracking-wider text-foreground group-hover:text-primary transition-colors">
             NISQ <span className="text-primary">VANGUARD</span>
           </div>
-          <div className="font-mono text-[0.6rem] text-muted-foreground tracking-tight">ACADEMY</div>
+          <div className="font-mono text-[0.6rem] text-muted-foreground tracking-tight">
+            ACADEMY
+          </div>
         </div>
       </Link>
 
       <ul className="hidden lg:flex gap-1 items-center">
         {mainNav.map((item) => {
-          const isActive = pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
+          const isActive =
+            pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
           return (
             <li key={item.to}>
               <Link
@@ -198,9 +204,13 @@ function TopNav() {
               >
                 <span>{item.label}</span>
                 {item.badge && (
-                  <span className={`text-[0.6rem] px-1.5 py-0.5 rounded-xs font-mono uppercase ${
-                    isActive ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                  }`}>
+                  <span
+                    className={`text-[0.6rem] px-1.5 py-0.5 rounded-xs font-mono uppercase ${
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
                     {item.badge}
                   </span>
                 )}
@@ -260,7 +270,9 @@ function TopNav() {
 
       {open && (
         <div className="lg:hidden absolute top-16 inset-x-0 bg-card/95 backdrop-blur-md border-b border-border p-4 flex flex-col gap-2 shadow-lg animate-in slide-in-from-top-2">
-          <div className="font-mono text-[0.65rem] text-muted-foreground uppercase px-2 mb-1">Navigation</div>
+          <div className="font-mono text-[0.65rem] text-muted-foreground uppercase px-2 mb-1">
+            Navigation
+          </div>
           {mainNav.map((item) => (
             <Link
               key={item.to}

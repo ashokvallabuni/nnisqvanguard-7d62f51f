@@ -42,7 +42,8 @@ export function LabCard({ lab }: LabCardProps) {
           <div className="flex items-center gap-2">
             <span
               className={`text-[0.65rem] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full border font-medium ${
-                difficultyStyles[lab.difficulty.toLowerCase()] || "bg-muted text-muted-foreground border-border"
+                difficultyStyles[lab.difficulty.toLowerCase()] ||
+                "bg-muted text-muted-foreground border-border"
               }`}
             >
               {lab.difficulty}

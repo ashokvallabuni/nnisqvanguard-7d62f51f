@@ -45,7 +45,12 @@ export const evaluateBadge = createServerFn({ method: "POST" })
     }
 
     if (!dbBadge) {
-      return { awarded: false, alreadyHeld: false, badgeName: badge.name, message: "Badge record error." };
+      return {
+        awarded: false,
+        alreadyHeld: false,
+        badgeName: badge.name,
+        message: "Badge record error.",
+      };
     }
 
     // 2. Check if already awarded (composite PK user_id, badge_id)
@@ -57,7 +62,12 @@ export const evaluateBadge = createServerFn({ method: "POST" })
       .maybeSingle();
 
     if (existing) {
-      return { awarded: false, alreadyHeld: true, badgeName: badge.name, message: "Already earned." };
+      return {
+        awarded: false,
+        alreadyHeld: true,
+        badgeName: badge.name,
+        message: "Already earned.",
+      };
     }
 
     // 3. Evaluate genuine eligibility
@@ -86,10 +96,12 @@ export const evaluateBadge = createServerFn({ method: "POST" })
     }
 
     // 4. Award badge via service-role (bypasses RLS) — idempotent upsert
-    await supabaseAdmin.from("user_badges").upsert(
-      { user_id: userId, badge_id: dbBadge.id, awarded_at: new Date().toISOString() },
-      { onConflict: "user_id,badge_id" },
-    );
+    await supabaseAdmin
+      .from("user_badges")
+      .upsert(
+        { user_id: userId, badge_id: dbBadge.id, awarded_at: new Date().toISOString() },
+        { onConflict: "user_id,badge_id" },
+      );
 
     return {
       awarded: true,

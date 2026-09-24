@@ -18,6 +18,7 @@ import {
   Calendar,
   Sparkles,
   HelpCircle,
+  Home as HomeIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -30,7 +31,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
       { title: "Student Command Center — NISQ Vanguard Academy" },
       {
         name: "description",
-        content: "Track your cybersecurity learning progress, active cyber labs, and verified credentials.",
+        content:
+          "Track your cybersecurity learning progress, active cyber labs, and verified credentials.",
       },
     ],
   }),
@@ -108,16 +110,14 @@ function StudentDashboard() {
     queryKey: ["dash-user-badges", user?.id],
     queryFn: async () => {
       if (!user) return [];
-      const { data } = await supabase
-        .from("user_badges")
-        .select("badge_id,awarded_at");
+      const { data } = await supabase.from("user_badges").select("badge_id,awarded_at");
       return data ?? [];
     },
     enabled: !!user,
   });
 
   const completedModuleIds = new Set(
-    (progress ?? []).filter((p) => p.completed).map((p) => p.module_id)
+    (progress ?? []).filter((p) => p.completed).map((p) => p.module_id),
   );
 
   const completedModulesCount = completedModuleIds.size;
@@ -131,9 +131,7 @@ function StudentDashboard() {
     courses?.find((c) => c.slug === "cybersecurity-foundations") ||
     courses?.[0];
 
-  const courseModules = (allModules ?? []).filter(
-    (m) => m.course_id === activeCourse?.id
-  );
+  const courseModules = (allModules ?? []).filter((m) => m.course_id === activeCourse?.id);
   const nextModuleToResume =
     courseModules.find((m) => !completedModuleIds.has(m.id)) || courseModules[0];
 
@@ -143,7 +141,8 @@ function StudentDashboard() {
       return {
         stage: "STEP 1: START LESSON",
         title: "Begin with Networking Fundamentals (Module 1)",
-        description: "Learn how data packets traverse the physical and logical layers of the internet.",
+        description:
+          "Learn how data packets traverse the physical and logical layers of the internet.",
         linkTo: "/learn/networking-fundamentals/what-is-networking",
         ctaText: "Start First Lesson",
       };
@@ -153,7 +152,8 @@ function StudentDashboard() {
       return {
         stage: "STEP 2: EXPLORE REAL DATA",
         title: "Analyze CIC-IDS2018 Network Flow Telemetry",
-        description: "Examine live packet streams and detect SYN flood anomalies in the dataset viewer.",
+        description:
+          "Examine live packet streams and detect SYN flood anomalies in the dataset viewer.",
         linkTo: "/cyber-range/datasets",
         ctaText: "Explore Dataset",
       };
@@ -183,7 +183,12 @@ function StudentDashboard() {
     {
       name: "TCP/IP & Protocol Analysis",
       category: "Networking",
-      level: completedModulesCount >= 3 ? "PRACTICED" : completedModulesCount >= 1 ? "DEVELOPING" : "BEGINNER",
+      level:
+        completedModulesCount >= 3
+          ? "PRACTICED"
+          : completedModulesCount >= 1
+            ? "DEVELOPING"
+            : "BEGINNER",
       points: completedModulesCount * 30,
     },
     {
@@ -195,7 +200,8 @@ function StudentDashboard() {
     {
       name: "Suricata NIDS Threat Hunting",
       category: "Network Defense",
-      level: completedLabsCount >= 2 ? "PROFICIENT" : completedLabsCount >= 1 ? "PRACTICED" : "BEGINNER",
+      level:
+        completedLabsCount >= 2 ? "PROFICIENT" : completedLabsCount >= 1 ? "PRACTICED" : "BEGINNER",
       points: completedLabsCount * 75,
     },
     {
@@ -245,9 +251,7 @@ function StudentDashboard() {
             <div className="font-display font-bold text-2xl sm:text-3xl text-foreground">
               {completedModulesCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-muted-foreground">
-              Across curriculum
-            </div>
+            <div className="text-[0.65rem] font-mono text-muted-foreground">Across curriculum</div>
           </div>
 
           <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
@@ -258,9 +262,7 @@ function StudentDashboard() {
             <div className="font-display font-bold text-2xl sm:text-3xl text-foreground">
               {completedLabsCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-muted-foreground">
-              In Cyber Range
-            </div>
+            <div className="text-[0.65rem] font-mono text-muted-foreground">In Cyber Range</div>
           </div>
 
           <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
@@ -271,7 +273,10 @@ function StudentDashboard() {
             <div className="font-display font-bold text-2xl sm:text-3xl text-foreground">
               {totalBadgesEarned}
             </div>
-            <Link to="/achievements" className="text-[0.65rem] font-mono text-primary hover:underline">
+            <Link
+              to="/achievements"
+              className="text-[0.65rem] font-mono text-primary hover:underline"
+            >
               View Portfolio →
             </Link>
           </div>
@@ -325,8 +330,12 @@ function StudentDashboard() {
             {skillsMatrix.map((skill, i) => (
               <div key={i} className="p-4 rounded-xl border border-border bg-muted/20 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[0.6rem] font-mono text-muted-foreground uppercase">{skill.category}</span>
-                  <span className={`text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-md border font-semibold ${skillLevelBadges[skill.level]}`}>
+                  <span className="text-[0.6rem] font-mono text-muted-foreground uppercase">
+                    {skill.category}
+                  </span>
+                  <span
+                    className={`text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-md border font-semibold ${skillLevelBadges[skill.level]}`}
+                  >
                     {skill.level}
                   </span>
                 </div>
@@ -374,9 +383,7 @@ function StudentDashboard() {
                     <h4 className="font-display font-bold text-lg text-foreground line-clamp-1">
                       {c.title}
                     </h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {c.description}
-                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{c.description}</p>
                   </div>
 
                   <div className="space-y-3 pt-2 border-t border-border/60">
@@ -408,14 +415,31 @@ function StudentDashboard() {
         </div>
 
         {/* Quick Reference Tools */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <Link
+            to="/"
+            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between"
+          >
+            <div>
+              <div className="text-[0.65rem] font-mono text-cyber uppercase font-semibold">
+                Public Site
+              </div>
+              <div className="font-display font-bold text-sm text-foreground mt-0.5">Home</div>
+            </div>
+            <HomeIcon className="w-5 h-5 text-cyber" />
+          </Link>
+
           <Link
             to="/achievements"
             className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between"
           >
             <div>
-              <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">Verified Badges</div>
-              <div className="font-display font-bold text-sm text-foreground mt-0.5">Achievements Portfolio</div>
+              <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">
+                Verified Badges
+              </div>
+              <div className="font-display font-bold text-sm text-foreground mt-0.5">
+                Achievements Portfolio
+              </div>
             </div>
             <Award className="w-5 h-5 text-primary" />
           </Link>
@@ -425,8 +449,12 @@ function StudentDashboard() {
             className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between"
           >
             <div>
-              <div className="text-[0.65rem] font-mono text-accent uppercase font-semibold">Technical Lexicon</div>
-              <div className="font-display font-bold text-sm text-foreground mt-0.5">Cybersecurity Glossary</div>
+              <div className="text-[0.65rem] font-mono text-accent uppercase font-semibold">
+                Technical Lexicon
+              </div>
+              <div className="font-display font-bold text-sm text-foreground mt-0.5">
+                Cybersecurity Glossary
+              </div>
             </div>
             <BookOpen className="w-5 h-5 text-accent" />
           </Link>
@@ -437,8 +465,12 @@ function StudentDashboard() {
             className="p-5 rounded-xl border border-border bg-card hover:border-success/40 transition-colors flex items-center justify-between"
           >
             <div>
-              <div className="text-[0.65rem] font-mono text-success uppercase font-semibold">Credential Verification</div>
-              <div className="font-display font-bold text-sm text-foreground mt-0.5">Public Certificate Portal</div>
+              <div className="text-[0.65rem] font-mono text-success uppercase font-semibold">
+                Credential Verification
+              </div>
+              <div className="font-display font-bold text-sm text-foreground mt-0.5">
+                Public Certificate Portal
+              </div>
             </div>
             <CheckCircle2 className="w-5 h-5 text-success" />
           </Link>

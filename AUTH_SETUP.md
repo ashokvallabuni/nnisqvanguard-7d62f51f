@@ -1,6 +1,7 @@
 # NISQ Vanguard — Production Google OAuth & Authentication Configuration
 
 ## 1. Supabase Project Details
+
 - **Project Ref**: `cbyoozhtubavksiolgxz`
 - **Project URL**: `https://cbyoozhtubavksiolgxz.supabase.co`
 
@@ -9,15 +10,20 @@
 ## 2. Distinction Between Callback URIs
 
 ### A. Google Cloud Console → Supabase Auth Broker
+
 This is the **Authorized Redirect URI** configured inside the **Google Cloud Console (Credentials → OAuth 2.0 Client IDs)**:
+
 ```text
 https://cbyoozhtubavksiolgxz.supabase.co/auth/v1/callback
 ```
+
 > [!IMPORTANT]
 > Do NOT set your frontend `/auth/callback` in Google Cloud Console. Google talks directly to the Supabase Auth server broker (`...supabase.co/auth/v1/callback`).
 
 ### B. Supabase Dashboard → Frontend Application Redirect
+
 This is configured inside **Supabase Dashboard → Authentication → URL Configuration**:
+
 - **Site URL**:
   ```text
   https://<your-vercel-domain>.vercel.app
@@ -34,7 +40,7 @@ This is configured inside **Supabase Dashboard → Authentication → URL Config
 ## 3. Google Cloud Console Setup Step-by-Step
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services** → **Credentials**.
-2. Create or open an **OAuth 2.0 Client ID** (Application type: *Web application*).
+2. Create or open an **OAuth 2.0 Client ID** (Application type: _Web application_).
 3. **Authorized JavaScript origins**:
    - `http://localhost:5173`
    - `https://<your-vercel-domain>.vercel.app`
@@ -57,12 +63,14 @@ This is configured inside **Supabase Dashboard → Authentication → URL Config
 ## 5. Vercel & Local Environment Variables
 
 ### Frontend Environment Variables (Vercel & `.env.local`):
+
 ```bash
 VITE_SUPABASE_URL=https://cbyoozhtubavksiolgxz.supabase.co
 VITE_SUPABASE_ANON_KEY=<your-anon-publishable-key-from-supabase-dashboard>
 ```
 
 ### Server / Lab Runner Environment Variables (Never add `VITE_` prefix):
+
 ```bash
 SUPABASE_URL=https://cbyoozhtubavksiolgxz.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key-from-supabase-dashboard>
@@ -73,6 +81,7 @@ LAB_RUNNER_SECRET=<your-lab-runner-secret>
 ---
 
 ## 6. End-to-End Authentication Flow
+
 ```
 1. User clicks "Continue with Google"
    ↓

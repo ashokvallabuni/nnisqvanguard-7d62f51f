@@ -16,7 +16,9 @@ interface ExplainThisAssistantProps {
 
 export function ExplainThisAssistant({ explanations }: ExplainThisAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"quick" | "beginner" | "technical" | "security" | "practical">("beginner");
+  const [activeTab, setActiveTab] = useState<
+    "quick" | "beginner" | "technical" | "security" | "practical"
+  >("beginner");
 
   if (!explanations) return null;
 
@@ -44,7 +46,8 @@ export function ExplainThisAssistant({ explanations }: ExplainThisAssistantProps
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-primary" />
               <h4 className="font-display font-bold text-sm text-foreground">
-                Grounded Explanation Engine: <span className="text-primary">{explanations.conceptName}</span>
+                Grounded Explanation Engine:{" "}
+                <span className="text-primary">{explanations.conceptName}</span>
               </h4>
             </div>
             <button
@@ -84,7 +87,9 @@ export function ExplainThisAssistant({ explanations }: ExplainThisAssistantProps
 
           <div className="text-[0.65rem] font-mono text-muted-foreground flex items-center justify-between pt-1">
             <span>Authoritative curriculum synthesis</span>
-            <span className="text-primary font-semibold">Strictly grounded in technical RFC / NIST specs</span>
+            <span className="text-primary font-semibold">
+              Strictly grounded in technical RFC / NIST specs
+            </span>
           </div>
         </div>
       )}

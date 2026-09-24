@@ -1,11 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { callChatModel, clientKey, getAuth, json, logEvent, NISQ_SYSTEM_PROMPT, rateLimit } from "@/lib/api-helpers.server";
+import {
+  callChatModel,
+  clientKey,
+  getAuth,
+  json,
+  logEvent,
+  NISQ_SYSTEM_PROMPT,
+  rateLimit,
+} from "@/lib/api-helpers.server";
 import { handleSecurityChatQuery, formatAnalysisSummary } from "@/lib/agents/orchestrator";
 
 const Body = z.object({
   message: z.string().trim().min(1).max(4000),
-  history: z.array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().max(4000) })).max(20).optional(),
+  history: z
+    .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().max(4000) }))
+    .max(20)
+    .optional(),
 });
 
 export const Route = createFileRoute("/api/chat")({
@@ -26,7 +37,7 @@ export const Route = createFileRoute("/api/chat")({
           // Run through multi-agent orchestrator for security-related queries
           const { reply, analysis } = await handleSecurityChatQuery(
             parsed.message,
-            undefined // No pre-existing threat context
+            undefined, // No pre-existing threat context
           );
 
           // If agents found threats, include analysis summary in response
@@ -40,7 +51,10 @@ export const Route = createFileRoute("/api/chat")({
           if (enhancedReply === reply && !analysis) {
             const messages = [
               { role: "system" as const, content: NISQ_SYSTEM_PROMPT },
-              ...(parsed.history ?? []).map((h) => ({ role: h.role as "user" | "assistant", content: h.content })),
+              ...(parsed.history ?? []).map((h) => ({
+                role: h.role as "user" | "assistant",
+                content: h.content,
+              })),
               { role: "user" as const, content: parsed.message },
             ];
             enhancedReply = await callChatModel(messages);
@@ -61,10 +75,16 @@ export const Route = createFileRoute("/api/chat")({
                 user_id: ctx.userId,
                 input_type: "chat_query",
                 input_data: parsed.message,
-                detection_result: analysis.detection ? JSON.parse(JSON.stringify(analysis.detection)) : null,
-                analysis_result: analysis.analysis ? JSON.parse(JSON.stringify(analysis.analysis)) : null,
+                detection_result: analysis.detection
+                  ? JSON.parse(JSON.stringify(analysis.detection))
+                  : null,
+                analysis_result: analysis.analysis
+                  ? JSON.parse(JSON.stringify(analysis.analysis))
+                  : null,
                 risk_result: analysis.risk ? JSON.parse(JSON.stringify(analysis.risk)) : null,
-                response_result: analysis.response ? JSON.parse(JSON.stringify(analysis.response)) : null,
+                response_result: analysis.response
+                  ? JSON.parse(JSON.stringify(analysis.response))
+                  : null,
                 risk_score: analysis.risk?.riskScore ?? null,
                 severity: analysis.risk?.severity ?? null,
                 findings_count: analysis.detection?.findings.length ?? 0,
@@ -78,11 +98,15 @@ export const Route = createFileRoute("/api/chat")({
             "chat",
             parsed.message,
             { reply_length: enhancedReply.length, agent_analysis: analysis ? true : false },
-            analysis?.risk?.severity === "Critical" ? "High"
-              : analysis?.risk?.severity === "High" ? "High"
-              : analysis?.risk?.severity === "Medium" ? "Medium"
-              : analysis?.risk?.severity === "Low" ? "Low"
-              : "Unknown"
+            analysis?.risk?.severity === "Critical"
+              ? "High"
+              : analysis?.risk?.severity === "High"
+                ? "High"
+                : analysis?.risk?.severity === "Medium"
+                  ? "Medium"
+                  : analysis?.risk?.severity === "Low"
+                    ? "Low"
+                    : "Unknown",
           );
           return json({ reply: enhancedReply });
         } catch (e) {
@@ -93,4 +117,3 @@ export const Route = createFileRoute("/api/chat")({
     },
   },
 });
-

@@ -66,8 +66,6 @@ export const Route = createFileRoute("/api/progress")({
           ...(typeof body.quiz_score === "number" ? { quiz_score: body.quiz_score } : {}),
         };
 
-
-
         const { data, error } = await ctx.supabase
           .from("module_progress")
           .upsert(patch, { onConflict: "user_id,module_id" })

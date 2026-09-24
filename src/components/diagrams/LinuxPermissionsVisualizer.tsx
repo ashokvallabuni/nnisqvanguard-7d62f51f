@@ -34,7 +34,8 @@ export function LinuxPermissionsVisualizer() {
             <span>Interactive Linux File Permissions & `chmod` Calculator</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Toggle read, write, and execute bits to visualize symbolic modes, octal values, and security constraints.
+            Toggle read, write, and execute bits to visualize symbolic modes, octal values, and
+            security constraints.
           </p>
         </div>
         <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
@@ -82,7 +83,9 @@ export function LinuxPermissionsVisualizer() {
         {/* User (Owner) */}
         <div className="p-4 rounded-xl border border-border bg-muted/20 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-xs text-foreground uppercase font-mono">Owner (User)</span>
+            <span className="font-semibold text-xs text-foreground uppercase font-mono">
+              Owner (User)
+            </span>
             <span className="text-xs font-mono font-bold text-primary">{userVal} (rwx)</span>
           </div>
 
@@ -92,13 +95,14 @@ export function LinuxPermissionsVisualizer() {
               { key: "w", label: "Write (w = 2)", state: userPerms.w },
               { key: "x", label: "Execute (x = 1)", state: userPerms.x },
             ].map((p) => (
-              <label key={p.key} className="flex items-center gap-2 text-xs font-mono text-foreground cursor-pointer">
+              <label
+                key={p.key}
+                className="flex items-center gap-2 text-xs font-mono text-foreground cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={p.state}
-                  onChange={(e) =>
-                    setUserPerms((prev) => ({ ...prev, [p.key]: e.target.checked }))
-                  }
+                  onChange={(e) => setUserPerms((prev) => ({ ...prev, [p.key]: e.target.checked }))}
                   className="rounded accent-primary"
                 />
                 <span>{p.label}</span>
@@ -120,7 +124,10 @@ export function LinuxPermissionsVisualizer() {
               { key: "w", label: "Write (w = 2)", state: groupPerms.w },
               { key: "x", label: "Execute (x = 1)", state: groupPerms.x },
             ].map((p) => (
-              <label key={p.key} className="flex items-center gap-2 text-xs font-mono text-foreground cursor-pointer">
+              <label
+                key={p.key}
+                className="flex items-center gap-2 text-xs font-mono text-foreground cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={p.state}
@@ -138,7 +145,9 @@ export function LinuxPermissionsVisualizer() {
         {/* Others */}
         <div className="p-4 rounded-xl border border-border bg-muted/20 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-xs text-foreground uppercase font-mono">Others (World)</span>
+            <span className="font-semibold text-xs text-foreground uppercase font-mono">
+              Others (World)
+            </span>
             <span className="text-xs font-mono font-bold text-warning">{otherVal} (rwx)</span>
           </div>
 
@@ -148,7 +157,10 @@ export function LinuxPermissionsVisualizer() {
               { key: "w", label: "Write (w = 2)", state: otherPerms.w },
               { key: "x", label: "Execute (x = 1)", state: otherPerms.x },
             ].map((p) => (
-              <label key={p.key} className="flex items-center gap-2 text-xs font-mono text-foreground cursor-pointer">
+              <label
+                key={p.key}
+                className="flex items-center gap-2 text-xs font-mono text-foreground cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={p.state}
@@ -169,7 +181,9 @@ export function LinuxPermissionsVisualizer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-3">
           <div>
             <div className="text-slate-400 text-[0.65rem] uppercase">Symbolic Representation:</div>
-            <div className="text-2xl font-bold tracking-wider text-green-400 mt-0.5">{symbolic}</div>
+            <div className="text-2xl font-bold tracking-wider text-green-400 mt-0.5">
+              {symbolic}
+            </div>
           </div>
 
           <div className="text-right">
@@ -185,22 +199,19 @@ export function LinuxPermissionsVisualizer() {
             <span className="text-primary font-bold">User ({userVal}): </span>
             {userPerms.r ? "4(r) " : ""}
             {userPerms.w ? "+ 2(w) " : ""}
-            {userPerms.x ? "+ 1(x) " : ""}
-            = {userVal}
+            {userPerms.x ? "+ 1(x) " : ""}= {userVal}
           </div>
           <div>
             <span className="text-accent font-bold">Group ({groupVal}): </span>
             {groupPerms.r ? "4(r) " : ""}
             {groupPerms.w ? "+ 2(w) " : ""}
-            {groupPerms.x ? "+ 1(x) " : ""}
-            = {groupVal}
+            {groupPerms.x ? "+ 1(x) " : ""}= {groupVal}
           </div>
           <div>
             <span className="text-warning font-bold">Others ({otherVal}): </span>
             {otherPerms.r ? "4(r) " : ""}
             {otherPerms.w ? "+ 2(w) " : ""}
-            {otherPerms.x ? "+ 1(x) " : ""}
-            = {otherVal}
+            {otherPerms.x ? "+ 1(x) " : ""}= {otherVal}
           </div>
         </div>
       </div>
@@ -212,7 +223,8 @@ export function LinuxPermissionsVisualizer() {
           <div>
             <span className="font-bold font-mono uppercase">Security Risk Warning: </span>
             <span>
-              World-writable permissions (Others has write access) allow any local user or malicious process to overwrite, tamper with, or hijack this file. Never use 777 in production.
+              World-writable permissions (Others has write access) allow any local user or malicious
+              process to overwrite, tamper with, or hijack this file. Never use 777 in production.
             </span>
           </div>
         </div>

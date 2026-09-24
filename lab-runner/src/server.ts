@@ -84,7 +84,8 @@ export function createRunnerServer(
     flagDigest?: string;
   } = {},
 ) {
-  const runnerSecret = options.runnerSecret ?? process.env.LAB_RUNNER_SECRET ?? "nisq_lab_runner_secret_2026_dev";
+  const runnerSecret =
+    options.runnerSecret ?? process.env.LAB_RUNNER_SECRET ?? "nisq_lab_runner_secret_2026_dev";
   const provider = options.provider ?? new DockerProvider();
   const flagDigest =
     options.flagDigest ??
@@ -99,7 +100,8 @@ export function createRunnerServer(
       response.writeHead(204, {
         "access-control-allow-origin": "*",
         "access-control-allow-methods": "GET, POST, OPTIONS",
-        "access-control-allow-headers": "content-type, x-lab-runner-secret, x-authenticated-user-id",
+        "access-control-allow-headers":
+          "content-type, x-lab-runner-secret, x-authenticated-user-id",
       });
       response.end();
       return;
@@ -250,7 +252,12 @@ async function handleRequest(
     }
 
     // Allow 'reset', 'start', and 'stop' even if session is COMPLETED or STOPPED
-    if (session.status !== "RUNNING" && action !== "start" && action !== "reset" && action !== "stop") {
+    if (
+      session.status !== "RUNNING" &&
+      action !== "start" &&
+      action !== "reset" &&
+      action !== "stop"
+    ) {
       json(response, 409, { error: "SESSION_INACTIVE" });
       return;
     }

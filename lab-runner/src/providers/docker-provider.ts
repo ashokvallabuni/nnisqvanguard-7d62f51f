@@ -89,7 +89,7 @@ export class DockerProvider implements LabEnvironmentProvider {
 
   async createEnvironment(limits: EnvironmentLimits): Promise<Environment> {
     const containerName = `nisq-lab-${randomUUID()}`;
-    
+
     // Strict isolation flags
     // - non-root user 'analyst' (falls back safely inside container)
     // - resource constraints: cpus, memory, pids-limit
@@ -150,13 +150,7 @@ export class DockerProvider implements LabEnvironmentProvider {
 
     // Execute strictly inside the container as non-root 'analyst'
     // Fallback to default container user if analyst user resolution happens inside entrypoint
-    const args = [
-      "exec",
-      environmentId,
-      "bash",
-      "-c",
-      command,
-    ];
+    const args = ["exec", environmentId, "bash", "-c", command];
 
     return await runDocker(args, timeoutMs, maxOutputBytes);
   }

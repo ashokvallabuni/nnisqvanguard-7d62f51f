@@ -42,7 +42,10 @@ export function AuthoritativeSources({ sources }: AuthoritativeSourcesProps) {
 
       <div className="divide-y divide-border/60">
         {sources.map((src, idx) => (
-          <div key={idx} className="py-2.5 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
+          <div
+            key={idx}
+            className="py-2.5 first:pt-0 last:pb-0 flex items-start justify-between gap-4"
+          >
             <div className="space-y-0.5 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
@@ -52,14 +55,10 @@ export function AuthoritativeSources({ sources }: AuthoritativeSourcesProps) {
                 >
                   {src.type} {src.citationNumber ? `• ${src.citationNumber}` : ""}
                 </span>
-                <span className="font-semibold text-xs text-foreground truncate">
-                  {src.title}
-                </span>
+                <span className="font-semibold text-xs text-foreground truncate">{src.title}</span>
               </div>
               {src.notes && (
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {src.notes}
-                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{src.notes}</p>
               )}
             </div>
 

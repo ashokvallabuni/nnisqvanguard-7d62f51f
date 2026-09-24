@@ -41,7 +41,13 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
 
       if (dbQuiz) {
         if (dbQuiz.module_id !== data.moduleId) {
-          return { error: "QUIZ_INVALID", is_correct: false, score: 0, attempt_number: 0, explanation: "This quiz does not belong to the specified module." };
+          return {
+            error: "QUIZ_INVALID",
+            is_correct: false,
+            score: 0,
+            attempt_number: 0,
+            explanation: "This quiz does not belong to the specified module.",
+          };
         }
         correctOption = dbQuiz.correct_option;
         quizExplanation = dbQuiz.explanation;
@@ -72,7 +78,7 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
         outer: for (const course of AVAILABLE_COURSES) {
           for (const mod of course.modules) {
             const foundQuiz = mod.quizzes.find(
-              (q) => q.id === data.quizId || data.quizId.startsWith(mod.slug)
+              (q) => q.id === data.quizId || data.quizId.startsWith(mod.slug),
             );
             if (foundQuiz) {
               correctOption = foundQuiz.correct_option;
@@ -152,8 +158,11 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
           score,
           attempt_number: attemptNumber,
           explanation: isCorrect
-            ? (quizExplanation ?? "Correct! However, your session has expired. Please sign in again to save your progress.")
-            : (quizExplanation ? `Incorrect. ${quizExplanation}` : "Incorrect. Review the lesson and try again."),
+            ? (quizExplanation ??
+              "Correct! However, your session has expired. Please sign in again to save your progress.")
+            : quizExplanation
+              ? `Incorrect. ${quizExplanation}`
+              : "Incorrect. Review the lesson and try again.",
           warning: "SESSION_EXPIRED",
         };
       }
@@ -167,6 +176,8 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
       attempt_number: attemptNumber,
       explanation: isCorrect
         ? (quizExplanation ?? "Correct! Excellent work.")
-        : (quizExplanation ? `Incorrect. ${quizExplanation}` : "Incorrect. Review the lesson and try again."),
+        : quizExplanation
+          ? `Incorrect. ${quizExplanation}`
+          : "Incorrect. Review the lesson and try again.",
     };
   });

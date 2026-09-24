@@ -89,7 +89,9 @@ export function ModuleNavigation({
                     </span>
                   )}
                 </div>
-                <div className={`text-xs font-medium leading-snug line-clamp-2 ${isActive ? "text-primary font-semibold" : ""}`}>
+                <div
+                  className={`text-xs font-medium leading-snug line-clamp-2 ${isActive ? "text-primary font-semibold" : ""}`}
+                >
                   {m.title}
                 </div>
                 <div className="flex items-center gap-2 pt-0.5">

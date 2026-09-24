@@ -37,7 +37,9 @@ export function DatasetCatalogCard({ dataset, onPreview }: DatasetCatalogCardPro
           </div>
 
           <span className="text-xs font-mono text-muted-foreground">
-            {dataset.size_mb ? `${dataset.size_mb} MB` : `${dataset.record_count?.toLocaleString()} rows`}
+            {dataset.size_mb
+              ? `${dataset.size_mb} MB`
+              : `${dataset.record_count?.toLocaleString()} rows`}
           </span>
         </div>
 

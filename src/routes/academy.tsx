@@ -85,7 +85,9 @@ function AcademyPage() {
   // Calculate course stats & progress
   const coursesWithDetails: CourseData[] = useMemo(() => {
     if (!courses) return [];
-    const completedSet = new Set((userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id));
+    const completedSet = new Set(
+      (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id),
+    );
 
     return courses.map((c) => {
       const courseModules = (modules ?? []).filter((m) => m.course_id === c.id);
@@ -130,7 +132,8 @@ function AcademyPage() {
     });
   }, [coursesWithDetails, searchQuery, selectedLevel, selectedCategory]);
 
-  const beginnerCourse = coursesWithDetails.find((c) => c.slug === "cybersecurity-foundations") || coursesWithDetails[0];
+  const beginnerCourse =
+    coursesWithDetails.find((c) => c.slug === "cybersecurity-foundations") || coursesWithDetails[0];
 
   return (
     <div className="min-h-screen pt-16 pb-24">
@@ -196,11 +199,13 @@ function AcademyPage() {
                   {beginnerCourse.title}
                 </h2>
                 <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                  Start your cybersecurity journey with the foundational architecture: threat modeling, network traffic protocols, access controls, and authentication hygiene.
+                  Start your cybersecurity journey with the foundational architecture: threat
+                  modeling, network traffic protocols, access controls, and authentication hygiene.
                 </p>
                 <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-muted-foreground pt-1">
                   <span className="flex items-center gap-1">
-                    <BookOpen className="w-4 h-4 text-primary" /> {beginnerCourse.module_count} Modules
+                    <BookOpen className="w-4 h-4 text-primary" /> {beginnerCourse.module_count}{" "}
+                    Modules
                   </span>
                   <span className="flex items-center gap-1">
                     <Database className="w-4 h-4 text-accent" /> Real Telemetry Included
@@ -274,10 +279,13 @@ function AcademyPage() {
               <Shield className="w-10 h-10 text-destructive mx-auto" />
               <h4 className="font-semibold text-foreground">Database Connection Error</h4>
               <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Unable to load curriculum courses from the production database. Please ensure migrations have been applied.
+                Unable to load curriculum courses from the production database. Please ensure
+                migrations have been applied.
               </p>
               <div className="text-xs font-mono text-destructive/80">
-                {courseError instanceof Error ? courseError.message : "Error connecting to Supabase"}
+                {courseError instanceof Error
+                  ? courseError.message
+                  : "Error connecting to Supabase"}
               </div>
             </div>
           ) : !courses || courses.length === 0 ? (
@@ -309,11 +317,7 @@ function AcademyPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCourses.map((course) => (
-                <CourseCard
-                  key={course.id}
-                  course={course}
-                  progress={course.progress_percent}
-                />
+                <CourseCard key={course.id} course={course} progress={course.progress_percent} />
               ))}
             </div>
           )}
@@ -324,13 +328,16 @@ function AcademyPage() {
           <div className="space-y-2 text-center sm:text-left">
             <div className="flex items-center gap-2 justify-center sm:justify-start">
               <Terminal className="w-4 h-4 text-primary" />
-              <span className="text-xs font-mono text-muted-foreground uppercase">PRACTICAL EXTENSION</span>
+              <span className="text-xs font-mono text-muted-foreground uppercase">
+                PRACTICAL EXTENSION
+              </span>
             </div>
             <h4 className="font-display font-bold text-xl text-foreground">
               Ready for live command-line execution?
             </h4>
             <p className="text-sm text-muted-foreground max-w-xl">
-              Apply what you've learned inside real Docker-isolated virtual environments with live attack traffic and forensic telemetry.
+              Apply what you've learned inside real Docker-isolated virtual environments with live
+              attack traffic and forensic telemetry.
             </p>
           </div>
           <Link

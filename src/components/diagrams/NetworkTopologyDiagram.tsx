@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Laptop, Server, Router, Network, Globe, Shield, ArrowRight, Info, AlertTriangle } from "lucide-react";
+import {
+  Laptop,
+  Server,
+  Router,
+  Network,
+  Globe,
+  Shield,
+  ArrowRight,
+  Info,
+  AlertTriangle,
+} from "lucide-react";
 
 interface ComponentDetail {
   id: string;
@@ -15,8 +25,10 @@ const NETWORK_COMPONENTS: Record<string, ComponentDetail> = {
     id: "client",
     name: "Client Workstation / Endpoint",
     role: "Originates user requests (e.g. browser fetching web page, terminal sending SSH packet).",
-    dataHandled: "Plaintext application data, user credentials, local socket connections (Source Port: e.g. 54102).",
-    securityConcerns: "Malware infection, keylogging, unencrypted credential cache, rogue DNS resolver configuration.",
+    dataHandled:
+      "Plaintext application data, user credentials, local socket connections (Source Port: e.g. 54102).",
+    securityConcerns:
+      "Malware infection, keylogging, unencrypted credential cache, rogue DNS resolver configuration.",
     layer: "Layer 7 (Application) down to Layer 1 (Physical)",
   },
   switch: {
@@ -24,31 +36,38 @@ const NETWORK_COMPONENTS: Record<string, ComponentDetail> = {
     name: "Layer 2 Ethernet Switch",
     role: "Forwards Ethernet frames within the local area network (LAN) using MAC address lookup tables (CAM table).",
     dataHandled: "Ethernet frames, Source/Destination MAC addresses, VLAN tags (802.1Q).",
-    securityConcerns: "ARP spoofing / cache poisoning, MAC flooding attacks, rogue DHCP servers, VLAN hopping.",
+    securityConcerns:
+      "ARP spoofing / cache poisoning, MAC flooding attacks, rogue DHCP servers, VLAN hopping.",
     layer: "Layer 2 (Data Link Layer)",
   },
   router: {
     id: "router",
     name: "Network Gateway / Router / Firewall",
     role: "Routes IP packets across different network subnets, performs NAT (Network Address Translation), and enforces ACLs.",
-    dataHandled: "IP Packets (IPv4/IPv6), Routing tables (BGP/OSPF), NAT state tables, stateful firewall inspects.",
-    securityConcerns: "Route hijacking, unauthenticated management interfaces, IP spoofing, DDoS saturation.",
+    dataHandled:
+      "IP Packets (IPv4/IPv6), Routing tables (BGP/OSPF), NAT state tables, stateful firewall inspects.",
+    securityConcerns:
+      "Route hijacking, unauthenticated management interfaces, IP spoofing, DDoS saturation.",
     layer: "Layer 3 (Network Layer) & Layer 4 (Transport)",
   },
   internet: {
     id: "internet",
     name: "Public Internet & Transit Backbone",
     role: "Global mesh of autonomous systems (AS) routing packets across fiber optic backbones and undersea cables.",
-    dataHandled: "Encapsulated global transit IP packets, DNS root queries, TLS-encrypted application payloads.",
-    securityConcerns: "BGP route leaks, adversary wiretapping / surveillance, Man-in-the-Middle (MitM) attacks.",
+    dataHandled:
+      "Encapsulated global transit IP packets, DNS root queries, TLS-encrypted application payloads.",
+    securityConcerns:
+      "BGP route leaks, adversary wiretapping / surveillance, Man-in-the-Middle (MitM) attacks.",
     layer: "Global Autonomous Transit",
   },
   server: {
     id: "server",
     name: "Destination Application Server",
     role: "Listens on dedicated TCP/UDP daemon ports (e.g. 443 for HTTPS, 22 for SSH) and serves client requests.",
-    dataHandled: "Decrypted application payloads, database transaction queries, authorization tokens, access logs.",
-    securityConcerns: "Remote Code Execution (RCE), SQL injection, unpatched service vulnerabilities, privilege escalation.",
+    dataHandled:
+      "Decrypted application payloads, database transaction queries, authorization tokens, access logs.",
+    securityConcerns:
+      "Remote Code Execution (RCE), SQL injection, unpatched service vulnerabilities, privilege escalation.",
     layer: "Layer 7 (Application Layer)",
   },
 };
@@ -66,7 +85,8 @@ export function NetworkTopologyDiagram() {
             <span>Interactive Network Topology & Packet Traversal</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Click each network node to inspect its technical role, data processed, and security considerations.
+            Click each network node to inspect its technical role, data processed, and security
+            considerations.
           </p>
         </div>
         <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
@@ -189,7 +209,9 @@ export function NetworkTopologyDiagram() {
               <span className="font-mono text-[0.65rem] uppercase text-destructive font-semibold flex items-center gap-1">
                 <AlertTriangle className="w-3 h-3" /> Security Concerns
               </span>
-              <p className="text-foreground/90 leading-relaxed">{activeComponent.securityConcerns}</p>
+              <p className="text-foreground/90 leading-relaxed">
+                {activeComponent.securityConcerns}
+              </p>
             </div>
           </div>
         </div>

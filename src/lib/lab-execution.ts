@@ -10,12 +10,7 @@ import {
 } from "@/lib/lab-runner.functions";
 
 export type LabExecutionState =
-  | "configuration_required"
-  | "connecting"
-  | "running"
-  | "stopped"
-  | "completed"
-  | "error";
+  "configuration_required" | "connecting" | "running" | "stopped" | "completed" | "error";
 
 export type LabSession = {
   id: string | null;

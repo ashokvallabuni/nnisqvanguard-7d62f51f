@@ -24,12 +24,7 @@ export function IpSubnetVisualizer() {
       const broadcastNum = (netNum | ~maskNum) >>> 0;
 
       const numToIp = (num: number) =>
-        [
-          (num >>> 24) & 255,
-          (num >>> 16) & 255,
-          (num >>> 8) & 255,
-          num & 255,
-        ].join(".");
+        [(num >>> 24) & 255, (num >>> 16) & 255, (num >>> 8) & 255, num & 255].join(".");
 
       const toBinary = (num: number) =>
         [
@@ -73,7 +68,8 @@ export function IpSubnetVisualizer() {
             <span>Interactive IPv4 Subnetting & CIDR Calculator</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Modify the IP and CIDR prefix to calculate network boundaries, host ranges, and binary bit masks.
+            Modify the IP and CIDR prefix to calculate network boundaries, host ranges, and binary
+            bit masks.
           </p>
         </div>
         <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
@@ -134,7 +130,9 @@ export function IpSubnetVisualizer() {
           {/* Calculated Output Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
             <div className="p-3 rounded-lg border border-border bg-muted/30 space-y-1">
-              <span className="text-[0.65rem] text-muted-foreground uppercase">Network Address</span>
+              <span className="text-[0.65rem] text-muted-foreground uppercase">
+                Network Address
+              </span>
               <div className="font-bold text-sm text-primary">{calculation.networkAddress}</div>
             </div>
 
@@ -144,13 +142,17 @@ export function IpSubnetVisualizer() {
             </div>
 
             <div className="p-3 rounded-lg border border-border bg-muted/30 space-y-1">
-              <span className="text-[0.65rem] text-muted-foreground uppercase">Broadcast Address</span>
+              <span className="text-[0.65rem] text-muted-foreground uppercase">
+                Broadcast Address
+              </span>
               <div className="font-bold text-sm text-accent">{calculation.broadcastAddress}</div>
             </div>
 
             <div className="p-3 rounded-lg border border-border bg-muted/30 space-y-1">
               <span className="text-[0.65rem] text-muted-foreground uppercase">Usable Hosts</span>
-              <div className="font-bold text-sm text-success">{calculation.usableHosts.toLocaleString()}</div>
+              <div className="font-bold text-sm text-success">
+                {calculation.usableHosts.toLocaleString()}
+              </div>
             </div>
           </div>
 

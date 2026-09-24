@@ -16,16 +16,20 @@ export const Route = createFileRoute("/api/upload")({
 
         const form = await request.formData().catch(() => null);
         const file = form?.get("file");
-        if (!(file instanceof File)) return json({ error: "No file uploaded (field: 'file')" }, 400);
+        if (!(file instanceof File))
+          return json({ error: "No file uploaded (field: 'file')" }, 400);
         if (file.size === 0) return json({ error: "Empty file" }, 400);
-        if (file.size > MAX_BYTES) return json({ error: `File too large (max ${MAX_BYTES} bytes)` }, 413);
+        if (file.size > MAX_BYTES)
+          return json({ error: `File too large (max ${MAX_BYTES} bytes)` }, 413);
 
         try {
           // Submit
           const submitForm = new FormData();
           submitForm.append("file", file, file.name);
           const submit = await fetch("https://www.virustotal.com/api/v3/files", {
-            method: "POST", headers: { "x-apikey": key }, body: submitForm,
+            method: "POST",
+            headers: { "x-apikey": key },
+            body: submitForm,
           });
           if (!submit.ok) {
             const t = await submit.text();
@@ -40,9 +44,13 @@ export const Route = createFileRoute("/api/upload")({
           let status = "queued";
           for (let i = 0; i < 10; i++) {
             await new Promise((r) => setTimeout(r, 2000));
-            const a = await fetch(`https://www.virustotal.com/api/v3/analyses/${analysisId}`, { headers: { "x-apikey": key } });
+            const a = await fetch(`https://www.virustotal.com/api/v3/analyses/${analysisId}`, {
+              headers: { "x-apikey": key },
+            });
             if (!a.ok) continue;
-            const aj = (await a.json()) as { data?: { attributes?: { status?: string; stats?: Record<string, number> } } };
+            const aj = (await a.json()) as {
+              data?: { attributes?: { status?: string; stats?: Record<string, number> } };
+            };
             status = aj.data?.attributes?.status ?? status;
             stats = aj.data?.attributes?.stats;
             if (status === "completed") break;
@@ -50,10 +58,16 @@ export const Route = createFileRoute("/api/upload")({
 
           const malicious = stats?.malicious ?? 0;
           const suspicious = stats?.suspicious ?? 0;
-          const risk: "Low" | "Medium" | "High" = malicious > 0 ? "High" : suspicious > 0 ? "Medium" : "Low";
+          const risk: "Low" | "Medium" | "High" =
+            malicious > 0 ? "High" : suspicious > 0 ? "Medium" : "Low";
           const result = {
-            filename: file.name, size: file.size, type: file.type,
-            analysisId, status, stats: stats ?? null, risk,
+            filename: file.name,
+            size: file.size,
+            type: file.type,
+            analysisId,
+            status,
+            stats: stats ?? null,
+            risk,
             verdict: risk === "High" ? "Dangerous" : risk === "Medium" ? "Suspicious" : "Clean",
           };
           await logEvent(ctx, "file", `${file.name} (${file.size}b)`, result, risk);

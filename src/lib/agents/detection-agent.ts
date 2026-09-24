@@ -38,7 +38,7 @@ function generateRequestId(): string {
 
 export async function runDetection(
   input: string,
-  context?: Partial<AgentContext>
+  context?: Partial<AgentContext>,
 ): Promise<DetectionResult> {
   const messages = [
     { role: "system" as const, content: DETECTION_SYSTEM_PROMPT },
@@ -91,4 +91,3 @@ function clampScore(n: unknown): number {
   if (isNaN(v)) return 0;
   return Math.max(0, Math.min(100, Math.round(v)));
 }
-

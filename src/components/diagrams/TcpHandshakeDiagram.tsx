@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { ArrowRight, ArrowLeft, Shield, AlertTriangle, CheckCircle2, RotateCcw, Info, Activity } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowLeft,
+  Shield,
+  AlertTriangle,
+  CheckCircle2,
+  RotateCcw,
+  Info,
+  Activity,
+} from "lucide-react";
 
 interface HandshakeStep {
   step: number;
@@ -22,8 +31,10 @@ const HANDSHAKE_STEPS: HandshakeStep[] = [
     flags: "SYN=1, ACK=0",
     seqNumber: "ISN (e.g. 1000)",
     ackNumber: "0",
-    description: "The client selects an Initial Sequence Number (ISN) and sends a TCP packet with the SYN flag set to request a new reliable connection on port 443.",
-    securityNotes: "Adversaries exploit this step in SYN Flood attacks by transmitting thousands of spoofed SYN packets without completing the handshake, exhausting the server's TCP backlog queue.",
+    description:
+      "The client selects an Initial Sequence Number (ISN) and sends a TCP packet with the SYN flag set to request a new reliable connection on port 443.",
+    securityNotes:
+      "Adversaries exploit this step in SYN Flood attacks by transmitting thousands of spoofed SYN packets without completing the handshake, exhausting the server's TCP backlog queue.",
   },
   {
     step: 2,
@@ -33,8 +44,10 @@ const HANDSHAKE_STEPS: HandshakeStep[] = [
     flags: "SYN=1, ACK=1",
     seqNumber: "Server ISN (e.g. 5000)",
     ackNumber: "Client ISN + 1 (1001)",
-    description: "The server acknowledges the client's ISN by setting Ack = 1001, chooses its own random ISN (5000), and sends a SYN-ACK packet back to the client.",
-    securityNotes: "Servers use SYN Cookies (cryptographically derived sequence numbers) to resist SYN flood resource exhaustion without allocating state in memory until step 3 arrives.",
+    description:
+      "The server acknowledges the client's ISN by setting Ack = 1001, chooses its own random ISN (5000), and sends a SYN-ACK packet back to the client.",
+    securityNotes:
+      "Servers use SYN Cookies (cryptographically derived sequence numbers) to resist SYN flood resource exhaustion without allocating state in memory until step 3 arrives.",
   },
   {
     step: 3,
@@ -44,8 +57,10 @@ const HANDSHAKE_STEPS: HandshakeStep[] = [
     flags: "SYN=0, ACK=1",
     seqNumber: "1001",
     ackNumber: "Server ISN + 1 (5001)",
-    description: "The client acknowledges the server's sequence number by setting Ack = 5001. The connection transitions to ESTABLISHED on both endpoints.",
-    securityNotes: "Once ESTABLISHED, TLS negotiation (ClientHello / ServerHello) begins over this reliable byte stream. TCP RST packets can be injected by adversaries if sequence numbers are guessable.",
+    description:
+      "The client acknowledges the server's sequence number by setting Ack = 5001. The connection transitions to ESTABLISHED on both endpoints.",
+    securityNotes:
+      "Once ESTABLISHED, TLS negotiation (ClientHello / ServerHello) begins over this reliable byte stream. TCP RST packets can be injected by adversaries if sequence numbers are guessable.",
   },
 ];
 
@@ -62,7 +77,8 @@ export function TcpHandshakeDiagram() {
             <span>Interactive TCP 3-Way Handshake Visualizer</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Click each packet phase (01 $\to$ 02 $\to$ 03) to inspect the TCP header flags, sequence math, and security implications.
+            Click each packet phase (01 $\to$ 02 $\to$ 03) to inspect the TCP header flags, sequence
+            math, and security implications.
           </p>
         </div>
         <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
@@ -135,7 +151,9 @@ export function TcpHandshakeDiagram() {
             <div className="flex items-center justify-between">
               <span className="text-slate-300">SYN-SENT</span>
               <div className="flex items-center gap-2 text-[0.7rem]">
-                <span>&lt;------------------ [ SYN=1, ACK=1, Seq=5000, Ack=1001 ] ----------------</span>
+                <span>
+                  &lt;------------------ [ SYN=1, ACK=1, Seq=5000, Ack=1001 ] ----------------
+                </span>
               </div>
               <span className="font-bold text-accent">2. [SYN-ACK]</span>
             </div>
@@ -153,7 +171,9 @@ export function TcpHandshakeDiagram() {
             <div className="flex items-center justify-between">
               <span className="font-bold text-success">3. [ACK]</span>
               <div className="flex items-center gap-2 text-[0.7rem]">
-                <span>------------------- [ SYN=0, ACK=1, Seq=1001, Ack=5001 ] ------------------&gt;</span>
+                <span>
+                  ------------------- [ SYN=0, ACK=1, Seq=1001, Ack=5001 ] ------------------&gt;
+                </span>
               </div>
               <span className="text-success font-bold">ESTABLISHED</span>
             </div>
@@ -187,8 +207,12 @@ export function TcpHandshakeDiagram() {
               Sequence Number Calculations
             </span>
             <div className="font-mono text-[0.7rem] text-foreground">
-              <div>Sequence: <span className="text-primary font-bold">{current.seqNumber}</span></div>
-              <div>Acknowledgment: <span className="text-accent font-bold">{current.ackNumber}</span></div>
+              <div>
+                Sequence: <span className="text-primary font-bold">{current.seqNumber}</span>
+              </div>
+              <div>
+                Acknowledgment: <span className="text-accent font-bold">{current.ackNumber}</span>
+              </div>
             </div>
           </div>
 

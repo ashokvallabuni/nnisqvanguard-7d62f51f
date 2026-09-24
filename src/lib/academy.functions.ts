@@ -52,8 +52,16 @@ export const completeModule = createServerFn({ method: "POST" })
       }
     } catch (err: any) {
       const msg: string = err?.message ?? "";
-      if (msg.includes("JWT expired") || msg.includes("token is expired") || msg.includes("Unauthorized")) {
-        return { error: "SESSION_EXPIRED", completed: false, message: "Your session has expired. Please sign in again to continue." };
+      if (
+        msg.includes("JWT expired") ||
+        msg.includes("token is expired") ||
+        msg.includes("Unauthorized")
+      ) {
+        return {
+          error: "SESSION_EXPIRED",
+          completed: false,
+          message: "Your session has expired. Please sign in again to continue.",
+        };
       }
     }
 
@@ -68,7 +76,11 @@ export const completeModule = createServerFn({ method: "POST" })
     }
 
     if (!courseId) {
-      return { error: "COURSE_NOT_FOUND", completed: false, message: "Course not found. Please refresh and try again." };
+      return {
+        error: "COURSE_NOT_FOUND",
+        completed: false,
+        message: "Course not found. Please refresh and try again.",
+      };
     }
 
     // ── 2. Resolve module ID ────────────────────────────────────────────────
@@ -88,8 +100,16 @@ export const completeModule = createServerFn({ method: "POST" })
       }
     } catch (err: any) {
       const msg: string = err?.message ?? "";
-      if (msg.includes("JWT expired") || msg.includes("token is expired") || msg.includes("Unauthorized")) {
-        return { error: "SESSION_EXPIRED", completed: false, message: "Your session has expired. Please sign in again to continue." };
+      if (
+        msg.includes("JWT expired") ||
+        msg.includes("token is expired") ||
+        msg.includes("Unauthorized")
+      ) {
+        return {
+          error: "SESSION_EXPIRED",
+          completed: false,
+          message: "Your session has expired. Please sign in again to continue.",
+        };
       }
     }
 
@@ -105,7 +125,11 @@ export const completeModule = createServerFn({ method: "POST" })
     }
 
     if (!moduleId) {
-      return { error: "MODULE_NOT_FOUND", completed: false, message: "Module not found. Please refresh and try again." };
+      return {
+        error: "MODULE_NOT_FOUND",
+        completed: false,
+        message: "Module not found. Please refresh and try again.",
+      };
     }
 
     // ── 3. Persist module completion ────────────────────────────────────────
@@ -122,8 +146,16 @@ export const completeModule = createServerFn({ method: "POST" })
       );
     } catch (err: any) {
       const msg: string = err?.message ?? "";
-      if (msg.includes("JWT expired") || msg.includes("token is expired") || msg.includes("Unauthorized")) {
-        return { error: "SESSION_EXPIRED", completed: false, message: "Your session has expired. Please sign in again to save your progress." };
+      if (
+        msg.includes("JWT expired") ||
+        msg.includes("token is expired") ||
+        msg.includes("Unauthorized")
+      ) {
+        return {
+          error: "SESSION_EXPIRED",
+          completed: false,
+          message: "Your session has expired. Please sign in again to save your progress.",
+        };
       }
       // Non-session DB error — log and continue (don't block the user)
       console.warn("[completeModule] Warning saving module progress to DB:", err);
@@ -156,7 +188,10 @@ export const completeModule = createServerFn({ method: "POST" })
             .select("module_id", { count: "exact", head: true })
             .eq("user_id", userId)
             .eq("completed", true)
-            .in("module_id", allModules.map((m) => m.id));
+            .in(
+              "module_id",
+              allModules.map((m) => m.id),
+            );
 
           if ((completedCount ?? 0) >= allModules.length) {
             // All modules done — issue certificate if not already issued
@@ -197,7 +232,7 @@ export const completeModule = createServerFn({ method: "POST" })
 
     return {
       completed: true,
-      moduleId,       // Fixed: was incorrectly using `module.id` (undefined) in old code
+      moduleId, // Fixed: was incorrectly using `module.id` (undefined) in old code
       moduleTitle,
       awardedBadges,
       certificateNumber,

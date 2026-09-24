@@ -19,14 +19,12 @@ interface DatasetPreviewCardProps {
 export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState<"table" | "raw">(
-    Array.isArray(dataset.data) ? "table" : "raw"
+    Array.isArray(dataset.data) ? "table" : "raw",
   );
 
   const handleCopy = () => {
     const textToCopy =
-      typeof dataset.data === "string"
-        ? dataset.data
-        : JSON.stringify(dataset.data, null, 2);
+      typeof dataset.data === "string" ? dataset.data : JSON.stringify(dataset.data, null, 2);
     navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -44,15 +42,14 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-display font-semibold text-sm text-foreground">
-                {dataset.name}
-              </h4>
+              <h4 className="font-display font-semibold text-sm text-foreground">{dataset.name}</h4>
               <span className="text-[0.6rem] font-mono uppercase px-2 py-0.5 rounded-xs bg-muted text-muted-foreground border border-border">
                 {dataset.format}
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Source: {dataset.source} {dataset.recordsCount ? `• ${dataset.recordsCount.toLocaleString()} records` : ""}
+              Source: {dataset.source}{" "}
+              {dataset.recordsCount ? `• ${dataset.recordsCount.toLocaleString()} records` : ""}
             </p>
           </div>
         </div>
@@ -63,7 +60,9 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
               <button
                 onClick={() => setViewMode("table")}
                 className={`px-2.5 py-1 rounded-xs transition-colors ${
-                  viewMode === "table" ? "bg-primary text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
+                  viewMode === "table"
+                    ? "bg-primary text-primary-foreground font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Table
@@ -71,7 +70,9 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
               <button
                 onClick={() => setViewMode("raw")}
                 className={`px-2.5 py-1 rounded-xs transition-colors ${
-                  viewMode === "raw" ? "bg-primary text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
+                  viewMode === "raw"
+                    ? "bg-primary text-primary-foreground font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 JSON / Log
@@ -84,7 +85,11 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
             className="flex items-center gap-1 text-xs font-mono px-2.5 py-1.5 rounded-md border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
             title="Copy sample data"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-success" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? (
+              <Check className="w-3.5 h-3.5 text-success" />
+            ) : (
+              <Copy className="w-3.5 h-3.5" />
+            )}
             <span>{copied ? "Copied" : "Copy"}</span>
           </button>
 
@@ -120,15 +125,16 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-850">
-              {Array.isArray(dataset.data) && dataset.data.map((row: Record<string, any>, rIdx: number) => (
-                <tr key={rIdx} className="hover:bg-slate-900/60 transition-colors">
-                  {headers.map((h) => (
-                    <td key={h} className="p-2 whitespace-nowrap text-slate-300">
-                      {typeof row[h] === "object" ? JSON.stringify(row[h]) : String(row[h] ?? "")}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {Array.isArray(dataset.data) &&
+                dataset.data.map((row: Record<string, any>, rIdx: number) => (
+                  <tr key={rIdx} className="hover:bg-slate-900/60 transition-colors">
+                    {headers.map((h) => (
+                      <td key={h} className="p-2 whitespace-nowrap text-slate-300">
+                        {typeof row[h] === "object" ? JSON.stringify(row[h]) : String(row[h] ?? "")}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
             </tbody>
           </table>
         ) : (

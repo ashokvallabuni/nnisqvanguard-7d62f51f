@@ -9,11 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-[0_4px_0_0_rgba(0,180,216,1)] hover:shadow-[0_2px_0_0_rgba(0,180,216,1)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px]",
-        destructive: "bg-destructive text-destructive-foreground shadow-[0_4px_0_0_rgba(220,38,38,1)] hover:shadow-[0_2px_0_0_rgba(220,38,38,1)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px]",
+        default:
+          "bg-primary text-primary-foreground shadow-[0_4px_0_0_rgba(0,180,216,1)] hover:shadow-[0_2px_0_0_rgba(0,180,216,1)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px]",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-[0_4px_0_0_rgba(220,38,38,1)] hover:shadow-[0_2px_0_0_rgba(220,38,38,1)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px]",
         outline:
           "border-2 border-primary bg-background text-primary shadow-[0_4px_0_0_rgba(0,180,216,1)] hover:shadow-[0_2px_0_0_rgba(0,180,216,1)] hover:translate-y-[2px] hover:bg-primary/5 active:shadow-none active:translate-y-[4px]",
-        secondary: "bg-secondary text-secondary-foreground shadow-[0_4px_0_0_rgba(71,85,105,1)] hover:shadow-[0_2px_0_0_rgba(71,85,105,1)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px]",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-[0_4px_0_0_rgba(71,85,105,1)] hover:shadow-[0_2px_0_0_rgba(71,85,105,1)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px]",
         ghost: "hover:bg-accent hover:text-accent-foreground active:translate-y-[1px]",
         link: "text-primary underline-offset-4 hover:underline active:translate-y-[1px]",
       },

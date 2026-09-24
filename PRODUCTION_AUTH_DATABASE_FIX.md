@@ -23,7 +23,7 @@
 
 2. **`beforeLoad` Race Condition in `_authenticated/route.tsx`**:
    The `_authenticated` route's `beforeLoad` hook previously executed only `supabase.auth.getUser()`, which makes a remote API call to Supabase. Before the newly set session was fully written or if there was an in-flight token synchronization latency, `getUser()` failed and immediately threw a redirect back to `/login`.
-   
+
 3. **The Fix**:
    - `src/routes/auth.callback.tsx` parses `#access_token` and `#refresh_token`, executes `supabase.auth.setSession`, strips the sensitive tokens from the browser URL (`history.replaceState`), syncs the profile safely, and navigates.
    - `src/routes/_authenticated/route.tsx` now inspects `supabase.auth.getSession()` first (immediate in-memory/localStorage session check) before falling back to `getUser()`, preventing false-positive redirects to `/login`.
@@ -47,6 +47,7 @@
 All 21 migrations exist in [`supabase/migrations/`](file:///C:/Users/ashok/nnisqvanguard-7d62f51f-1/supabase/migrations/). No destructive changes are required.
 
 To push all migrations to `cbyoozhtubavksiolgxz`:
+
 ```bash
 npx supabase db push --project-ref cbyoozhtubavksiolgxz
 ```
@@ -59,12 +60,12 @@ In **Vercel Dashboard → Project Settings → Environment Variables**:
 
 Ensure the following are set for **Production**, **Preview**, and **Development**:
 
-| Variable Name | Environment | Value | Description |
-|---|---|---|---|
-| `VITE_SUPABASE_URL` | Production, Preview, Dev | `https://cbyoozhtubavksiolgxz.supabase.co` | Supabase Project URL |
-| `VITE_SUPABASE_ANON_KEY` | Production, Preview, Dev | `<anon_public_key>` | Publishable Anonymous Key |
-| `SUPABASE_URL` | Production, Preview, Dev | `https://cbyoozhtubavksiolgxz.supabase.co` | Server-side Supabase URL |
-| `SUPABASE_SERVICE_ROLE_KEY` | Production, Preview, Dev | `<service_role_key>` | Server-side only key (Never use `VITE_` prefix) |
+| Variable Name               | Environment              | Value                                      | Description                                     |
+| --------------------------- | ------------------------ | ------------------------------------------ | ----------------------------------------------- |
+| `VITE_SUPABASE_URL`         | Production, Preview, Dev | `https://cbyoozhtubavksiolgxz.supabase.co` | Supabase Project URL                            |
+| `VITE_SUPABASE_ANON_KEY`    | Production, Preview, Dev | `<anon_public_key>`                        | Publishable Anonymous Key                       |
+| `SUPABASE_URL`              | Production, Preview, Dev | `https://cbyoozhtubavksiolgxz.supabase.co` | Server-side Supabase URL                        |
+| `SUPABASE_SERVICE_ROLE_KEY` | Production, Preview, Dev | `<service_role_key>`                       | Server-side only key (Never use `VITE_` prefix) |
 
 > [!IMPORTANT]
 > After updating Environment Variables in Vercel, you **MUST trigger a new deployment** (Redeploy) for the variables to be baked into the client bundle.

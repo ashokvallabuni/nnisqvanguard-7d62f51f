@@ -44,13 +44,11 @@ export async function generateResponse(
   detection: DetectionResult | null,
   analysis: AnalysisResult | null,
   risk: RiskResult | null,
-  context?: Partial<AgentContext>
+  context?: Partial<AgentContext>,
 ): Promise<ResponseResult> {
   const inputData = JSON.stringify(
     {
-      detection: detection
-        ? { findings: detection.findings, summary: detection.summary }
-        : null,
+      detection: detection ? { findings: detection.findings, summary: detection.summary } : null,
       analysis: analysis
         ? {
             attackPattern: analysis.attackPattern,
@@ -67,7 +65,7 @@ export async function generateResponse(
         : null,
     },
     null,
-    2
+    2,
   );
 
   const messages = [
@@ -105,9 +103,7 @@ export async function generateResponse(
   }
 }
 
-export function getDefaultResponseForThreat(
-  threatType: string
-): ResponseResult {
+export function getDefaultResponseForThreat(threatType: string): ResponseResult {
   const defaults: Record<string, Partial<ResponseResult>> = {
     "brute-force": {
       immediateActions: [
@@ -202,10 +198,7 @@ export function getDefaultResponseForThreat(
       "Review and document the security event",
       "Notify the security team for assessment",
     ],
-    containmentSteps: [
-      "Monitor for related events",
-      "Document all findings",
-    ],
+    containmentSteps: ["Monitor for related events", "Document all findings"],
     remediationSteps: [
       "Follow standard incident response procedures",
       "Update security controls as needed",
@@ -223,4 +216,3 @@ function safeArray(val: unknown): string[] {
   if (!Array.isArray(val)) return [];
   return val.map(String).filter((s) => s.trim().length > 0);
 }
-

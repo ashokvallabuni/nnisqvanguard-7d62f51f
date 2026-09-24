@@ -40,7 +40,7 @@ const ORCHESTRATOR_SYSTEM_PROMPT =
  */
 export async function runFullAnalysis(
   input: AnalysisInput,
-  options?: { skipReport?: boolean }
+  options?: { skipReport?: boolean },
 ): Promise<OrchestratedAnalysis> {
   const requestId = "or-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
   const timestamp = new Date().toISOString();
@@ -111,9 +111,17 @@ export async function runQuickAnalysis(input: string): Promise<{
     overallAssessment: "Quick assessment based on " + detection.findings.length + " findings",
   };
 
-  const summary = detection.findings.length > 0
-    ? "Detected " + detection.findings.length + " indicator(s). Risk level: " + risk.severity + " (" + riskScore + "/100). " + detection.summary
-    : "No immediate threats detected. Risk level: Low.";
+  const summary =
+    detection.findings.length > 0
+      ? "Detected " +
+        detection.findings.length +
+        " indicator(s). Risk level: " +
+        risk.severity +
+        " (" +
+        riskScore +
+        "/100). " +
+        detection.summary
+      : "No immediate threats detected. Risk level: Low.";
 
   return { detection, risk, summary };
 }
@@ -121,9 +129,7 @@ export async function runQuickAnalysis(input: string): Promise<{
 /**
  * Process a security event through the multi-agent pipeline
  */
-export async function processSecurityEvent(
-  event: SecurityEvent
-): Promise<OrchestratedAnalysis> {
+export async function processSecurityEvent(event: SecurityEvent): Promise<OrchestratedAnalysis> {
   const eventData = JSON.stringify(event, null, 2);
   return runFullAnalysis({
     type: "security_event",
@@ -137,7 +143,7 @@ export async function processSecurityEvent(
  */
 export async function handleSecurityChatQuery(
   message: string,
-  threatContext?: string
+  threatContext?: string,
 ): Promise<{
   reply: string;
   analysis?: OrchestratedAnalysis;
@@ -158,21 +164,26 @@ export async function handleSecurityChatQuery(
 
   if (hasThreatIndicators) {
     // Run full analysis for threat-related queries
-    analysis = await runFullAnalysis(
-      { type: "chat_query", data: message },
-      { skipReport: true }
-    );
+    analysis = await runFullAnalysis({ type: "chat_query", data: message }, { skipReport: true });
 
     const contextData = analysis
-      ? "Detection Findings: " + (analysis.detection?.findings.length || 0) + " issues found\n" +
-        "Risk Score: " + (analysis.risk?.riskScore || 0) + "/100\n" +
-        "Severity: " + (analysis.risk?.severity || "Low")
+      ? "Detection Findings: " +
+        (analysis.detection?.findings.length || 0) +
+        " issues found\n" +
+        "Risk Score: " +
+        (analysis.risk?.riskScore || 0) +
+        "/100\n" +
+        "Severity: " +
+        (analysis.risk?.severity || "Low")
       : "";
 
     messages.push({ role: "user", content: message });
     messages.push({
       role: "user",
-      content: "Additional context from agent analysis:\n" + contextData + "\n\nProvide a clear, helpful security answer incorporating this analysis.",
+      content:
+        "Additional context from agent analysis:\n" +
+        contextData +
+        "\n\nProvide a clear, helpful security answer incorporating this analysis.",
     });
   } else {
     messages.push({ role: "user", content: message });
@@ -195,13 +206,40 @@ export async function handleSecurityChatQuery(
  */
 function checkForThreatIndicators(message: string): boolean {
   const threatKeywords = [
-    "threat", "attack", "malware", "phishing", "breach", "hack",
-    "virus", "ransomware", "suspicious", "fraud", "scam",
-    "compromised", "infected", "blocked", "alert", "incident",
-    "vulnerability", "exploit", "trojan", "spyware", "botnet",
-    "ddos", "intrusion", "unauthorized", "malicious", "dangerous",
-    "risk", "leak", "exposure", "credential", "password reset",
-    "login failed", "brute force", "social engineering",
+    "threat",
+    "attack",
+    "malware",
+    "phishing",
+    "breach",
+    "hack",
+    "virus",
+    "ransomware",
+    "suspicious",
+    "fraud",
+    "scam",
+    "compromised",
+    "infected",
+    "blocked",
+    "alert",
+    "incident",
+    "vulnerability",
+    "exploit",
+    "trojan",
+    "spyware",
+    "botnet",
+    "ddos",
+    "intrusion",
+    "unauthorized",
+    "malicious",
+    "dangerous",
+    "risk",
+    "leak",
+    "exposure",
+    "credential",
+    "password reset",
+    "login failed",
+    "brute force",
+    "social engineering",
   ];
 
   const lower = message.toLowerCase();
@@ -211,9 +249,7 @@ function checkForThreatIndicators(message: string): boolean {
 /**
  * Create a simplified analysis summary for UI display
  */
-export function formatAnalysisSummary(
-  analysis: OrchestratedAnalysis
-): string {
+export function formatAnalysisSummary(analysis: OrchestratedAnalysis): string {
   const lines: string[] = [];
   lines.push("NISQ Vanguard AI Analysis");
   lines.push("");
@@ -252,4 +288,3 @@ export function formatAnalysisSummary(
 
   return lines.join("\n");
 }
-

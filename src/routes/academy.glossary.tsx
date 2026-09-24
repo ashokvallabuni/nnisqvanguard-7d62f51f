@@ -32,7 +32,14 @@ function AcademyGlossaryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-  const categories = ["all", "Networking", "Defensive Ops", "Threat Intel", "Linux", "Web Security"];
+  const categories = [
+    "all",
+    "Networking",
+    "Defensive Ops",
+    "Threat Intel",
+    "Linux",
+    "Web Security",
+  ];
 
   const filteredTerms = useMemo(() => {
     return GLOSSARY_TERMS.filter((term) => {
@@ -42,7 +49,8 @@ function AcademyGlossaryPage() {
         term.technicalDetails.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesCat =
-        selectedCategory === "all" || term.category.toLowerCase() === selectedCategory.toLowerCase();
+        selectedCategory === "all" ||
+        term.category.toLowerCase() === selectedCategory.toLowerCase();
 
       return matchesSearch && matchesCat;
     });
@@ -118,9 +126,7 @@ function AcademyGlossaryPage() {
                       )}
                     </div>
 
-                    <h3 className="font-display font-bold text-lg text-foreground">
-                      {t.term}
-                    </h3>
+                    <h3 className="font-display font-bold text-lg text-foreground">{t.term}</h3>
                     <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed">
                       {t.definition}
                     </p>
@@ -149,15 +155,6 @@ function AcademyGlossaryPage() {
                       >
                         <BookOpen className="w-3.5 h-3.5" />
                         <span>Lesson</span>
-                      </Link>
-                    )}
-                    {t.relatedDatasetSlug && (
-                      <Link
-                        to="/cyber-range/datasets"
-                        className="inline-flex items-center gap-1 text-accent hover:underline"
-                      >
-                        <Database className="w-3.5 h-3.5" />
-                        <span>Dataset</span>
                       </Link>
                     )}
                     {t.relatedLabSlug && (

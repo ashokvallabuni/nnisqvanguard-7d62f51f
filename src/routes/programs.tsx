@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
-import { Search, Calendar } from "lucide-react";
+import { Search, Calendar, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/programs")({
   head: () => ({
@@ -33,6 +33,9 @@ function Programs() {
   const [q, setQ] = useState("");
   const [results, setResults] = useState<College[]>([]);
   const [selected, setSelected] = useState<College | null>(null);
+  const [open, setOpen] = useState(false);
+  const [activeIdx, setActiveIdx] = useState<number>(-1);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [form, setForm] = useState({
     contact_person: "",
     email: "",
@@ -44,20 +47,43 @@ function Programs() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(async () => {
-      if (q.length < 2) {
-        setResults([]);
-        return;
+    function onDocClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
       }
-      const { data } = await supabase
-        .from("colleges")
-        .select("id,name,city,state,type")
-        .ilike("name", `%${q}%`)
-        .limit(10);
-      setResults((data ?? []) as College[]);
-    }, 200);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  const fetchColleges = async (query: string) => {
+    let b = supabase.from("colleges").select("id,name,city,state,type");
+    if (query.trim().length > 0) {
+      b = b.ilike("name", `%${query.trim()}%`);
+    }
+    const { data } = await b.order("name").limit(query.trim() ? 20 : 50);
+    setResults((data ?? []) as College[]);
+  };
+
+  useEffect(() => {
+    const t = setTimeout(
+      async () => {
+        if (!open) return;
+        await fetchColleges(q);
+      },
+      q.length === 0 ? 0 : 200,
+    );
     return () => clearTimeout(t);
-  }, [q]);
+  }, [q, open]);
+
+  const toggleDropdown = async (force?: boolean) => {
+    const next = force !== undefined ? force : !open;
+    setOpen(next);
+    setActiveIdx(-1);
+    if (next && results.length === 0) {
+      await fetchColleges(q);
+    }
+  };
 
   const submit = async () => {
     if (!user) {
@@ -123,36 +149,97 @@ function Programs() {
                     {selected.city}, {selected.state} · {selected.type}
                   </div>
                 </div>
-                <button onClick={() => setSelected(null)} className="mono text-[0.6rem] text-cyber">
+                <button
+                  onClick={() => {
+                    setSelected(null);
+                    toggleDropdown(true);
+                  }}
+                  className="mono text-[0.6rem] text-cyber"
+                >
                   CHANGE
                 </button>
               </div>
             ) : (
-              <div className="relative">
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search Indian colleges..."
-                  className="w-full bg-input/40 border border-border rounded-md px-3 py-3 focus:outline-none focus:border-primary"
-                />
-                {results.length > 0 && (
-                  <div className="absolute z-10 inset-x-0 mt-1 glass rounded-md max-h-72 overflow-auto">
-                    {results.map((c) => (
-                      <button
-                        key={c.id}
-                        onClick={() => {
-                          setSelected(c);
-                          setResults([]);
-                          setQ("");
-                        }}
-                        className="w-full text-left px-3 py-2 hover:bg-primary/10 border-b border-border/30"
-                      >
-                        <div className="text-sm">{c.name}</div>
-                        <div className="mono text-[0.55rem] text-muted-foreground">
-                          {c.city}, {c.state}
-                        </div>
-                      </button>
-                    ))}
+              <div className="relative" ref={dropdownRef}>
+                <div className="relative">
+                  <input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    onFocus={() => toggleDropdown(true)}
+                    onKeyDown={(e) => {
+                      if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        setOpen(true);
+                        setActiveIdx((i) => Math.min(results.length - 1, i + 1));
+                      } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        setActiveIdx((i) => Math.max(0, i - 1));
+                      } else if (
+                        e.key === "Enter" &&
+                        activeIdx >= 0 &&
+                        activeIdx < results.length
+                      ) {
+                        e.preventDefault();
+                        const c = results[activeIdx];
+                        setSelected(c);
+                        setResults([]);
+                        setQ("");
+                        setOpen(false);
+                      } else if (e.key === "Escape") {
+                        setOpen(false);
+                        setActiveIdx(-1);
+                      }
+                    }}
+                    placeholder="Search Indian colleges..."
+                    aria-autocomplete="list"
+                    aria-expanded={open}
+                    className="w-full bg-input/40 border border-border rounded-md pl-3 pr-10 py-3 focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    type="button"
+                    aria-label={open ? "Close college list" : "Open college list"}
+                    onClick={() => toggleDropdown()}
+                    className="absolute right-0 top-0 h-full px-3 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                </div>
+                {open && (
+                  <div
+                    role="listbox"
+                    className="absolute z-10 inset-x-0 mt-1 glass rounded-md max-h-72 overflow-auto shadow-lg border border-border/60"
+                  >
+                    {results.length === 0 ? (
+                      <div className="px-3 py-6 text-center text-sm text-muted-foreground mono">
+                        {q.length === 0 ? "Loading colleges..." : "No colleges match your search"}
+                      </div>
+                    ) : (
+                      results.map((c, idx) => (
+                        <button
+                          key={c.id}
+                          role="option"
+                          aria-selected={idx === activeIdx}
+                          onMouseEnter={() => setActiveIdx(idx)}
+                          onClick={() => {
+                            setSelected(c);
+                            setResults([]);
+                            setQ("");
+                            setOpen(false);
+                            setActiveIdx(-1);
+                          }}
+                          className={`w-full text-left px-3 py-2 border-b border-border/30 ${
+                            idx === activeIdx ? "bg-primary/20" : "hover:bg-primary/10"
+                          }`}
+                        >
+                          <div className="text-sm">{c.name}</div>
+                          <div className="mono text-[0.55rem] text-muted-foreground">
+                            {c.city}, {c.state}
+                          </div>
+                        </button>
+                      ))
+                    )}
                   </div>
                 )}
               </div>

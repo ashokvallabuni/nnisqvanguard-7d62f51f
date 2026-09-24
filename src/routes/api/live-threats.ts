@@ -24,7 +24,10 @@ export const Route = createFileRoute("/api/live-threats")({
             body: JSON.stringify({ query: "get_iocs", days: 3 }),
           });
           if (!r.ok) return json({ error: `ThreatFox ${r.status}` }, 502);
-          const j = (await r.json()) as { query_status?: string; data?: Array<Record<string, unknown>> };
+          const j = (await r.json()) as {
+            query_status?: string;
+            data?: Array<Record<string, unknown>>;
+          };
           if (j.query_status !== "ok" || !Array.isArray(j.data)) {
             return json({ error: "ThreatFox returned no data", status: j.query_status }, 502);
           }

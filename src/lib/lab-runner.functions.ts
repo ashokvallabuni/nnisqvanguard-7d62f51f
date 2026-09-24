@@ -67,7 +67,9 @@ async function callRunner(
 
     const result = (await response.json().catch(() => ({}))) as RunnerResponse;
     if (!response.ok) {
-      return { error: typeof result.error === "string" ? result.error : "LAB_EXECUTION_UNAVAILABLE" };
+      return {
+        error: typeof result.error === "string" ? result.error : "LAB_EXECUTION_UNAVAILABLE",
+      };
     }
     return result;
   } catch {
@@ -75,8 +77,8 @@ async function callRunner(
   }
 }
 
-export const checkLabRunnerHealth = createServerFn({ method: "GET" })
-  .handler(async (): Promise<LabRunnerHealthResult> => {
+export const checkLabRunnerHealth = createServerFn({ method: "GET" }).handler(
+  async (): Promise<LabRunnerHealthResult> => {
     const runnerUrl = process.env.LAB_RUNNER_URL;
     const runnerSecret = process.env.LAB_RUNNER_SECRET;
 
@@ -116,7 +118,8 @@ export const checkLabRunnerHealth = createServerFn({ method: "GET" })
           runnerUrlConfigured: true,
           runnerSecretConfigured: true,
           reachable: true,
-          error: res.status === 401 || res.status === 403 ? "RUNNER_AUTH_FAILED" : "RUNNER_NOT_READY",
+          error:
+            res.status === 401 || res.status === 403 ? "RUNNER_AUTH_FAILED" : "RUNNER_NOT_READY",
         };
       }
 
@@ -141,7 +144,8 @@ export const checkLabRunnerHealth = createServerFn({ method: "GET" })
         error: "RUNNER_UNREACHABLE",
       };
     }
-  });
+  },
+);
 
 export const createLabSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

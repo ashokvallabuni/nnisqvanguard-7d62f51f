@@ -5,13 +5,43 @@ import { clientKey, getAuth, json, logEvent, rateLimit } from "@/lib/api-helpers
 const Body = z.object({ input: z.string().trim().min(1).max(4000) });
 
 const SCAM_KEYWORDS = [
-  "urgent", "otp", "password", "verify your account", "bank account", "click here",
-  "suspended", "lottery", "prize", "kyc", "aadhaar", "refund", "gift card",
-  "wire transfer", "bitcoin", "crypto", "iphone winner", "act now", "limited time",
+  "urgent",
+  "otp",
+  "password",
+  "verify your account",
+  "bank account",
+  "click here",
+  "suspended",
+  "lottery",
+  "prize",
+  "kyc",
+  "aadhaar",
+  "refund",
+  "gift card",
+  "wire transfer",
+  "bitcoin",
+  "crypto",
+  "iphone winner",
+  "act now",
+  "limited time",
 ];
 
 const SUSPICIOUS_TLDS = [".zip", ".mov", ".xyz", ".top", ".click", ".country", ".gq", ".tk", ".ml"];
-const LEGIT_BRANDS = ["amazon", "paypal", "google", "microsoft", "apple", "flipkart", "sbi", "hdfc", "icici", "axis", "razorpay", "phonepe", "paytm"];
+const LEGIT_BRANDS = [
+  "amazon",
+  "paypal",
+  "google",
+  "microsoft",
+  "apple",
+  "flipkart",
+  "sbi",
+  "hdfc",
+  "icici",
+  "axis",
+  "razorpay",
+  "phonepe",
+  "paytm",
+];
 
 function extractUrls(text: string): string[] {
   const re = /https?:\/\/[^\s<>"']+|(?:\b|^)(?:www\.)?[a-z0-9-]+\.[a-z]{2,}(?:\/[^\s<>"']*)?/gi;
@@ -24,7 +54,10 @@ function normalize(u: string): string {
 }
 
 function looksLikeTyposquat(host: string): { hit: boolean; brand?: string } {
-  const bare = host.replace(/^www\./, "").split(".")[0].toLowerCase();
+  const bare = host
+    .replace(/^www\./, "")
+    .split(".")[0]
+    .toLowerCase();
   for (const b of LEGIT_BRANDS) {
     if (bare === b) return { hit: false };
     // Same length, low edit distance, or digit substitution
@@ -54,23 +87,34 @@ async function safeBrowsingCheck(urls: string[]): Promise<Record<string, string[
     const body = {
       client: { clientId: "nisq-vanguard", clientVersion: "1.0" },
       threatInfo: {
-        threatTypes: ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
+        threatTypes: [
+          "MALWARE",
+          "SOCIAL_ENGINEERING",
+          "UNWANTED_SOFTWARE",
+          "POTENTIALLY_HARMFUL_APPLICATION",
+        ],
         platformTypes: ["ANY_PLATFORM"],
         threatEntryTypes: ["URL"],
         threatEntries: urls.map((u) => ({ url: u })),
       },
     };
     const r = await fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${key}`, {
-      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body),
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
     });
     if (!r.ok) return {};
-    const j = (await r.json()) as { matches?: Array<{ threat: { url: string }; threatType: string }> };
+    const j = (await r.json()) as {
+      matches?: Array<{ threat: { url: string }; threatType: string }>;
+    };
     const out: Record<string, string[]> = {};
     for (const m of j.matches ?? []) {
       (out[m.threat.url] ||= []).push(m.threatType);
     }
     return out;
-  } catch { return {}; }
+  } catch {
+    return {};
+  }
 }
 
 async function virusTotalUrl(url: string) {
@@ -79,24 +123,33 @@ async function virusTotalUrl(url: string) {
   try {
     // URL identifier = base64url(url without padding)
     const id = btoa(url).replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
-    const r = await fetch(`https://www.virustotal.com/api/v3/urls/${id}`, { headers: { "x-apikey": key } });
+    const r = await fetch(`https://www.virustotal.com/api/v3/urls/${id}`, {
+      headers: { "x-apikey": key },
+    });
     if (r.status === 404) {
       // Submit for analysis
       const sub = await fetch("https://www.virustotal.com/api/v3/urls", {
-        method: "POST", headers: { "x-apikey": key, "content-type": "application/x-www-form-urlencoded" },
+        method: "POST",
+        headers: { "x-apikey": key, "content-type": "application/x-www-form-urlencoded" },
         body: `url=${encodeURIComponent(url)}`,
       });
       if (!sub.ok) return undefined;
       return { malicious: 0, suspicious: 0, harmless: 0, undetected: 0 };
     }
     if (!r.ok) return undefined;
-    const j = (await r.json()) as { data?: { attributes?: { last_analysis_stats?: Record<string, number> } } };
+    const j = (await r.json()) as {
+      data?: { attributes?: { last_analysis_stats?: Record<string, number> } };
+    };
     const s = j.data?.attributes?.last_analysis_stats ?? {};
     return {
-      malicious: s.malicious ?? 0, suspicious: s.suspicious ?? 0,
-      harmless: s.harmless ?? 0, undetected: s.undetected ?? 0,
+      malicious: s.malicious ?? 0,
+      suspicious: s.suspicious ?? 0,
+      harmless: s.harmless ?? 0,
+      undetected: s.undetected ?? 0,
     };
-  } catch { return undefined; }
+  } catch {
+    return undefined;
+  }
 }
 
 export const Route = createFileRoute("/api/check-url")({
@@ -108,8 +161,11 @@ export const Route = createFileRoute("/api/check-url")({
           return json({ error: "Rate limit exceeded" }, 429);
         }
         let body: z.infer<typeof Body>;
-        try { body = Body.parse(await request.json()); }
-        catch (e) { return json({ error: "Invalid input", details: (e as Error).message }, 400); }
+        try {
+          body = Body.parse(await request.json());
+        } catch (e) {
+          return json({ error: "Invalid input", details: (e as Error).message }, 400);
+        }
 
         const text = body.input;
         const lower = text.toLowerCase();
@@ -123,27 +179,52 @@ export const Route = createFileRoute("/api/check-url")({
           let risk: UrlReport["risk"] = "Low";
           try {
             const host = new URL(u).hostname;
-            if (SUSPICIOUS_TLDS.some((t) => host.endsWith(t))) { signals.push(`suspicious TLD (${host})`); risk = "Medium"; }
+            if (SUSPICIOUS_TLDS.some((t) => host.endsWith(t))) {
+              signals.push(`suspicious TLD (${host})`);
+              risk = "Medium";
+            }
             const typo = looksLikeTyposquat(host);
-            if (typo.hit) { signals.push(`possible typosquat of ${typo.brand}`); risk = "High"; }
-            if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) { signals.push("IP address in URL"); risk = "High"; }
-            if (host.split(".").length > 4) { signals.push("deep subdomain nesting"); if (risk === "Low") risk = "Medium"; }
-          } catch { signals.push("malformed URL"); risk = "Medium"; }
+            if (typo.hit) {
+              signals.push(`possible typosquat of ${typo.brand}`);
+              risk = "High";
+            }
+            if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) {
+              signals.push("IP address in URL");
+              risk = "High";
+            }
+            if (host.split(".").length > 4) {
+              signals.push("deep subdomain nesting");
+              if (risk === "Low") risk = "Medium";
+            }
+          } catch {
+            signals.push("malformed URL");
+            risk = "Medium";
+          }
 
           const sbThreats = sbMap[u] ?? [];
-          if (sbThreats.length) { signals.push(`Google Safe Browsing: ${sbThreats.join(", ")}`); risk = "High"; }
+          if (sbThreats.length) {
+            signals.push(`Google Safe Browsing: ${sbThreats.join(", ")}`);
+            risk = "High";
+          }
 
           const vt = await virusTotalUrl(u);
           if (vt && (vt.malicious > 0 || vt.suspicious > 2)) {
             signals.push(`VirusTotal: ${vt.malicious} malicious / ${vt.suspicious} suspicious`);
             risk = "High";
           }
-          reports.push({ url: u, risk, signals, safeBrowsing: sbThreats.length ? { threats: sbThreats } : undefined, virusTotal: vt });
+          reports.push({
+            url: u,
+            risk,
+            signals,
+            safeBrowsing: sbThreats.length ? { threats: sbThreats } : undefined,
+            virusTotal: vt,
+          });
         }
 
         let overall: "Low" | "Medium" | "High" = "Low";
         if (reports.some((r) => r.risk === "High") || keywordHits.length >= 3) overall = "High";
-        else if (reports.some((r) => r.risk === "Medium") || keywordHits.length >= 1) overall = "Medium";
+        else if (reports.some((r) => r.risk === "Medium") || keywordHits.length >= 1)
+          overall = "Medium";
 
         const result = { overall, keywordHits, urls: reports };
         await logEvent(ctx, urls.length ? "url" : "text", text, result, overall);

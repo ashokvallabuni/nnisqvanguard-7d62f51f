@@ -36,7 +36,9 @@ export const Route = createFileRoute("/achievements")({
 
 function AchievementsPage() {
   const { user } = useAuth();
-  const [selectedTab, setSelectedTab] = useState<"all" | "earned" | "in_progress" | "locked">("all");
+  const [selectedTab, setSelectedTab] = useState<"all" | "earned" | "in_progress" | "locked">(
+    "all",
+  );
   const [selectedBadge, setSelectedBadge] = useState<BadgeDefinition | null>(null);
 
   // Fetch earned badges from DB
@@ -83,8 +85,8 @@ function AchievementsPage() {
       const status: "EARNED" | "IN_PROGRESS" | "LOCKED" = isEarned
         ? "EARNED"
         : isInProgress
-        ? "IN_PROGRESS"
-        : "LOCKED";
+          ? "IN_PROGRESS"
+          : "LOCKED";
 
       return {
         ...b,
@@ -96,7 +98,8 @@ function AchievementsPage() {
 
   const filteredBadges = useMemo(() => {
     if (selectedTab === "earned") return badgesWithStatus.filter((b) => b.status === "EARNED");
-    if (selectedTab === "in_progress") return badgesWithStatus.filter((b) => b.status === "IN_PROGRESS");
+    if (selectedTab === "in_progress")
+      return badgesWithStatus.filter((b) => b.status === "IN_PROGRESS");
     if (selectedTab === "locked") return badgesWithStatus.filter((b) => b.status === "LOCKED");
     return badgesWithStatus;
   }, [badgesWithStatus, selectedTab]);
@@ -124,7 +127,8 @@ function AchievementsPage() {
               </h3>
             </div>
             <p className="text-xs text-muted-foreground">
-              Server-evaluated proof of technical skill. Badges map directly to industry NIST NICE work roles.
+              Server-evaluated proof of technical skill. Badges map directly to industry NIST NICE
+              work roles.
             </p>
           </div>
 
@@ -174,8 +178,8 @@ function AchievementsPage() {
                   isEarned
                     ? "border-primary/40 bg-card hover:border-primary shadow-xs"
                     : isInProgress
-                    ? "border-amber-500/40 bg-card/90 hover:border-amber-500"
-                    : "border-border/60 bg-muted/10 opacity-75 hover:opacity-100"
+                      ? "border-amber-500/40 bg-card/90 hover:border-amber-500"
+                      : "border-border/60 bg-muted/10 opacity-75 hover:opacity-100"
                 }`}
               >
                 <div className="space-y-3">
@@ -185,8 +189,8 @@ function AchievementsPage() {
                         isEarned
                           ? "bg-primary/15 border-primary/40 text-primary animate-in zoom-in-95"
                           : isInProgress
-                          ? "bg-amber-500/15 border-amber-500/40 text-amber-600"
-                          : "bg-muted border-border text-muted-foreground"
+                            ? "bg-amber-500/15 border-amber-500/40 text-amber-600"
+                            : "bg-muted border-border text-muted-foreground"
                       }`}
                     >
                       {isEarned ? (
@@ -203,8 +207,8 @@ function AchievementsPage() {
                         isEarned
                           ? "bg-success/15 text-success border-success/30"
                           : isInProgress
-                          ? "bg-warning/15 text-warning border-warning/30"
-                          : "bg-muted text-muted-foreground border-border"
+                            ? "bg-warning/15 text-warning border-warning/30"
+                            : "bg-muted text-muted-foreground border-border"
                       }`}
                     >
                       {badge.status}
@@ -212,9 +216,7 @@ function AchievementsPage() {
                   </div>
 
                   <div>
-                    <h4 className="font-display font-bold text-lg text-foreground">
-                      {badge.name}
-                    </h4>
+                    <h4 className="font-display font-bold text-lg text-foreground">{badge.name}</h4>
                     <p className="text-xs text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
                       {badge.description}
                     </p>

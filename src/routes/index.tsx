@@ -14,8 +14,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "NISQ Vanguard — Cyber Intelligence Platform" },
       {
         property: "og:description",
-        content:
-          "Practical cyber defence, education and intelligence for the threats of tomorrow.",
+        content: "Practical cyber defence, education and intelligence for the threats of tomorrow.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

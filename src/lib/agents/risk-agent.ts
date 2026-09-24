@@ -41,12 +41,11 @@ Return STRICT JSON with:
 export async function calculateRisk(
   findings: Finding[],
   attackPattern: string | null,
-  context?: Partial<{ userId: string; organizationId: string }>
+  context?: Partial<{ userId: string; organizationId: string }>,
 ): Promise<RiskResult> {
   const findingsSummary = findings
     .map(
-      (f) =>
-        `- ${f.type}: ${f.description} (severity: ${f.severity}, confidence: ${f.severity})`
+      (f) => `- ${f.type}: ${f.description} (severity: ${f.severity}, confidence: ${f.severity})`,
     )
     .join("\n");
 
@@ -62,14 +61,12 @@ export async function calculateRisk(
     const raw = await callChatModel(messages, { json: true });
     const parsed = JSON.parse(raw);
 
-    const factors: RiskFactor[] = (parsed.factors || []).map(
-      (f: Record<string, unknown>) => ({
-        name: String(f.name || "unknown"),
-        score: clampScore(f.score),
-        weight: clampWeight(f.weight),
-        description: String(f.description || ""),
-      })
-    );
+    const factors: RiskFactor[] = (parsed.factors || []).map((f: Record<string, unknown>) => ({
+      name: String(f.name || "unknown"),
+      score: clampScore(f.score),
+      weight: clampWeight(f.weight),
+      description: String(f.description || ""),
+    }));
 
     const riskScore = clampScore(parsed.riskScore);
 
@@ -78,9 +75,7 @@ export async function calculateRisk(
       riskScore,
       severity: scoreToSeverity(riskScore),
       factors,
-      overallAssessment: String(
-        parsed.overallAssessment || "Risk assessment completed"
-      ),
+      overallAssessment: String(parsed.overallAssessment || "Risk assessment completed"),
     };
   } catch (e) {
     console.error("[RiskAgent] Error:", e);
@@ -134,4 +129,3 @@ function clampWeight(n: unknown): number {
   if (isNaN(v)) return 0;
   return Math.max(0, Math.min(1, v));
 }
-

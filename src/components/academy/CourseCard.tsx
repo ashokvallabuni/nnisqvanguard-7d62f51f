@@ -37,7 +37,8 @@ export function CourseCard({ course, progress }: CourseCardProps) {
         <div className="flex items-center justify-between gap-2">
           <span
             className={`text-[0.65rem] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full border font-medium ${
-              levelStyles[course.level.toLowerCase()] || "bg-muted text-muted-foreground border-border"
+              levelStyles[course.level.toLowerCase()] ||
+              "bg-muted text-muted-foreground border-border"
             }`}
           >
             {course.level}
@@ -111,7 +112,9 @@ export function CourseCard({ course, progress }: CourseCardProps) {
             params={{ slug: course.slug }}
             className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 group/btn transition-colors"
           >
-            <span>{currentProgress > 0 ? (isCompleted ? "Review" : "Continue") : "Start Course"}</span>
+            <span>
+              {currentProgress > 0 ? (isCompleted ? "Review" : "Continue") : "Start Course"}
+            </span>
             <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
           </Link>
         </div>

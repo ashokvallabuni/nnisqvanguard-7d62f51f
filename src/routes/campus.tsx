@@ -12,7 +12,8 @@ export const Route = createFileRoute("/campus")({
       { title: "Campus Programs — NISQ Vanguard" },
       {
         name: "description",
-        content: "Explore active NISQ Vanguard cyber education programs for colleges and universities.",
+        content:
+          "Explore active NISQ Vanguard cyber education programs for colleges and universities.",
       },
     ],
   }),
@@ -200,8 +201,16 @@ function CampusPrograms() {
 
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
           <StatCard icon={Building2} label="Total Connected Colleges" value={stats.colleges} />
-          <StatCard icon={ShieldCheck} label="Active Consultation Workflows" value={stats.workflows} />
-          <StatCard icon={Users} label="Enrolled Students" value={stats.students.toLocaleString()} />
+          <StatCard
+            icon={ShieldCheck}
+            label="Active Consultation Workflows"
+            value={stats.workflows}
+          />
+          <StatCard
+            icon={Users}
+            label="Enrolled Students"
+            value={stats.students.toLocaleString()}
+          />
         </div>
 
         <section className="mb-8 grid gap-3 border border-slate-800 bg-[#0a0f1d] p-4 md:grid-cols-5">
@@ -214,14 +223,34 @@ function CampusPrograms() {
               className="w-full border border-slate-700 bg-slate-950 px-10 py-2.5 font-mono text-xs text-white outline-none focus:border-cyan-400"
             />
           </label>
-          <Filter value={stateFilter} onChange={(value) => { setStateFilter(value); setCityFilter("All"); }} options={states} placeholder="State" />
+          <Filter
+            value={stateFilter}
+            onChange={(value) => {
+              setStateFilter(value);
+              setCityFilter("All");
+            }}
+            options={states}
+            placeholder="State"
+          />
           <Filter value={cityFilter} onChange={setCityFilter} options={cities} placeholder="City" />
-          <Filter value={typeFilter} onChange={setTypeFilter} options={["Webinar", "Seminar", "Workshop", "Cyber Range"]} placeholder="Program Type" />
-          <Filter value={securityFilter} onChange={setSecurityFilter} options={["Foundation", "Professional", "Advanced"]} placeholder="Security Level" />
+          <Filter
+            value={typeFilter}
+            onChange={setTypeFilter}
+            options={["Webinar", "Seminar", "Workshop", "Cyber Range"]}
+            placeholder="Program Type"
+          />
+          <Filter
+            value={securityFilter}
+            onChange={setSecurityFilter}
+            options={["Foundation", "Professional", "Advanced"]}
+            placeholder="Security Level"
+          />
         </section>
 
         {loading ? (
-          <p className="py-16 text-center font-mono text-sm text-cyan-300">LOADING CAMPUS DIRECTORY...</p>
+          <p className="py-16 text-center font-mono text-sm text-cyan-300">
+            LOADING CAMPUS DIRECTORY...
+          </p>
         ) : filteredPrograms.length === 0 ? (
           <div className="border border-dashed border-slate-700 py-16 text-center font-mono text-sm text-slate-400">
             No active programs match these filters.
@@ -229,7 +258,11 @@ function CampusPrograms() {
         ) : (
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {filteredPrograms.map((program) => (
-              <ProgramCard key={program.id} program={program} onApply={() => openConsultation(program)} />
+              <ProgramCard
+                key={program.id}
+                program={program}
+                onApply={() => openConsultation(program)}
+              />
             ))}
           </div>
         )}
@@ -240,27 +273,79 @@ function CampusPrograms() {
           <div className="w-full max-w-lg border border-cyan-400/50 bg-[#0a0f1d] p-6 shadow-[0_0_30px_rgba(0,210,255,0.18)]">
             <div className="mb-6 flex items-start justify-between">
               <div>
-                <div className="mono text-[10px] tracking-widest text-cyan-300">APPLY / CONNECT CAMPUS</div>
-                <h2 className="mt-2 font-display text-2xl font-semibold text-white">{selected.college_name}</h2>
-                <p className="mt-1 font-mono text-xs text-slate-400">{selected.program_type} · {selected.security_level} · {selected.city}</p>
+                <div className="mono text-[10px] tracking-widest text-cyan-300">
+                  APPLY / CONNECT CAMPUS
+                </div>
+                <h2 className="mt-2 font-display text-2xl font-semibold text-white">
+                  {selected.college_name}
+                </h2>
+                <p className="mt-1 font-mono text-xs text-slate-400">
+                  {selected.program_type} · {selected.security_level} · {selected.city}
+                </p>
               </div>
-              <button onClick={() => setSelected(null)} aria-label="Close consultation form" className="text-slate-400 hover:text-white"><X /></button>
+              <button
+                onClick={() => setSelected(null)}
+                aria-label="Close consultation form"
+                className="text-slate-400 hover:text-white"
+              >
+                <X />
+              </button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              <FormInput label="CONTACT NAME *" value={form.contact_name} onChange={(value) => setForm({ ...form, contact_name: value })} />
-              <FormInput label="EMAIL *" type="email" value={form.email} onChange={(value) => setForm({ ...form, email: value })} />
-              <FormInput label="PHONE" value={form.phone} onChange={(value) => setForm({ ...form, phone: value })} />
-              <FormInput label="ROLE / DEPARTMENT" value={form.organization_role} onChange={(value) => setForm({ ...form, organization_role: value })} />
-              <FormInput label="EXPECTED STUDENTS" type="number" value={form.student_count} onChange={(value) => setForm({ ...form, student_count: value })} />
+              <FormInput
+                label="CONTACT NAME *"
+                value={form.contact_name}
+                onChange={(value) => setForm({ ...form, contact_name: value })}
+              />
+              <FormInput
+                label="EMAIL *"
+                type="email"
+                value={form.email}
+                onChange={(value) => setForm({ ...form, email: value })}
+              />
+              <FormInput
+                label="PHONE"
+                value={form.phone}
+                onChange={(value) => setForm({ ...form, phone: value })}
+              />
+              <FormInput
+                label="ROLE / DEPARTMENT"
+                value={form.organization_role}
+                onChange={(value) => setForm({ ...form, organization_role: value })}
+              />
+              <FormInput
+                label="EXPECTED STUDENTS"
+                type="number"
+                value={form.student_count}
+                onChange={(value) => setForm({ ...form, student_count: value })}
+              />
               <label className="sm:col-span-2">
                 <span className="mono mb-1 block text-[10px] text-slate-400">MESSAGE</span>
-                <textarea value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} rows={3} className="w-full border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400" placeholder="Tell us about your campus goal..." />
+                <textarea
+                  value={form.message}
+                  onChange={(event) => setForm({ ...form, message: event.target.value })}
+                  rows={3}
+                  className="w-full border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400"
+                  placeholder="Tell us about your campus goal..."
+                />
               </label>
             </div>
-            <button onClick={submitConsultation} disabled={busy} className="mt-5 w-full bg-gradient-to-r from-blue-600 to-cyan-400 py-3 font-display text-xs font-bold tracking-wider text-slate-950 disabled:opacity-60">
+            <button
+              onClick={submitConsultation}
+              disabled={busy}
+              className="mt-5 w-full bg-gradient-to-r from-blue-600 to-cyan-400 py-3 font-display text-xs font-bold tracking-wider text-slate-950 disabled:opacity-60"
+            >
               {busy ? "SUBMITTING..." : "SUBMIT CONSULTATION"}
             </button>
-            {!user && <p className="mt-3 text-center font-mono text-xs text-slate-400">Please <Link to="/login" search={{ next: "/campus" }} className="text-cyan-300">sign in</Link> to continue.</p>}
+            {!user && (
+              <p className="mt-3 text-center font-mono text-xs text-slate-400">
+                Please{" "}
+                <Link to="/login" search={{ next: "/campus" }} className="text-cyan-300">
+                  sign in
+                </Link>{" "}
+                to continue.
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -272,33 +357,119 @@ function unique(values: string[]) {
   return [...new Set(values)].sort();
 }
 
-function Filter({ value, onChange, options, placeholder }: { value: string; onChange: (value: string) => void; options: string[]; placeholder: string }) {
+function Filter({
+  value,
+  onChange,
+  options,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+  placeholder: string;
+}) {
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)} aria-label={placeholder} className="border border-slate-700 bg-slate-950 px-3 py-2.5 font-mono text-xs text-slate-300 outline-none focus:border-cyan-400">
+    <select
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      aria-label={placeholder}
+      className="border border-slate-700 bg-slate-950 px-3 py-2.5 font-mono text-xs text-slate-300 outline-none focus:border-cyan-400"
+    >
       <option value="All">All {placeholder === "City" ? "Cities" : `${placeholder}s`}</option>
-      {options.map((option) => <option key={option} value={option}>{option}</option>)}
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
     </select>
   );
 }
 
-function StatCard({ icon: Icon, label, value }: { icon: typeof Building2; label: string; value: number | string }) {
-  return <div className="border border-cyan-400/20 bg-[#0a0f1d] p-5"><Icon className="h-5 w-5 text-cyan-300" /><div className="mt-4 font-display text-3xl font-bold text-white">{value}</div><div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-slate-400">{label}</div></div>;
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof Building2;
+  label: string;
+  value: number | string;
+}) {
+  return (
+    <div className="border border-cyan-400/20 bg-[#0a0f1d] p-5">
+      <Icon className="h-5 w-5 text-cyan-300" />
+      <div className="mt-4 font-display text-3xl font-bold text-white">{value}</div>
+      <div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-slate-400">
+        {label}
+      </div>
+    </div>
+  );
 }
 
 function ProgramCard({ program, onApply }: { program: Program; onApply: () => void }) {
-  const deadline = new Date(`${program.application_deadline}T00:00:00`).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  const deadline = new Date(`${program.application_deadline}T00:00:00`).toLocaleDateString(
+    "en-IN",
+    { day: "numeric", month: "short", year: "numeric" },
+  );
   return (
     <article className="border border-slate-700 bg-[#0a0f1d] p-5 transition hover:border-cyan-400/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]">
-      <div className="flex items-start justify-between gap-3"><span className="mono border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[9px] tracking-widest text-cyan-300">{program.dynamic_tier}</span><span className="mono text-[10px] text-slate-400">{program.security_level}</span></div>
+      <div className="flex items-start justify-between gap-3">
+        <span className="mono border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[9px] tracking-widest text-cyan-300">
+          {program.dynamic_tier}
+        </span>
+        <span className="mono text-[10px] text-slate-400">{program.security_level}</span>
+      </div>
       <h2 className="mt-5 font-display text-xl font-semibold text-white">{program.college_name}</h2>
-      <p className="mt-2 flex items-center gap-1 font-mono text-xs text-slate-400"><MapPin className="h-3.5 w-3.5 text-cyan-300" />{program.city}, {program.state} · {program.country}</p>
-      <p className="mt-4 min-h-12 font-mono text-xs leading-relaxed text-slate-400">{program.description}</p>
-      <div className="mt-5 grid grid-cols-2 gap-3 border-y border-slate-700 py-4 font-mono text-[10px] text-slate-400"><span><ShieldCheck className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />{program.program_type}</span><span><Users className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />{program.enrolled_students}/{program.seats} enrolled</span><span className="col-span-2"><CalendarDays className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />Apply by {deadline}</span></div>
-      <button onClick={onApply} className="mt-5 w-full border border-cyan-400/60 py-2.5 font-display text-xs font-bold tracking-wider text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-950">APPLY / CONNECT CAMPUS</button>
+      <p className="mt-2 flex items-center gap-1 font-mono text-xs text-slate-400">
+        <MapPin className="h-3.5 w-3.5 text-cyan-300" />
+        {program.city}, {program.state} · {program.country}
+      </p>
+      <p className="mt-4 min-h-12 font-mono text-xs leading-relaxed text-slate-400">
+        {program.description}
+      </p>
+      <div className="mt-5 grid grid-cols-2 gap-3 border-y border-slate-700 py-4 font-mono text-[10px] text-slate-400">
+        <span>
+          <ShieldCheck className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />
+          {program.program_type}
+        </span>
+        <span>
+          <Users className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />
+          {program.enrolled_students}/{program.seats} enrolled
+        </span>
+        <span className="col-span-2">
+          <CalendarDays className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />
+          Apply by {deadline}
+        </span>
+      </div>
+      <button
+        onClick={onApply}
+        className="mt-5 w-full border border-cyan-400/60 py-2.5 font-display text-xs font-bold tracking-wider text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-950"
+      >
+        APPLY / CONNECT CAMPUS
+      </button>
     </article>
   );
 }
 
-function FormInput({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (value: string) => void; type?: string }) {
-  return <label><span className="mono mb-1 block text-[10px] text-slate-400">{label}</span><input type={type} value={value} onChange={(event) => onChange(event.target.value)} className="w-full border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400" /></label>;
+function FormInput({
+  label,
+  value,
+  onChange,
+  type = "text",
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: string;
+}) {
+  return (
+    <label>
+      <span className="mono mb-1 block text-[10px] text-slate-400">{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="w-full border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400"
+      />
+    </label>
+  );
 }

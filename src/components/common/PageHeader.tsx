@@ -52,11 +52,19 @@ export function PageHeader({
                       {item.label}
                     </Link>
                   ) : (
-                    <span className={isLast ? "text-foreground font-medium truncate max-w-[200px] sm:max-w-none" : ""}>
+                    <span
+                      className={
+                        isLast
+                          ? "text-foreground font-medium truncate max-w-[200px] sm:max-w-none"
+                          : ""
+                      }
+                    >
                       {item.label}
                     </span>
                   )}
-                  {!isLast && <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60 shrink-0" />}
+                  {!isLast && (
+                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60 shrink-0" />
+                  )}
                 </div>
               );
             })}

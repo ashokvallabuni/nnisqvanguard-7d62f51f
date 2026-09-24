@@ -96,8 +96,7 @@ export const ACADEMY_BADGES: BadgeDefinition[] = [
     iconName: "Layers",
     courseSlug: "cloud-security-fundamentals",
     skills: ["Docker Hardening", "Linux Capabilities", "Kubernetes Auditing", "Cloud IAM"],
-    criteria:
-      "Complete Cloud Security Fundamentals and solve the Container Breakout Defense Lab.",
+    criteria: "Complete Cloud Security Fundamentals and solve the Container Breakout Defense Lab.",
   },
 ];
 

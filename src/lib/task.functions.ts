@@ -85,7 +85,7 @@ export const submitLabTask = createServerFn({ method: "POST" })
       session_id: data.sessionId,
       task_id: data.taskId,
       user_id: userId,
-      answer: data.answer,        // store submitted answer for audit
+      answer: data.answer, // store submitted answer for audit
       is_correct: isCorrect,
       score,
       attempt_number: attemptNumber,

@@ -54,7 +54,10 @@ export const issueCertificate = createServerFn({ method: "POST" })
       .select("module_id", { count: "exact", head: true })
       .eq("user_id", userId)
       .eq("completed", true)
-      .in("module_id", modules.map((m) => m.id));
+      .in(
+        "module_id",
+        modules.map((m) => m.id),
+      );
 
     if ((completedCount ?? 0) < modules.length) {
       return {

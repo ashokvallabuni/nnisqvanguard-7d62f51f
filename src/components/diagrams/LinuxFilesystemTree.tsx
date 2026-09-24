@@ -14,57 +14,81 @@ const LINUX_DIRECTORIES: DirectoryNode[] = [
     name: "etc",
     path: "/etc",
     purpose: "Host-specific system-wide configuration files and startup scripts.",
-    criticalFiles: ["/etc/passwd (User accounts)", "/etc/shadow (Hashed passwords)", "/etc/sudoers (Sudo permissions)", "/etc/ssh/sshd_config"],
-    securityRelevance: "High-value target. Misconfigured permissions on /etc/passwd or /etc/shadow lead directly to root privilege escalation.",
+    criticalFiles: [
+      "/etc/passwd (User accounts)",
+      "/etc/shadow (Hashed passwords)",
+      "/etc/sudoers (Sudo permissions)",
+      "/etc/ssh/sshd_config",
+    ],
+    securityRelevance:
+      "High-value target. Misconfigured permissions on /etc/passwd or /etc/shadow lead directly to root privilege escalation.",
   },
   {
     name: "var",
     path: "/var",
     purpose: "Variable data files created during runtime (logs, mail spools, databases).",
-    criticalFiles: ["/var/log/auth.log (Auth attempts)", "/var/log/syslog", "/var/www/html (Web root)", "/var/run"],
-    securityRelevance: "Essential for forensic triage and threat hunting. Attackers often attempt to truncate or delete logs in /var/log to cover their tracks.",
+    criticalFiles: [
+      "/var/log/auth.log (Auth attempts)",
+      "/var/log/syslog",
+      "/var/www/html (Web root)",
+      "/var/run",
+    ],
+    securityRelevance:
+      "Essential for forensic triage and threat hunting. Attackers often attempt to truncate or delete logs in /var/log to cover their tracks.",
   },
   {
     name: "bin",
     path: "/bin",
     purpose: "Essential user command binaries required for single-user mode and system recovery.",
     criticalFiles: ["/bin/bash", "/bin/sh", "/bin/ls", "/bin/cat", "/bin/grep"],
-    securityRelevance: "SUID binaries in /bin or /usr/bin can be exploited via GTFOBins for unprivileged root shell escapes.",
+    securityRelevance:
+      "SUID binaries in /bin or /usr/bin can be exploited via GTFOBins for unprivileged root shell escapes.",
   },
   {
     name: "proc",
     path: "/proc",
-    purpose: "Virtual pseudo-filesystem providing an interface to the Linux kernel state and process table.",
-    criticalFiles: ["/proc/version (Kernel version)", "/proc/net/tcp (Active sockets)", "/proc/[PID]/cmdline", "/proc/sys/fs/suid_dumpable"],
-    securityRelevance: "Allows defenders and attackers to inspect memory maps, open file descriptors, and detect hidden rootkit processes.",
+    purpose:
+      "Virtual pseudo-filesystem providing an interface to the Linux kernel state and process table.",
+    criticalFiles: [
+      "/proc/version (Kernel version)",
+      "/proc/net/tcp (Active sockets)",
+      "/proc/[PID]/cmdline",
+      "/proc/sys/fs/suid_dumpable",
+    ],
+    securityRelevance:
+      "Allows defenders and attackers to inspect memory maps, open file descriptors, and detect hidden rootkit processes.",
   },
   {
     name: "tmp",
     path: "/tmp",
     purpose: "Temporary files directory accessible by all users with the sticky bit (+t) set.",
     criticalFiles: ["/tmp/sess_*", "/tmp/.X11-unix", "Malware staging scripts"],
-    securityRelevance: "Common staging ground for threat actors to download and execute reverse shells, cryptominers, or exploit payloads.",
+    securityRelevance:
+      "Common staging ground for threat actors to download and execute reverse shells, cryptominers, or exploit payloads.",
   },
   {
     name: "home",
     path: "/home",
     purpose: "User home directories containing personal files, bash history, and SSH keys.",
     criticalFiles: ["~/.ssh/authorized_keys", "~/.bash_history", "~/.ssh/id_rsa"],
-    securityRelevance: "Leaked private keys or command history in ~/.bash_history often expose sensitive API tokens and credentials.",
+    securityRelevance:
+      "Leaked private keys or command history in ~/.bash_history often expose sensitive API tokens and credentials.",
   },
   {
     name: "opt",
     path: "/opt",
     purpose: "Optional add-on third-party software packages.",
     criticalFiles: ["/opt/nisq-sandbox", "/opt/custom_agent"],
-    securityRelevance: "Custom third-party scripts frequently run with insecure file permissions or unquoted service paths.",
+    securityRelevance:
+      "Custom third-party scripts frequently run with insecure file permissions or unquoted service paths.",
   },
   {
     name: "root",
     path: "/root",
     purpose: "Home directory of the superuser (root).",
     criticalFiles: ["/root/.ssh/id_rsa", "/root/.bash_history"],
-    securityRelevance: "Accessible only by root (permissions 700). Contains root SSH credentials and administration history.",
+    securityRelevance:
+      "Accessible only by root (permissions 700). Contains root SSH credentials and administration history.",
   },
 ];
 
@@ -80,7 +104,8 @@ export function LinuxFilesystemTree() {
             <span>Interactive Linux Filesystem Hierarchy (FHS)</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Click any directory to inspect its purpose, critical system files, and security relevance.
+            Click any directory to inspect its purpose, critical system files, and security
+            relevance.
           </p>
         </div>
         <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
@@ -110,10 +135,14 @@ export function LinuxFilesystemTree() {
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    <Folder className={`w-3.5 h-3.5 ${isSelected ? "text-primary-foreground" : "text-amber-400"}`} />
+                    <Folder
+                      className={`w-3.5 h-3.5 ${isSelected ? "text-primary-foreground" : "text-amber-400"}`}
+                    />
                     <span>/{dir.name}</span>
                   </span>
-                  <span className={`text-[0.6rem] uppercase ${isSelected ? "text-primary-foreground/80" : "text-slate-500"}`}>
+                  <span
+                    className={`text-[0.6rem] uppercase ${isSelected ? "text-primary-foreground/80" : "text-slate-500"}`}
+                  >
                     Inspect →
                   </span>
                 </button>
@@ -150,7 +179,10 @@ export function LinuxFilesystemTree() {
             </span>
             <ul className="space-y-1 font-mono text-[0.7rem] text-foreground">
               {selectedDir.criticalFiles.map((file, i) => (
-                <li key={i} className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+                <li
+                  key={i}
+                  className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300"
+                >
                   <span className="text-primary">•</span>
                   <span>{file}</span>
                 </li>

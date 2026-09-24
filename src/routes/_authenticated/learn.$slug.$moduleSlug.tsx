@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
 import {
@@ -25,7 +25,10 @@ import { ModuleNavigation, ModuleItem } from "@/components/academy/ModuleNavigat
 import { DatasetPreviewCard, DatasetSample } from "@/components/academy/DatasetPreviewCard";
 import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
 import { AuthoritativeSources, CitationSource } from "@/components/academy/AuthoritativeSources";
-import { ExplainThisAssistant, ConceptExplanations } from "@/components/academy/ExplainThisAssistant";
+import {
+  ExplainThisAssistant,
+  ConceptExplanations,
+} from "@/components/academy/ExplainThisAssistant";
 import { NetworkTopologyDiagram } from "@/components/diagrams/NetworkTopologyDiagram";
 import { TcpHandshakeDiagram } from "@/components/diagrams/TcpHandshakeDiagram";
 import { IpSubnetVisualizer } from "@/components/diagrams/IpSubnetVisualizer";
@@ -53,33 +56,87 @@ export const Route = createFileRoute("/_authenticated/learn/$slug/$moduleSlug")(
 
 // Real Dataset Mock Generator
 function getModuleDataset(slug: string, title: string): DatasetSample {
-  if (slug.includes("tcp") || slug.includes("network") || slug.includes("packet") || slug.includes("traffic")) {
+  if (
+    slug.includes("tcp") ||
+    slug.includes("network") ||
+    slug.includes("packet") ||
+    slug.includes("traffic")
+  ) {
     return {
       name: "CIC-IDS2018 Real Network Flow & Suricata PCAP Telemetry",
       source: "Canadian Institute for Cybersecurity (CIC-IDS2018)",
       format: "json",
-      description: "Inspect network flow features (Source/Destination IP, Ports, Protocol 6 [TCP], Flow Duration, Packet/Byte counts) capturing normal vs SYN flood traffic.",
+      description:
+        "Inspect network flow features (Source/Destination IP, Ports, Protocol 6 [TCP], Flow Duration, Packet/Byte counts) capturing normal vs SYN flood traffic.",
       recordsCount: 1048576,
       data: [
-        { timestamp: "2026-09-21T08:30:12Z", src_ip: "192.168.1.105", src_port: 54102, dst_ip: "10.0.0.5", dst_port: 80, proto: "TCP", alert: "ET SCAN Potential Nmap SYN Scan", severity: 2 },
-        { timestamp: "2026-09-21T08:30:13Z", src_ip: "192.168.1.105", src_port: 54103, dst_ip: "10.0.0.5", dst_port: 443, proto: "TCP", alert: "ET SCAN Potential Nmap SYN Scan", severity: 2 },
-        { timestamp: "2026-09-21T08:35:45Z", src_ip: "10.0.0.5", src_port: 60231, dst_ip: "8.8.8.8", dst_port: 53, proto: "UDP", alert: "ET DNS Query for Suspicious High-Entropy Base64 Domain", severity: 1 },
+        {
+          timestamp: "2026-09-21T08:30:12Z",
+          src_ip: "192.168.1.105",
+          src_port: 54102,
+          dst_ip: "10.0.0.5",
+          dst_port: 80,
+          proto: "TCP",
+          alert: "ET SCAN Potential Nmap SYN Scan",
+          severity: 2,
+        },
+        {
+          timestamp: "2026-09-21T08:30:13Z",
+          src_ip: "192.168.1.105",
+          src_port: 54103,
+          dst_ip: "10.0.0.5",
+          dst_port: 443,
+          proto: "TCP",
+          alert: "ET SCAN Potential Nmap SYN Scan",
+          severity: 2,
+        },
+        {
+          timestamp: "2026-09-21T08:35:45Z",
+          src_ip: "10.0.0.5",
+          src_port: 60231,
+          dst_ip: "8.8.8.8",
+          dst_port: 53,
+          proto: "UDP",
+          alert: "ET DNS Query for Suspicious High-Entropy Base64 Domain",
+          severity: 1,
+        },
       ],
       kaggleUrl: "https://www.kaggle.com/datasets/cicdataset/cicids2017",
     };
   }
 
-  if (slug.includes("auth") || slug.includes("linux") || slug.includes("ssh") || slug.includes("password")) {
+  if (
+    slug.includes("auth") ||
+    slug.includes("linux") ||
+    slug.includes("ssh") ||
+    slug.includes("password")
+  ) {
     return {
       name: "Linux Authentication & SSH Telemetry Feed (/var/log/auth.log)",
       source: "Honeypot Sensor #042 (Ubuntu 22.04 LTS)",
       format: "log",
-      description: "Analyze failed authentication sequences, repeated user enumeration, and automated password brute-force bursts.",
+      description:
+        "Analyze failed authentication sequences, repeated user enumeration, and automated password brute-force bursts.",
       recordsCount: 420000,
       data: [
-        { timestamp: "2026-09-21T10:14:02Z", host: "auth-gateway-01", process: "sshd[18442]", event: "Failed password for invalid user admin from 198.51.100.44 port 48212 ssh2" },
-        { timestamp: "2026-09-21T10:14:03Z", host: "auth-gateway-01", process: "sshd[18445]", event: "Failed password for invalid user root from 198.51.100.44 port 48218 ssh2" },
-        { timestamp: "2026-09-21T10:15:20Z", host: "auth-gateway-01", process: "sshd[18512]", event: "Accepted publickey for secops from 10.0.4.12 port 51102 ssh2: RSA SHA256:8sK..." },
+        {
+          timestamp: "2026-09-21T10:14:02Z",
+          host: "auth-gateway-01",
+          process: "sshd[18442]",
+          event: "Failed password for invalid user admin from 198.51.100.44 port 48212 ssh2",
+        },
+        {
+          timestamp: "2026-09-21T10:14:03Z",
+          host: "auth-gateway-01",
+          process: "sshd[18445]",
+          event: "Failed password for invalid user root from 198.51.100.44 port 48218 ssh2",
+        },
+        {
+          timestamp: "2026-09-21T10:15:20Z",
+          host: "auth-gateway-01",
+          process: "sshd[18512]",
+          event: "Accepted publickey for secops from 10.0.4.12 port 51102 ssh2: RSA SHA256:8sK...",
+        },
       ],
       kaggleUrl: "https://www.kaggle.com/datasets",
     };
@@ -89,11 +146,24 @@ function getModuleDataset(slug: string, title: string): DatasetSample {
     name: `${title} — Real Incident Telemetry`,
     source: "NISQ Defense Cyber Range Sensor Grid",
     format: "json",
-    description: "Real-world captured system events and indicators of compromise (IOCs) mapped to this module's learning objectives.",
+    description:
+      "Real-world captured system events and indicators of compromise (IOCs) mapped to this module's learning objectives.",
     recordsCount: 350,
     data: [
-      { id: "EVT-9021", timestamp: "2026-09-21T09:00:00Z", category: "Defensive Operations", severity: "HIGH", description: "Privilege escalation attempt detected on host-endpoint-alpha" },
-      { id: "EVT-9022", timestamp: "2026-09-21T09:04:12Z", category: "Network Boundary", severity: "MEDIUM", description: "Outbound beaconing to unregistered ASN IP" },
+      {
+        id: "EVT-9021",
+        timestamp: "2026-09-21T09:00:00Z",
+        category: "Defensive Operations",
+        severity: "HIGH",
+        description: "Privilege escalation attempt detected on host-endpoint-alpha",
+      },
+      {
+        id: "EVT-9022",
+        timestamp: "2026-09-21T09:04:12Z",
+        category: "Network Boundary",
+        severity: "MEDIUM",
+        description: "Outbound beaconing to unregistered ASN IP",
+      },
     ],
     kaggleUrl: "https://www.kaggle.com/datasets",
   };
@@ -107,7 +177,9 @@ function ModuleLearningPage() {
 
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [checkedQuizzes, setCheckedQuizzes] = useState<Record<string, boolean>>({});
-  const [quizResults, setQuizResults] = useState<Record<string, { is_correct: boolean; score: number; explanation: string }>>({});
+  const [quizResults, setQuizResults] = useState<
+    Record<string, { is_correct: boolean; score: number; explanation: string }>
+  >({});
   const [completing, setCompleting] = useState(false);
 
   // 1. Fetch Course
@@ -134,7 +206,8 @@ function ModuleLearningPage() {
           id: "c-net-fund",
           slug: "networking-fundamentals",
           title: "Networking Fundamentals",
-          description: "Master TCP/IP, OSI layers, packet flows, routing, and network forensics from first principles.",
+          description:
+            "Master TCP/IP, OSI layers, packet flows, routing, and network forensics from first principles.",
           level: "Beginner",
           tier: "free",
         };
@@ -142,7 +215,10 @@ function ModuleLearningPage() {
       return {
         id: `c-${slug}`,
         slug,
-        title: slug.split("-").map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" "),
+        title: slug
+          .split("-")
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(" "),
         description: "Authoritative cybersecurity curriculum.",
         level: "Beginner",
         tier: "free",
@@ -196,7 +272,9 @@ function ModuleLearningPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("modules")
-        .select("id,course_id,slug,title,notes_md,locked,tags,difficulty,duration_minutes,practice_labs,sort_order")
+        .select(
+          "id,course_id,slug,title,notes_md,locked,tags,difficulty,duration_minutes,practice_labs,sort_order",
+        )
         .eq("course_id", course!.id)
         .eq("slug", moduleSlug)
         .maybeSingle();
@@ -242,8 +320,12 @@ function ModuleLearningPage() {
         id: `mod-${moduleSlug}`,
         course_id: course!.id,
         slug: moduleSlug,
-        title: moduleSlug.split("-").map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" "),
-        notes_md: "### Core Concept\nMaster the technical architecture and security implications of this topic.",
+        title: moduleSlug
+          .split("-")
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(" "),
+        notes_md:
+          "### Core Concept\nMaster the technical architecture and security implications of this topic.",
         locked: false,
         tags: ["Security", "Defense"],
         difficulty: "BEGINNER",
@@ -293,7 +375,8 @@ function ModuleLearningPage() {
             "Delete system logs every hour",
           ],
           correct_option: 0,
-          explanation: "Applying the principle of least privilege and maintaining tamper-evident audit logs is the core security standard.",
+          explanation:
+            "Applying the principle of least privilege and maintaining tamper-evident audit logs is the core security standard.",
           sort_order: 1,
         },
       ];
@@ -322,7 +405,7 @@ function ModuleLearningPage() {
   if (!course || !currentModule) return null;
 
   const completedModuleIds = new Set(
-    (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id)
+    (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id),
   );
 
   const isCurrentModuleCompleted = completedModuleIds.has(currentModule.id);
@@ -357,10 +440,18 @@ function ModuleLearningPage() {
     if (slugLower.includes("permission") || slugLower.includes("chmod")) {
       return <LinuxPermissionsVisualizer />;
     }
-    if (slugLower.includes("filesystem") || slugLower.includes("fhs") || slugLower.includes("linux")) {
+    if (
+      slugLower.includes("filesystem") ||
+      slugLower.includes("fhs") ||
+      slugLower.includes("linux")
+    ) {
       return <LinuxFilesystemTree />;
     }
-    if (slugLower.includes("cia") || slugLower.includes("foundation") || slugLower.includes("threat")) {
+    if (
+      slugLower.includes("cia") ||
+      slugLower.includes("foundation") ||
+      slugLower.includes("threat")
+    ) {
       return <CiaTriadSecurityDiagram />;
     }
     if (slugLower.includes("soc") || slugLower.includes("log") || slugLower.includes("siem")) {
@@ -377,14 +468,16 @@ function ModuleLearningPage() {
       type: "RFC",
       citationNumber: "RFC 9293",
       url: "https://www.rfc-editor.org/rfc/rfc9293",
-      notes: "Authoritative IETF internet standard defining packet state machines and sequence synchronization.",
+      notes:
+        "Authoritative IETF internet standard defining packet state machines and sequence synchronization.",
     },
     {
       title: "NIST SP 800-53 Rev. 5: Security and Privacy Controls for Information Systems",
       type: "NIST",
       citationNumber: "SP 800-53",
       url: "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
-      notes: "Federal standards for access control, boundary protection, and continuous monitoring.",
+      notes:
+        "Federal standards for access control, boundary protection, and continuous monitoring.",
     },
     {
       title: "MITRE ATT&CK Framework: Enterprise Matrix",
@@ -399,10 +492,14 @@ function ModuleLearningPage() {
   const lessonExplanations: ConceptExplanations = {
     conceptName: currentModule.title,
     quick: `Core security concept: ${currentModule.title} defines how communication and state enforcement occur within the protocol boundary.`,
-    beginner: "Think of this like a passport checkpoint at an airport: every packet must present verifiable identification before entering.",
-    technical: "A stateful protocol layer utilizing deterministic sequence numbers, bitwise flag masks, and kernel-space socket buffers.",
-    security: "Misconfigurations allow adversaries to conduct spoofing, unauthorized traversal, or Denial of Service.",
-    practical: "Security analysts correlate these packet fields in SIEM queries to isolate indicators of compromise (IOCs).",
+    beginner:
+      "Think of this like a passport checkpoint at an airport: every packet must present verifiable identification before entering.",
+    technical:
+      "A stateful protocol layer utilizing deterministic sequence numbers, bitwise flag masks, and kernel-space socket buffers.",
+    security:
+      "Misconfigurations allow adversaries to conduct spoofing, unauthorized traversal, or Denial of Service.",
+    practical:
+      "Security analysts correlate these packet fields in SIEM queries to isolate indicators of compromise (IOCs).",
   };
 
   // Complete Module — server-side validation and badge/certificate evaluation
@@ -428,7 +525,9 @@ function ModuleLearningPage() {
       if (result.awardedBadges && result.awardedBadges.length > 0) {
         toast.success(`🏅 New Badge Awarded: ${result.awardedBadges[0]}!`, { duration: 5000 });
       } else if (result.certificateNumber) {
-        toast.success(`🎓 Course Complete! Certificate issued: ${result.certificateNumber}`, { duration: 7000 });
+        toast.success(`🎓 Course Complete! Certificate issued: ${result.certificateNumber}`, {
+          duration: 7000,
+        });
       } else {
         toast.success("Module completed! XP awarded.");
       }
@@ -453,7 +552,11 @@ function ModuleLearningPage() {
           duration: 7000,
           action: {
             label: "Sign In",
-            onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+            onClick: () =>
+              navigate({
+                to: "/login",
+                search: { next: `/learn/${course.slug}/${currentModule.slug}` },
+              }),
           },
         });
       } else {
@@ -485,7 +588,11 @@ function ModuleLearningPage() {
           duration: 7000,
           action: {
             label: "Sign In",
-            onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+            onClick: () =>
+              navigate({
+                to: "/login",
+                search: { next: `/learn/${course.slug}/${currentModule.slug}` },
+              }),
           },
         });
         return;
@@ -514,7 +621,11 @@ function ModuleLearningPage() {
             duration: 6000,
             action: {
               label: "Sign In",
-              onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+              onClick: () =>
+                navigate({
+                  to: "/login",
+                  search: { next: `/learn/${course.slug}/${currentModule.slug}` },
+                }),
             },
           });
         }
@@ -533,7 +644,11 @@ function ModuleLearningPage() {
           duration: 7000,
           action: {
             label: "Sign In",
-            onClick: () => navigate({ to: "/login", search: { next: `/learn/${course.slug}/${currentModule.slug}` } }),
+            onClick: () =>
+              navigate({
+                to: "/login",
+                search: { next: `/learn/${course.slug}/${currentModule.slug}` },
+              }),
           },
         });
       } else {
@@ -541,7 +656,6 @@ function ModuleLearningPage() {
       }
     }
   };
-
 
   return (
     <div className="min-h-screen pt-16 pb-24">
@@ -596,15 +710,14 @@ function ModuleLearningPage() {
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    In this lesson, you will master the foundational architecture and defensive concepts surrounding this topic.
+                    In this lesson, you will master the foundational architecture and defensive
+                    concepts surrounding this topic.
                   </p>
                 )}
               </div>
 
               {/* Interactive Educational Diagram Engine */}
-              <div className="pt-4 border-t border-border/60">
-                {renderInteractiveDiagram()}
-              </div>
+              <div className="pt-4 border-t border-border/60">{renderInteractiveDiagram()}</div>
             </section>
 
             {/* Step 2: Real Dataset Telemetry Viewer */}
@@ -622,7 +735,8 @@ function ModuleLearningPage() {
               </div>
 
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Security analysts don't just read theory—they analyze logs, PCAPs, and authentication streams. Inspect the real telemetry feed below:
+                Security analysts don't just read theory—they analyze logs, PCAPs, and
+                authentication streams. Inspect the real telemetry feed below:
               </p>
 
               <DatasetPreviewCard dataset={datasetSample} />
@@ -708,31 +822,33 @@ function ModuleLearningPage() {
                             Check Answer
                           </button>
 
-                          {isChecked && (() => {
-                            const serverResult = quizResults[q.id];
-                            const correct = serverResult?.is_correct ?? false;
-                            return (
-                              <span
-                                className={`text-xs font-mono font-semibold ${
-                                  correct ? "text-success" : "text-destructive"
-                                }`}
-                              >
-                                {correct ? "Correct! +10 XP" : "Incorrect. Try again."}
-                              </span>
-                            );
-                          })()}
+                          {isChecked &&
+                            (() => {
+                              const serverResult = quizResults[q.id];
+                              const correct = serverResult?.is_correct ?? false;
+                              return (
+                                <span
+                                  className={`text-xs font-mono font-semibold ${
+                                    correct ? "text-success" : "text-destructive"
+                                  }`}
+                                >
+                                  {correct ? "Correct! +10 XP" : "Incorrect. Try again."}
+                                </span>
+                              );
+                            })()}
                         </div>
 
-                        {isChecked && (() => {
-                          const serverResult = quizResults[q.id];
-                          const explanation = serverResult?.explanation ?? q.explanation;
-                          return explanation ? (
-                            <div className="p-3 rounded-md bg-muted text-xs text-muted-foreground leading-relaxed border-l-2 border-primary">
-                              <span className="font-semibold text-foreground">Explanation: </span>
-                              {explanation}
-                            </div>
-                          ) : null;
-                        })()}
+                        {isChecked &&
+                          (() => {
+                            const serverResult = quizResults[q.id];
+                            const explanation = serverResult?.explanation ?? q.explanation;
+                            return explanation ? (
+                              <div className="p-3 rounded-md bg-muted text-xs text-muted-foreground leading-relaxed border-l-2 border-primary">
+                                <span className="font-semibold text-foreground">Explanation: </span>
+                                {explanation}
+                              </div>
+                            ) : null;
+                          })()}
                       </div>
                     );
                   })}
@@ -753,7 +869,8 @@ function ModuleLearningPage() {
               </div>
 
               <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-                Apply what you've learned inside an isolated Linux sandbox container with live network capture artifacts and automated task verification.
+                Apply what you've learned inside an isolated Linux sandbox container with live
+                network capture artifacts and automated task verification.
               </p>
 
               <div className="pt-2 flex flex-wrap gap-3">
@@ -820,12 +937,12 @@ function ModuleLearningPage() {
                     {completing
                       ? "Saving..."
                       : isCurrentModuleCompleted
-                      ? nextModule
-                        ? "Completed — Next Module →"
-                        : "Completed!"
-                      : nextModule
-                      ? "Complete & Next Module →"
-                      : "Complete Course Track"}
+                        ? nextModule
+                          ? "Completed — Next Module →"
+                          : "Completed!"
+                        : nextModule
+                          ? "Complete & Next Module →"
+                          : "Complete Course Track"}
                   </span>
                 </button>
               </div>

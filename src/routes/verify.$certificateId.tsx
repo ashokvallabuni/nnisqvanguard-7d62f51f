@@ -22,7 +22,8 @@ export const Route = createFileRoute("/verify/$certificateId")({
       { title: `Verify Credential ${params.certificateId} — NISQ Vanguard Academy` },
       {
         name: "description",
-        content: "Public cryptographic verification portal for NISQ Vanguard Academy course certificates.",
+        content:
+          "Public cryptographic verification portal for NISQ Vanguard Academy course certificates.",
       },
     ],
   }),

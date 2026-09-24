@@ -5,7 +5,15 @@ import { runFullAnalysis, runQuickAnalysis } from "@/lib/agents/orchestrator";
 import type { RiskLevel } from "@/lib/agents/types";
 
 const AnalyzeBody = z.object({
-  type: z.enum(["security_event", "url", "file_hash", "ip_address", "domain", "log_entry", "chat_query"]),
+  type: z.enum([
+    "security_event",
+    "url",
+    "file_hash",
+    "ip_address",
+    "domain",
+    "log_entry",
+    "chat_query",
+  ]),
   data: z.string().trim().min(1).max(50000),
   mode: z.enum(["full", "quick"]).optional().default("quick"),
   metadata: z.record(z.unknown()).optional(),
@@ -47,7 +55,7 @@ export const Route = createFileRoute("/api/agents/analyze")({
               "chat",
               "agent_analyze:" + parsed.type,
               { mode: parsed.mode, status: result.status },
-              toLogRiskLevel(result.risk?.severity)
+              toLogRiskLevel(result.risk?.severity),
             );
 
             return json({
@@ -64,7 +72,7 @@ export const Route = createFileRoute("/api/agents/analyze")({
               "chat",
               "agent_analyze:" + parsed.type,
               { mode: parsed.mode, riskScore: result.risk.riskScore },
-              toLogRiskLevel(result.risk.severity)
+              toLogRiskLevel(result.risk.severity),
             );
 
             return json({
@@ -82,4 +90,3 @@ export const Route = createFileRoute("/api/agents/analyze")({
     },
   },
 });
-

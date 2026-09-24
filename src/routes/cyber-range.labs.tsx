@@ -41,7 +41,8 @@ const CANONICAL_LABS: LabData[] = [
     id: "lab-ssh-bruteforce",
     slug: "linux-ssh-brute-force-investigation",
     title: "Linux SSH Brute Force Investigation",
-    summary: "Analyze live syslog and auth.log streams in an isolated Linux environment to detect automated credential stuffing, identify attacker IP ranges, and construct automated fail2ban rules.",
+    summary:
+      "Analyze live syslog and auth.log streams in an isolated Linux environment to detect automated credential stuffing, identify attacker IP ranges, and construct automated fail2ban rules.",
     difficulty: "easy",
     category: "Host Forensics",
     estimated_minutes: 30,
@@ -53,7 +54,8 @@ const CANONICAL_LABS: LabData[] = [
     id: "lab-suricata-nids",
     slug: "suricata-network-threat-hunting",
     title: "Suricata Network Threat Hunting & PCAP Analysis",
-    summary: "Reconstruct malicious packet streams, isolate command-and-control (C2) beaconing intervals, and extract hidden base64 encoded data exfiltration channels from raw PCAPs.",
+    summary:
+      "Reconstruct malicious packet streams, isolate command-and-control (C2) beaconing intervals, and extract hidden base64 encoded data exfiltration channels from raw PCAPs.",
     difficulty: "medium",
     category: "Network Defense",
     estimated_minutes: 45,
@@ -65,7 +67,8 @@ const CANONICAL_LABS: LabData[] = [
     id: "lab-sqli-investigation",
     slug: "sql-injection-forensics-and-mitigation",
     title: "SQL Injection Incident Forensics & Hardening",
-    summary: "Investigate database access logs following a data exfiltration incident, identify the vulnerable parameterized query bypass, and remediate the backend application code.",
+    summary:
+      "Investigate database access logs following a data exfiltration incident, identify the vulnerable parameterized query bypass, and remediate the backend application code.",
     difficulty: "medium",
     category: "App Security",
     estimated_minutes: 40,
@@ -77,7 +80,8 @@ const CANONICAL_LABS: LabData[] = [
     id: "lab-ransomware-triage",
     slug: "ransomware-registry-persistence-triage",
     title: "Ransomware Registry Persistence & Triage",
-    summary: "Inspect Windows event logs and registry run keys in a simulated enterprise workstation to locate encrypted shadow copies and extract the attacker's staging script.",
+    summary:
+      "Inspect Windows event logs and registry run keys in a simulated enterprise workstation to locate encrypted shadow copies and extract the attacker's staging script.",
     difficulty: "hard",
     category: "Endpoint Triage",
     estimated_minutes: 60,
@@ -89,7 +93,8 @@ const CANONICAL_LABS: LabData[] = [
     id: "lab-container-security",
     slug: "docker-container-breakout-defense",
     title: "Docker Container Security & Escape Defense",
-    summary: "Identify misconfigured privileged container capabilities, audit mounted host sockets, and harden the Docker daemon security profile against privilege escalation.",
+    summary:
+      "Identify misconfigured privileged container capabilities, audit mounted host sockets, and harden the Docker daemon security profile against privilege escalation.",
     difficulty: "hard",
     category: "Cloud Security",
     estimated_minutes: 50,
@@ -101,7 +106,8 @@ const CANONICAL_LABS: LabData[] = [
     id: "lab-memory-forensics",
     slug: "volatility-memory-dump-analysis",
     title: "Memory Forensics with Volatility 3",
-    summary: "Parse raw memory dumps from a compromised domain controller, hunt for injected DLLs, unhooked processes, and recover plaintext credentials from memory.",
+    summary:
+      "Parse raw memory dumps from a compromised domain controller, hunt for injected DLLs, unhooked processes, and recover plaintext credentials from memory.",
     difficulty: "insane",
     category: "Threat Hunting",
     estimated_minutes: 75,
@@ -211,10 +217,12 @@ function CyberLabsCatalogPage() {
         lab.mitre_attack_ids?.some((m) => m.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchesCategory =
-        selectedCategory === "all" || lab.category?.toLowerCase() === selectedCategory.toLowerCase();
+        selectedCategory === "all" ||
+        lab.category?.toLowerCase() === selectedCategory.toLowerCase();
 
       const matchesDifficulty =
-        selectedDifficulty === "all" || lab.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
+        selectedDifficulty === "all" ||
+        lab.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
 
       return matchesSearch && matchesCategory && matchesDifficulty;
     });
@@ -271,7 +279,8 @@ function CyberLabsCatalogPage() {
               Isolated Execution Sandbox
             </h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Every lab launches a private Docker container with real forensics tools (TShark, Suricata, GDB, Volatility).
+              Every lab launches a private Docker container with real forensics tools (TShark,
+              Suricata, GDB, Volatility).
             </p>
           </div>
 
@@ -279,11 +288,10 @@ function CyberLabsCatalogPage() {
             <div className="w-7 h-7 rounded-md bg-accent/15 text-accent-foreground flex items-center justify-center font-mono text-xs font-bold">
               02
             </div>
-            <h4 className="font-display font-bold text-sm text-foreground">
-              Real Data Telemetry
-            </h4>
+            <h4 className="font-display font-bold text-sm text-foreground">Real Data Telemetry</h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Analyze realistic PCAPs, authentication event logs, and malware registry artifacts derived from real engagements.
+              Analyze realistic PCAPs, authentication event logs, and malware registry artifacts
+              derived from real engagements.
             </p>
           </div>
 
@@ -295,7 +303,8 @@ function CyberLabsCatalogPage() {
               Instant Validation & Points
             </h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Submit your analytical answers or captured security flags to receive automated score grading and skill points.
+              Submit your analytical answers or captured security flags to receive automated score
+              grading and skill points.
             </p>
           </div>
         </div>

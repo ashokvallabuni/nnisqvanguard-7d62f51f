@@ -25,11 +25,7 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/common/PageHeader";
 import { labExecutionService } from "@/lib/lab-execution";
-import {
-  submitLabFlag,
-  stopLabSession,
-  resetLabSession,
-} from "@/lib/lab-runner.functions";
+import { submitLabFlag, stopLabSession, resetLabSession } from "@/lib/lab-runner.functions";
 
 export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
   head: ({ params }) => ({
@@ -49,18 +45,13 @@ export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
 const ERROR_MESSAGES: Record<string, string> = {
   LAB_INFRASTRUCTURE_NOT_CONFIGURED:
     "The lab container runner is not reachable. Please verify the Cloudflare tunnel and local runner.",
-  RUNNER_URL_MISSING:
-    "LAB_RUNNER_URL is not configured in Vercel environment variables.",
-  RUNNER_SECRET_MISSING:
-    "LAB_RUNNER_SECRET is not configured in Vercel environment variables.",
+  RUNNER_URL_MISSING: "LAB_RUNNER_URL is not configured in Vercel environment variables.",
+  RUNNER_SECRET_MISSING: "LAB_RUNNER_SECRET is not configured in Vercel environment variables.",
   RUNNER_UNREACHABLE:
     "Cannot reach the Lab Runner over the Cloudflare tunnel. Please ensure cloudflared and Docker are running.",
-  RUNNER_AUTH_FAILED:
-    "Authentication to the Lab Runner failed (LAB_RUNNER_SECRET mismatch).",
-  RUNNER_NOT_READY:
-    "The Lab Runner is online but Docker or image dependencies are not ready.",
-  DOCKER_NOT_RUNNING:
-    "Docker Engine is not running on the lab host.",
+  RUNNER_AUTH_FAILED: "Authentication to the Lab Runner failed (LAB_RUNNER_SECRET mismatch).",
+  RUNNER_NOT_READY: "The Lab Runner is online but Docker or image dependencies are not ready.",
+  DOCKER_NOT_RUNNING: "Docker Engine is not running on the lab host.",
   LAB_IMAGE_NOT_FOUND:
     "The required Docker lab image (nisqvanguard/linux-security:latest) was not found.",
   LAB_EXECUTION_UNAVAILABLE:
@@ -68,8 +59,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   UNAUTHORIZED: "Your session has expired. Please sign out and sign back in.",
   SESSION_NOT_FOUND:
     "Your lab session was not found. It may have expired — click 'Start Lab' to create a new session.",
-  INVALID_COMMAND:
-    "That command is not permitted inside the sandbox environment.",
+  INVALID_COMMAND: "That command is not permitted inside the sandbox environment.",
   TASK_INVALID: "The task you attempted to submit could not be verified.",
   FLAG_INVALID: "The flag format is invalid. Expected FLAG{…}.",
   SESSION_INACTIVE: "Your session is no longer active. Start a new session to continue.",
@@ -200,7 +190,10 @@ function getLabConfig(slug: string): LabData {
   return {
     id: `lab-${slug}`,
     slug,
-    title: slug.split("-").map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" "),
+    title: slug
+      .split("-")
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(" "),
     difficulty: "MEDIUM",
     category: "Cyber Range",
     description:
@@ -517,9 +510,7 @@ function CyberLabWorkbenchPage() {
 
   // ── Derived progress stats ─────────────────────────────────────────────────
   const progressPct = persistedProgress?.total_tasks
-    ? Math.round(
-        ((persistedProgress.tasks_completed ?? 0) / persistedProgress.total_tasks) * 100,
-      )
+    ? Math.round(((persistedProgress.tasks_completed ?? 0) / persistedProgress.total_tasks) * 100)
     : 0;
 
   // ── Tasks Panel ────────────────────────────────────────────────────────────
@@ -557,14 +548,13 @@ function CyberLabWorkbenchPage() {
             <span>Interactive Tasks</span>
           </h3>
           <span className="text-xs font-mono text-muted-foreground">
-            {persistedProgress?.tasks_completed ?? 0}/{persistedProgress?.total_tasks ?? labConfig.tasks.length} Done
+            {persistedProgress?.tasks_completed ?? 0}/
+            {persistedProgress?.total_tasks ?? labConfig.tasks.length} Done
           </span>
         </div>
         <div className="space-y-3">
           {labConfig.tasks.map((task, index) => {
-            const isCompleted =
-              labSolved ||
-              (index < (persistedProgress?.tasks_completed ?? 0));
+            const isCompleted = labSolved || index < (persistedProgress?.tasks_completed ?? 0);
             return (
               <div
                 key={task.id}
@@ -643,10 +633,7 @@ function CyberLabWorkbenchPage() {
           {labConfig.hints.map((hint, idx) => {
             const isRevealed = revealedHints.includes(idx);
             return (
-              <div
-                key={idx}
-                className="p-3 rounded-lg border border-border/80 bg-muted/20 text-xs"
-              >
+              <div key={idx} className="p-3 rounded-lg border border-border/80 bg-muted/20 text-xs">
                 {isRevealed ? (
                   <div className="text-foreground leading-relaxed">
                     <span className="font-mono font-semibold text-primary">Hint {idx + 1}: </span>
@@ -743,20 +730,20 @@ function CyberLabWorkbenchPage() {
                 sessionStarting
                   ? "bg-amber-400 animate-ping"
                   : sessionActive
-                  ? "bg-green-400 animate-pulse"
-                  : infraStatus === "unconfigured" || infraStatus === "error"
-                  ? "bg-red-400"
-                  : "bg-slate-500"
+                    ? "bg-green-400 animate-pulse"
+                    : infraStatus === "unconfigured" || infraStatus === "error"
+                      ? "bg-red-400"
+                      : "bg-slate-500"
               }`}
             />
             <span>
               {sessionStarting
                 ? "CONNECTING..."
                 : sessionActive
-                ? "CONTAINER ONLINE"
-                : infraStatus === "unconfigured" || infraStatus === "error"
-                ? "RUNNER OFFLINE"
-                : "OFFLINE"}
+                  ? "CONTAINER ONLINE"
+                  : infraStatus === "unconfigured" || infraStatus === "error"
+                    ? "RUNNER OFFLINE"
+                    : "OFFLINE"}
             </span>
           </span>
         </div>
@@ -868,7 +855,8 @@ function CyberLabWorkbenchPage() {
 
             {labSolved ? (
               <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-success text-success-foreground font-mono text-xs font-bold shadow-xs">
-                <Award className="w-4 h-4" /> SOLVED (+{persistedProgress?.points ?? labConfig.reward_points} XP)
+                <Award className="w-4 h-4" /> SOLVED (+
+                {persistedProgress?.points ?? labConfig.reward_points} XP)
               </span>
             ) : sessionActive ? (
               <button

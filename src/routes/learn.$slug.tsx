@@ -112,7 +112,9 @@ function CourseDetailPage() {
 
       const { data } = await supabase
         .from("modules")
-        .select("id,course_id,slug,title,notes_md,difficulty,duration_minutes,tags,practice_labs,sort_order")
+        .select(
+          "id,course_id,slug,title,notes_md,difficulty,duration_minutes,tags,practice_labs,sort_order",
+        )
         .eq("course_id", course!.id)
         .order("sort_order");
 
@@ -161,7 +163,7 @@ function CourseDetailPage() {
   if (!course) return null;
 
   const completedModuleIds = new Set(
-    (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id)
+    (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id),
   );
   const totalModules = modules?.length || 0;
   const completedCount = modules?.filter((m) => completedModuleIds.has(m.id)).length || 0;
@@ -169,8 +171,7 @@ function CourseDetailPage() {
   const totalDuration = (modules ?? []).reduce((acc, m) => acc + (m.duration_minutes || 25), 0);
 
   // First uncompleted module or the first module
-  const nextModule =
-    modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];
+  const nextModule = modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];
 
   return (
     <div className="min-h-screen pt-16 pb-24">
@@ -178,7 +179,10 @@ function CourseDetailPage() {
         badge={course.level.toUpperCase()}
         badgeVariant="primary"
         title={course.title}
-        subtitle={course.description || "Master critical cybersecurity defense foundations with structured theory and live data analysis."}
+        subtitle={
+          course.description ||
+          "Master critical cybersecurity defense foundations with structured theory and live data analysis."
+        }
         breadcrumbs={[
           { label: "Home", to: "/" },
           { label: "Academy", to: "/academy" },
@@ -196,26 +200,34 @@ function CourseDetailPage() {
                 Course Curriculum Overview
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                This curriculum combines fundamental principles with telemetry logs and hands-on exercises. Each module ends with practical knowledge checks and references to isolated Cyber Labs.
+                This curriculum combines fundamental principles with telemetry logs and hands-on
+                exercises. Each module ends with practical knowledge checks and references to
+                isolated Cyber Labs.
               </p>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
                 <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
-                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Duration</div>
+                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">
+                    Duration
+                  </div>
                   <div className="font-semibold text-sm text-foreground flex items-center gap-1.5 mt-0.5">
                     <Clock className="w-4 h-4 text-primary" />
                     <span>~{Math.max(1, Math.round(totalDuration / 60))} Hours</span>
                   </div>
                 </div>
                 <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
-                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Structure</div>
+                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">
+                    Structure
+                  </div>
                   <div className="font-semibold text-sm text-foreground flex items-center gap-1.5 mt-0.5">
                     <BookOpen className="w-4 h-4 text-accent" />
                     <span>{totalModules} Modules</span>
                   </div>
                 </div>
                 <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
-                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Practice</div>
+                  <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">
+                    Practice
+                  </div>
                   <div className="font-semibold text-sm text-foreground flex items-center gap-1.5 mt-0.5">
                     <Terminal className="w-4 h-4 text-success" />
                     <span>Cyber Labs</span>
@@ -316,9 +328,7 @@ function CourseDetailPage() {
                 <span className="text-[0.65rem] font-mono uppercase px-2.5 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/20 font-medium">
                   {course.tier === "paid" ? "SPECIALIZATION" : "INCLUDED TRACK"}
                 </span>
-                <h3 className="font-display font-bold text-lg text-foreground">
-                  Track Completion
-                </h3>
+                <h3 className="font-display font-bold text-lg text-foreground">Track Completion</h3>
               </div>
 
               <div className="space-y-2">

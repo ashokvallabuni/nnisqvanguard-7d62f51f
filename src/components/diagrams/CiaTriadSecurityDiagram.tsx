@@ -14,26 +14,49 @@ const CIA_PILLARS: Record<string, PillarDetail> = {
   confidentiality: {
     id: "confidentiality",
     name: "Confidentiality",
-    definition: "Ensuring that sensitive information is accessible only to authorized entities and protected from unauthorized disclosure.",
-    realWorldExample: "Protecting patient medical records, source code repositories, and user passwords from being leaked.",
-    attackVector: "Data exfiltration, eavesdropping, SQL injection database dumps, unauthorized file reading.",
-    defensiveControls: ["AES-256 / TLS Encryption", "Role-Based Access Control (RBAC)", "MFA Authentication", "Data Loss Prevention (DLP)"],
+    definition:
+      "Ensuring that sensitive information is accessible only to authorized entities and protected from unauthorized disclosure.",
+    realWorldExample:
+      "Protecting patient medical records, source code repositories, and user passwords from being leaked.",
+    attackVector:
+      "Data exfiltration, eavesdropping, SQL injection database dumps, unauthorized file reading.",
+    defensiveControls: [
+      "AES-256 / TLS Encryption",
+      "Role-Based Access Control (RBAC)",
+      "MFA Authentication",
+      "Data Loss Prevention (DLP)",
+    ],
   },
   integrity: {
     id: "integrity",
     name: "Integrity",
-    definition: "Guarding against improper information modification, deletion, or tampering to ensure authenticity and accuracy.",
+    definition:
+      "Guarding against improper information modification, deletion, or tampering to ensure authenticity and accuracy.",
     realWorldExample: "Ensuring a bank transfer of $100 cannot be modified in transit to $10,000.",
-    attackVector: "Man-in-the-Middle (MitM) payload alteration, unauthorized database updates, software supply-chain tampering.",
-    defensiveControls: ["Cryptographic Hashes (SHA-256)", "Digital Signatures", "HMAC Verification", "Audit Logging & File Integrity Monitoring (FIM)"],
+    attackVector:
+      "Man-in-the-Middle (MitM) payload alteration, unauthorized database updates, software supply-chain tampering.",
+    defensiveControls: [
+      "Cryptographic Hashes (SHA-256)",
+      "Digital Signatures",
+      "HMAC Verification",
+      "Audit Logging & File Integrity Monitoring (FIM)",
+    ],
   },
   availability: {
     id: "availability",
     name: "Availability",
-    definition: "Ensuring timely, reliable, and uninterrupted access to systems and data for authorized users whenever needed.",
-    realWorldExample: "Ensuring 911 dispatch networks, emergency healthcare portals, and banking APIs remain online during traffic spikes.",
-    attackVector: "Distributed Denial of Service (DDoS) attacks, ransomware encryption of critical databases, hardware failures.",
-    defensiveControls: ["Redundant Infrastructure / High Availability", "DDoS Mitigation Scrubbing", "Disaster Recovery Backups", "Load Balancing"],
+    definition:
+      "Ensuring timely, reliable, and uninterrupted access to systems and data for authorized users whenever needed.",
+    realWorldExample:
+      "Ensuring 911 dispatch networks, emergency healthcare portals, and banking APIs remain online during traffic spikes.",
+    attackVector:
+      "Distributed Denial of Service (DDoS) attacks, ransomware encryption of critical databases, hardware failures.",
+    defensiveControls: [
+      "Redundant Infrastructure / High Availability",
+      "DDoS Mitigation Scrubbing",
+      "Disaster Recovery Backups",
+      "Load Balancing",
+    ],
   },
 };
 
@@ -50,7 +73,8 @@ export function CiaTriadSecurityDiagram() {
             <span>The CIA Triad & Core Cybersecurity Architecture</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Click each pillar to examine definitions, attack mechanisms, and defensive technical controls.
+            Click each pillar to examine definitions, attack mechanisms, and defensive technical
+            controls.
           </p>
         </div>
         <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
@@ -168,11 +192,17 @@ export function CiaTriadSecurityDiagram() {
           <span className="text-slate-500">$\longrightarrow$</span>
           <span className="px-2.5 py-1 rounded bg-red-950/60 text-red-400 font-bold">THREAT</span>
           <span className="text-slate-500">$\longrightarrow$</span>
-          <span className="px-2.5 py-1 rounded bg-amber-950/60 text-amber-400 font-bold">VULNERABILITY</span>
+          <span className="px-2.5 py-1 rounded bg-amber-950/60 text-amber-400 font-bold">
+            VULNERABILITY
+          </span>
           <span className="text-slate-500">$\longrightarrow$</span>
-          <span className="px-2.5 py-1 rounded bg-purple-950/60 text-purple-400 font-bold">RISK</span>
+          <span className="px-2.5 py-1 rounded bg-purple-950/60 text-purple-400 font-bold">
+            RISK
+          </span>
           <span className="text-slate-500">$\longrightarrow$</span>
-          <span className="px-2.5 py-1 rounded bg-green-950/60 text-green-400 font-bold">CONTROL</span>
+          <span className="px-2.5 py-1 rounded bg-green-950/60 text-green-400 font-bold">
+            CONTROL
+          </span>
         </div>
       </div>
     </div>

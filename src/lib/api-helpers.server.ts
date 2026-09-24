@@ -8,15 +8,31 @@ export type AuthContext = {
 };
 
 function makeUserClient(token: string): SupabaseClient<Database> {
-  const url = process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
+  const url =
+    process.env.SUPABASE_URL ||
+    (import.meta.env && (import.meta.env.VITE_SUPABASE_URL as string | undefined)) ||
+    "";
+  const key =
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    (import.meta.env &&
+      ((import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ??
+        (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined))) ||
+    "";
+  if (!url || !key) {
+    const missing = [
+      ...(!url ? ["SUPABASE_URL / VITE_SUPABASE_URL"] : []),
+      ...(!key ? ["SUPABASE_PUBLISHABLE_KEY / VITE_SUPABASE_ANON_KEY"] : []),
+    ];
+    throw new Error(`Missing Supabase environment variable(s): ${missing.join(", ")}`);
+  }
   const isNew = key.startsWith("sb_publishable_") || key.startsWith("sb_secret_");
   return createClient<Database>(url, key, {
     global: {
       headers: { Authorization: `Bearer ${token}` },
       fetch: (input, init) => {
         const headers = new Headers(init?.headers);
-        if (isNew && headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
+        if (isNew && headers.get("Authorization") === `Bearer ${key}`)
+          headers.delete("Authorization");
         headers.set("apikey", key);
         return fetch(input, { ...init, headers });
       },
@@ -84,12 +100,16 @@ export function rateLimit(key: string, limit: number, windowMs: number): boolean
 
 export function clientKey(request: Request, userId: string | null): string {
   if (userId) return `u:${userId}`;
-  const ip = request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "anon";
+  const ip =
+    request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "anon";
   return `ip:${ip}`;
 }
 
 // ---- OpenAI or Lovable AI fallback ----
-export async function callChatModel(messages: Array<{ role: string; content: string }>, opts?: { json?: boolean }) {
+export async function callChatModel(
+  messages: Array<{ role: string; content: string }>,
+  opts?: { json?: boolean },
+) {
   const openaiKey = process.env.OPENAI_API_KEY;
   if (openaiKey) {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {

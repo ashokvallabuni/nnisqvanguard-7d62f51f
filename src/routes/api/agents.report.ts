@@ -7,7 +7,10 @@ import { generateReport } from "@/lib/agents/report-agent";
 const ReportBody = z.object({
   data: z.string().trim().min(1).max(50000),
   title: z.string().max(200).optional(),
-  type: z.enum(["security_event", "url", "file_hash", "ip_address", "domain", "log_entry", "chat_query"]).optional().default("security_event"),
+  type: z
+    .enum(["security_event", "url", "file_hash", "ip_address", "domain", "log_entry", "chat_query"])
+    .optional()
+    .default("security_event"),
   metadata: z.record(z.unknown()).optional(),
 });
 
@@ -44,7 +47,7 @@ export const Route = createFileRoute("/api/agents/report")({
             analysis.detection,
             analysis.analysis,
             analysis.risk,
-            analysis.response
+            analysis.response,
           );
 
           const payload = {
@@ -68,7 +71,7 @@ export const Route = createFileRoute("/api/agents/report")({
             "chat",
             "agent_report:" + parsed.type,
             { title: payload.report.title, riskScore: payload.analysis.riskScore },
-            payload.analysis.severity as "Low" | "Medium" | "High" | "Unknown"
+            payload.analysis.severity as "Low" | "Medium" | "High" | "Unknown",
           );
 
           return json(payload);
@@ -80,4 +83,3 @@ export const Route = createFileRoute("/api/agents/report")({
     },
   },
 });
-

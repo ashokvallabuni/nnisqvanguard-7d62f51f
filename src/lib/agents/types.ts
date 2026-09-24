@@ -6,12 +6,7 @@ export type ThreatVerdict = "Safe" | "Suspicious" | "Malicious" | "Critical";
 
 export type RiskLevel = "Low" | "Medium" | "High" | "Critical";
 
-export type AgentRole =
-  | "detection"
-  | "analysis"
-  | "risk"
-  | "report"
-  | "response";
+export type AgentRole = "detection" | "analysis" | "risk" | "report" | "response";
 
 export interface AgentContext {
   userId?: string;
@@ -111,7 +106,8 @@ export interface OrchestratedAnalysis {
 }
 
 export interface AnalysisInput {
-  type: "security_event" | "url" | "file_hash" | "ip_address" | "domain" | "log_entry" | "chat_query";
+  type:
+    "security_event" | "url" | "file_hash" | "ip_address" | "domain" | "log_entry" | "chat_query";
   data: string;
   metadata?: Record<string, unknown>;
 }
@@ -132,4 +128,3 @@ export interface SecurityEvent {
   port?: number;
   status?: string;
 }
-

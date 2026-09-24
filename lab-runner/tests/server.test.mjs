@@ -106,49 +106,67 @@ test("session ownership, terminal execution, flag validation, reset and cleanup"
   assert.equal(session.status, "RUNNING");
 
   // Cross user isolation
-  const crossUser = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/status`, {
-    headers: { ...headers, "x-authenticated-user-id": "user-b" },
-  });
+  const crossUser = await fetch(
+    `${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/status`,
+    {
+      headers: { ...headers, "x-authenticated-user-id": "user-b" },
+    },
+  );
   assert.equal(crossUser.status, 404);
 
   // Terminal execution
-  const terminal = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ command: "whoami" }),
-  });
+  const terminal = await fetch(
+    `${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ command: "whoami" }),
+    },
+  );
   assert.equal(terminal.status, 200);
   assert.equal((await terminal.json()).stdout, "ran: whoami");
 
   // Incorrect flag submission
-  const incorrect = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/submit`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ flag: "wrong" }),
-  });
+  const incorrect = await fetch(
+    `${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/submit`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ flag: "wrong" }),
+    },
+  );
   assert.deepEqual(await incorrect.json(), { correct: false });
 
   // Correct flag submission
-  const correct = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/submit`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ flag: "NISQ{linux_permissions_basics}" }),
-  });
+  const correct = await fetch(
+    `${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/submit`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ flag: "NISQ{linux_permissions_basics}" }),
+    },
+  );
   assert.deepEqual(await correct.json(), { correct: true, score: 100 });
 
   // Reset session
-  const reset = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/reset`, {
-    method: "POST",
-    headers,
-  });
+  const reset = await fetch(
+    `${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/reset`,
+    {
+      method: "POST",
+      headers,
+    },
+  );
   assert.equal(reset.status, 200);
   assert.equal((await reset.json()).status, "RUNNING");
 
   // Stop session
-  const stopped = await fetch(`${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/stop`, {
-    method: "POST",
-    headers,
-  });
+  const stopped = await fetch(
+    `${baseUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/stop`,
+    {
+      method: "POST",
+      headers,
+    },
+  );
   assert.equal(stopped.status, 200);
   assert.equal((await stopped.json()).status, "STOPPED");
 

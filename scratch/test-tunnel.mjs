@@ -32,41 +32,50 @@ console.log("Session response:", {
 
 if (session.sessionId) {
   console.log("\nExecuting terminal command inside container over tunnel (whoami)...");
-  const execRes = await fetch(`${tunnelUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-lab-runner-secret": secret,
-      "x-authenticated-user-id": "test-analyst-uuid-1",
+  const execRes = await fetch(
+    `${tunnelUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-lab-runner-secret": secret,
+        "x-authenticated-user-id": "test-analyst-uuid-1",
+      },
+      body: JSON.stringify({ command: "whoami" }),
     },
-    body: JSON.stringify({ command: "whoami" }),
-  });
+  );
   const execData = await execRes.json();
   console.log("Terminal output:", execData);
 
   console.log("\nExecuting terminal command (pwd & ls)...");
-  const execRes2 = await fetch(`${tunnelUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-lab-runner-secret": secret,
-      "x-authenticated-user-id": "test-analyst-uuid-1",
+  const execRes2 = await fetch(
+    `${tunnelUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/terminal`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-lab-runner-secret": secret,
+        "x-authenticated-user-id": "test-analyst-uuid-1",
+      },
+      body: JSON.stringify({ command: "pwd && ls -la" }),
     },
-    body: JSON.stringify({ command: "pwd && ls -la" }),
-  });
+  );
   const execData2 = await execRes2.json();
   console.log("Terminal output 2:", execData2);
 
   console.log("\nStopping session over tunnel...");
-  const stopRes = await fetch(`${tunnelUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/stop`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-lab-runner-secret": secret,
-      "x-authenticated-user-id": "test-analyst-uuid-1",
+  const stopRes = await fetch(
+    `${tunnelUrl}/api/labs/linux-security-fundamentals/session/${session.sessionId}/stop`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-lab-runner-secret": secret,
+        "x-authenticated-user-id": "test-analyst-uuid-1",
+      },
+      body: JSON.stringify({}),
     },
-    body: JSON.stringify({}),
-  });
+  );
   const stopData = await stopRes.json();
   console.log("Stop response:", stopData);
 }

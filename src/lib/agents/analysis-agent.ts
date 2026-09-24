@@ -28,7 +28,7 @@ Return STRICT JSON with:
 
 export async function runAnalysis(
   findings: string,
-  context?: Partial<AgentContext>
+  context?: Partial<AgentContext>,
 ): Promise<AnalysisResult> {
   const messages = [
     { role: "system" as const, content: ANALYSIS_SYSTEM_PROMPT },
@@ -49,7 +49,7 @@ export async function runAnalysis(
         malicious: Boolean(t.malicious),
         confidence: Number(t.confidence) || 0,
         details: String(t.details || ""),
-      })
+      }),
     );
 
     return {
@@ -59,9 +59,7 @@ export async function runAnalysis(
       mitreTechniques: Array.isArray(parsed.mitreTechniques)
         ? parsed.mitreTechniques.map(String)
         : [],
-      iocLinks: Array.isArray(parsed.iocLinks)
-        ? parsed.iocLinks.map(String)
-        : [],
+      iocLinks: Array.isArray(parsed.iocLinks) ? parsed.iocLinks.map(String) : [],
       threatIntel,
       summary: String(parsed.summary || "Analysis complete"),
     };
@@ -103,4 +101,3 @@ export function mapThreatToMitre(threatType: string): string[] {
   }
   return [];
 }
-

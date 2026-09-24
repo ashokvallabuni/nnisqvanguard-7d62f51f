@@ -23,8 +23,9 @@ export const analyzeEvidence = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("AI service not configured");
 
     // create signed URL from the user-owned evidence file
-    const { data: signed, error: signErr } = await context.supabase
-      .storage.from("evidence").createSignedUrl(data.storagePath, 60 * 10);
+    const { data: signed, error: signErr } = await context.supabase.storage
+      .from("evidence")
+      .createSignedUrl(data.storagePath, 60 * 10);
     if (signErr || !signed?.signedUrl) throw new Error("Cannot access evidence file");
 
     // Fetch bytes and convert to base64 for reliable multimodal input
@@ -49,7 +50,10 @@ export const analyzeEvidence = createServerFn({ method: "POST" })
         {
           role: "user",
           content: [
-            { type: "text", text: "Analyze this screenshot for cyber-fraud indicators. Respond ONLY with JSON." },
+            {
+              type: "text",
+              text: "Analyze this screenshot for cyber-fraud indicators. Respond ONLY with JSON.",
+            },
             { type: "image_url", image_url: { url: dataUrl } },
           ],
         },
@@ -67,33 +71,45 @@ export const analyzeEvidence = createServerFn({ method: "POST" })
     });
 
     if (aiRes.status === 429) throw new Error("AI rate limit hit. Please try again in a moment.");
-    if (aiRes.status === 402) throw new Error("AI credits exhausted. Ask the workspace owner to add credits.");
+    if (aiRes.status === 402)
+      throw new Error("AI credits exhausted. Ask the workspace owner to add credits.");
     if (!aiRes.ok) {
       const t = await aiRes.text();
       throw new Error(`AI error: ${t.slice(0, 200)}`);
     }
-    const json = await aiRes.json() as { choices?: Array<{ message?: { content?: string } }> };
+    const json = (await aiRes.json()) as { choices?: Array<{ message?: { content?: string } }> };
     const raw = json.choices?.[0]?.message?.content ?? "{}";
     let parsed: AiResult;
     try {
       const p = JSON.parse(raw);
       parsed = {
         fraud_score: Math.max(0, Math.min(100, Number(p.fraud_score) || 0)),
-        verdict: (["Safe", "Suspicious", "Fraud"].includes(p.verdict) ? p.verdict : "Suspicious") as AiVerdict,
+        verdict: (["Safe", "Suspicious", "Fraud"].includes(p.verdict)
+          ? p.verdict
+          : "Suspicious") as AiVerdict,
         explanation: String(p.explanation ?? ""),
         recommended_action: String(p.recommended_action ?? ""),
       };
     } catch {
-      parsed = { fraud_score: 50, verdict: "Suspicious", explanation: raw.slice(0, 500), recommended_action: "Manual review recommended." };
+      parsed = {
+        fraud_score: 50,
+        verdict: "Suspicious",
+        explanation: raw.slice(0, 500),
+        recommended_action: "Manual review recommended.",
+      };
     }
 
     // If complaintId provided, persist AI result on that complaint
     if (data.complaintId) {
-      await context.supabase.from("complaints").update({
-        ai_result: parsed,
-        fraud_score: parsed.fraud_score,
-        verdict: parsed.verdict,
-      }).eq("id", data.complaintId).eq("user_id", context.userId);
+      await context.supabase
+        .from("complaints")
+        .update({
+          ai_result: parsed,
+          fraud_score: parsed.fraud_score,
+          verdict: parsed.verdict,
+        })
+        .eq("id", data.complaintId)
+        .eq("user_id", context.userId);
     }
 
     return parsed;

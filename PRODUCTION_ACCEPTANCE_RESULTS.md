@@ -8,13 +8,13 @@
 
 ## 1. System Environment & Current State Audit
 
-| Component | Target Standard | Live Reality / Evidence | Status |
-| :--- | :--- | :--- | :---: |
-| **TypeScript Compiler** | Zero errors (`tsc --noEmit`) | Ran `npx tsc --noEmit` $\rightarrow$ Exit Code **0** | **VERIFIED** |
-| **Vite SSR Production Build** | Production bundle output | Ran `npm run build` $\rightarrow$ Exit Code **0** (Nitro worker + client assets generated) | **VERIFIED** |
-| **Docker Engine** | Running daemon for ephemeral sandboxes | Ran `docker info` $\rightarrow$ Failed to connect to docker pipe (`The system cannot find the file specified`) | **FAILED** |
-| **Lab Runner API** | `LAB_RUNNER_URL` and `LAB_RUNNER_SECRET` configured | Process environment variables are currently **NOT configured** in `.env` | **PARTIAL** |
-| **Supabase Connected Project** | `dvtjencqiotrjoehaamo.supabase.co` | Live REST API accessible with valid publishable token | **VERIFIED** |
+| Component                      | Target Standard                                     | Live Reality / Evidence                                                                                        |    Status    |
+| :----------------------------- | :-------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :----------: |
+| **TypeScript Compiler**        | Zero errors (`tsc --noEmit`)                        | Ran `npx tsc --noEmit` $\rightarrow$ Exit Code **0**                                                           | **VERIFIED** |
+| **Vite SSR Production Build**  | Production bundle output                            | Ran `npm run build` $\rightarrow$ Exit Code **0** (Nitro worker + client assets generated)                     | **VERIFIED** |
+| **Docker Engine**              | Running daemon for ephemeral sandboxes              | Ran `docker info` $\rightarrow$ Failed to connect to docker pipe (`The system cannot find the file specified`) |  **FAILED**  |
+| **Lab Runner API**             | `LAB_RUNNER_URL` and `LAB_RUNNER_SECRET` configured | Process environment variables are currently **NOT configured** in `.env`                                       | **PARTIAL**  |
+| **Supabase Connected Project** | `dvtjencqiotrjoehaamo.supabase.co`                  | Live REST API accessible with valid publishable token                                                          | **VERIFIED** |
 
 ---
 
@@ -40,6 +40,7 @@ Direct audit executed via native REST query to `https://dvtjencqiotrjoehaamo.sup
 ```
 
 ### Exact Database Metrics:
+
 - **TOTAL COURSES** = `3` (`cyber-awareness`, `cybersecurity-foundations`, `cybersecurity-fundamentals`)
 - **TOTAL PATHS** = `0` (Paths exist in frontend curriculum schema and SQL migrations, not yet applied to remote DB)
 - **TOTAL MODULES** = `16` (Attached to the 3 existing courses)
@@ -55,36 +56,37 @@ Direct audit executed via native REST query to `https://dvtjencqiotrjoehaamo.sup
 
 ## 3. Routing Verification
 
-| Route | Expected Behavior | Actual Behavior | Status |
-| :--- | :--- | :--- | :---: |
-| `/` | Landing page | Renders Hero, Academy intro, Cyber Range preview, CyberShield AI, Case studies | **VERIFIED** |
-| `/academy` | Academy catalog & paths | Renders 10 Learning Paths, search/filter controls, and course cards | **VERIFIED** |
-| `/academy/glossary` | Cybersecurity glossary | Renders alphabetized glossary terms (TCP, DNS, XSS, SUID, etc.) with definitions | **VERIFIED** |
-| `/learn/$slug` | Course detail syllabus | Fetches DB course or falls back to curriculum definition with modules & objectives | **VERIFIED** |
-| `/learn/$slug/$moduleSlug` | Interactive Lesson Workbench | Renders Theory, Interactive SVG Diagrams, Real Datasets, Quizzes, Companion Lab link | **VERIFIED** |
-| `/cyber-range` | Cyber Range Hub | Renders Range modules, active container status, and CTF/Lab links | **VERIFIED** |
-| `/cyber-range/labs` | Lab catalog | Renders lab cards, difficulty filters, ATT&CK mapping, canonical `/cyber-range/lab/$slug` links | **VERIFIED** |
-| `/cyber-range/lab/$slug` | Sandbox Workbench | Correctly handles active session, terminal pane, task checklist, and unconfigured infra | **VERIFIED** |
-| `/cyber-range/datasets` | Dataset Explorer | Renders dataset provenance, schema, checksums, and Kaggle source links | **VERIFIED** |
-| `/cyber-range/learning-paths`| Cyber Range Paths | Renders role-based path roadmaps | **VERIFIED** |
-| `/achievements` | Badges & Skills | Renders 21 official badges, criteria, and skill radar | **VERIFIED** |
-| `/verify/$certificateId` | Certificate verification | Queries Supabase certificates table and verifies digital signature | **VERIFIED** |
+| Route                         | Expected Behavior            | Actual Behavior                                                                                 |    Status    |
+| :---------------------------- | :--------------------------- | :---------------------------------------------------------------------------------------------- | :----------: |
+| `/`                           | Landing page                 | Renders Hero, Academy intro, Cyber Range preview, CyberShield AI, Case studies                  | **VERIFIED** |
+| `/academy`                    | Academy catalog & paths      | Renders 10 Learning Paths, search/filter controls, and course cards                             | **VERIFIED** |
+| `/academy/glossary`           | Cybersecurity glossary       | Renders alphabetized glossary terms (TCP, DNS, XSS, SUID, etc.) with definitions                | **VERIFIED** |
+| `/learn/$slug`                | Course detail syllabus       | Fetches DB course or falls back to curriculum definition with modules & objectives              | **VERIFIED** |
+| `/learn/$slug/$moduleSlug`    | Interactive Lesson Workbench | Renders Theory, Interactive SVG Diagrams, Real Datasets, Quizzes, Companion Lab link            | **VERIFIED** |
+| `/cyber-range`                | Cyber Range Hub              | Renders Range modules, active container status, and CTF/Lab links                               | **VERIFIED** |
+| `/cyber-range/labs`           | Lab catalog                  | Renders lab cards, difficulty filters, ATT&CK mapping, canonical `/cyber-range/lab/$slug` links | **VERIFIED** |
+| `/cyber-range/lab/$slug`      | Sandbox Workbench            | Correctly handles active session, terminal pane, task checklist, and unconfigured infra         | **VERIFIED** |
+| `/cyber-range/datasets`       | Dataset Explorer             | Renders dataset provenance, schema, checksums, and Kaggle source links                          | **VERIFIED** |
+| `/cyber-range/learning-paths` | Cyber Range Paths            | Renders role-based path roadmaps                                                                | **VERIFIED** |
+| `/achievements`               | Badges & Skills              | Renders 21 official badges, criteria, and skill radar                                           | **VERIFIED** |
+| `/verify/$certificateId`      | Certificate verification     | Queries Supabase certificates table and verifies digital signature                              | **VERIFIED** |
 
 ---
 
 ## 4. Course $\rightarrow$ Lab Linkage Test
 
 Tested across 3 major course pathways:
+
 1. **Networking Fundamentals (`networking-fundamentals`)**:
-   - Module: *02 TCP 3-Way Handshake & State Machine*
+   - Module: _02 TCP 3-Way Handshake & State Machine_
    - Step 4 Link $\rightarrow$ `/cyber-range/lab/suricata-network-threat-hunting`
    - Destination: Opens Suricata Network Threat Hunting workbench with PCAP investigation briefing.
 2. **Linux Fundamentals (`linux-fundamentals`)**:
-   - Module: *01 Linux Architecture, Kernel & Terminal*
+   - Module: _01 Linux Architecture, Kernel & Terminal_
    - Step 4 Link $\rightarrow$ `/cyber-range/lab/linux-ssh-brute-force-investigation`
    - Destination: Opens Linux SSH Brute Force Investigation workbench with `auth.log` triage tasks.
 3. **Web Application Security (`sql-injection-in-band`)**:
-   - Module: *01 Core Architecture & Fundamentals*
+   - Module: _01 Core Architecture & Fundamentals_
    - Step 4 Link $\rightarrow$ `/cyber-range/lab/sql-injection-fundamentals`
    - Destination: Opens SQL Injection Fundamentals workbench with union-based query tasks.
 
@@ -93,6 +95,7 @@ Tested across 3 major course pathways:
 ## 5 & 6. Real Lab Infrastructure & Container Test
 
 ### Live Infrastructure Audit:
+
 - **Docker Daemon Check (`docker info`)**:
   - `Server: failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine... The system cannot find the file specified.`
   - Result: Local Docker daemon is currently stopped.
@@ -101,6 +104,7 @@ Tested across 3 major course pathways:
   - `process.env.LAB_RUNNER_SECRET` is empty.
 
 ### Critical Safety Compliance:
+
 - When a user clicks **"Start Lab Environment"**:
   - The frontend calls `labExecutionService.createSession(slug)`.
   - The server function detects that `LAB_RUNNER_URL` is not configured.
@@ -179,18 +183,20 @@ Tested across 3 major course pathways:
 ## 16. 102 Course Curriculum Quality Audit
 
 Inspected representative courses across the 10 Paths:
-- **Course 1** (*Digital Safety & Hygiene*): First-principles hygiene, password entropy, MFA.
-- **Course 11** (*Networking Fundamentals — Part 1*): OSI layers, Ethernet frames, MAC addresses.
-- **Course 21** (*Linux Fundamentals — Part 1*): Monolithic kernel, syscalls (`open`, `read`, `fork`), user space.
-- **Course 31** (*The CIA Triad & Core Principles*): Confidentiality, Integrity, Availability matrix.
-- **Course 41** (*OSINT — Web Search*): Dorking, passive metadata collection.
-- **Course 53** (*SQL Injection — In-Band*): Union-based injection against isolated test targets.
-- **Course 72** (*Log Analysis & Management*): SIEM aggregation, timestamp correlation.
-- **Course 82** (*Memory Forensics — Volatility*): Memory acquisition, process trees, network sockets.
-- **Course 93** (*Cloud Security Foundations*): IAM policies, S3/GCS bucket permission boundary auditing.
-- **Course 102** (*Capstone Project*): Full range assault and defense scenario.
+
+- **Course 1** (_Digital Safety & Hygiene_): First-principles hygiene, password entropy, MFA.
+- **Course 11** (_Networking Fundamentals — Part 1_): OSI layers, Ethernet frames, MAC addresses.
+- **Course 21** (_Linux Fundamentals — Part 1_): Monolithic kernel, syscalls (`open`, `read`, `fork`), user space.
+- **Course 31** (_The CIA Triad & Core Principles_): Confidentiality, Integrity, Availability matrix.
+- **Course 41** (_OSINT — Web Search_): Dorking, passive metadata collection.
+- **Course 53** (_SQL Injection — In-Band_): Union-based injection against isolated test targets.
+- **Course 72** (_Log Analysis & Management_): SIEM aggregation, timestamp correlation.
+- **Course 82** (_Memory Forensics — Volatility_): Memory acquisition, process trees, network sockets.
+- **Course 93** (_Cloud Security Foundations_): IAM policies, S3/GCS bucket permission boundary auditing.
+- **Course 102** (_Capstone Project_): Full range assault and defense scenario.
 
 **Content Quality Classification**:
+
 - **Fully Detailed Curriculum Schema**: 102 Courses with Level, Duration, Objectives, Prerequisites, Skills, Badges, and Modules.
 - **Deep Reference Modules**: Networking & Linux have full Markdown notes, SVG diagrams, and quiz banks.
 - **Structured Standard Modules**: Remaining courses utilize structured lesson templates grounded in NIST/CISA/MITRE standards.
@@ -200,6 +206,7 @@ Inspected representative courses across the 10 Paths:
 ## 17. Responsive Mobile Audit
 
 Tested viewport widths: `375px`, `390px`, `768px`, `1024px`, `1440px`:
+
 - **Header & Navigation**: Collapses gracefully into mobile drawer without horizontal overflow.
 - **Workbench Layout**: Splits horizontally on desktop ($\ge 1024\text{px}$) and stacks vertically on mobile with full tabbed access to Briefing, Tasks, Hints, Flag, and Terminal.
 - **Diagrams**: SVG visualizers scale with `viewBox` preservation.
@@ -225,21 +232,21 @@ Exit Code: 0 (Production client & SSR worker bundle built successfully)
 
 ## Comprehensive Feature Status Matrix
 
-| Feature | Status | Actual Evidence | Remaining Work |
-| :--- | :---: | :--- | :--- |
-| **Routing System** | **VERIFIED** | Canonical routes mapped in `routeTree.gen.ts`, all links redirect correctly | None |
-| **102 Course Curriculum Schema** | **VERIFIED** | Defined in [`src/data/curriculum-102.ts`](file:///c:/Users/ashok/nnisqvanguard-7d62f51f-1/src/data/curriculum-102.ts) across 10 Learning Paths | None |
-| **102 Courses in Supabase Database** | **FAILED** | Direct REST query returned **3 courses** in DB | Apply migration `20260921060000_seed_102_courses_curriculum.sql` via Supabase Dashboard SQL Editor |
-| **Interactive Educational Diagrams** | **VERIFIED** | SVG diagrams for TCP Handshake, Subnetting, Linux FS, Permissions, CIA, SOC | None |
-| **Authentic Dataset Exercises** | **PARTIAL** | Live sample telemetry for CIC-IDS2018, auth.log, CTU-13 present in-lesson | Configure Kaggle credentials for direct bulk pipeline |
-| **Lab Routing & Navigation** | **VERIFIED** | Direct link from Lesson Step 4 to `/cyber-range/lab/$slug` verified | None |
-| **Lab Failure Safety** | **VERIFIED** | `LAB INFRASTRUCTURE NOT CONFIGURED` banner shown when runner is unreachable; no fake outputs | None |
-| **Live Container Runner** | **NOT TESTABLE** | `docker info` failed (Docker Desktop not running on host) | Start Docker Desktop and set `LAB_RUNNER_URL` / `LAB_RUNNER_SECRET` |
-| **Knowledge Checks & Quizzes** | **VERIFIED** | Multi-choice checks with technical explanations and database progress sync | None |
-| **Badge Engine** | **VERIFIED** | Server-side validation against `user_badges` in [`badge-engine.ts`](file:///c:/Users/ashok/nnisqvanguard-7d62f51f-1/src/lib/badge-engine.ts) | None |
-| **Certificate Verification** | **VERIFIED** | Public `/verify/$certificateId` resolver against Supabase records | None |
-| **Mobile UX** | **VERIFIED** | Responsive layout tested from 375px mobile to 1440px desktop | None |
-| **Build & Type Integrity** | **VERIFIED** | `tsc --noEmit` exit code 0, `npm run build` exit code 0 | None |
+| Feature                              |      Status      | Actual Evidence                                                                                                                                | Remaining Work                                                                                     |
+| :----------------------------------- | :--------------: | :--------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- |
+| **Routing System**                   |   **VERIFIED**   | Canonical routes mapped in `routeTree.gen.ts`, all links redirect correctly                                                                    | None                                                                                               |
+| **102 Course Curriculum Schema**     |   **VERIFIED**   | Defined in [`src/data/curriculum-102.ts`](file:///c:/Users/ashok/nnisqvanguard-7d62f51f-1/src/data/curriculum-102.ts) across 10 Learning Paths | None                                                                                               |
+| **102 Courses in Supabase Database** |    **FAILED**    | Direct REST query returned **3 courses** in DB                                                                                                 | Apply migration `20260921060000_seed_102_courses_curriculum.sql` via Supabase Dashboard SQL Editor |
+| **Interactive Educational Diagrams** |   **VERIFIED**   | SVG diagrams for TCP Handshake, Subnetting, Linux FS, Permissions, CIA, SOC                                                                    | None                                                                                               |
+| **Authentic Dataset Exercises**      |   **PARTIAL**    | Live sample telemetry for CIC-IDS2018, auth.log, CTU-13 present in-lesson                                                                      | Configure Kaggle credentials for direct bulk pipeline                                              |
+| **Lab Routing & Navigation**         |   **VERIFIED**   | Direct link from Lesson Step 4 to `/cyber-range/lab/$slug` verified                                                                            | None                                                                                               |
+| **Lab Failure Safety**               |   **VERIFIED**   | `LAB INFRASTRUCTURE NOT CONFIGURED` banner shown when runner is unreachable; no fake outputs                                                   | None                                                                                               |
+| **Live Container Runner**            | **NOT TESTABLE** | `docker info` failed (Docker Desktop not running on host)                                                                                      | Start Docker Desktop and set `LAB_RUNNER_URL` / `LAB_RUNNER_SECRET`                                |
+| **Knowledge Checks & Quizzes**       |   **VERIFIED**   | Multi-choice checks with technical explanations and database progress sync                                                                     | None                                                                                               |
+| **Badge Engine**                     |   **VERIFIED**   | Server-side validation against `user_badges` in [`badge-engine.ts`](file:///c:/Users/ashok/nnisqvanguard-7d62f51f-1/src/lib/badge-engine.ts)   | None                                                                                               |
+| **Certificate Verification**         |   **VERIFIED**   | Public `/verify/$certificateId` resolver against Supabase records                                                                              | None                                                                                               |
+| **Mobile UX**                        |   **VERIFIED**   | Responsive layout tested from 375px mobile to 1440px desktop                                                                                   | None                                                                                               |
+| **Build & Type Integrity**           |   **VERIFIED**   | `tsc --noEmit` exit code 0, `npm run build` exit code 0                                                                                        | None                                                                                               |
 
 ---
 
@@ -248,9 +255,11 @@ Exit Code: 0 (Production client & SSR worker bundle built successfully)
 > **"Can a brand-new student: Register $\rightarrow$ Start Course 1 $\rightarrow$ Learn the lesson $\rightarrow$ Understand the concept $\rightarrow$ Complete the knowledge check $\rightarrow$ Analyze genuine cybersecurity data $\rightarrow$ Enter a real isolated Cyber Lab $\rightarrow$ Execute an actual authorized command $\rightarrow$ Complete a practical task $\rightarrow$ Submit a real flag/answer $\rightarrow$ Complete the lab $\rightarrow$ Pass the assessment $\rightarrow$ Receive a database-backed badge $\rightarrow$ See skill progression $\rightarrow$ Continue to the next course $\rightarrow$ Eventually receive a verifiable certificate?"**
 
 ### Official Audit Verdict:
+
 ### **FINAL STATUS = PARTIAL**
 
 ### Technical Explanation:
+
 1. **What Works Today (VERIFIED)**:
    - Registration, authentication, and session handling.
    - Course 1 through 102 curriculum navigation, conceptual lessons, and interactive diagrams.

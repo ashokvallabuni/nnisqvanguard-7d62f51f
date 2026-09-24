@@ -4,8 +4,23 @@ import type { Database } from "@/integrations/supabase/types";
 import { json } from "@/lib/api-helpers.server";
 
 function publicClient() {
-  const url = process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
+  const url =
+    process.env.SUPABASE_URL ||
+    (import.meta.env && (import.meta.env.VITE_SUPABASE_URL as string | undefined)) ||
+    "";
+  const key =
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    (import.meta.env &&
+      ((import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ??
+        (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined))) ||
+    "";
+  if (!url || !key) {
+    const missing = [
+      ...(!url ? ["SUPABASE_URL / VITE_SUPABASE_URL"] : []),
+      ...(!key ? ["SUPABASE_PUBLISHABLE_KEY / VITE_SUPABASE_ANON_KEY"] : []),
+    ];
+    throw new Error(`Missing Supabase environment variable(s): ${missing.join(", ")}`);
+  }
   const isNew = key.startsWith("sb_publishable_") || key.startsWith("sb_secret_");
   return createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false, storage: undefined },

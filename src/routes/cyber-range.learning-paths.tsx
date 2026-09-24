@@ -61,15 +61,46 @@ const CAREER_PATHS: CareerPath[] = [
     title: "SOC Analyst Tier-1 Career Track",
     role: "Security Operations Center (SOC) Analyst",
     level: "Beginner",
-    description: "Master real-time alert triage, packet inspection, authentication brute-force analysis, and incident escalations with industry-standard telemetry.",
+    description:
+      "Master real-time alert triage, packet inspection, authentication brute-force analysis, and incident escalations with industry-standard telemetry.",
     totalDurationHours: 12,
     skills: ["SIEM Triage", "Suricata / Wireshark", "Auth.log Parsing", "Incident Ticketing"],
     steps: [
-      { stepNumber: 1, title: "Cybersecurity Foundations & Threat Architecture", type: "theory", duration: "2h", linkTo: "/learn/cybersecurity-foundations" },
-      { stepNumber: 2, title: "Auth.log & Linux Credential Stuffing Telemetry", type: "data", duration: "1.5h", linkTo: "/learn/cybersecurity-foundations/authentication-and-access-control" },
-      { stepNumber: 3, title: "Lab: Linux SSH Brute Force Investigation", type: "lab", duration: "45m", linkTo: "/cyber-range/labs" },
-      { stepNumber: 4, title: "Network Defense & Traffic Flow Telemetry", type: "theory", duration: "2h", linkTo: "/learn/cybersecurity-foundations/network-security-and-protocols" },
-      { stepNumber: 5, title: "Lab: Suricata Network Threat Hunting & PCAP", type: "lab", duration: "1h", linkTo: "/cyber-range/labs" },
+      {
+        stepNumber: 1,
+        title: "Cybersecurity Foundations & Threat Architecture",
+        type: "theory",
+        duration: "2h",
+        linkTo: "/learn/cybersecurity-foundations",
+      },
+      {
+        stepNumber: 2,
+        title: "Auth.log & Linux Credential Stuffing Telemetry",
+        type: "data",
+        duration: "1.5h",
+        linkTo: "/learn/cybersecurity-foundations/authentication-and-access-control",
+      },
+      {
+        stepNumber: 3,
+        title: "Lab: Linux SSH Brute Force Investigation",
+        type: "lab",
+        duration: "45m",
+        linkTo: "/cyber-range/labs",
+      },
+      {
+        stepNumber: 4,
+        title: "Network Defense & Traffic Flow Telemetry",
+        type: "theory",
+        duration: "2h",
+        linkTo: "/learn/cybersecurity-foundations/network-security-and-protocols",
+      },
+      {
+        stepNumber: 5,
+        title: "Lab: Suricata Network Threat Hunting & PCAP",
+        type: "lab",
+        duration: "1h",
+        linkTo: "/cyber-range/labs",
+      },
     ],
   },
   {
@@ -78,15 +109,50 @@ const CAREER_PATHS: CareerPath[] = [
     title: "Digital Forensics & Incident Response (DFIR)",
     role: "DFIR Investigator / Incident Handler",
     level: "Intermediate",
-    description: "Hunt advanced persistent threats (APTs), reconstruct memory dumps with Volatility 3, triage ransomware persistence, and build forensic timelines.",
+    description:
+      "Hunt advanced persistent threats (APTs), reconstruct memory dumps with Volatility 3, triage ransomware persistence, and build forensic timelines.",
     totalDurationHours: 18,
-    skills: ["Memory Forensics (Volatility 3)", "Windows Event Logs", "Ransomware Triage", "Timeline Reconstruction"],
+    skills: [
+      "Memory Forensics (Volatility 3)",
+      "Windows Event Logs",
+      "Ransomware Triage",
+      "Timeline Reconstruction",
+    ],
     steps: [
-      { stepNumber: 1, title: "Host Artifacts & Windows Registry Persistence", type: "theory", duration: "3h", linkTo: "/academy" },
-      { stepNumber: 2, title: "Real Malware Registry Telemetry & IOC Extraction", type: "data", duration: "2h", linkTo: "/cyber-range/datasets" },
-      { stepNumber: 3, title: "Lab: Ransomware Registry Persistence & Triage", type: "lab", duration: "1h", linkTo: "/cyber-range/labs" },
-      { stepNumber: 4, title: "Memory Dump Acquisition & Process Injections", type: "theory", duration: "2.5h", linkTo: "/academy" },
-      { stepNumber: 5, title: "Lab: Memory Forensics with Volatility 3", type: "lab", duration: "1.5h", linkTo: "/cyber-range/labs" },
+      {
+        stepNumber: 1,
+        title: "Host Artifacts & Windows Registry Persistence",
+        type: "theory",
+        duration: "3h",
+        linkTo: "/academy",
+      },
+      {
+        stepNumber: 2,
+        title: "Real Malware Registry Telemetry & IOC Extraction",
+        type: "data",
+        duration: "2h",
+      },
+      {
+        stepNumber: 3,
+        title: "Lab: Ransomware Registry Persistence & Triage",
+        type: "lab",
+        duration: "1h",
+        linkTo: "/cyber-range/labs",
+      },
+      {
+        stepNumber: 4,
+        title: "Memory Dump Acquisition & Process Injections",
+        type: "theory",
+        duration: "2.5h",
+        linkTo: "/academy",
+      },
+      {
+        stepNumber: 5,
+        title: "Lab: Memory Forensics with Volatility 3",
+        type: "lab",
+        duration: "1.5h",
+        linkTo: "/cyber-range/labs",
+      },
     ],
   },
   {
@@ -95,14 +161,44 @@ const CAREER_PATHS: CareerPath[] = [
     title: "Cloud & Container Security Defense",
     role: "Cloud Security Engineer / DevSecOps",
     level: "Advanced",
-    description: "Audit Docker daemon capabilities, secure Kubernetes clusters, hunt IAM misconfigurations, and defend containerized microservices against breakouts.",
+    description:
+      "Audit Docker daemon capabilities, secure Kubernetes clusters, hunt IAM misconfigurations, and defend containerized microservices against breakouts.",
     totalDurationHours: 15,
-    skills: ["Docker Breakout Defense", "Linux Capabilities", "Kubernetes Auditing", "Cloud IAM Policy Hardening"],
+    skills: [
+      "Docker Breakout Defense",
+      "Linux Capabilities",
+      "Kubernetes Auditing",
+      "Cloud IAM Policy Hardening",
+    ],
     steps: [
-      { stepNumber: 1, title: "Linux Namespaces, Cgroups & Capabilities Architecture", type: "theory", duration: "2.5h", linkTo: "/academy" },
-      { stepNumber: 2, title: "Container Escape Attack Vectors & MITRE Matrix", type: "theory", duration: "2h", linkTo: "/academy" },
-      { stepNumber: 3, title: "Lab: Docker Container Security & Escape Defense", type: "lab", duration: "1h", linkTo: "/cyber-range/labs" },
-      { stepNumber: 4, title: "Container Runtime Hardening (AppArmor & Seccomp)", type: "assessment", duration: "2h", linkTo: "/academy" },
+      {
+        stepNumber: 1,
+        title: "Linux Namespaces, Cgroups & Capabilities Architecture",
+        type: "theory",
+        duration: "2.5h",
+        linkTo: "/academy",
+      },
+      {
+        stepNumber: 2,
+        title: "Container Escape Attack Vectors & MITRE Matrix",
+        type: "theory",
+        duration: "2h",
+        linkTo: "/academy",
+      },
+      {
+        stepNumber: 3,
+        title: "Lab: Docker Container Security & Escape Defense",
+        type: "lab",
+        duration: "1h",
+        linkTo: "/cyber-range/labs",
+      },
+      {
+        stepNumber: 4,
+        title: "Container Runtime Hardening (AppArmor & Seccomp)",
+        type: "assessment",
+        duration: "2h",
+        linkTo: "/academy",
+      },
     ],
   },
 ];
@@ -127,9 +223,7 @@ function LearningPathsPage() {
         .from("user_learning_paths")
         .select("path_slug")
         .eq("user_id", user.id);
-      return (data ?? [])
-        .map((r) => r.path_slug)
-        .filter((slug): slug is string => Boolean(slug));
+      return (data ?? []).map((r) => r.path_slug).filter((slug): slug is string => Boolean(slug));
     },
     enabled: !!user,
   });
@@ -138,10 +232,12 @@ function LearningPathsPage() {
   const enrollMutation = useMutation({
     mutationFn: async (pathSlug: string) => {
       if (!user) throw new Error("Not signed in");
-      const { error } = await supabase.from("user_learning_paths").upsert(
-        { user_id: user.id, path_slug: pathSlug, enrolled_at: new Date().toISOString() },
-        { onConflict: "user_id,path_slug" },
-      );
+      const { error } = await supabase
+        .from("user_learning_paths")
+        .upsert(
+          { user_id: user.id, path_slug: pathSlug, enrolled_at: new Date().toISOString() },
+          { onConflict: "user_id,path_slug" },
+        );
       if (error) throw error;
       return pathSlug;
     },
@@ -154,11 +250,7 @@ function LearningPathsPage() {
     },
   });
 
-  const isEnrolled = useCallback(
-    (slug: string) => enrolledSlugs.includes(slug),
-    [enrolledSlugs],
-  );
-
+  const isEnrolled = useCallback((slug: string) => enrolledSlugs.includes(slug), [enrolledSlugs]);
 
   return (
     <div className="min-h-screen pt-16 pb-24">
@@ -187,12 +279,8 @@ function LearningPathsPage() {
                     Target Role: {path.role}
                   </span>
                 </div>
-                <h3 className="font-display font-bold text-2xl text-foreground">
-                  {path.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {path.description}
-                </p>
+                <h3 className="font-display font-bold text-2xl text-foreground">{path.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{path.description}</p>
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {path.skills.map((skill, i) => (
                     <span
