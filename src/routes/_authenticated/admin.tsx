@@ -9,6 +9,7 @@ import {
   School,
   LogOut,
   Shield,
+  BookOpen,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -22,6 +23,7 @@ const items = [
   { to: "/admin/complaints", label: "Complaints", icon: ShieldAlert },
   { to: "/admin/team", label: "Team", icon: Users },
   { to: "/admin/content", label: "CMS Content", icon: FileText },
+  { to: "/admin/courses", label: "Courses", icon: BookOpen },
   { to: "/admin/colleges", label: "Colleges", icon: School },
 ];
 

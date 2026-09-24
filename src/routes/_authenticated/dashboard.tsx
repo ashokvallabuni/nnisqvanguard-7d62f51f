@@ -47,17 +47,22 @@ interface SkillLevel {
 }
 
 function StudentDashboard() {
-  const { user, profile, isAdmin, signOut } = useAuth();
+  const { user, profile, isAdmin, adminView, signOut } = useAuth();
   const rawRole = (profile as any)?.role?.toString()?.toUpperCase();
-  const activeRole: "STUDENT" | "ORGANIZATION" | "COLLEGE" | "ADMIN" = isAdmin
-    ? "ADMIN"
-    : profile?.account_type === "ORGANIZATION" ||
-        rawRole === "ORGANIZATION" ||
-        profile?.organization
-      ? "ORGANIZATION"
-      : profile?.account_type === "COLLEGE" || rawRole === "COLLEGE" || profile?.college
-        ? "COLLEGE"
-        : "STUDENT";
+  
+  let activeRole: "STUDENT" | "ORGANIZATION" | "COLLEGE" | "ADMIN" = "STUDENT";
+  if (isAdmin) {
+    if (adminView === "LEARNER") activeRole = "STUDENT";
+    else if (adminView === "ORGANIZATION") activeRole = "ORGANIZATION";
+    else activeRole = "ADMIN";
+  } else {
+    activeRole = 
+      profile?.account_type === "ORGANIZATION" || rawRole === "ORGANIZATION" || profile?.organization
+        ? "ORGANIZATION"
+        : profile?.account_type === "COLLEGE" || rawRole === "COLLEGE" || profile?.college
+          ? "COLLEGE"
+          : "STUDENT";
+  }
 
   // 1. Fetch courses
   const { data: courses } = useQuery({

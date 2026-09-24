@@ -37,7 +37,7 @@ export const Route = createFileRoute("/academy")({
 });
 
 function AcademyPage() {
-  const { user } = useAuth();
+  const { user, isAdmin, adminView } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -48,12 +48,18 @@ function AcademyPage() {
     isError: coursesError,
     error: courseError,
   } = useQuery({
-    queryKey: ["academy-courses"],
+    queryKey: ["academy-courses", isAdmin, adminView],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("courses")
-        .select("id,slug,title,description,level,tier,sort_order")
+        .select("id,slug,title,description,level,tier,sort_order,status")
         .order("sort_order");
+
+      if (isAdmin && adminView === "LEARNER") {
+        query = query.eq("status", "PUBLISHED");
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
       return data ?? [];
     },

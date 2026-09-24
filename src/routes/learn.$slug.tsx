@@ -1,5 +1,6 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, Navigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { useState } from "react";
 import {
   BookOpen,
@@ -181,6 +182,12 @@ function CourseDetailPage() {
   }
 
   if (!course) return null;
+
+  if (course.isLocked && !isAdmin) {
+    // TanStack router will handle this, but we show a toast when it mounts
+    setTimeout(() => toast.error(course.description || "Course is not published or currently unavailable."), 0);
+    return <Navigate to="/academy" replace />;
+  }
 
   const completedModuleIds = new Set(
     (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id),

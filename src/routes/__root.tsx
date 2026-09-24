@@ -215,7 +215,7 @@ function TopNav() {
     : [];
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 bg-card/90 backdrop-blur-md border-b border-border/80 shadow-xs">
+    <nav className={`fixed inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 bg-card/90 backdrop-blur-md border-b border-border/80 shadow-xs transition-all ${isAdmin ? 'top-8' : 'top-0'}`}>
       <Link to="/" className="flex items-center gap-2.5 group">
         <div className="w-9 h-9 rounded-md border border-primary/40 bg-white overflow-hidden shadow-xs flex items-center justify-center">
           <img src={nisqLogoUrl} alt="NISQ Vanguard logo" className="w-full h-full object-cover" />
@@ -480,22 +480,75 @@ function BottomNav() {
   );
 }
 
+function AdminTacticalPreviewBar() {
+  const { isAdmin, adminView, setAdminView } = useAuth();
+  if (!isAdmin) return null;
+
+  return (
+    <div className="fixed top-0 inset-x-0 z-[60] bg-zinc-950 text-white border-b border-zinc-800 text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5 shadow-md">
+      <div className="flex items-center gap-2 text-accent">
+        <Shield className="w-3.5 h-3.5" />
+        <span className="font-bold tracking-wider">ADMIN CONSOLE ACTIVE</span>
+      </div>
+      <div className="flex items-center gap-4">
+        <span className="text-zinc-400">VIEWING AS:</span>
+        <div className="flex items-center gap-3">
+          {(["ADMIN", "LEARNER", "ORGANIZATION"] as const).map((view) => (
+            <label
+              key={view}
+              className={`flex items-center gap-1.5 cursor-pointer transition-colors ${
+                adminView === view ? "text-accent font-semibold" : "text-zinc-300 hover:text-white"
+              }`}
+            >
+              <input
+                type="radio"
+                name="adminView"
+                value={view}
+                checked={adminView === view}
+                onChange={() => setAdminView(view)}
+                className="w-3 h-3 accent-accent"
+              />
+              <span>
+                {view === "ADMIN"
+                  ? "Admin View"
+                  : view === "LEARNER"
+                  ? "Learner View"
+                  : "Organization View"}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AuthListener />
-        <div className="min-h-screen relative pt-16 pb-12 md:pb-0">
-          <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
-          <TopNav />
-          <BottomNav />
-          <div className="relative z-10">
-            <Outlet />
-          </div>
-        </div>
+        <AdminTacticalPreviewBarWrapper />
         <Toaster theme="light" />
       </AuthProvider>
     </QueryClientProvider>
+  );
+}
+
+function AdminTacticalPreviewBarWrapper() {
+  const { isAdmin } = useAuth();
+  return (
+    <div className={`min-h-screen relative pb-12 md:pb-0 ${isAdmin ? "pt-[5.5rem]" : "pt-16"}`}>
+      <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
+      <AdminTacticalPreviewBar />
+      <div className={isAdmin ? "pt-8" : ""}>
+        <TopNav />
+      </div>
+      <BottomNav />
+      <div className="relative z-10">
+        <Outlet />
+      </div>
+    </div>
   );
 }

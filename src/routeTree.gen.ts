@@ -63,6 +63,7 @@ import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
 import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
+import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin.courses'
 import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
 import { Route as AuthenticatedCyberRangeCtfRouteImport } from './routes/_authenticated/cyber-range.ctf'
 import { Route as AuthenticatedCyberRangeMyProgressRouteImport } from './routes/_authenticated/cyber-range.my-progress'
@@ -351,6 +352,12 @@ const AuthenticatedAdminContentRoute =
     path: '/content',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminCoursesRoute =
+  AuthenticatedAdminCoursesRouteImport.update({
+    id: '/courses',
+    path: '/courses',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -472,6 +479,7 @@ export interface FileRoutesByFullPath {
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
   '/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
@@ -538,6 +546,7 @@ export interface FileRoutesByTo {
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
   '/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
@@ -607,6 +616,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/_authenticated/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
+  '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
   '/_authenticated/cyber-range/ctf': typeof AuthenticatedCyberRangeCtfRoute
   '/_authenticated/cyber-range/my-progress': typeof AuthenticatedCyberRangeMyProgressRoute
@@ -676,6 +686,7 @@ export interface FileRouteTypes {
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
+    | '/admin/courses'
     | '/admin/team'
     | '/cyber-range/ctf'
     | '/cyber-range/my-progress'
@@ -742,6 +753,7 @@ export interface FileRouteTypes {
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
+    | '/admin/courses'
     | '/admin/team'
     | '/cyber-range/ctf'
     | '/cyber-range/my-progress'
@@ -810,6 +822,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/colleges'
     | '/_authenticated/admin/complaints'
     | '/_authenticated/admin/content'
+    | '/_authenticated/admin/courses'
     | '/_authenticated/admin/team'
     | '/_authenticated/cyber-range/ctf'
     | '/_authenticated/cyber-range/my-progress'
@@ -1244,6 +1257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/courses': {
+      id: '/_authenticated/admin/courses'
+      path: '/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AuthenticatedAdminCoursesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/team': {
       id: '/_authenticated/admin/team'
       path: '/team'
@@ -1337,6 +1357,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminCollegesRoute: typeof AuthenticatedAdminCollegesRoute
   AuthenticatedAdminComplaintsRoute: typeof AuthenticatedAdminComplaintsRoute
   AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
+  AuthenticatedAdminCoursesRoute: typeof AuthenticatedAdminCoursesRoute
   AuthenticatedAdminTeamRoute: typeof AuthenticatedAdminTeamRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -1347,6 +1368,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminCollegesRoute: AuthenticatedAdminCollegesRoute,
   AuthenticatedAdminComplaintsRoute: AuthenticatedAdminComplaintsRoute,
   AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
+  AuthenticatedAdminCoursesRoute: AuthenticatedAdminCoursesRoute,
   AuthenticatedAdminTeamRoute: AuthenticatedAdminTeamRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }

@@ -68,6 +68,8 @@ type AuthCtx = {
   loading: boolean;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  adminView: "ADMIN" | "LEARNER" | "ORGANIZATION";
+  setAdminView: (view: "ADMIN" | "LEARNER" | "ORGANIZATION") => void;
   signInWithGoogle: (next?: string) => Promise<{ error?: Error }>;
   signOut: () => Promise<void>;
   getCurrentUser: () => Promise<User | null>;
@@ -83,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [adminView, setAdminView] = useState<"ADMIN" | "LEARNER" | "ORGANIZATION">("ADMIN");
   const mountedRef = useRef(true);
 
   const loadProfile = async (currentUser: User | null) => {
@@ -181,6 +184,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         isAuthenticated: Boolean(user),
         isAdmin: profile?.role === "admin",
+        adminView,
+        setAdminView,
         signInWithGoogle,
         signOut,
         getCurrentUser: async () => {
