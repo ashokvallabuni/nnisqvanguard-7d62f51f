@@ -208,6 +208,30 @@ function CyberLabsCatalogPage() {
     return ["all", ...Array.from(set)];
   }, [allLabs]);
 
+  const STANDARD_CATEGORIES = [
+    "NETWORKING",
+    "LINUX",
+    "WEB SECURITY",
+    "ETHICAL HACKING",
+    "PHISHING DEFENCE",
+    "OSINT",
+    "DIGITAL FORENSICS",
+    "SOC",
+    "INCIDENT RESPONSE",
+    "PENETRATION TESTING",
+    "CLOUD SECURITY",
+    "MALWARE ANALYSIS",
+  ] as const;
+
+  const stats = useMemo(() => {
+    const available = allLabs.length;
+    const inProgress = allLabs.filter((l) => l.is_active_session).length;
+    const completed = allLabs.filter((l) => l.completed).length;
+    const learningPaths =
+      categories.length > 1 ? categories.length - 1 : 0;
+    return { available, inProgress, completed, learningPaths };
+  }, [allLabs, categories]);
+
   // Filtered labs
   const filteredLabs = useMemo(() => {
     return allLabs.filter((lab) => {
@@ -230,29 +254,75 @@ function CyberLabsCatalogPage() {
 
   const activeSessionLab = allLabs.find((l) => l.is_active_session);
 
+  const existingCategoryNorm = new Set(
+    (categories.slice(1).filter(Boolean) as string[]).map((c) => c.toLowerCase().replace(/[\s\-_]/g, ""))
+  );
+
   return (
-    <div className="min-h-screen pt-16 pb-24">
+    <div className="min-h-screen">
       <PageHeader
-        badge="NISQ Cyber Labs"
+        badge="CYBER RANGE COMMAND CENTER"
         badgeVariant="primary"
-        title="Hands-on Cyber Range Workbenches"
-        subtitle="Practice real-world incident investigation, malware triage, and network packet analysis inside isolated sandbox environments."
-        breadcrumbs={[{ label: "Home", to: "/" }, { label: "Cyber Labs" }]}
+        title="CYBER LABS"
+        subtitle="Train. Attack. Defend. Prove. — Launch isolated containerized mission workbenches, analyze real capture telemetry, and submit validated flags."
+        breadcrumbs={[{ label: "PLATFORM", to: "/" }, { label: "CYBER LABS" }]}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10 pb-24">
+        {/* ── KPI STAT ROW ─────────────────────────────────────────────── */}
+        <section aria-label="Cyber labs statistics" className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          {[
+            { label: "AVAILABLE LABS", value: stats.available, icon: Layers, variant: "primary" },
+            { label: "IN PROGRESS", value: stats.inProgress, icon: Activity, variant: "warning", showPulse: stats.inProgress > 0 },
+            { label: "COMPLETED", value: stats.completed, icon: Award, variant: "success" },
+            { label: "LEARNING PATHS", value: stats.learningPaths, icon: Sparkles, variant: "accent" },
+          ].map((stat, i) => {
+            const Icon = stat.icon;
+            const variantClasses: Record<string, string> = {
+              primary: "border-primary/30 bg-primary/5 text-primary",
+              warning: "border-warning/30 bg-warning/5 text-warning",
+              success: "border-success/30 bg-success/5 text-success",
+              accent: "border-accent/30 bg-accent/10 text-accent-foreground",
+            };
+            return (
+              <div
+                key={i}
+                className="relative rounded-xl border bg-card p-4 sm:p-5 flex flex-col gap-2 overflow-hidden"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-muted-foreground font-semibold">
+                    {stat.label}
+                  </span>
+                  <div className={`p-1.5 rounded-md border ${variantClasses[stat.variant]} ${stat.showPulse ? "animate-pulse" : ""}`}>
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="font-display text-2xl sm:text-3xl font-black text-foreground tabular-nums leading-none">
+                    {stat.value}
+                  </span>
+                  <span className="font-mono text-[0.65rem] text-muted-foreground uppercase">
+                    total
+                  </span>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-60" />
+              </div>
+            );
+          })}
+        </section>
+
         {/* Active Session Notification Card */}
         {activeSessionLab && (
           <div className="rounded-xl border border-primary bg-primary/10 p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm animate-in fade-in">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-primary text-primary-foreground animate-pulse">
+              <div className="p-2.5 rounded-lg bg-primary text-primary-foreground animate-pulse shrink-0">
                 <Activity className="w-5 h-5" />
               </div>
               <div>
                 <div className="text-xs font-mono uppercase tracking-wider text-primary font-semibold">
                   ACTIVE CONTAINER SESSION RUNNING
                 </div>
-                <div className="font-display font-bold text-base text-foreground">
+                <div className="font-display font-bold text-base text-foreground mt-0.5">
                   {activeSessionLab.title}
                 </div>
               </div>
@@ -264,74 +334,104 @@ function CyberLabsCatalogPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-xs font-mono font-semibold hover:bg-primary/90 transition-colors shadow-xs shrink-0"
             >
               <Terminal className="w-4 h-4" />
-              <span>Resume Active Lab</span>
+              <span>CONTINUE LAB</span>
             </Link>
           </div>
         )}
 
-        {/* Labs Workflow Guide */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-xl border border-border bg-card space-y-2">
-            <div className="w-7 h-7 rounded-md bg-primary/10 text-primary flex items-center justify-center font-mono text-xs font-bold">
-              01
-            </div>
-            <h4 className="font-display font-bold text-sm text-foreground">
-              Isolated Execution Sandbox
-            </h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Every lab launches a private Docker container with real forensics tools (TShark,
-              Suricata, GDB, Volatility).
-            </p>
+        {/* ── CATEGORY / CAPABILITY CHIPS ──────────────────────────────── */}
+        <section aria-label="Lab categories" className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground font-semibold flex items-center gap-2">
+              <Filter className="w-3.5 h-3.5" /> CAPABILITY MAP
+            </h2>
+            <button
+              onClick={() => { setSelectedCategory("all"); setSelectedDifficulty("all"); setSearchQuery(""); }}
+              className="font-mono text-[0.65rem] uppercase tracking-wider text-primary font-semibold hover:underline"
+            >
+              Reset filters
+            </button>
           </div>
-
-          <div className="p-5 rounded-xl border border-border bg-card space-y-2">
-            <div className="w-7 h-7 rounded-md bg-accent/15 text-accent-foreground flex items-center justify-center font-mono text-xs font-bold">
-              02
-            </div>
-            <h4 className="font-display font-bold text-sm text-foreground">Real Data Telemetry</h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Analyze realistic PCAPs, authentication event logs, and malware registry artifacts
-              derived from real engagements.
-            </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedCategory("all")}
+              className={`px-3.5 py-2 rounded-md text-[0.7rem] font-mono font-semibold tracking-wide border transition-colors ${
+                selectedCategory === "all"
+                  ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                  : "bg-card text-foreground border-border hover:border-primary/50 hover:bg-muted/40"
+              }`}
+              aria-current={selectedCategory === "all" ? "page" : undefined}
+            >
+              ALL LABS · {allLabs.length}
+            </button>
+            {STANDARD_CATEGORIES.map((std) => {
+              const stdKey = std.toLowerCase().replace(/[\s\-_]/g, "");
+              const match = (categories.slice(1).filter(Boolean) as string[])
+                .find(
+                  (c) => c.toLowerCase().replace(/[\s\-_]/g, "") === stdKey
+                );
+              const hasContent = !!match || existingCategoryNorm.has(stdKey);
+              const isSelected =
+                match && selectedCategory.toLowerCase().replace(/[\s\-_]/g, "") === stdKey;
+              const count = hasContent && match
+                ? allLabs.filter((l) => (l.category || "").toLowerCase().replace(/[\s\-_]/g, "") === stdKey).length
+                : 0;
+              return (
+                <button
+                  key={std}
+                  disabled={!hasContent}
+                  onClick={() => match && setSelectedCategory(match)}
+                  className={`px-3 py-2 rounded-md text-[0.7rem] font-mono font-semibold tracking-wide border transition-all inline-flex items-center gap-2 ${
+                    isSelected
+                      ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                      : hasContent
+                      ? "bg-card text-foreground border-border hover:border-primary/50 hover:bg-muted/40 disabled:opacity-50"
+                      : "bg-muted/30 text-muted-foreground border-dashed border-border/80"
+                  }`}
+                >
+                  <span>{std}</span>
+                  {hasContent ? (
+                    <span className={`px-1.5 py-0.5 rounded-xs text-[0.6rem] ${
+                      isSelected ? "bg-primary-foreground/20" : "bg-muted"
+                    }`}>
+                      {count}
+                    </span>
+                  ) : (
+                    <span className="px-1.5 py-0.5 rounded-xs text-[0.6rem] font-semibold tracking-wider bg-muted-foreground/10">
+                      COMING SOON
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
-
-          <div className="p-5 rounded-xl border border-border bg-card space-y-2">
-            <div className="w-7 h-7 rounded-md bg-success/15 text-success flex items-center justify-center font-mono text-xs font-bold">
-              03
-            </div>
-            <h4 className="font-display font-bold text-sm text-foreground">
-              Instant Validation & Points
-            </h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Submit your analytical answers or captured security flags to receive automated score
-              grading and skill points.
-            </p>
-          </div>
-        </div>
+        </section>
 
         {/* Search & Filters */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
-          <div className="relative flex-1 max-w-md">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pt-2">
+          <div className="relative flex-1 max-w-lg">
             <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search labs by technique or title (e.g. T1110, Volatility, SSH)..."
+              placeholder="Search by title, technique, or ATT&CK ID (e.g. Volatility, T1110, SQLi)…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full pl-10 pr-4 py-2.5 text-sm rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 text-xs font-mono">
-              <span className="px-2 text-muted-foreground">Difficulty:</span>
-              {["all", "easy", "medium", "hard"].map((diff) => (
+              <span className="px-2 text-muted-foreground font-semibold uppercase tracking-wider text-[0.65rem]">
+                Difficulty
+              </span>
+              {(["all", "easy", "medium", "hard", "insane"] as const).map((diff) => (
                 <button
                   key={diff}
                   onClick={() => setSelectedDifficulty(diff)}
-                  className={`px-2.5 py-1 rounded-md capitalize transition-colors ${
+                  className={`px-2.5 py-1.5 rounded-md capitalize transition-colors text-[0.7rem] font-semibold tracking-wide ${
                     selectedDifficulty === diff
-                      ? "bg-primary text-primary-foreground font-semibold"
+                      ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -343,22 +443,26 @@ function CyberLabsCatalogPage() {
         </div>
 
         {/* Labs Grid */}
-        <div className="space-y-6">
+        <section aria-label="Available labs" className="space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
               <Terminal className="w-5 h-5 text-primary" />
-              <span>Available Cyber Range Labs ({filteredLabs.length})</span>
+              <span>Available Cyber Range Labs</span>
+              <span className="font-mono text-[0.7rem] px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border font-semibold ml-1">
+                {filteredLabs.length}
+              </span>
             </h3>
           </div>
 
           {isLoading ? (
             <GridSkeleton count={6} />
           ) : filteredLabs.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-border p-12 text-center space-y-3">
-              <Terminal className="w-10 h-10 text-muted-foreground mx-auto" />
-              <h4 className="font-semibold text-foreground">No labs match your filter</h4>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Try clearing your search query or choosing a different difficulty level.
+            <div className="rounded-xl border border-dashed border-border p-10 md:p-14 text-center space-y-4">
+              <Database className="w-10 h-10 text-muted-foreground mx-auto" />
+              <h4 className="font-semibold text-foreground text-lg">No labs match your current filters</h4>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                Try clearing your search query, choosing a different difficulty level, or browse all
+                categories using the capability chips above.
               </p>
               <button
                 onClick={() => {
@@ -366,19 +470,19 @@ function CyberLabsCatalogPage() {
                   setSelectedDifficulty("all");
                   setSelectedCategory("all");
                 }}
-                className="text-xs font-mono text-primary underline"
+                className="text-xs font-mono font-semibold text-primary tracking-wider hover:underline uppercase"
               >
-                Reset filters
+                Reset all filters
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredLabs.map((lab) => (
                 <LabCard key={lab.id} lab={lab} />
               ))}
             </div>
           )}
-        </div>
+        </section>
       </div>
     </div>
   );

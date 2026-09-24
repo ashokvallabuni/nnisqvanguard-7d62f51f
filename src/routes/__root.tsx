@@ -15,7 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider, useAuth } from "../lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Shield, LogOut, Menu, X } from "lucide-react";
+import { Shield, LogOut, Menu, X, Home, BookOpen, Terminal, Radar, User, Award, LineChart } from "lucide-react";
 import { useState } from "react";
 
 const nisqLogoUrl = "/assets/nisq-logo.jpeg";
@@ -23,16 +23,39 @@ const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="max-w-md text-center glass rounded-xl p-10 glow-cyber">
-        <h1 className="display text-7xl text-cyber">404</h1>
-        <p className="mono text-xs text-muted-foreground mt-2">SIGNAL LOST</p>
-        <h2 className="mt-4 text-xl font-semibold">Page not found</h2>
-        <Link
-          to="/"
-          className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-        >
-          Return home
-        </Link>
+      <div className="max-w-md w-full text-center glass rounded-2xl p-8 md:p-10 glow-cyber border border-border">
+        <div className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground mb-2">
+          SIGNAL LOST
+        </div>
+        <h1 className="display text-6xl md:text-7xl text-cyber font-black">404</h1>
+        <p className="mono text-xs md:text-sm text-muted-foreground mt-3 tracking-wide">
+          PAGE NOT FOUND
+        </p>
+        <h2 className="mt-5 text-lg md:text-xl font-semibold text-foreground">
+          The requested route could not be located.
+        </h2>
+        <div className="mt-8 flex flex-col gap-2.5">
+          <Link
+            to="/"
+            className="w-full inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs font-mono tracking-wide"
+          >
+            RETURN HOME
+          </Link>
+          <div className="grid grid-cols-2 gap-2.5">
+            <Link
+              to="/academy"
+              className="w-full inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors font-mono tracking-wide"
+            >
+              OPEN ACADEMY
+            </Link>
+            <Link
+              to="/cyber-range/labs"
+              className="w-full inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors font-mono tracking-wide"
+            >
+              OPEN CYBER LABS
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -112,13 +135,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon-32x32.jpeg", type: "image/jpeg", sizes: "32x32" },
-      { rel: "icon", href: "/favicon-16x16.jpeg", type: "image/jpeg", sizes: "16x16" },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "icon", href: "/assets/nisq-logo.jpeg", type: "image/jpeg" },
-      { rel: "shortcut icon", href: "/assets/nisq-logo.jpeg", type: "image/jpeg" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.jpeg", sizes: "180x180" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.jpeg", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -168,12 +186,19 @@ function TopNav() {
   if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
 
   const mainNav = [
-    { to: "/academy", label: "Academy", badge: "Theory" },
-    { to: "/cyber-range/labs", label: "Cyber Labs", badge: "Hands-on" },
-    { to: "/cyber-range/learning-paths", label: "Learning Paths" },
-    { to: "/achievements", label: "Badges", badge: "Verified" },
-    { to: "/academy/glossary", label: "Glossary" },
+    { to: "/", label: "HOME", icon: Home },
+    { to: "/academy", label: "ACADEMY", icon: BookOpen },
+    { to: "/cyber-range/labs", label: "CYBER LABS", icon: Terminal },
+    { to: "/intelligence", label: "THREAT INTEL", icon: Radar },
+    { to: "/solutions", label: "SERVICES", icon: Shield },
+    { to: "/events", label: "COMMUNITY", icon: User },
   ];
+
+  const authedNav = user ? [
+    { to: "/cyber-range/my-progress", label: "PROGRESS", icon: LineChart },
+    { to: "/certificates", label: "CERTIFICATES", icon: Award },
+    { to: "/profile", label: "PROFILE", icon: User },
+  ] : [];
 
   return (
     <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-4 md:px-8 bg-card/90 backdrop-blur-md border-b border-border/80 shadow-xs">
@@ -186,67 +211,78 @@ function TopNav() {
             NISQ <span className="text-primary">VANGUARD</span>
           </div>
           <div className="font-mono text-[0.6rem] text-muted-foreground tracking-tight">
-            ACADEMY
+            DEFENCE TECHNOLOGIES
           </div>
         </div>
       </Link>
 
-      <ul className="hidden lg:flex gap-1 items-center">
+      <ul className="hidden xl:flex gap-0.5 items-center">
         {mainNav.map((item) => {
+          const Icon = item.icon;
           const isActive =
             pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
           return (
             <li key={item.to}>
               <Link
                 to={item.to}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-md font-semibold text-[0.7rem] tracking-wide transition-colors ${
                   isActive
-                    ? "bg-primary/10 text-primary font-semibold border border-primary/20"
+                    ? "bg-primary/10 text-primary border border-primary/20"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                 }`}
               >
+                <Icon className="w-3.5 h-3.5" />
                 <span>{item.label}</span>
-                {item.badge && (
-                  <span
-                    className={`text-[0.6rem] px-1.5 py-0.5 rounded-xs font-mono uppercase ${
-                      isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
+              </Link>
+            </li>
+          );
+        })}
+        {authedNav.map((item) => {
+          const Icon = item.icon;
+          const isActive =
+            pathname === item.to || pathname.startsWith(item.to);
+          return (
+            <li key={item.to}>
+              <Link
+                to={item.to}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-md font-semibold text-[0.7rem] tracking-wide transition-colors ${
+                  isActive
+                    ? "bg-accent/10 text-accent border border-accent/20"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{item.label}</span>
               </Link>
             </li>
           );
         })}
       </ul>
 
-      <div className="hidden lg:flex gap-2.5 items-center">
+      <div className="hidden xl:flex gap-2 items-center">
         {user ? (
           <>
             {isAdmin && (
               <Link
                 to="/admin"
-                className="font-mono text-xs px-2.5 py-1.5 rounded-md border border-accent/40 text-accent hover:bg-accent/10 transition-colors"
+                className="font-mono text-[0.65rem] px-2.5 py-1.5 rounded-md border border-accent/40 text-accent hover:bg-accent/10 transition-colors font-semibold tracking-wide"
               >
-                ADMIN
+                ADMIN CONSOLE
               </Link>
             )}
             <Link
               to="/dashboard"
-              className={`font-mono text-xs px-3.5 py-1.5 rounded-md border transition-all flex items-center gap-1.5 ${
+              className={`font-mono text-[0.65rem] px-3.5 py-1.5 rounded-md border transition-all flex items-center gap-1.5 font-semibold tracking-wide ${
                 pathname === "/dashboard"
                   ? "bg-primary text-primary-foreground border-primary shadow-xs"
                   : "bg-background border-border text-foreground hover:border-primary/50"
               }`}
             >
-              <span>Command Center</span>
+              <span>DASHBOARD</span>
             </Link>
             <button
               onClick={() => void signOut()}
-              className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+              className="p-2 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
               title="Sign Out"
               aria-label="Sign Out"
             >
@@ -254,17 +290,25 @@ function TopNav() {
             </button>
           </>
         ) : (
-          <Link
-            to="/login"
-            className="font-mono text-xs px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors shadow-xs"
-          >
-            SIGN IN
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to="/login"
+              className="font-mono text-[0.65rem] px-4 py-2 rounded-md border border-border text-foreground font-semibold hover:bg-muted transition-colors tracking-wide"
+            >
+              SIGN IN
+            </Link>
+            <Link
+              to="/auth"
+              className="font-mono text-[0.65rem] px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors shadow-xs tracking-wide"
+            >
+              CREATE ACCOUNT
+            </Link>
+          </div>
         )}
       </div>
 
       <button
-        className="lg:hidden p-2 rounded-md text-foreground hover:bg-muted"
+        className="xl:hidden p-2 rounded-md text-foreground hover:bg-muted"
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close menu" : "Open menu"}
       >
@@ -272,42 +316,74 @@ function TopNav() {
       </button>
 
       {open && (
-        <div className="lg:hidden absolute top-16 inset-x-0 bg-card/95 backdrop-blur-md border-b border-border p-4 flex flex-col gap-2 shadow-lg animate-in slide-in-from-top-2">
-          <div className="font-mono text-[0.65rem] text-muted-foreground uppercase px-2 mb-1">
-            Navigation
+        <div className="xl:hidden absolute top-16 inset-x-0 bg-card/95 backdrop-blur-md border-b border-border p-4 flex flex-col gap-1 shadow-lg animate-in slide-in-from-top-2 max-h-[80vh] overflow-y-auto">
+          <div className="font-mono text-[0.6rem] text-muted-foreground uppercase px-2 py-1 tracking-wider">
+            Platform
           </div>
-          {mainNav.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between px-3 py-2 rounded-md text-sm text-foreground hover:bg-muted font-medium"
-            >
-              <span>{item.label}</span>
-              {item.badge && (
-                <span className="text-[0.65rem] px-1.5 py-0.5 rounded-xs bg-muted font-mono text-muted-foreground">
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          ))}
-          <div className="border-t border-border pt-3 mt-1 flex flex-col gap-2">
+          {mainNav.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-3 px-3 py-3 rounded-md text-sm font-semibold transition-colors ${
+                  isActive
+                    ? "bg-primary/10 text-primary border border-primary/20"
+                    : "text-foreground hover:bg-muted"
+                }`}
+              >
+                <Icon className="w-4.5 h-4.5" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+          {authedNav.length > 0 && (
+            <>
+              <div className="font-mono text-[0.6rem] text-muted-foreground uppercase px-2 py-1 mt-2 tracking-wider border-t border-border pt-3">
+                My Workspace
+              </div>
+              {authedNav.map((item) => {
+                const Icon = item.icon;
+                const isActive =
+                  pathname === item.to || pathname.startsWith(item.to);
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-3 rounded-md text-sm font-semibold transition-colors ${
+                      isActive
+                        ? "bg-accent/10 text-accent border border-accent/20"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <Icon className="w-4.5 h-4.5" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </>
+          )}
+          <div className="border-t border-border pt-3 mt-2 flex flex-col gap-2">
             {user ? (
               <>
                 <Link
                   to="/dashboard"
                   onClick={() => setOpen(false)}
-                  className="w-full text-center py-2 rounded-md bg-primary text-primary-foreground font-mono text-xs font-semibold"
+                  className="w-full text-center py-3 rounded-md bg-primary text-primary-foreground font-mono text-xs font-semibold tracking-wide"
                 >
-                  Student Command Center
+                  OPEN DASHBOARD
                 </Link>
                 {isAdmin && (
                   <Link
                     to="/admin"
                     onClick={() => setOpen(false)}
-                    className="w-full text-center py-2 rounded-md border border-accent/40 text-accent font-mono text-xs"
+                    className="w-full text-center py-3 rounded-md border border-accent/40 text-accent font-mono text-xs font-semibold tracking-wide"
                   >
-                    Admin Console
+                    ADMIN CONSOLE
                   </Link>
                 )}
                 <button
@@ -315,23 +391,80 @@ function TopNav() {
                     setOpen(false);
                     void signOut();
                   }}
-                  className="w-full text-center py-2 rounded-md border border-border text-muted-foreground hover:text-destructive font-mono text-xs"
+                  className="w-full text-center py-3 rounded-md border border-border text-muted-foreground hover:text-destructive font-mono text-xs font-semibold tracking-wide"
                 >
-                  Sign out
+                  SIGN OUT
                 </button>
               </>
             ) : (
-              <Link
-                to="/login"
-                onClick={() => setOpen(false)}
-                className="w-full text-center py-2 rounded-md bg-primary text-primary-foreground font-mono text-xs font-semibold"
-              >
-                SIGN IN
-              </Link>
+              <div className="flex flex-col gap-2">
+                <Link
+                  to="/login"
+                  onClick={() => setOpen(false)}
+                  className="w-full text-center py-3 rounded-md border border-border text-foreground font-mono text-xs font-semibold tracking-wide"
+                >
+                  SIGN IN
+                </Link>
+                <Link
+                  to="/auth"
+                  onClick={() => setOpen(false)}
+                  className="w-full text-center py-3 rounded-md bg-primary text-primary-foreground font-mono text-xs font-semibold tracking-wide"
+                >
+                  CREATE ACCOUNT
+                </Link>
+              </div>
             )}
           </div>
         </div>
       )}
+    </nav>
+  );
+}
+
+function BottomNav() {
+  const { user } = useAuth();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
+
+  const items = [
+    { to: "/", label: "HOME", icon: Home },
+    { to: "/academy", label: "ACADEMY", icon: BookOpen },
+    { to: "/cyber-range/labs", label: "LABS", icon: Terminal },
+    { to: "/intelligence", label: "INTEL", icon: Radar },
+    { to: user ? "/profile" : "/login", label: user ? "PROFILE" : "SIGN IN", icon: User },
+  ];
+
+  return (
+    <nav
+      className="fixed bottom-0 inset-x-0 z-50 h-12 md:hidden bg-card/95 backdrop-blur-md border-t border-border/80 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]"
+      role="navigation"
+      aria-label="Mobile primary navigation"
+    >
+      <ul className="h-full grid grid-cols-5 items-center">
+        {items.map((item) => {
+          const Icon = item.icon;
+          const isActive =
+            pathname === item.to || (item.to !== "/" && item.to !== "/login" && pathname.startsWith(item.to));
+          return (
+            <li key={item.to} className="h-full">
+              <Link
+                to={item.to}
+                className={`h-full w-full flex flex-col items-center justify-center gap-0.5 transition-colors ${
+                  isActive
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                aria-current={isActive ? "page" : undefined}
+              >
+                <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} />
+                <span className="font-mono text-[9px] font-semibold tracking-wider leading-none">
+                  {item.label}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </nav>
   );
 }
@@ -342,9 +475,10 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AuthListener />
-        <div className="min-h-screen relative">
+        <div className="min-h-screen relative pt-16 pb-12 md:pb-0">
           <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
           <TopNav />
+          <BottomNav />
           <div className="relative z-10">
             <Outlet />
           </div>

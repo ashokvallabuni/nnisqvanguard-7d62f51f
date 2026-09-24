@@ -39,6 +39,7 @@ import { SocPipelineDiagram } from "@/components/diagrams/SocPipelineDiagram";
 import { NETWORKING_MODULES, LINUX_MODULES } from "@/data/courses-curriculum";
 import { completeModule } from "@/lib/academy.functions";
 import { submitQuizAnswer } from "@/lib/quiz.functions";
+import { isCourseAccessible, describeAccessError } from "@/lib/course-accessibility";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/$moduleSlug")({
   head: ({ params }) => ({
@@ -171,7 +172,7 @@ function getModuleDataset(slug: string, title: string): DatasetSample {
 
 function ModuleLearningPage() {
   const { slug, moduleSlug } = Route.useParams();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -181,14 +182,22 @@ function ModuleLearningPage() {
     Record<string, { is_correct: boolean; score: number; explanation: string }>
   >({});
   const [completing, setCompleting] = useState(false);
+  const [verifyingQuizId, setVerifyingQuizId] = useState<string | null>(null);
 
   // 1. Fetch Course
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ["course-by-slug", slug],
     queryFn: async () => {
-      // Security Check: Enforce course locking for direct URL access
-      const { LOCKED_COURSES } = await import("@/data/courses-curriculum");
-      if (LOCKED_COURSES.some((c) => c.slug === slug)) {
+      // Security Check: Enforce course locking via centralized predicate for direct URL access
+      const accessResult = await isCourseAccessible(slug, {
+        user: { isAdmin, id: user?.id ?? null, role: null },
+        requireAuth: true,
+      });
+      if (!accessResult.ok) {
+        toast.error(describeAccessError(accessResult.reason), {
+          description: "Return to Academy to explore approved courses.",
+        });
+        navigate({ to: "/academy", replace: true });
         throw notFound();
       }
 
@@ -628,6 +637,7 @@ function ModuleLearningPage() {
     const selectedOption = selectedAnswers[quizId];
     if (selectedOption === undefined) return;
 
+    setVerifyingQuizId(quizId);
     try {
       const result = await submitQuizAnswer({
         data: {
@@ -710,6 +720,8 @@ function ModuleLearningPage() {
       } else {
         toast.error("Unable to verify answer. Please check your connection and try again.");
       }
+    } finally {
+      setVerifyingQuizId(null);
     }
   };
 
@@ -871,11 +883,11 @@ function ModuleLearningPage() {
 
                         <div className="flex items-center justify-between pt-2">
                           <button
-                            disabled={selected === undefined}
+                            disabled={selected === undefined || verifyingQuizId === q.id}
                             onClick={() => handleCheckQuiz(q.id, currentModule.id)}
                             className="px-3.5 py-1.5 rounded-md text-xs font-mono bg-primary text-primary-foreground font-semibold disabled:opacity-40"
                           >
-                            Check Answer
+                            {verifyingQuizId === q.id ? "VERIFYING ANSWER…" : "Check Answer"}
                           </button>
 
                           {isChecked &&
@@ -991,7 +1003,7 @@ function ModuleLearningPage() {
                   <CheckCircle2 className="w-4 h-4" />
                   <span>
                     {completing
-                      ? "Saving..."
+                      ? "SAVING PROGRESS…"
                       : isCurrentModuleCompleted
                         ? nextModule
                           ? "Completed — Next Module →"

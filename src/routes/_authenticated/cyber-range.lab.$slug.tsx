@@ -19,6 +19,8 @@ import {
   AlertTriangle,
   ListChecks,
   BarChart3,
+  Home,
+  LogOut,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
@@ -844,7 +846,23 @@ function CyberLabWorkbenchPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-background hover:bg-muted text-foreground font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+              title="Home"
+            >
+              <Home className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">HOME</span>
+            </Link>
+            <Link
+              to="/cyber-range/labs"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-background hover:bg-muted text-foreground font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+              title="Back to Cyber Labs"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">BACK TO LABS</span>
+            </Link>
             {sessionActive && (
               <div className="flex items-center gap-2 font-mono text-xs px-3 py-1.5 rounded-lg border border-border bg-muted/40">
                 <Clock className="w-3.5 h-3.5 text-primary" />
@@ -859,21 +877,39 @@ function CyberLabWorkbenchPage() {
                 {persistedProgress?.points ?? labConfig.reward_points} XP)
               </span>
             ) : sessionActive ? (
-              <button
-                onClick={handleStopSession}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-destructive/40 text-destructive hover:bg-destructive/10 font-mono text-xs font-semibold transition-colors"
-              >
-                <Square className="w-3.5 h-3.5" /> Stop Sandbox
-              </button>
+              <>
+                <button
+                  onClick={handleStopSession}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-destructive/40 text-destructive hover:bg-destructive/10 font-mono text-xs font-semibold transition-colors"
+                >
+                  <Square className="w-3.5 h-3.5" /> Stop Sandbox
+                </button>
+                <Link
+                  to="/cyber-range/labs"
+                  onClick={(e) => {
+                    if (sessionActive) {
+                      e.preventDefault();
+                      void handleStopSession().finally(() => {
+                        window.location.href = "/cyber-range/labs";
+                      });
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-border bg-background hover:bg-muted text-foreground font-mono text-xs font-semibold tracking-wide transition-colors"
+                >
+                  <LogOut className="w-3.5 h-3.5" /> EXIT LAB
+                </Link>
+              </>
             ) : (
-              <button
-                onClick={handleStartSession}
-                disabled={sessionStarting}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-all shadow-sm"
-              >
-                <Play className="w-3.5 h-3.5 fill-primary-foreground" />
-                <span>{sessionStarting ? "Provisioning Sandbox…" : "Start Lab Sandbox"}</span>
-              </button>
+              <>
+                <button
+                  onClick={handleStartSession}
+                  disabled={sessionStarting}
+                  className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-all shadow-sm"
+                >
+                  <Play className="w-3.5 h-3.5 fill-primary-foreground" />
+                  <span>{sessionStarting ? "Provisioning Sandbox…" : "Start Lab Sandbox"}</span>
+                </button>
+              </>
             )}
           </div>
         </div>

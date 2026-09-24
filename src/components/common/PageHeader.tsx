@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Home } from "lucide-react";
 
 interface BreadcrumbItem {
   label: string;
@@ -15,6 +15,7 @@ interface PageHeaderProps {
   breadcrumbs?: BreadcrumbItem[];
   children?: ReactNode;
   action?: ReactNode;
+  hideHomeButton?: boolean;
 }
 
 export function PageHeader({
@@ -25,6 +26,7 @@ export function PageHeader({
   breadcrumbs,
   children,
   action,
+  hideHomeButton = false,
 }: PageHeaderProps) {
   const badgeStyles = {
     primary: "bg-primary/10 text-primary border-primary/20",
@@ -35,19 +37,49 @@ export function PageHeader({
     muted: "bg-muted text-muted-foreground border-border",
   };
 
+  const normalizedBreadcrumbs: BreadcrumbItem[] =
+    breadcrumbs && breadcrumbs.length > 0
+      ? breadcrumbs[0]?.to === "/" || breadcrumbs[0]?.label === "HOME"
+        ? breadcrumbs
+        : [{ label: "HOME", to: "/" }, ...breadcrumbs]
+      : [];
+
+  const homeButton = !hideHomeButton ? (
+    <Link
+      to="/"
+      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md border border-border bg-background hover:bg-muted text-foreground font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+      aria-label="Navigate to home"
+    >
+      <Home className="w-3.5 h-3.5" />
+      <span className="hidden sm:inline">HOME</span>
+    </Link>
+  ) : null;
+
+  const renderedAction = action ? (
+    <div className="flex items-center gap-2 flex-wrap justify-end">
+      {hideHomeButton ? null : homeButton}
+      {action}
+    </div>
+  ) : hideHomeButton ? null : (
+    homeButton
+  );
+
   return (
-    <div className="relative border-b border-border bg-card/60 backdrop-blur-xs py-8 px-4 sm:px-6 lg:px-8">
+    <div className="relative border-b border-border bg-card/60 backdrop-blur-xs py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {breadcrumbs && breadcrumbs.length > 0 && (
-          <nav className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground mb-4 flex-wrap">
-            {breadcrumbs.map((item, index) => {
-              const isLast = index === breadcrumbs.length - 1;
+        {normalizedBreadcrumbs.length > 0 && (
+          <nav
+            className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground mb-4 flex-wrap"
+            aria-label="Breadcrumb"
+          >
+            {normalizedBreadcrumbs.map((item, index) => {
+              const isLast = index === normalizedBreadcrumbs.length - 1;
               return (
                 <div key={index} className="flex items-center gap-1.5">
                   {item.to && !isLast ? (
                     <Link
                       to={item.to}
-                      className="hover:text-primary transition-colors truncate max-w-[160px] sm:max-w-none"
+                      className="hover:text-primary transition-colors truncate max-w-[160px] sm:max-w-none font-semibold"
                     >
                       {item.label}
                     </Link>
@@ -55,8 +87,8 @@ export function PageHeader({
                     <span
                       className={
                         isLast
-                          ? "text-foreground font-medium truncate max-w-[200px] sm:max-w-none"
-                          : ""
+                          ? "text-foreground font-semibold truncate max-w-[200px] sm:max-w-none"
+                          : "font-semibold"
                       }
                     >
                       {item.label}
@@ -93,7 +125,11 @@ export function PageHeader({
             {children}
           </div>
 
-          {action && <div className="shrink-0 flex items-center gap-2 pt-2 md:pt-0">{action}</div>}
+          {renderedAction && (
+            <div className="shrink-0 flex items-center justify-end pt-2 md:pt-0">
+              {renderedAction}
+            </div>
+          )}
         </div>
       </div>
     </div>

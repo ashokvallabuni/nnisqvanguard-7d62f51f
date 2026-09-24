@@ -19,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
 import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
+import { isCourseAccessible, getLockedComingSoonCoursesStatic, describeAccessError } from "@/lib/course-accessibility";
 
 export const Route = createFileRoute("/learn/$slug")({
   head: ({ params }) => ({
@@ -54,21 +55,26 @@ export const Route = createFileRoute("/learn/$slug")({
 
 function CourseDetailPage() {
   const { slug } = Route.useParams();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ["course-detail", slug],
     queryFn: async () => {
-      // 1. Check if it's a locked Coming Soon course
-      const { LOCKED_COURSES, AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
-      const lockedFound = LOCKED_COURSES.find((c) => c.slug === slug);
-      if (lockedFound) {
+      // 1. Check centralized course accessibility predicate (server-side friendly)
+      const accessResult = await isCourseAccessible(slug, {
+        user: { isAdmin, id: user?.id ?? null, role: null },
+      });
+
+      // 2. Check locked Coming Soon catalog first (canonical COMING SOON list)
+      const lockedList = getLockedComingSoonCoursesStatic();
+      const lockedFound = lockedList.find((c) => c.slug === slug);
+      if (!accessResult.ok && lockedFound) {
         return {
           id: lockedFound.id,
           slug: lockedFound.slug,
           title: lockedFound.title,
-          description: `The ${lockedFound.title} curriculum is currently in production and under review by our Chief Architect. Direct access is restricted.`,
-          level: lockedFound.difficulty,
+          description: describeAccessError("locked"),
+          level: lockedFound.level,
           tier: "pro",
           sort_order: 99,
           isLocked: true,
@@ -76,18 +82,28 @@ function CourseDetailPage() {
         };
       }
 
-      // 2. Query Supabase
+      // 3. Query Supabase
       const { data, error } = await supabase
         .from("courses")
         .select("id,slug,title,description,level,tier,sort_order")
         .eq("slug", slug)
         .maybeSingle();
 
-      if (data) return { ...data, isLocked: false, comingSoon: false };
+      if (data) {
+        if (accessResult.ok) return { ...data, isLocked: false, comingSoon: false };
+        // DB has course but predicate locked it
+        return {
+          ...data,
+          description: describeAccessError(accessResult.reason),
+          isLocked: true,
+          comingSoon: accessResult.reason !== "locked",
+        };
+      }
 
-      // 3. Fallback to canonical available courses
+      // 4. Fallback to canonical available courses
+      const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
       const canonical = AVAILABLE_COURSES.find((c) => c.slug === slug);
-      if (canonical) {
+      if (canonical && accessResult.ok) {
         return {
           id: canonical.id,
           slug: canonical.slug,

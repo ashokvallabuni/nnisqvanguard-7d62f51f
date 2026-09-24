@@ -20,6 +20,7 @@ import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
 import { CourseCard, CourseData } from "@/components/academy/CourseCard";
 import { GridSkeleton } from "@/components/common/SkeletonLoaders";
+import { getLockedComingSoonCoursesStatic } from "@/lib/course-accessibility";
 
 export const Route = createFileRoute("/academy")({
   head: () => ({
@@ -84,12 +85,11 @@ function AcademyPage() {
 
   // Calculate course stats & progress
   const coursesWithDetails: CourseData[] = useMemo(() => {
-    if (!courses) return [];
     const completedSet = new Set(
       (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id),
     );
 
-    return courses.map((c) => {
+    const dbCourses: CourseData[] = (courses ?? []).map((c) => {
       const courseModules = (modules ?? []).filter((m) => m.course_id === c.id);
       const completedCourseModules = courseModules.filter((m) => completedSet.has(m.id));
       const progressPercent = courseModules.length
@@ -112,6 +112,13 @@ function AcademyPage() {
         progress_percent: progressPercent,
       };
     });
+
+    const existingSlugs = new Set(dbCourses.map((c) => c.slug));
+    const lockedCourses = getLockedComingSoonCoursesStatic().filter(
+      (lc) => !existingSlugs.has(lc.slug),
+    );
+
+    return [...dbCourses, ...lockedCourses];
   }, [courses, modules, userProgress]);
 
   // Filter courses

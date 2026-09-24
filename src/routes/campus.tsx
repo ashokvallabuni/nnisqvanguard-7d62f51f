@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Building2, CalendarDays, MapPin, Search, ShieldCheck, Users, X } from "lucide-react";
+import { Building2, CalendarDays, MapPin, Search, ShieldCheck, Users, X, Home } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -186,18 +186,27 @@ function CampusPrograms() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] px-4 pb-20 pt-28 text-slate-200 md:px-8">
+    <main className="min-h-screen bg-[#030712] px-4 pb-24 pt-28 text-slate-200 md:px-8">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-10">
-          <div className="mono text-xs tracking-[0.18em] text-cyan-300">// CAMPUS PROGRAMS</div>
-          <h1 className="mt-3 font-display text-4xl font-bold text-white md:text-6xl">
-            CONNECT THE CAMPUS
-          </h1>
-          <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-slate-400">
-            Discover active cyber education and cyber-range programs across the NISQ Vanguard
-            college network. Filter by location, program format and security level.
-          </p>
-        </header>
+        <div className="flex items-end justify-between mb-10 gap-4 flex-col md:flex-row">
+          <header>
+            <div className="mono text-xs tracking-[0.18em] text-cyan-300">// CAMPUS PROGRAMS</div>
+            <h1 className="mt-3 font-display text-4xl font-bold text-white md:text-6xl">
+              CONNECT THE CAMPUS
+            </h1>
+            <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-slate-400">
+              Discover active cyber education and cyber-range programs across the NISQ Vanguard
+              college network. Filter by location, program format and security level.
+            </p>
+          </header>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-cyan-400/30 bg-white/5 hover:bg-white/10 text-cyan-200 font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+          >
+            <Home className="w-4 h-4" />
+            <span>HOME</span>
+          </Link>
+        </div>
 
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
           <StatCard icon={Building2} label="Total Connected Colleges" value={stats.colleges} />
