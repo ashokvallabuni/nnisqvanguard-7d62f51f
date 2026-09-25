@@ -247,7 +247,7 @@ export function CyberIntelligenceHome() {
                 to="/cyber-range"
                 className="inline-flex items-center gap-2 border border-[#0A192F] bg-white px-5 py-3 font-display text-xs font-bold tracking-wider text-[#0A192F] transition hover:bg-[#F0F4F9] hover:text-[#0284C7] rounded-md uppercase"
               >
-                EXPLORE NISQ VANGUARD <FlaskConical className="h-4 w-4" />
+                EXPLORE IVVAB LABS <FlaskConical className="h-4 w-4" />
               </Link>
             </div>
 
@@ -726,10 +726,10 @@ export function CyberIntelligenceHome() {
                 Practical Training Infrastructure
               </span>
               <h2 className="mt-4 font-display text-4xl font-bold text-[#0A192F] sm:text-5xl">
-                NISQ <span className="text-[#0284C7]">IVVAB LABS</span>
+                IVVAB <span className="text-[#0284C7]">LABS</span>
               </h2>
               <p className="mt-5 font-mono text-sm leading-relaxed text-[#0A192F]">
-                The NISQ IVVAB LABS provides isolated, containerised lab environments for hands-on
+                The IVVAB LABS provides isolated, containerised lab environments for hands-on
                 practitioner training. Each lab scenario is built around real incident telemetry,
                 adversary simulation, and defensive verification objectives.
               </p>
@@ -790,7 +790,7 @@ export function CyberIntelligenceHome() {
               <div className="mb-5 flex items-center justify-between border-b border-[#CBD5E1] pb-4 font-mono text-xs text-[#0A192F] font-bold">
                 <span>
                   <Terminal className="mr-2 inline h-4 w-4 text-[#64748B]" />
-                  VANGUARD_CYBER_RANGE.LOG
+                  VANGUARD_IVVAB_LABS.LOG
                 </span>
                 <span className="flex gap-1.5">
                   <i className="h-2.5 w-2.5 rounded-full bg-[#E2E8F0] border border-[#CBD5E1]" />

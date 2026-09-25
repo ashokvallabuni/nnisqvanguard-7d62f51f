@@ -11,9 +11,9 @@ import {
   Clock,
   Layers,
   Sparkles,
-  ArrowRight,
   Database,
   Award,
+  WifiOff,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -26,7 +26,7 @@ import { AVAILABLE_COURSES } from "@/data/courses-curriculum";
 export const Route = createFileRoute("/cyber-range/labs")({
   head: () => ({
     meta: [
-      { title: "NISQ Cyber Labs — Hands-on Cyber Range & Incident Workbenches" },
+      { title: "IVVAB LABS — Hands-on Cybersecurity Practice Environment" },
       {
         name: "description",
         content:
@@ -264,11 +264,19 @@ function CyberLabsCatalogPage() {
   return (
     <div className="min-h-screen">
       <PageHeader
-        badge="NISQ CYBER RANGE"
+        badge="IVVAB LABS"
         badgeVariant="primary"
-        title="Lab Command Center"
+        title={
+          <div className="flex items-center gap-3">
+            <span>Lab Command Center</span>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-[#059669]/30 bg-[#059669]/10 text-[#059669] text-[10px] font-mono tracking-widest font-bold">
+              <WifiOff className="w-3 h-3" />
+              AVAILABLE OFFLINE
+            </div>
+          </div>
+        }
         subtitle="Practical cybersecurity training through controlled laboratories and real-world security exercises."
-        breadcrumbs={[{ label: "PLATFORM", to: "/" }, { label: "CYBER LABS" }]}
+        breadcrumbs={[{ label: "PLATFORM", to: "/" }, { label: "IVVAB LABS" }]}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10 pb-24">
@@ -474,7 +482,7 @@ function CyberLabsCatalogPage() {
           <div className="flex items-center justify-between">
             <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
               <Terminal className="w-5 h-5 text-primary" />
-              <span>Available Cyber Range Labs</span>
+              <span>Available IVVAB LABS</span>
               <span className="font-mono text-[0.7rem] px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border font-semibold ml-1">
                 {filteredLabs.length}
               </span>

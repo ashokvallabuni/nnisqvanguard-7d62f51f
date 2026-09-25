@@ -20,7 +20,8 @@ async function api(path, options = {}) {
       method: options.method || 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SECRET}`,
+        'x-lab-runner-secret': SECRET,
+        'x-authenticated-user-id': 'test-user-123',
         ...options.headers
       }
     }, (res) => {
@@ -62,13 +63,15 @@ async function runTests() {
     console.log(`\nTesting Lab: ${labId}`);
     try {
       console.log('  1. START -> CREATE REAL CONTAINER');
-      await api(`/api/labs/${labId}/session`, { method: 'POST', body: { sessionId } });
+      const sessionRes = await api(`/api/labs/${labId}/session`, { method: 'POST' });
+      const actualSessionId = sessionRes.sessionId;
       
       console.log('  2. EXECUTE REAL COMMAND');
-      await api(`/api/labs/${labId}/session/${sessionId}/execute`, { method: 'POST', body: { command: 'whoami' } });
+      const terminalRes = await api(`/api/labs/${labId}/session/${actualSessionId}/terminal`, { method: 'POST', body: { command: 'whoami' } });
+      console.log('     Output:', terminalRes.stdout?.trim() || terminalRes.stderr?.trim());
       
       console.log('  3. STOP -> VERIFY CONTAINER REMOVED');
-      await api(`/api/labs/${labId}/session/${sessionId}`, { method: 'DELETE' });
+      await api(`/api/labs/${labId}/session/${actualSessionId}/stop`, { method: 'POST' });
       console.log(`  ✓ Lab ${labId} passed.`);
       successCount++;
     } catch (err) {

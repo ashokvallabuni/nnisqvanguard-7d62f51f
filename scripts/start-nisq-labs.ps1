@@ -102,17 +102,31 @@ $env:LAB_DOCKER_ENABLED = "true"
 $env:LAB_DOCKER_IMAGE = "nisqvanguard/linux-security:latest"
 
 # 4. Launch the Lab Runner Server
-Write-Host "[3/4] Launching NISQ Lab Runner on 127.0.0.1:$Port..." -ForegroundColor Yellow
+Write-Host "[3/4] Building and Launching NISQ Lab Runner on 127.0.0.1:$Port..." -ForegroundColor Yellow
 $labRunnerDir = Join-Path $PSScriptRoot "..\lab-runner"
 
 # Compile and start
+Write-Host "Installing dependencies and building server..." -ForegroundColor Yellow
+Start-Process -FilePath "npm.cmd" -ArgumentList "install" -WorkingDirectory $labRunnerDir -Wait -NoNewWindow
+Start-Process -FilePath "npm.cmd" -ArgumentList "run", "build" -WorkingDirectory $labRunnerDir -Wait -NoNewWindow
+
 Write-Host "[4/4] Starting server process..." -ForegroundColor Yellow
 Start-Process -FilePath "npm.cmd" -ArgumentList "start" -WorkingDirectory $labRunnerDir -NoNewWindow
 
-Start-Sleep -Seconds 2
+Write-Host "Waiting up to 15 seconds for server to become ready..." -ForegroundColor Yellow
+$serverReady = $false
+for ($i = 1; $i -le 15; $i++) {
+    Start-Sleep -Seconds 1
+    try {
+        $health = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/health" -Method Get -TimeoutSec 2 -ErrorAction Stop
+        $serverReady = $true
+        break
+    } catch {}
+    Write-Host -NoNewline "."
+}
+Write-Host ""
 
-# Verify Health
-try {
+if ($serverReady) {
     $health = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/health" -Method Get -TimeoutSec 5
     Write-Host ""
     Write-Host "============================================================" -ForegroundColor Green
@@ -124,6 +138,12 @@ try {
     Write-Host "Endpoint:  http://127.0.0.1:$Port" -ForegroundColor Green
     Write-Host "Status:    ONLINE" -ForegroundColor Green
     Write-Host "============================================================" -ForegroundColor Green
-} catch {
-    Write-Host "Runner started. Health check can be verified at: http://127.0.0.1:$Port/health" -ForegroundColor Yellow
+    
+    Write-Host ""
+    Write-Host "Running automated smoke and E2E tests..." -ForegroundColor Yellow
+    Set-Location (Join-Path $PSScriptRoot "..")
+    npm run test:labs:e2e
+} else {
+    Write-Host "ERROR: Runner failed to start or health check timed out. Verification failed." -ForegroundColor Red
+    exit 1
 }

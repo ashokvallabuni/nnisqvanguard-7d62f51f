@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider, useAuth } from "../lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useRegisterSW } from 'virtual:pwa-register/react';
 import { TopNav, BottomNav, TelemetryTicker } from "@/components/common/Navigation";
 import { CommandPalette } from "@/components/common/CommandPalette";
 import {
@@ -238,11 +239,24 @@ function AdminTacticalPreviewBar() {
   );
 }
 
+function PWARegister() {
+  useRegisterSW({
+    onRegistered(r) {
+      console.log('SW Registered: ' + r)
+    },
+    onRegisterError(error) {
+      console.log('SW registration error', error)
+    }
+  })
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <PWARegister />
         <AuthListener />
         <AdminTacticalPreviewBarWrapper />
         <Toaster theme="dark" />

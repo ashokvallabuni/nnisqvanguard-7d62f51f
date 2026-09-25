@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Terminal,
@@ -12,22 +12,23 @@ import {
   HelpCircle,
   Flag,
   Clock,
-  Activity,
   Award,
   ChevronRight,
   ArrowLeft,
-  AlertTriangle,
   ListChecks,
   BarChart3,
   Home,
   LogOut,
+  FolderOpen
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { PageHeader } from "@/components/common/PageHeader";
-import { labExecutionService } from "@/lib/lab-execution";
-import { submitLabFlag, stopLabSession, resetLabSession } from "@/lib/lab-runner.functions";
+import { VirtualFileSystem } from "@/labs/engine/filesystem/vfs";
+import { executeCommandString, CommandContext } from "@/labs/engine/commands";
+import { TaskEngine } from "@/labs/engine/tasks/task-engine";
+import { getLabDefinition } from "@/labs/definitions";
+import { saveVfsState, loadVfsState, clearVfsState, saveLocalProgress, loadLocalProgress } from "@/labs/engine/persistence";
 
 export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
   head: ({ params }) => ({
@@ -43,225 +44,28 @@ export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
   component: CyberLabWorkbenchPage,
 });
 
-// ─── Safe error code → user message mapping ────────────────────────────────
-const ERROR_MESSAGES: Record<string, string> = {
-  LAB_INFRASTRUCTURE_NOT_CONFIGURED:
-    "The lab container runner is not reachable. Please verify the Cloudflare tunnel and local runner.",
-  RUNNER_URL_MISSING: "LAB_RUNNER_URL is not configured in Vercel environment variables.",
-  RUNNER_SECRET_MISSING: "LAB_RUNNER_SECRET is not configured in Vercel environment variables.",
-  RUNNER_UNREACHABLE:
-    "Cannot reach the Lab Runner over the Cloudflare tunnel. Please ensure cloudflared and Docker are running.",
-  RUNNER_AUTH_FAILED: "Authentication to the Lab Runner failed (LAB_RUNNER_SECRET mismatch).",
-  RUNNER_NOT_READY: "The Lab Runner is online but Docker or image dependencies are not ready.",
-  DOCKER_NOT_RUNNING: "Docker Engine is not running on the lab host.",
-  LAB_IMAGE_NOT_FOUND:
-    "The required Docker lab image (nisqvanguard/linux-security:latest) was not found.",
-  LAB_EXECUTION_UNAVAILABLE:
-    "The lab execution service is temporarily unavailable. Please try again in a moment.",
-  UNAUTHORIZED: "Your session has expired. Please sign out and sign back in.",
-  SESSION_NOT_FOUND:
-    "Your lab session was not found. It may have expired — click 'Start Lab' to create a new session.",
-  INVALID_COMMAND: "That command is not permitted inside the sandbox environment.",
-  TASK_INVALID: "The task you attempted to submit could not be verified.",
-  FLAG_INVALID: "The flag format is invalid. Expected FLAG{…}.",
-  SESSION_INACTIVE: "Your session is no longer active. Start a new session to continue.",
-};
-
-function safeErrorMessage(code?: string): string {
-  if (!code) return "An unexpected error occurred. Please try again.";
-  return ERROR_MESSAGES[code] ?? ERROR_MESSAGES["LAB_INFRASTRUCTURE_NOT_CONFIGURED"];
-}
-
-interface TaskItem {
-  id: string;
-  title: string;
-  description: string;
-  command_hint?: string;
-  completed: boolean;
-}
-
-interface LabData {
-  id: string;
-  slug: string;
-  title: string;
-  difficulty: string;
-  category: string;
-  description: string;
-  estimated_minutes: number;
-  reward_points: number;
-  learning_objectives: string[];
-  tasks: TaskItem[];
-  hints: string[];
-}
-
-// Canonical lab configurations — correct_flag is NEVER stored here (runner validates it)
-const LAB_CONFIGS: Record<string, LabData> = {
-  "linux-ssh-brute-force-investigation": {
-    id: "lab-ssh-bruteforce",
-    slug: "linux-ssh-brute-force-investigation",
-    title: "Linux SSH Brute Force Investigation",
-    difficulty: "EASY",
-    category: "Host Forensics",
-    description:
-      "An external adversary is conducting an automated credential-stuffing attack against the production gateway. Inspect /var/log/auth.log, identify the attacker's IP, determine the target accounts, and block the range.",
-    estimated_minutes: 30,
-    reward_points: 100,
-    learning_objectives: [
-      "Parse Linux authentication logs using grep, awk, and sort",
-      "Identify failed password patterns and automated dictionary attacks",
-      "Extract attacker IP addresses and frequency distribution",
-      "Generate automated firewall and fail2ban defensive blocking rules",
-    ],
-    tasks: [
-      {
-        id: "t1",
-        title: "Inspect /var/log/auth.log for failed logins",
-        description: "Run grep or cat on the auth log to isolate failed password attempts.",
-        command_hint: "grep 'Failed password' /var/log/auth.log | head -n 10",
-        completed: false,
-      },
-      {
-        id: "t2",
-        title: "Identify the primary attacking IP address",
-        description: "Count the occurrences of failed attempts grouped by source IP.",
-        command_hint: "awk '{print $11}' /var/log/auth.log | sort | uniq -c",
-        completed: false,
-      },
-      {
-        id: "t3",
-        title: "Extract the security flag from the vault",
-        description: "Submit the captured flag found in /opt/nisq/vault/flag.txt once verified.",
-        command_hint: "cat /opt/nisq/vault/flag.txt",
-        completed: false,
-      },
-    ],
-    hints: [
-      "Use 'grep \"Failed password\" /var/log/auth.log' to view unauthorized login bursts.",
-      "The attacker's source IP address can be found in the log entries.",
-      "The flag is located at /opt/nisq/vault/flag.txt.",
-    ],
-  },
-  "suricata-network-threat-hunting": {
-    id: "lab-suricata-nids",
-    slug: "suricata-network-threat-hunting",
-    title: "Suricata Network Threat Hunting & PCAP Analysis",
-    difficulty: "MEDIUM",
-    category: "Network Defense",
-    description:
-      "Inspect captured perimeter traffic from an active C2 beaconing incident. Identify beaconing intervals, uncover DNS tunneling payloads, and extract the exfiltrated flag.",
-    estimated_minutes: 45,
-    reward_points: 150,
-    learning_objectives: [
-      "Analyze network PCAP files using tshark and Wireshark filters",
-      "Detect regular interval beaconing traffic associated with C2 frameworks",
-      "Decode high-entropy base64 subdomains used for DNS data exfiltration",
-    ],
-    tasks: [
-      {
-        id: "t1",
-        title: "List capture files in /captures",
-        description: "Locate the primary incident packet capture file.",
-        command_hint: "ls -la /captures",
-        completed: false,
-      },
-      {
-        id: "t2",
-        title: "Analyze DNS queries with tshark",
-        description: "Filter DNS query names to identify anomalous long subdomains.",
-        command_hint:
-          "tshark -r /captures/incident.pcap -Y 'dns.flags.response == 0' -T fields -e dns.qry.name",
-        completed: false,
-      },
-      {
-        id: "t3",
-        title: "Capture and submit the exfiltration flag",
-        description: "Decode the secret flag transmitted in the DNS payload.",
-        command_hint: "cat /captures/extracted_flag.txt",
-        completed: false,
-      },
-    ],
-    hints: [
-      "Look for DNS queries ending in .exfil.nisq-defense.internal.",
-      "Base64 decode the prefix string to read the flag.",
-    ],
-  },
-};
-
-function getLabConfig(slug: string): LabData {
-  if (LAB_CONFIGS[slug]) return LAB_CONFIGS[slug];
-  return {
-    id: `lab-${slug}`,
-    slug,
-    title: slug
-      .split("-")
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-      .join(" "),
-    difficulty: "MEDIUM",
-    category: "IVVAB LABS",
-    description:
-      "Investigate security artifacts in this containerized sandbox workbench. Use Linux forensics commands to analyze telemetry, fulfill tasks, and locate the challenge flag.",
-    estimated_minutes: 45,
-    reward_points: 100,
-    learning_objectives: [
-      "Investigate realistic system and network artifacts",
-      "Apply defensive analysis methodology",
-      "Extract and validate indicators of compromise (IOCs)",
-    ],
-    tasks: [
-      {
-        id: "t1",
-        title: "Initial System Reconnaissance",
-        description: "Verify active services and inspect incident files in /workspace.",
-        command_hint: "ls -la /workspace",
-        completed: false,
-      },
-      {
-        id: "t2",
-        title: "Analyze Forensic Telemetry",
-        description: "Inspect the provided log files to identify anomalies.",
-        command_hint: "cat /workspace/telemetry.log",
-        completed: false,
-      },
-      {
-        id: "t3",
-        title: "Retrieve Security Flag",
-        description: "Locate and submit the verification flag.",
-        command_hint: "cat /workspace/flag.txt",
-        completed: false,
-      },
-    ],
-    hints: [
-      "Use 'ls -la /workspace' to see all files including hidden ones.",
-      "The flag is located in /workspace/flag.txt.",
-    ],
-  };
-}
-
-// Mobile tab options
-type MobileTab = "terminal" | "tasks" | "progress";
+type MobileTab = "terminal" | "tasks" | "progress" | "files";
 
 function CyberLabWorkbenchPage() {
   const { slug } = Route.useParams();
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [labConfig] = useState<LabData>(getLabConfig(slug));
+  
+  const labConfig = useMemo(() => getLabDefinition(slug), [slug]);
+  
   const [sessionActive, setSessionActive] = useState(false);
-  const [sessionStarting, setSessionStarting] = useState(false);
-  const [infraStatus, setInfraStatus] = useState<"idle" | "ready" | "unconfigured" | "error">(
-    "idle",
-  );
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
-  const [sessionTimer, setSessionTimer] = useState(labConfig.estimated_minutes * 60);
+  const [sessionTimer, setSessionTimer] = useState(labConfig ? labConfig.estimated_minutes * 60 : 0);
   const [mobileTab, setMobileTab] = useState<MobileTab>("terminal");
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  // Engine state
+  const [vfs, setVfs] = useState<VirtualFileSystem | null>(null);
+  const [cwd, setCwd] = useState("/home/analyst");
+  const [taskEngine, setTaskEngine] = useState<TaskEngine | null>(null);
 
   // Terminal state
   const [commandInput, setCommandInput] = useState("");
-  const [history, setHistory] = useState<string[]>([
-    "NISQ IVVAB LABS Container v2.4 (Ubuntu 22.04 LTS)",
-    "Type 'help' for available commands.",
-    "Session initialized. Sandbox storage mounted at /var/log and /opt/nisq.",
-    "",
-  ]);
+  const [history, setHistory] = useState<string[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -269,14 +73,30 @@ function CyberLabWorkbenchPage() {
   // Hints and Flag state
   const [revealedHints, setRevealedHints] = useState<number[]>([]);
   const [flagInput, setFlagInput] = useState("");
-  const [flagSubmitting, setFlagSubmitting] = useState(false);
   const [labSolved, setLabSolved] = useState(false);
+  
+  // Progress tracking
+  const [tasksCompleted, setTasksCompleted] = useState(0);
 
-  // ── Fetch persistent progress from Supabase ───────────────────────────────
-  const { data: persistedProgress } = useQuery({
-    queryKey: ["lab-progress", user?.id, labConfig.id],
+  // Network listener
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    }
+  }, []);
+
+  // Fetch persistent progress from Supabase & Local
+  const { data: dbProgress } = useQuery({
+    queryKey: ["lab-progress", user?.id, labConfig?.id],
     queryFn: async () => {
-      if (!user) return null;
+      if (!user || !labConfig) return null;
+      if (isOffline) return null; // skip if offline
+      
       const { data } = await supabase
         .from("lab_progress")
         .select("completed, tasks_completed, total_tasks, points")
@@ -285,13 +105,27 @@ function CyberLabWorkbenchPage() {
         .maybeSingle();
       return data;
     },
-    enabled: !!user,
+    enabled: !!user && !!labConfig && !isOffline,
   });
 
-  // Sync persisted solved state on mount
+  // Load progress
   useEffect(() => {
-    if (persistedProgress?.completed) setLabSolved(true);
-  }, [persistedProgress]);
+    if (!labConfig) return;
+    const local = loadLocalProgress(labConfig.id);
+    let solved = false;
+    let completed = 0;
+    
+    if (dbProgress) {
+      solved = dbProgress.completed;
+      completed = dbProgress.tasks_completed ?? 0;
+    } else if (local) {
+      solved = local.completed;
+      completed = local.tasksCompleted;
+    }
+    
+    setLabSolved(solved);
+    setTasksCompleted(completed);
+  }, [dbProgress, labConfig]);
 
   // Auto scroll terminal
   useEffect(() => {
@@ -313,109 +147,100 @@ function CyberLabWorkbenchPage() {
     return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
-  const [lastError, setLastError] = useState<string | null>(null);
-
   // ── Session management ────────────────────────────────────────────────────
-  const handleStartSession = async () => {
-    setSessionStarting(true);
-    setInfraStatus("idle");
-    setLastError(null);
-    try {
-      const res = await labExecutionService.createSession(slug);
-      if (res.state === "configuration_required") {
-        setInfraStatus("unconfigured");
-        setSessionActive(false);
-        const errCode = res.error || "LAB_INFRASTRUCTURE_NOT_CONFIGURED";
-        setLastError(errCode);
-        toast.error(safeErrorMessage(errCode));
-      } else if (res.state === "running" || res.state === "completed") {
-        setInfraStatus("ready");
-        setSessionActive(true);
-        setActiveSessionId(res.id);
-        setHistory((prev) => [
-          ...prev,
-          `[${new Date().toLocaleTimeString()}] Authenticated sandbox session created (ID: ${res.id})`,
-          `[${new Date().toLocaleTimeString()}] Isolated container environment ready.`,
-          "analyst@nisq-range:~$ ",
-        ]);
-        toast.success("IVVAB LABS container started successfully.");
-        // Switch to terminal tab on mobile after start
-        setMobileTab("terminal");
-      } else {
-        setInfraStatus("error");
-        const errCode = res.error || res.message;
-        setLastError(errCode);
-        toast.error(safeErrorMessage(errCode));
-      }
-    } catch {
-      setInfraStatus("unconfigured");
-      setLastError("RUNNER_UNREACHABLE");
-      toast.error(safeErrorMessage("RUNNER_UNREACHABLE"));
-    } finally {
-      setSessionStarting(false);
+  const handleStartSession = () => {
+    if (!labConfig) return;
+    
+    // Load VFS from local storage or initialize fresh
+    let initialVfs = loadVfsState(labConfig.id);
+    if (!initialVfs) {
+      initialVfs = labConfig.setupFilesystem();
+      saveVfsState(labConfig.id, initialVfs);
     }
+    
+    setVfs(initialVfs);
+    setCwd("/home/analyst");
+    
+    // Init task engine
+    const engine = new TaskEngine(labConfig.tasks);
+    
+    // Restore completed tasks
+    const localProgress = loadLocalProgress(labConfig.id);
+    if (localProgress) {
+      localProgress.completedTaskIds.forEach(id => engine.completedIds.add(id));
+    }
+    setTaskEngine(engine);
+
+    setSessionActive(true);
+    setHistory([
+      "IVVAB LABS Client-Side Engine v3.0 (Offline-First Sandbox)",
+      `[${new Date().toLocaleTimeString()}] Local virtual filesystem mounted.`,
+      "Type 'help' for available commands.",
+      ""
+    ]);
+    toast.success("IVVAB LABS browser environment started successfully.");
+    setMobileTab("terminal");
   };
 
-  const handleStopSession = async () => {
-    if (activeSessionId) {
-      await stopLabSession({ data: { labId: slug, sessionId: activeSessionId } }).catch(() => null);
-    }
+  const handleStopSession = () => {
     setSessionActive(false);
-    setActiveSessionId(null);
+    setVfs(null);
+    setTaskEngine(null);
     setHistory((prev) => [
       ...prev,
-      `[${new Date().toLocaleTimeString()}] Container instance terminated. Session stopped.`,
+      `[${new Date().toLocaleTimeString()}] Sandbox session stopped.`,
     ]);
-    toast.info("Container session terminated.");
+    toast.info("Sandbox session stopped.");
   };
 
-  const handleResetSession = async () => {
-    if (!activeSessionId) return;
-    try {
-      await resetLabSession({ data: { labId: slug, sessionId: activeSessionId } });
-      setHistory([
-        "NISQ IVVAB LABS Container v2.4 (Ubuntu 22.04 LTS)",
-        `[${new Date().toLocaleTimeString()}] Container reset. Fresh environment ready.`,
-        "analyst@nisq-range:~$ ",
-      ]);
-      toast.success("Container reset to clean state.");
-    } catch {
-      toast.error("Failed to reset container.");
-    }
+  const handleResetSession = () => {
+    if (!labConfig) return;
+    clearVfsState(labConfig.id);
+    
+    const freshVfs = labConfig.setupFilesystem();
+    setVfs(freshVfs);
+    saveVfsState(labConfig.id, freshVfs);
+    setCwd("/home/analyst");
+    
+    const engine = new TaskEngine(labConfig.tasks);
+    setTaskEngine(engine);
+    setTasksCompleted(0);
+    
+    // reset local progress safely
+    saveLocalProgress(labConfig.id, {
+      completed: false,
+      tasksCompleted: 0,
+      points: 0,
+      completedTaskIds: []
+    });
+
+    setHistory([
+      "IVVAB LABS Client-Side Engine v3.0 (Offline-First Sandbox)",
+      `[${new Date().toLocaleTimeString()}] Sandbox reset to clean state.`,
+      ""
+    ]);
+    toast.success("Sandbox reset to clean state.");
   };
 
   // ── Terminal command execution ─────────────────────────────────────────────
-  const handleExecuteCommand = async (e: React.FormEvent) => {
+  const handleExecuteCommand = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!commandInput.trim()) return;
+    if (!commandInput.trim() || !vfs || !taskEngine || !labConfig) return;
 
     const cmd = commandInput.trim();
     setCommandHistory((prev) => [...prev, cmd]);
     setHistoryIndex(-1);
     setCommandInput("");
+    
+    const ctx: CommandContext = {
+      vfs,
+      cwd,
+      setCwd,
+      stdout: [],
+      stderr: []
+    };
 
-    // Try real runner first
-    if (activeSessionId) {
-      try {
-        const res = await labExecutionService.executeTerminal(slug, activeSessionId, cmd);
-        if (res.error) {
-          setHistory((prev) => [
-            ...prev,
-            `analyst@nisq-range:~$ ${cmd}`,
-            safeErrorMessage(res.error),
-          ]);
-          return;
-        }
-        const out = res.stdout || res.stderr || "";
-        setHistory((prev) => [...prev, `analyst@nisq-range:~$ ${cmd}`, ...(out ? [out] : [])]);
-        return;
-      } catch {
-        // fallthrough — session may be transiently unavailable
-      }
-    }
-
-    // Offline-mode fallback (no mock completions, no fake flag output)
-    const newLogs = [`analyst@nisq-range:~$ ${cmd}`];
+    const newLogs = [`analyst@ivvab-labs:${cwd}$ ${cmd}`];
     const lowerCmd = cmd.toLowerCase();
 
     if (lowerCmd === "clear") {
@@ -423,24 +248,35 @@ function CyberLabWorkbenchPage() {
       return;
     } else if (lowerCmd === "help") {
       newLogs.push(
-        "Available commands in this sandbox:",
-        "  ls, cat, grep, awk, sort, uniq, head, tail",
-        "  tshark, suricata, volatility, nmap",
-        "  check          - Run task verification",
+        "Available commands in this simulated sandbox:",
+        "  ls, cd, pwd, cat, grep, awk, sort, uniq, head, tail, wc, echo",
         "  clear          - Clear terminal screen",
         "  help           - Show this manual",
         "",
-        "Note: Start a live sandbox session to execute commands against real data.",
+        "Note: This is an educational browser-based simulation. Real commands operate on the virtual dataset filesystem."
       );
-    } else if (lowerCmd === "check") {
-      const completed = persistedProgress?.tasks_completed ?? 0;
-      const total = persistedProgress?.total_tasks ?? labConfig.tasks.length;
-      newLogs.push(`Task Verification: ${completed}/${total} tasks verified.`);
     } else {
-      newLogs.push(
-        `Command queued: ${cmd}`,
-        "Note: Connect a live sandbox session to execute commands.",
-      );
+      executeCommandString(cmd, ctx);
+      if (ctx.stdout.length > 0) newLogs.push(...ctx.stdout);
+      if (ctx.stderr.length > 0) newLogs.push(...ctx.stderr);
+      
+      // Save VFS state in case of mutations
+      saveVfsState(labConfig.id, vfs);
+      
+      // Evaluate tasks
+      const newlyCompleted = taskEngine.evaluate(ctx, cmd);
+      if (newlyCompleted.length > 0) {
+        toast.success(`Task Completed!`);
+        const totalDone = taskEngine.completedIds.size;
+        setTasksCompleted(totalDone);
+        
+        saveLocalProgress(labConfig.id, {
+          completed: labSolved,
+          tasksCompleted: totalDone,
+          points: labSolved ? labConfig.reward_points : 0,
+          completedTaskIds: Array.from(taskEngine.completedIds)
+        });
+      }
     }
 
     setHistory((prev) => [...prev, ...newLogs]);
@@ -461,58 +297,66 @@ function CyberLabWorkbenchPage() {
     }
   };
 
-  // ── Flag Submission — server-side validation only ─────────────────────────
+  // ── Flag Submission ────────────────────────────────────────────────────────
   const handleSubmitFlag = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!flagInput.trim() || !activeSessionId) return;
+    if (!flagInput.trim() || !labConfig || !sessionActive) return;
 
     if (!flagInput.trim().startsWith("FLAG{")) {
-      toast.error(safeErrorMessage("FLAG_INVALID"));
+      toast.error("Invalid flag format. Expected FLAG{...}");
       return;
     }
 
-    setFlagSubmitting(true);
-    try {
-      const result = await submitLabFlag({
-        data: { labId: slug, sessionId: activeSessionId, flag: flagInput.trim() },
-      });
+    if (flagInput.trim() === labConfig.flag) {
+      setLabSolved(true);
+      setFlagInput("");
+      
+      const newProgress = {
+        completed: true,
+        tasksCompleted: taskEngine?.completedIds.size ?? labConfig.tasks.length,
+        points: labConfig.reward_points,
+        completedTaskIds: Array.from(taskEngine?.completedIds ?? [])
+      };
+      
+      saveLocalProgress(labConfig.id, newProgress);
 
-      if (result.error) {
-        toast.error(safeErrorMessage(result.error));
-        return;
-      }
-
-      if (result.correct) {
-        setLabSolved(true);
-        setFlagInput("");
-        queryClient.invalidateQueries({ queryKey: ["lab-progress"] });
-        queryClient.invalidateQueries({ queryKey: ["user-active-lab-sessions"] });
-        queryClient.invalidateQueries({ queryKey: ["user-earned-badges"] });
-
-        if (result.alreadyAwarded) {
-          toast.info("Flag already verified — progress previously recorded.");
-        } else {
-          toast.success(`Flag Verified! +${result.score} XP awarded.`, { duration: 5000 });
+      if (!isOffline && user) {
+        try {
+          await supabase.from("lab_progress").upsert({
+            user_id: user.id,
+            lab_id: labConfig.id,
+            completed: true,
+            tasks_completed: newProgress.tasksCompleted,
+            total_tasks: labConfig.tasks.length,
+            points: labConfig.reward_points,
+            completed_at: new Date().toISOString()
+          }, { onConflict: "user_id, lab_id" });
+          
+          queryClient.invalidateQueries({ queryKey: ["lab-progress"] });
+        } catch {
+          toast.warning("Flag verified! Saved locally (offline). Will sync when online.");
         }
       } else {
-        toast.error("Incorrect flag. Inspect the logs and try again.");
+        toast.success(`Flag Verified Offline! +${labConfig.reward_points} XP awarded locally.`, { duration: 5000 });
       }
-    } catch {
-      toast.error(safeErrorMessage("LAB_EXECUTION_UNAVAILABLE"));
-    } finally {
-      setFlagSubmitting(false);
+    } else {
+      toast.error("Incorrect flag. Inspect the logs and try again.");
     }
   };
 
   const revealHint = (index: number) => {
     if (revealedHints.includes(index)) return;
     setRevealedHints((prev) => [...prev, index]);
-    toast.info("Hint revealed. Full points awarded on independent solve.");
+    toast.info("Hint revealed.");
   };
 
+  if (!labConfig) {
+    return <div className="p-8 text-center text-foreground font-mono">Lab definition not found.</div>;
+  }
+
   // ── Derived progress stats ─────────────────────────────────────────────────
-  const progressPct = persistedProgress?.total_tasks
-    ? Math.round(((persistedProgress.tasks_completed ?? 0) / persistedProgress.total_tasks) * 100)
+  const progressPct = labConfig.tasks.length > 0
+    ? Math.round((tasksCompleted / labConfig.tasks.length) * 100)
     : 0;
 
   // ── Tasks Panel ────────────────────────────────────────────────────────────
@@ -550,13 +394,12 @@ function CyberLabWorkbenchPage() {
             <span>Interactive Tasks</span>
           </h3>
           <span className="text-xs font-mono text-muted-foreground">
-            {persistedProgress?.tasks_completed ?? 0}/
-            {persistedProgress?.total_tasks ?? labConfig.tasks.length} Done
+            {tasksCompleted}/{labConfig.tasks.length} Done
           </span>
         </div>
         <div className="space-y-3">
           {labConfig.tasks.map((task, index) => {
-            const isCompleted = labSolved || index < (persistedProgress?.tasks_completed ?? 0);
+            const isCompleted = labSolved || (taskEngine && taskEngine.completedIds.has(task.id)) || (index < tasksCompleted);
             return (
               <div
                 key={task.id}
@@ -598,31 +441,23 @@ function CyberLabWorkbenchPage() {
           <Flag className="w-4 h-4 text-primary" />
           <span>Submit Security Flag</span>
         </h3>
-        <p className="text-xs text-muted-foreground">
-          Found the flag inside the sandbox? Enter it below to verify and claim XP:
-        </p>
         <form onSubmit={handleSubmitFlag} className="flex gap-2">
           <input
             type="text"
             placeholder="FLAG{...}"
             value={flagInput}
             onChange={(e) => setFlagInput(e.target.value)}
-            disabled={!activeSessionId || labSolved || flagSubmitting}
+            disabled={!sessionActive || labSolved}
             className="flex-1 px-3 py-2 text-xs font-mono rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
           />
           <button
             type="submit"
-            disabled={!activeSessionId || !flagInput.trim() || labSolved || flagSubmitting}
+            disabled={!sessionActive || !flagInput.trim() || labSolved}
             className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shrink-0 font-mono disabled:opacity-40"
           >
-            {flagSubmitting ? "Verifying…" : "Verify Flag"}
+            Verify
           </button>
         </form>
-        {!activeSessionId && (
-          <p className="text-[0.65rem] font-mono text-muted-foreground">
-            Start a sandbox session to submit flags.
-          </p>
-        )}
       </div>
 
       {/* Progressive Hints */}
@@ -671,7 +506,7 @@ function CyberLabWorkbenchPage() {
           <div>
             <div className="font-bold text-success text-sm">LAB SOLVED</div>
             <div className="text-xs text-muted-foreground">
-              +{persistedProgress?.points ?? labConfig.reward_points} XP earned
+              +{labConfig.reward_points} XP earned
             </div>
           </div>
         </div>
@@ -679,10 +514,7 @@ function CyberLabWorkbenchPage() {
         <div className="space-y-3">
           <div className="flex justify-between text-xs font-mono text-muted-foreground">
             <span>Tasks</span>
-            <span>
-              {persistedProgress?.tasks_completed ?? 0} /{" "}
-              {persistedProgress?.total_tasks ?? labConfig.tasks.length}
-            </span>
+            <span>{tasksCompleted} / {labConfig.tasks.length}</span>
           </div>
           <div className="w-full bg-muted rounded-full h-2">
             <div
@@ -690,23 +522,53 @@ function CyberLabWorkbenchPage() {
               style={{ width: `${progressPct}%` }}
             />
           </div>
-          <div className="text-xs text-muted-foreground">
-            {progressPct > 0
-              ? `${progressPct}% complete — progress saved to your account.`
-              : "Start the sandbox and complete tasks to earn XP."}
-          </div>
         </div>
       )}
 
-      {sessionActive && activeSessionId && (
+      {sessionActive && (
         <div className="pt-3 border-t border-border flex gap-2">
           <button
             onClick={handleResetSession}
             className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            Reset Container
+            Reset Lab State
           </button>
+        </div>
+      )}
+    </div>
+  );
+  
+  // ── File Explorer (New) ──────────────────────────────────────────────────
+  const FilesPanel = () => (
+    <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-xs">
+      <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2">
+        <FolderOpen className="w-4 h-4 text-primary" />
+        Dataset Browser
+      </h3>
+      <p className="text-xs text-muted-foreground">
+        This lab operates on a virtual in-browser filesystem. You can use terminal commands like <code>ls</code> and <code>cat</code> to explore it.
+      </p>
+      
+      {!sessionActive ? (
+        <div className="p-4 text-center border rounded-lg bg-muted/20 text-xs text-muted-foreground font-mono">
+          Start sandbox to load dataset.
+        </div>
+      ) : (
+        <div className="p-4 border rounded-lg bg-slate-950 text-slate-300 text-xs font-mono overflow-auto max-h-[300px]">
+          {/* Simple recursive tree renderer */}
+          {vfs && (
+            <pre>
+              {JSON.stringify(
+                Object.keys(vfs.root.children || {}).reduce((acc, key) => {
+                  acc[key] = vfs.root.children![key].type;
+                  return acc;
+                }, {} as any),
+                null,
+                2
+              )}
+            </pre>
+          )}
         </div>
       )}
     </div>
@@ -723,61 +585,42 @@ function CyberLabWorkbenchPage() {
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
           </div>
-          <span className="font-mono text-xs text-slate-300 ml-2">analyst@nisq-range-sandbox</span>
+          <span className="font-mono text-xs text-slate-300 ml-2">IVVAB LABS Sandbox (Browser)</span>
         </div>
         <div className="flex items-center gap-3 text-[0.65rem] font-mono text-slate-400">
+          {isOffline && (
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30">
+              AVAILABLE OFFLINE
+            </span>
+          )}
           <span className="flex items-center gap-1.5">
             <span
               className={`inline-block w-2 h-2 rounded-full ${
-                sessionStarting
-                  ? "bg-amber-400 animate-ping"
-                  : sessionActive
-                    ? "bg-green-400 animate-pulse"
-                    : infraStatus === "unconfigured" || infraStatus === "error"
-                      ? "bg-red-400"
-                      : "bg-slate-500"
+                sessionActive
+                  ? "bg-green-400 animate-pulse"
+                  : "bg-slate-500"
               }`}
             />
             <span>
-              {sessionStarting
-                ? "CONNECTING..."
-                : sessionActive
-                  ? "CONTAINER ONLINE"
-                  : infraStatus === "unconfigured" || infraStatus === "error"
-                    ? "RUNNER OFFLINE"
-                    : "OFFLINE"}
+              {sessionActive ? "SANDBOX ONLINE" : "OFFLINE"}
             </span>
           </span>
         </div>
       </div>
 
       {/* Terminal body */}
-      {infraStatus === "unconfigured" || infraStatus === "error" ? (
-        <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-4 font-mono">
-          <div className="p-3.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-            <AlertTriangle className="w-8 h-8" />
-          </div>
-          <div className="space-y-2 max-w-md">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-amber-400">
-              Lab Infrastructure Notice
-            </h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              {safeErrorMessage(lastError ?? "LAB_INFRASTRUCTURE_NOT_CONFIGURED")}
-            </p>
-          </div>
-        </div>
-      ) : !sessionActive ? (
+      {!sessionActive ? (
         <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-slate-400">
           <Terminal className="w-8 h-8 text-slate-600" />
           <p className="text-xs max-w-md">
             Click <span className="text-primary font-semibold">&quot;Start Lab Sandbox&quot;</span>{" "}
-            above to authenticate and provision your isolated sandbox session.
+            above to provision your client-side isolated environment. No server required.
           </p>
         </div>
       ) : (
         <div className="flex-1 p-4 overflow-y-auto overflow-x-auto font-mono text-xs text-slate-200 space-y-1 selection:bg-primary selection:text-white">
           {history.map((line, idx) => (
-            <div key={idx} className="whitespace-pre leading-relaxed min-w-0">
+            <div key={idx} className="whitespace-pre leading-relaxed min-w-0 break-all">
               {line}
             </div>
           ))}
@@ -791,14 +634,14 @@ function CyberLabWorkbenchPage() {
         className="border-t border-slate-800 bg-slate-900/60 p-2.5 flex items-center gap-2 shrink-0"
       >
         <span className="font-mono text-xs text-green-400 pl-2 shrink-0">
-          analyst@nisq-range:~$
+          analyst@ivvab-labs:{cwd}$
         </span>
         <input
           type="text"
           disabled={!sessionActive}
           placeholder={
             sessionActive
-              ? "Type command (e.g. ls, cat, grep, check)..."
+              ? "Type command (e.g. ls, cat, grep, awk)..."
               : "Start sandbox container above to run commands"
           }
           value={commandInput}
@@ -874,7 +717,7 @@ function CyberLabWorkbenchPage() {
             {labSolved ? (
               <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-success text-success-foreground font-mono text-xs font-bold shadow-xs">
                 <Award className="w-4 h-4" /> SOLVED (+
-                {persistedProgress?.points ?? labConfig.reward_points} XP)
+                {labConfig.reward_points} XP)
               </span>
             ) : sessionActive ? (
               <>
@@ -884,30 +727,15 @@ function CyberLabWorkbenchPage() {
                 >
                   <Square className="w-3.5 h-3.5" /> Stop Sandbox
                 </button>
-                <Link
-                  to="/cyber-range/labs"
-                  onClick={(e) => {
-                    if (sessionActive) {
-                      e.preventDefault();
-                      void handleStopSession().finally(() => {
-                        window.location.href = "/cyber-range/labs";
-                      });
-                    }
-                  }}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-border bg-background hover:bg-muted text-foreground font-mono text-xs font-semibold tracking-wide transition-colors"
-                >
-                  <LogOut className="w-3.5 h-3.5" /> EXIT LAB
-                </Link>
               </>
             ) : (
               <>
                 <button
                   onClick={handleStartSession}
-                  disabled={sessionStarting}
                   className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-all shadow-sm"
                 >
                   <Play className="w-3.5 h-3.5 fill-primary-foreground" />
-                  <span>{sessionStarting ? "Provisioning Sandbox…" : "Start Lab Sandbox"}</span>
+                  <span>Start Lab Sandbox</span>
                 </button>
               </>
             )}
@@ -922,6 +750,7 @@ function CyberLabWorkbenchPage() {
             [
               { id: "terminal", label: "Terminal", icon: Terminal },
               { id: "tasks", label: "Tasks", icon: ListChecks },
+              { id: "files", label: "Files", icon: FolderOpen },
               { id: "progress", label: "Progress", icon: BarChart3 },
             ] as { id: MobileTab; label: string; icon: React.ElementType }[]
           ).map(({ id, label, icon: Icon }) => (
@@ -935,7 +764,7 @@ function CyberLabWorkbenchPage() {
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
-              {label}
+              <span className="hidden sm:inline">{label}</span>
             </button>
           ))}
         </div>
@@ -957,6 +786,11 @@ function CyberLabWorkbenchPage() {
               <ProgressPanel />
             </div>
           )}
+          {mobileTab === "files" && (
+            <div className="pb-6">
+              <FilesPanel />
+            </div>
+          )}
         </div>
 
         {/* ── Desktop Split View (≥ 768px) ──────────────────────────────── */}
@@ -964,6 +798,7 @@ function CyberLabWorkbenchPage() {
           {/* Left: Tasks + Hints + Flag (5 cols) */}
           <div className="col-span-5 space-y-4">
             <TasksPanel />
+            <FilesPanel />
             <ProgressPanel />
           </div>
 
