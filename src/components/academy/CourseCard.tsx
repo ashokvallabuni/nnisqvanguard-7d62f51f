@@ -37,9 +37,9 @@ export function CourseCard({ course, progress }: CourseCardProps) {
   const isCompleted = currentProgress >= 100;
 
   const levelStyles: Record<string, string> = {
-    beginner: "bg-success/10 text-success border-success/20",
-    intermediate: "bg-primary/10 text-primary border-primary/20",
-    advanced: "bg-warning/10 text-warning border-warning/20",
+    beginner: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
+    intermediate: "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD]",
+    advanced: "bg-[#FFFBEB] text-[#D97706] border-[#FDE68A]",
   };
 
   const isLocked = !!course.isLocked;
@@ -58,9 +58,9 @@ export function CourseCard({ course, progress }: CourseCardProps) {
       <div className="p-5 sm:p-6 space-y-3.5">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <span
-            className={`text-[0.65rem] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full border font-medium ${
+            className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${
               levelStyles[course.level.toLowerCase()] ||
-              "bg-muted text-muted-foreground border-border"
+              "bg-[#E2E8F0] text-[#64748B] border-[#CBD5E1]"
             }`}
           >
             {course.level}
@@ -68,18 +68,18 @@ export function CourseCard({ course, progress }: CourseCardProps) {
 
           <div className="flex items-center gap-1.5 flex-wrap">
             {course.category && !notAccessible && (
-              <span className="text-[0.65rem] font-mono text-muted-foreground uppercase tracking-tight">
+              <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-tight">
                 {course.category}
               </span>
             )}
             {isComingSoon && (
-              <span className="inline-flex items-center gap-1 text-[0.6rem] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-warning/40 bg-warning/10 text-warning font-semibold">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-[#CBD5E1] bg-[#F1F5F9] text-[#64748B]">
                 <Sparkles className="w-3 h-3" />
                 <span>Coming Soon</span>
               </span>
             )}
             {isLocked && !isComingSoon && (
-              <span className="inline-flex items-center gap-1 text-[0.6rem] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-destructive/30 bg-destructive/5 text-destructive font-semibold">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-[#FECACA] bg-[#FEF2F2] text-[#DC2626]">
                 <Lock className="w-3 h-3" />
                 <span>Locked</span>
               </span>
@@ -101,13 +101,13 @@ export function CourseCard({ course, progress }: CourseCardProps) {
         </div>
 
         {course.tags && course.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 pt-1">
-            {course.tags.slice(0, 3).map((tag, i) => (
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            {course.tags.slice(0, 4).map((tag, i) => (
               <span
                 key={i}
-                className="text-[0.65rem] font-mono px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border/60"
+                className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#E2E8F0] text-[#64748B] border border-[#CBD5E1] truncate text-center"
               >
-                #{tag}
+                {tag}
               </span>
             ))}
           </div>

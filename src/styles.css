@@ -48,45 +48,40 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-:root {
+:root, .dark {
   --radius: 0.5rem;
-  --background: #070A0F;
-  --foreground: #F8FAFC;
-  --card: #0E1420;
-  --card-foreground: #F8FAFC;
-  --popover: #0E1420;
-  --popover-foreground: #F8FAFC;
-  --primary: #00F0FF;
-  --primary-foreground: #070A0F;
-  --secondary: #1E293B;
-  --secondary-foreground: #F8FAFC;
-  --muted: #1E293B;
-  --muted-foreground: #94A3B8;
-  --accent: #8B5CF6;
-  --accent-foreground: #F8FAFC;
-  --destructive: #EF4444;
-  --destructive-foreground: #F8FAFC;
-  --success: #10B981;
+  --background: #F0F4F9;
+  --foreground: #0A192F;
+  --card: #FFFFFF;
+  --card-foreground: #0A192F;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A192F;
+  --primary: #0284C7;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E2E8F0;
+  --secondary-foreground: #64748B;
+  --muted: #E2E8F0;
+  --muted-foreground: #64748B;
+  --accent: #0284C7;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #059669;
   --warning: #F59E0B;
-  --border: #1E293B;
-  --input: #1E293B;
-  --ring: #00F0FF;
-  --cyber: #00F0FF;
-  --cyber-2: #8B5CF6;
-  --violet-accent: #8B5CF6;
-  --sidebar: #0E1420;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #00F0FF;
-  --sidebar-primary-foreground: #070A0F;
-  --sidebar-accent: #1E293B;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #1E293B;
-  --sidebar-ring: #00F0FF;
-}
-
-.dark {
-  --background: #070A0F;
-  --foreground: #F8FAFC;
+  --border: #CBD5E1;
+  --input: #CBD5E1;
+  --ring: #0284C7;
+  --cyber: #0284C7;
+  --cyber-2: #0369A1;
+  --violet-accent: #0369A1;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0A192F;
+  --sidebar-primary: #0284C7;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E2E8F0;
+  --sidebar-accent-foreground: #0A192F;
+  --sidebar-border: #CBD5E1;
+  --sidebar-ring: #0284C7;
 }
 
 @layer base {
@@ -580,8 +575,8 @@
 
 @utility nv-card-hover {
   &:hover {
-    border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
-    box-shadow: 0 4px 20px -4px rgb(0 240 255 / 0.08);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 }
 
@@ -592,8 +587,8 @@
   padding: 1.5rem;
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
   &:hover {
-    border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
-    box-shadow: 0 4px 20px -4px rgb(0 240 255 / 0.08);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 }
 

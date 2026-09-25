@@ -206,21 +206,21 @@ export function CinematicHero() {
               to="/appointments"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
-                "hero-action border-white/40 bg-white/5 text-white hover:bg-white/15 hover:text-white",
+                "hero-action border-white/40 bg-white/5 text-[#0A192F] hover:bg-white/15 hover:text-[#0A192F]",
               )}
             >
               Book a Consultation <ArrowRight />
             </Link>
             <Link
               to="/cyber-range"
-              className={cn(buttonVariants({ size: "lg" }), "hero-action glow-cyber")}
+              className={cn(buttonVariants({ size: "lg" }), "hero-action shadow-sm")}
             >
               Explore NISQ Vanguard <Radar />
             </Link>
             <Button
               variant="outline"
               size="lg"
-              className="hero-action border-white/40 bg-white/5 text-white hover:bg-white/15 hover:text-white"
+              className="hero-action border-white/40 bg-white/5 text-[#0A192F] hover:bg-white/15 hover:text-[#0A192F]"
               onClick={enterLabs}
             >
               Start Your Defence Journey <ArrowRight />
@@ -252,7 +252,7 @@ export function CinematicHero() {
       </div>
 
       <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
-        <DialogContent className="max-w-md glass glow-cyber">
+        <DialogContent className="max-w-md glass shadow-sm">
           <DialogHeader>
             <DialogTitle className="display text-2xl text-cyber">
               Secure Cyber Labs Access

@@ -33,31 +33,31 @@ interface LabCardProps {
 
 export function LabCard({ lab }: LabCardProps) {
   const difficultyStyles: Record<string, string> = {
-    beginner: "bg-success/10 text-success border-success/20",
-    easy: "bg-success/10 text-success border-success/20",
-    medium: "bg-primary/10 text-primary border-primary/20",
-    hard: "bg-warning/10 text-warning border-warning/20",
-    insane: "bg-destructive/10 text-destructive border-destructive/20",
+    beginner: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
+    easy: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
+    medium: "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD]",
+    hard: "bg-[#FFFBEB] text-[#D97706] border-[#FDE68A]",
+    insane: "bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]",
   };
 
   const normalizedDiff = (lab.difficulty || "medium").toLowerCase();
 
   let statusLabel = "AVAILABLE";
-  let statusVariant = "bg-muted/70 text-muted-foreground border-border";
+  let statusVariant = "bg-[#F1F5F9] text-[#64748B] border-[#CBD5E1]";
   let ctaLabel = "OPEN LAB";
   let ctaIcon: typeof Play = Play;
   let ctaVariant =
-    "border border-border bg-card text-foreground hover:border-primary hover:text-primary hover:bg-primary/5";
+    "border border-[#CBD5E1] bg-white text-[#0A192F] hover:bg-[#F8FAFC]";
 
   if (lab.is_active_session) {
     statusLabel = "IN PROGRESS";
-    statusVariant = "bg-primary/15 text-primary border-primary/30";
+    statusVariant = "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD]";
     ctaLabel = "CONTINUE LAB";
     ctaIcon = RotateCcw;
-    ctaVariant = "bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs";
+    ctaVariant = "bg-[#0284C7] text-white hover:bg-[#0369A1] shadow-sm";
   } else if (lab.completed) {
     statusLabel = "COMPLETED";
-    statusVariant = "bg-success/15 text-success border-success/30";
+    statusVariant = "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]";
     ctaLabel = "VIEW LAB DETAILS";
     ctaIcon = Award;
     ctaVariant = "border border-success/40 bg-success/5 text-success hover:bg-success/10";
@@ -76,23 +76,23 @@ export function LabCard({ lab }: LabCardProps) {
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span
-              className={`text-[0.65rem] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full border font-semibold ${
-                difficultyStyles[normalizedDiff] || "bg-muted text-muted-foreground border-border"
+              className={`text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border ${
+                difficultyStyles[normalizedDiff] || "bg-[#E2E8F0] text-[#64748B] border-[#CBD5E1]"
               }`}
             >
               {lab.difficulty}
             </span>
             {lab.category && (
-              <span className="text-[0.65rem] font-mono text-muted-foreground uppercase tracking-wide">
+              <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wide">
                 · {lab.category}
               </span>
             )}
           </div>
 
           <span
-            className={`flex items-center gap-1 text-[0.65rem] font-mono font-semibold px-2 py-0.5 rounded-full border ${
+            className={`flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${
               lab.is_active_session
-                ? "bg-primary/15 text-primary border-primary/30 animate-pulse"
+                ? "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD] animate-pulse"
                 : statusVariant
             }`}
           >
@@ -120,11 +120,11 @@ export function LabCard({ lab }: LabCardProps) {
         (lab.skills && lab.skills.length > 0) ? (
           <div className="space-y-2">
             {lab.mitre_attack_ids && lab.mitre_attack_ids.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {lab.mitre_attack_ids.slice(0, 3).map((mitre, i) => (
+              <div className="grid grid-cols-2 gap-2">
+                {lab.mitre_attack_ids.slice(0, 4).map((mitre, i) => (
                   <span
                     key={i}
-                    className="text-[0.6rem] font-mono px-2 py-0.5 rounded-xs bg-slate-900 text-slate-200 border border-slate-700"
+                    className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-[#0A192F] text-white border border-[#CBD5E1] truncate text-center"
                   >
                     ATT&CK® {mitre}
                   </span>
@@ -132,20 +132,15 @@ export function LabCard({ lab }: LabCardProps) {
               </div>
             )}
             {lab.skills && lab.skills.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {lab.skills.slice(0, 3).map((skill, i) => (
+              <div className="grid grid-cols-2 gap-2">
+                {lab.skills.slice(0, 4).map((skill, i) => (
                   <span
                     key={i}
-                    className="text-[0.65rem] font-mono px-2 py-0.5 rounded-xs bg-muted text-muted-foreground border border-border/80"
+                    className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-[#E2E8F0] text-[#64748B] border border-[#CBD5E1] truncate text-center"
                   >
                     {skill}
                   </span>
                 ))}
-                {lab.skills.length > 3 && (
-                  <span className="text-[0.65rem] font-mono px-2 py-0.5 rounded-xs bg-muted text-muted-foreground border border-border/80">
-                    +{lab.skills.length - 3}
-                  </span>
-                )}
               </div>
             )}
           </div>

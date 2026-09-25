@@ -228,10 +228,10 @@ function StudentDashboard() {
   ];
 
   const skillLevelBadges = {
-    BEGINNER: "bg-muted text-muted-foreground",
-    DEVELOPING: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30",
-    PRACTICED: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
-    PROFICIENT: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30",
+    BEGINNER: "bg-[#F0F4F9] text-[#64748B] border-[#CBD5E1]",
+    DEVELOPING: "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD]",
+    PRACTICED: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
+    PROFICIENT: "bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]",
   };
 
   return (
@@ -246,7 +246,7 @@ function StudentDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
         {/* Role-Specific Action Strip */}
-        <div className="nv-card p-4 sm:p-5 shadow-2xl">
+        <div className="nv-card p-4 sm:p-5 shadow-sm">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-border/60">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
@@ -500,61 +500,61 @@ function StudentDashboard() {
 
         {/* Metric Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="p-5 nv-card space-y-1 shadow-2xl hover:border-amber-500/30 transition-colors">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-mono uppercase text-amber-500 font-bold">Active Streak</span>
-              <Activity className="w-4 h-4 text-amber-500" />
+          <div className="p-5 nv-card space-y-1 shadow-sm hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between text-[#64748B]">
+              <span className="text-xs font-mono uppercase text-[#D97706] font-bold">Active Streak</span>
+              <Activity className="w-4 h-4 text-[#D97706]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
-              7 <span className="text-sm text-slate-500">Days</span>
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
+              7 <span className="text-sm text-[#64748B]">Days</span>
             </div>
-            <div className="text-[0.65rem] font-mono text-slate-500">Keep it up!</div>
+            <div className="text-[0.65rem] font-mono text-[#64748B]">Keep it up!</div>
           </div>
 
-          <div className="p-5 nv-card space-y-1 shadow-2xl">
-            <div className="flex items-center justify-between text-slate-400">
+          <div className="p-5 nv-card space-y-1 shadow-sm">
+            <div className="flex items-center justify-between text-[#64748B]">
               <span className="text-xs font-mono uppercase">Verified Skill XP</span>
-              <Zap className="w-4 h-4 text-amber-400" />
+              <Zap className="w-4 h-4 text-[#D97706]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
               {totalXp}
             </div>
-            <div className="text-[0.65rem] font-mono text-slate-500">Level 1 Defender</div>
+            <div className="text-[0.65rem] font-mono text-[#64748B]">Level 1 Defender</div>
           </div>
 
-          <div className="p-5 nv-card space-y-1 shadow-2xl">
-            <div className="flex items-center justify-between text-slate-400">
+          <div className="p-5 nv-card space-y-1 shadow-sm">
+            <div className="flex items-center justify-between text-[#64748B]">
               <span className="text-xs font-mono uppercase">Lessons Completed</span>
-              <BookOpen className="w-4 h-4 text-cyan-400" />
+              <BookOpen className="w-4 h-4 text-[#0284C7]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
               {completedModulesCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-slate-500">Across curriculum</div>
+            <div className="text-[0.65rem] font-mono text-[#64748B]">Across curriculum</div>
           </div>
 
-          <div className="p-5 nv-card space-y-1 shadow-2xl">
-            <div className="flex items-center justify-between text-slate-400">
+          <div className="p-5 nv-card space-y-1 shadow-sm">
+            <div className="flex items-center justify-between text-[#64748B]">
               <span className="text-xs font-mono uppercase">Labs Solved</span>
-              <Terminal className="w-4 h-4 text-emerald-400" />
+              <Terminal className="w-4 h-4 text-[#059669]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
               {completedLabsCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-slate-500">In Cyber Range</div>
+            <div className="text-[0.65rem] font-mono text-[#64748B]">In Cyber Range</div>
           </div>
 
-          <div className="p-5 nv-card space-y-1 shadow-2xl">
-            <div className="flex items-center justify-between text-slate-400">
+          <div className="p-5 nv-card space-y-1 shadow-sm">
+            <div className="flex items-center justify-between text-[#64748B]">
               <span className="text-xs font-mono uppercase">Badges Earned</span>
-              <Award className="w-4 h-4 text-purple-400" />
+              <Award className="w-4 h-4 text-[#8B5CF6]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-white">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
               {totalBadgesEarned}
             </div>
             <Link
               to="/achievements"
-              className="text-[0.65rem] font-mono text-cyan-400 hover:underline"
+              className="text-[0.65rem] font-mono text-[#0284C7] hover:underline"
             >
               View Portfolio →
             </Link>
@@ -562,20 +562,20 @@ function StudentDashboard() {
         </div>
 
         {/* Dynamic "Next Step Engine" Hero */}
-        <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-r from-cyan-500/10 via-slate-900 to-purple-500/10 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-2xl">
+        <div className="rounded-2xl border border-[#CBD5E1] bg-white p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-cyan-500 text-black font-semibold">
+              <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#0284C7] text-white font-semibold">
                 {nextStepAction.stage}
               </span>
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-xs font-mono text-[#64748B]">
                 Automated Recommendation
               </span>
             </div>
-            <h3 className="font-display font-bold text-2xl text-white">
+            <h3 className="font-display font-bold text-2xl text-[#0A192F]">
               {nextStepAction.title}
             </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-[#64748B] leading-relaxed">
               {nextStepAction.description}
             </p>
           </div>
@@ -583,16 +583,16 @@ function StudentDashboard() {
           <div className="shrink-0 flex items-center gap-3">
             <Link
               to={nextStepAction.linkTo as any}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 text-black font-semibold text-sm hover:bg-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0A192F] text-white font-semibold text-sm hover:bg-[#0284C7] shadow-sm transition-all uppercase"
             >
-              <Play className="w-4 h-4 fill-black" />
+              <Play className="w-4 h-4 fill-white" />
               <span>{nextStepAction.ctaText}</span>
             </Link>
           </div>
         </div>
 
         {/* Verified Skill Progression Matrix */}
-        <div className="nv-card p-6 space-y-4 shadow-2xl">
+        <div className="nv-card p-6 space-y-4 shadow-sm">
           <div className="flex items-center justify-between border-b border-border/80 pb-3">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-primary" />

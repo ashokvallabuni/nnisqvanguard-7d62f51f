@@ -46,21 +46,21 @@ const LEADERSHIP = [
     name: "Ashok Vallabhuni",
     title: "Founder · Chief Architect",
     initials: "AV",
-    color: "from-cyan-400 to-blue-600",
+    color: "from-[#E0F2FE] to-[#BAE6FD]",
     focus: ["Cyber Strategy", "AI · Security", "Cyber Defence Architecture", "Security Education"],
   },
   {
     name: "Varun Gajula",
     title: "Co-Founder",
     initials: "VG",
-    color: "from-emerald-400 to-teal-600",
+    color: "from-[#ECFDF5] to-[#A7F3D0]",
     focus: ["Product Vision", "Platform Architecture", "Growth"],
   },
   {
     name: "Sannith Reddy",
     title: "CPO · Product Marketer",
     initials: "SR",
-    color: "from-violet-400 to-purple-600",
+    color: "from-[#F5F3FF] to-[#DDD6FE]",
     focus: ["Product Strategy", "Go-to-Market", "Campus Programs", "Brand Storytelling"],
   },
 ] as const;
@@ -195,47 +195,43 @@ const COMMUNITY = [
 // ─────────────────────────────────────────────────────────────────────────────
 export function CyberIntelligenceHome() {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#030712] text-slate-200">
+    <main className="min-h-screen overflow-x-hidden bg-[#F0F4F9] text-[#0A192F]">
       {/* Navigation is provided by the root layout TopNav */}
 
       {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
       <section id="hero" className="relative flex min-h-[720px] items-center overflow-hidden">
-        {/* Grid background */}
-        <div className="absolute inset-0 intel-grid" aria-hidden="true" />
-        <div className="absolute inset-0 intel-scanlines" aria-hidden="true" />
-        <div
-          className="absolute left-1/2 top-1/4 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-[130px]"
-          aria-hidden="true"
-        />
+        {/* Background elements */}
+        <div className="absolute inset-0 bg-[#F0F4F9]" aria-hidden="true" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:16px_16px]" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12">
           <div className="space-y-7 lg:col-span-7">
-            <div className="inline-flex items-center gap-2 border border-cyan-400/30 bg-cyan-400/10 px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] text-cyan-300">
-              <Radar className="h-3.5 w-3.5 animate-pulse" />
+            <div className="inline-flex items-center gap-2 border border-[#CBD5E1] bg-white px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] text-[#0A192F] uppercase font-semibold">
+              <Radar className="h-3.5 w-3.5 text-[#0284C7]" />
               NISQ VANGUARD — DEFENCE TECHNOLOGIES
             </div>
-            <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-white sm:text-7xl">
+            <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-[#0A192F] sm:text-7xl">
               SECURE TODAY.{" "}
-              <span className="bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent">
+              <span className="text-[#0284C7]">
                 DEFEND TOMORROW.
               </span>{" "}
               EMPOWER FOREVER.
             </h1>
-            <p className="max-w-2xl font-mono text-sm leading-relaxed text-slate-300 sm:text-base">
+            <p className="max-w-2xl font-mono text-sm leading-relaxed text-[#64748B] sm:text-base">
               Enterprise-grade cybersecurity training, real data threat investigations, and hands-on
               cyber range labs — built by defenders for defenders.
             </p>
 
-            <div className="intel-hud-border relative max-w-2xl border border-cyan-400/30 bg-slate-950/80 p-5">
-              <span className="absolute -top-3 left-4 bg-[#030712] px-2 font-mono text-[10px] tracking-widest text-cyan-300">
-                <Terminal className="mr-1 inline h-3 w-3" />
+            <div className="relative max-w-2xl border border-[#CBD5E1] bg-white p-5 rounded-md shadow-sm">
+              <span className="absolute -top-2.5 left-4 bg-white px-2 font-mono text-[10px] font-bold tracking-widest text-[#0A192F]">
+                <Terminal className="mr-1 inline h-3 w-3 text-[#64748B]" />
                 VANGUARD THREAT ADVISORY
               </span>
-              <p className="font-mono text-xs italic leading-relaxed text-cyan-100 sm:text-sm">
+              <p className="font-mono text-xs italic leading-relaxed text-[#0A192F] sm:text-sm">
                 "Security is not a product. It is a process built around people, signals and
                 decisive action."
               </p>
-              <p className="mt-2 font-mono text-[10px] text-slate-500">
+              <p className="mt-2 font-mono text-[10px] text-[#64748B]">
                 — Ashok Vallabhuni, Founder · Chief Architect, NISQ Vanguard
               </p>
             </div>
@@ -243,19 +239,19 @@ export function CyberIntelligenceHome() {
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/learn"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 px-5 py-3 font-display text-xs font-bold tracking-wider text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
+                className="inline-flex items-center gap-2 bg-[#0A192F] px-5 py-3 font-display text-xs font-bold tracking-wider text-white transition hover:bg-[#0284C7] rounded-md uppercase"
               >
                 START YOUR DEFENCE JOURNEY <GraduationCap className="h-4 w-4" />
               </Link>
               <Link
                 to="/cyber-range"
-                className="inline-flex items-center gap-2 border border-cyan-400/70 bg-slate-950/70 px-5 py-3 font-display text-xs font-bold tracking-wider text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-950"
+                className="inline-flex items-center gap-2 border border-[#0A192F] bg-white px-5 py-3 font-display text-xs font-bold tracking-wider text-[#0A192F] transition hover:bg-[#F0F4F9] hover:text-[#0284C7] rounded-md uppercase"
               >
                 EXPLORE NISQ VANGUARD <FlaskConical className="h-4 w-4" />
               </Link>
             </div>
 
-            <div className="grid max-w-xl grid-cols-3 gap-4 border-t border-slate-700/70 pt-6">
+            <div className="grid max-w-xl grid-cols-3 gap-4 border-t border-[#CBD5E1] pt-6">
               <IntelStat value="1,492" label="Threat signals reviewed" />
               <IntelStat value="0.04ms" label="Signal response target" />
               <IntelStat value="100%" label="Learning access uptime" />
@@ -263,17 +259,14 @@ export function CyberIntelligenceHome() {
           </div>
 
           <div className="relative flex min-h-[390px] items-center justify-center lg:col-span-5">
-            <div className="absolute bottom-12 h-24 w-72 rounded-[100%] bg-cyan-400/20 blur-2xl" />
-            <div className="absolute bottom-14 h-14 w-56 rounded-[100%] border border-cyan-400/60 animate-ping" />
-            <div className="relative w-full max-w-[480px] animate-[float_5s_ease-in-out_infinite]">
-              <div className="absolute inset-8 rounded-full bg-cyan-400/20 blur-3xl" />
+            <div className="relative w-full max-w-[480px]">
               <img
                 src={wolfHero}
                 alt="NISQ Vanguard cyber defence platform"
-                className="relative z-10 w-full object-contain drop-shadow-[0_0_30px_rgba(0,210,255,0.55)]"
+                className="relative z-10 w-full object-contain"
               />
-              <div className="absolute bottom-1 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap border border-cyan-400 bg-slate-950/90 px-4 py-1.5 font-mono text-[10px] tracking-wider text-cyan-300 shadow-[0_0_24px_rgba(0,210,255,0.3)]">
-                <Crosshair className="mr-1 inline h-3 w-3" />
+              <div className="absolute bottom-1 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap border border-[#CBD5E1] bg-white px-4 py-1.5 font-mono text-[10px] tracking-wider text-[#0A192F] uppercase font-bold rounded-md shadow-sm">
+                <Crosshair className="mr-1 inline h-3 w-3 text-[#0284C7]" />
                 UNIT: FENRIR-AI // ACTIVE
               </div>
             </div>
@@ -284,11 +277,11 @@ export function CyberIntelligenceHome() {
       {/* ── PRIORITY 1: FOUNDER SECTION ─────────────────────────────────────── */}
       <section
         id="founder"
-        className="border-t border-slate-800 bg-gradient-to-b from-[#030712] to-slate-950 py-24"
+        className="border-t border-[#CBD5E1] bg-white py-24"
       >
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-6 text-center">
-            <span className="inline-block border border-cyan-400/30 bg-cyan-400/10 px-4 py-1 font-mono text-[10px] tracking-[0.2em] text-cyan-300">
+            <span className="inline-block border border-[#CBD5E1] bg-[#F0F4F9] px-4 py-1 font-mono text-[10px] tracking-[0.2em] text-[#0A192F] uppercase font-bold rounded">
               PRIORITY · FOUNDER PROFILE
             </span>
           </div>
@@ -296,26 +289,17 @@ export function CyberIntelligenceHome() {
           <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
             {/* Founder photo + badge */}
             <div className="relative flex justify-center">
-              {/* Outer HUD frame */}
-              <div className="relative inline-block">
-                {/* Corner decorators */}
-                <span className="absolute -top-3 -left-3 h-6 w-6 border-t-2 border-l-2 border-cyan-400" />
-                <span className="absolute -top-3 -right-3 h-6 w-6 border-t-2 border-r-2 border-cyan-400" />
-                <span className="absolute -bottom-3 -left-3 h-6 w-6 border-b-2 border-l-2 border-cyan-400" />
-                <span className="absolute -bottom-3 -right-3 h-6 w-6 border-b-2 border-r-2 border-cyan-400" />
-
-                {/* Glow behind photo */}
-                <div className="absolute inset-0 rounded-lg bg-cyan-400/10 blur-2xl" />
-
+              {/* Outer frame */}
+              <div className="relative inline-block border border-[#CBD5E1] p-2 bg-white rounded-xl shadow-sm">
                 {/* Founder photograph */}
                 <img
                   src={founderImg}
                   alt="Ashok Vallabhuni — Founder & Chief Architect, NISQ Vanguard"
-                  className="relative z-10 h-72 w-72 rounded-lg object-cover shadow-[0_0_48px_rgba(0,210,255,0.25)] sm:h-80 sm:w-80"
+                  className="relative z-10 h-72 w-72 rounded-lg object-cover sm:h-80 sm:w-80"
                 />
 
                 {/* NISQ Logo badge — bottom right overlay */}
-                <div className="absolute -bottom-5 -right-5 z-20 flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan-400 bg-[#030712] shadow-[0_0_20px_rgba(0,210,255,0.4)]">
+                <div className="absolute -bottom-5 -right-5 z-20 flex h-16 w-16 items-center justify-center rounded-full border-2 border-white bg-white shadow-md">
                   <img
                     src={nisqLogo}
                     alt="NISQ Vanguard emblem"
@@ -324,8 +308,8 @@ export function CyberIntelligenceHome() {
                 </div>
 
                 {/* Active status badge */}
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap border border-cyan-400 bg-[#030712] px-3 py-1 font-mono text-[9px] tracking-[0.2em] text-cyan-300">
-                  <span className="mr-1.5 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap border border-[#CBD5E1] bg-white px-3 py-1 font-mono text-[9px] tracking-[0.2em] text-[#0A192F] font-bold rounded-full shadow-sm">
+                  <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[#059669]" />
                   AUTHENTICATED · CHIEF ARCHITECT
                 </div>
               </div>
@@ -334,13 +318,13 @@ export function CyberIntelligenceHome() {
             {/* Text content */}
             <div className="space-y-6">
               <div>
-                <p className="font-mono text-[11px] tracking-[0.3em] text-cyan-400 uppercase mb-2">
+                <p className="font-mono text-[11px] tracking-[0.3em] text-[#0284C7] uppercase mb-2">
                   FOUNDER · CHIEF ARCHITECT
                 </p>
-                <h2 className="font-display text-4xl font-bold tracking-wide text-white sm:text-5xl">
+                <h2 className="font-display text-4xl font-bold tracking-wide text-[#0A192F] sm:text-5xl">
                   ASHOK VALLABHUNI
                 </h2>
-                <p className="mt-2 font-mono text-xs text-slate-500 tracking-wider">
+                <p className="mt-2 font-mono text-xs text-[#64748B] tracking-wider">
                   NISQ VANGUARD DEFENCE TECHNOLOGIES · IVVAB LABS ENGINE
                 </p>
               </div>
@@ -357,14 +341,14 @@ export function CyberIntelligenceHome() {
                 ].map((tag) => (
                   <span
                     key={tag}
-                    className="border border-cyan-400/30 bg-cyan-400/8 px-3 py-1 font-mono text-[10px] tracking-wider text-cyan-300"
+                    className="border border-[#CBD5E1] bg-[#F0F4F9] px-3 py-1 font-mono text-[10px] tracking-wider text-[#64748B] font-semibold rounded"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              <p className="font-mono text-sm leading-relaxed text-slate-300">
+              <p className="font-mono text-sm leading-relaxed text-[#64748B]">
                 Ashok Vallabhuni is the Founder and Chief Architect of NISQ Vanguard Defence
                 Technologies — an organisation dedicated to making cybersecurity education
                 accessible, practical, and impactful across India and beyond. Through the IVVAB Labs
@@ -375,7 +359,7 @@ export function CyberIntelligenceHome() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/about/founder"
-                  className="inline-flex items-center gap-2 border border-cyan-400/70 bg-cyan-400/10 px-5 py-2.5 font-mono text-[11px] tracking-wider text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition-all"
+                  className="inline-flex items-center gap-2 border border-[#CBD5E1] bg-white px-5 py-2.5 font-mono text-[11px] tracking-wider text-[#0A192F] hover:bg-[#F0F4F9] transition-all rounded uppercase font-bold"
                 >
                   VIEW FOUNDER PROFILE <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -386,13 +370,13 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 2: ABOUT FOUNDER ────────────────────────────────────────── */}
-      <section id="about-founder" className="border-t border-slate-800 bg-slate-950 py-24">
+      <section id="about-founder" className="border-t border-[#CBD5E1] bg-[#F0F4F9] py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-12 text-center">
-            <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
+            <span className="font-mono text-[10px] tracking-[0.3em] text-[#0284C7] uppercase">
               Why NISQ Vanguard Was Created
             </span>
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-wide text-white sm:text-4xl">
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-wide text-[#0A192F] sm:text-4xl">
               THE MISSION BEHIND THE PLATFORM
             </h2>
           </div>
@@ -432,13 +416,13 @@ export function CyberIntelligenceHome() {
             ].map(({ icon: Icon, heading, body }) => (
               <div
                 key={heading}
-                className="border border-slate-700 bg-[#0a0f1d] p-6 hover:border-cyan-400/40 transition-colors"
+                className="border border-[#CBD5E1] bg-[#0a0f1d] p-6 hover:border-cyan-400/40 transition-colors"
               >
                 <div className="mb-4 flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-display text-base font-semibold text-white">{heading}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-slate-400">{body}</p>
+                <h3 className="font-display text-base font-semibold text-[#0A192F]">{heading}</h3>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-[#64748B]">{body}</p>
               </div>
             ))}
           </div>
@@ -446,7 +430,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 3: LEADERSHIP TEAM ──────────────────────────────────────── */}
-      <section id="leadership" className="border-t border-slate-800 bg-[#030712] py-24">
+      <section id="leadership" className="border-t border-[#CBD5E1] bg-[#030712] py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <SectionHeading
             eyebrow="NISQ VANGUARD LEADERSHIP"
@@ -458,7 +442,7 @@ export function CyberIntelligenceHome() {
             {LEADERSHIP.map((member) => (
               <div
                 key={member.name}
-                className="relative border border-slate-700 bg-[#0a0f1d] p-8 text-center hover:border-cyan-400/40 transition-all"
+                className="relative border border-[#CBD5E1] bg-[#0a0f1d] p-8 text-center hover:border-cyan-400/40 transition-all"
               >
                 {/* Corner decorators */}
                 <span className="absolute top-0 left-0 h-4 w-4 border-t border-l border-cyan-400/40" />
@@ -468,13 +452,13 @@ export function CyberIntelligenceHome() {
 
                 {/* Avatar */}
                 <div
-                  className={`mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br ${member.color} font-display text-xl font-bold text-white shadow-lg`}
+                  className={`mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br ${member.color} font-display text-xl font-bold text-[#0A192F] shadow-lg`}
                 >
                   {member.initials}
                 </div>
 
-                <h3 className="font-display text-xl font-bold text-white">{member.name}</h3>
-                <p className="mt-1 font-mono text-[10px] tracking-widest text-cyan-400 uppercase">
+                <h3 className="font-display text-xl font-bold text-[#0A192F]">{member.name}</h3>
+                <p className="mt-1 font-mono text-[10px] tracking-widest text-[#0284C7] uppercase">
                   {member.title}
                 </p>
 
@@ -482,7 +466,7 @@ export function CyberIntelligenceHome() {
                   {member.focus.map((f) => (
                     <span
                       key={f}
-                      className="rounded-none border border-slate-600 bg-slate-800/60 px-2 py-0.5 font-mono text-[9px] text-slate-400"
+                      className="rounded-none border border-slate-600 bg-[#F0F4F9] px-2 py-0.5 font-mono text-[9px] text-[#64748B]"
                     >
                       {f}
                     </span>
@@ -495,7 +479,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 4: ABOUT NISQ VANGUARD — 4 PILLARS ────────────────────── */}
-      <section id="about" className="border-t border-slate-800 bg-slate-950 py-24">
+      <section id="about" className="border-t border-[#CBD5E1] bg-[#F0F4F9] py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <SectionHeading
             eyebrow="ABOUT NISQ VANGUARD"
@@ -528,13 +512,13 @@ export function CyberIntelligenceHome() {
             ].map(({ icon: Icon, pillar, desc }) => (
               <div
                 key={pillar}
-                className="group border border-slate-700 bg-[#0a0f1d] p-8 text-center transition hover:border-cyan-400/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]"
+                className="group border border-[#CBD5E1] bg-[#0a0f1d] p-8 text-center transition hover:border-cyan-400/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]"
               >
                 <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-slate-950">
                   <Icon className="h-6 w-6" />
                 </div>
-                <div className="font-mono text-[10px] tracking-[0.2em] text-cyan-400">{pillar}</div>
-                <p className="mt-3 font-mono text-xs leading-relaxed text-slate-400">{desc}</p>
+                <div className="font-mono text-[10px] tracking-[0.2em] text-[#0284C7]">{pillar}</div>
+                <p className="mt-3 font-mono text-xs leading-relaxed text-[#64748B]">{desc}</p>
               </div>
             ))}
           </div>
@@ -542,7 +526,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 5: SERVICES ─────────────────────────────────────────────── */}
-      <section id="services" className="border-t border-slate-800 bg-[#030712] py-24">
+      <section id="services" className="border-t border-[#CBD5E1] bg-[#030712] py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <SectionHeading
             eyebrow="CYBERSECURITY PROTECTION"
@@ -554,13 +538,13 @@ export function CyberIntelligenceHome() {
             {SERVICES.map(({ icon: Icon, title, body }) => (
               <div
                 key={title}
-                className="group border border-slate-700 bg-[#0a0f1d] p-7 transition hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,210,255,0.1)]"
+                className="group border border-[#CBD5E1] bg-[#0a0f1d] p-7 transition hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,210,255,0.1)]"
               >
                 <div className="mb-5 flex h-11 w-11 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-slate-950">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-display text-base font-semibold text-white">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-slate-400">{body}</p>
+                <h3 className="font-display text-base font-semibold text-[#0A192F]">{title}</h3>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-[#64748B]">{body}</p>
               </div>
             ))}
           </div>
@@ -577,17 +561,17 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 6: NISQ ACADEMY ─────────────────────────────────────────── */}
-      <section id="academy" className="border-t border-slate-800 bg-slate-950/90 py-24">
+      <section id="academy" className="border-t border-[#CBD5E1] bg-[#F0F4F9]/90 py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-14 text-center">
-            <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
+            <span className="font-mono text-[10px] tracking-[0.3em] text-[#0284C7] uppercase">
               NISQ VANGUARD ACADEMY
             </span>
-            <h2 className="mt-4 font-display text-4xl font-bold tracking-wide text-white sm:text-5xl">
+            <h2 className="mt-4 font-display text-4xl font-bold tracking-wide text-[#0A192F] sm:text-5xl">
               LEARN. <span className="text-cyan-300">PRACTICE.</span> PROVE.{" "}
               <span className="text-cyan-300">VERIFY.</span> CERTIFY.
             </h2>
-            <p className="mt-5 mx-auto max-w-2xl font-mono text-sm leading-relaxed text-slate-400">
+            <p className="mt-5 mx-auto max-w-2xl font-mono text-sm leading-relaxed text-[#64748B]">
               The NISQ Academy is the primary pillar of NISQ Vanguard — a structured, verifiable,
               hands-on cybersecurity education engine powered by the IVVAB Labs platform.
             </p>
@@ -620,13 +604,13 @@ export function CyberIntelligenceHome() {
               <Link
                 key={title}
                 to={to}
-                className="group border border-slate-700 bg-[#0a0f1d] p-7 transition hover:border-cyan-400/70 hover:shadow-[0_0_24px_rgba(0,210,255,0.14)]"
+                className="group border border-[#CBD5E1] bg-[#0a0f1d] p-7 transition hover:border-cyan-400/70 hover:shadow-[0_0_24px_rgba(0,210,255,0.14)]"
               >
                 <Icon className="mb-5 h-8 w-8 text-cyan-300" />
                 <div className="font-mono text-[10px] tracking-widest text-cyan-300">{label}</div>
-                <h3 className="mt-2 font-display text-lg font-semibold text-white">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-slate-400">{desc}</p>
-                <div className="mt-8 flex items-center justify-between border-t border-slate-700 pt-4 font-mono text-xs text-slate-400">
+                <h3 className="mt-2 font-display text-lg font-semibold text-[#0A192F]">{title}</h3>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-[#64748B]">{desc}</p>
+                <div className="mt-8 flex items-center justify-between border-t border-[#CBD5E1] pt-4 font-mono text-xs text-[#64748B]">
                   <span>Continue pathway</span>
                   <ArrowRight className="h-4 w-4 text-cyan-300 transition group-hover:translate-x-1" />
                 </div>
@@ -637,7 +621,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 7a: AVAILABLE COURSES ───────────────────────────────────── */}
-      <section id="courses" className="border-t border-slate-800 bg-[#030712] py-24">
+      <section id="courses" className="border-t border-[#CBD5E1] bg-white py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <SectionHeading
             eyebrow="AVAILABLE NOW"
@@ -650,27 +634,27 @@ export function CyberIntelligenceHome() {
               ({ slug, title, level, modules, duration, description, skills, icon: Icon }) => (
                 <div
                   key={slug}
-                  className="group border border-slate-700 bg-[#0a0f1d] p-7 flex flex-col transition hover:border-cyan-400/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]"
+                  className="group border border-[#CBD5E1] bg-[#F0F4F9] p-7 flex flex-col transition hover:border-[#0284C7] hover:shadow-sm"
                 >
                   <div className="mb-5 flex items-center justify-between">
-                    <div className="flex h-11 w-11 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-slate-950">
+                    <div className="flex h-11 w-11 items-center justify-center border border-[#CBD5E1] bg-white text-[#0A192F] transition group-hover:bg-[#0284C7] group-hover:border-[#0284C7] group-hover:text-white rounded">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="flex gap-2">
-                      <span className="border border-slate-600 bg-slate-800 px-2 py-0.5 font-mono text-[9px] tracking-wider text-slate-400">
+                      <span className="border border-slate-600 bg-[#F0F4F9] px-2 py-0.5 font-mono text-[9px] tracking-wider text-[#64748B]">
                         {level}
                       </span>
-                      <span className="border border-slate-600 bg-slate-800 px-2 py-0.5 font-mono text-[9px] tracking-wider text-slate-400">
+                      <span className="border border-slate-600 bg-[#F0F4F9] px-2 py-0.5 font-mono text-[9px] tracking-wider text-[#64748B]">
                         {modules} modules
                       </span>
-                      <span className="border border-slate-600 bg-slate-800 px-2 py-0.5 font-mono text-[9px] tracking-wider text-slate-400">
+                      <span className="border border-slate-600 bg-[#F0F4F9] px-2 py-0.5 font-mono text-[9px] tracking-wider text-[#64748B]">
                         {duration}
                       </span>
                     </div>
                   </div>
 
-                  <h3 className="font-display text-xl font-bold text-white">{title}</h3>
-                  <p className="mt-2 flex-1 font-mono text-xs leading-relaxed text-slate-400">
+                  <h3 className="font-display text-xl font-bold text-[#0A192F]">{title}</h3>
+                  <p className="mt-2 flex-1 font-mono text-xs leading-relaxed text-[#64748B]">
                     {description}
                   </p>
 
@@ -678,19 +662,19 @@ export function CyberIntelligenceHome() {
                     {skills.map((s) => (
                       <span
                         key={s}
-                        className="border border-slate-700 bg-slate-800/50 px-2 py-0.5 font-mono text-[9px] text-slate-500"
+                        className="border border-[#CBD5E1] bg-[#F0F4F9] px-2 py-0.5 font-mono text-[9px] text-[#64748B]"
                       >
                         {s}
                       </span>
                     ))}
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-slate-700 pt-4">
-                    <span className="font-mono text-[10px] text-emerald-400">● AVAILABLE NOW</span>
+                  <div className="mt-6 flex items-center justify-between border-t border-[#CBD5E1] pt-4">
+                    <span className="font-mono text-[10px] text-[#059669] font-bold">● AVAILABLE NOW</span>
                     <Link
                       to="/learn/$slug"
                       params={{ slug }}
-                      className="inline-flex items-center gap-1.5 border border-cyan-400/60 bg-cyan-400/10 px-4 py-2 font-mono text-[10px] tracking-wider text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition-all"
+                      className="inline-flex items-center gap-1.5 border border-[#0284C7] bg-white px-4 py-2 font-mono text-[10px] tracking-wider text-[#0284C7] font-bold hover:bg-[#0284C7] hover:text-white transition-all uppercase rounded"
                     >
                       START COURSE <ArrowRight className="h-3 w-3" />
                     </Link>
@@ -703,7 +687,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 7b: LOCKED COURSES (COMING SOON) ────────────────────────── */}
-      <section id="coming-soon" className="border-t border-slate-800 bg-slate-950 py-24">
+      <section id="coming-soon" className="border-t border-[#CBD5E1] bg-[#F0F4F9] py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <SectionHeading
             eyebrow="COMING SOON"
@@ -715,16 +699,16 @@ export function CyberIntelligenceHome() {
             {LOCKED_COURSES.map(({ title, category }) => (
               <div
                 key={title}
-                className="relative border border-slate-700/60 bg-[#0a0f1d]/80 p-5 text-center opacity-80"
+                className="relative border border-[#CBD5E1] bg-white p-5 text-center opacity-80 rounded shadow-sm"
               >
                 <div className="mb-3 flex justify-center">
-                  <Lock className="h-5 w-5 text-slate-500" />
+                  <Lock className="h-5 w-5 text-[#64748B]" />
                 </div>
-                <div className="font-mono text-[8px] tracking-widest text-slate-600 mb-1">
+                <div className="font-mono text-[8px] tracking-widest text-[#64748B] mb-1 font-bold">
                   {category}
                 </div>
-                <div className="font-display text-xs font-semibold text-slate-400">{title}</div>
-                <div className="mt-2 font-mono text-[8px] tracking-widest text-amber-500/70">
+                <div className="font-display text-xs font-semibold text-[#0A192F]">{title}</div>
+                <div className="mt-2 font-mono text-[8px] tracking-widest text-[#D97706] font-bold">
                   COMING SOON
                 </div>
               </div>
@@ -734,17 +718,17 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 5: CYBER RANGE ──────────────────────────────────────────── */}
-      <section id="cyber-range" className="border-t border-slate-800 bg-[#030712] py-24">
+      <section id="cyber-range" className="border-t border-[#CBD5E1] bg-white py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <div>
-              <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
+              <span className="font-mono text-[10px] tracking-[0.3em] text-[#0284C7] uppercase font-bold">
                 Practical Training Infrastructure
               </span>
-              <h2 className="mt-4 font-display text-4xl font-bold text-white sm:text-5xl">
-                NISQ <span className="text-cyan-300">CYBER RANGE</span>
+              <h2 className="mt-4 font-display text-4xl font-bold text-[#0A192F] sm:text-5xl">
+                NISQ <span className="text-[#0284C7]">CYBER RANGE</span>
               </h2>
-              <p className="mt-5 font-mono text-sm leading-relaxed text-slate-300">
+              <p className="mt-5 font-mono text-sm leading-relaxed text-[#0A192F]">
                 The NISQ Cyber Range provides isolated, containerised lab environments for hands-on
                 practitioner training. Each lab scenario is built around real incident telemetry,
                 adversary simulation, and defensive verification objectives.
@@ -774,12 +758,12 @@ export function CyberIntelligenceHome() {
                   },
                 ].map(({ icon: Icon, label, desc }) => (
                   <div key={label} className="flex items-start gap-3">
-                    <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300">
+                    <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center border border-[#CBD5E1] bg-white text-[#0A192F] rounded-md">
                       <Icon className="h-3.5 w-3.5" />
                     </div>
                     <div>
-                      <div className="font-display text-sm font-semibold text-white">{label}</div>
-                      <div className="font-mono text-[11px] text-slate-500">{desc}</div>
+                      <div className="font-display text-sm font-semibold text-[#0A192F]">{label}</div>
+                      <div className="font-mono text-[11px] text-[#64748B]">{desc}</div>
                     </div>
                   </div>
                 ))}
@@ -788,13 +772,13 @@ export function CyberIntelligenceHome() {
               <div className="mt-10 flex flex-wrap gap-3">
                 <Link
                   to="/cyber-range"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 px-5 py-3 font-mono text-[11px] tracking-wider text-slate-950 font-bold hover:brightness-110 transition"
+                  className="inline-flex items-center gap-2 bg-[#0A192F] px-5 py-3 font-mono text-[11px] tracking-wider text-white font-bold hover:bg-[#0284C7] transition rounded uppercase"
                 >
                   ENTER CYBER RANGE <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   to="/cyber-range/labs"
-                  className="inline-flex items-center gap-2 border border-cyan-400/60 bg-cyan-400/10 px-5 py-3 font-mono text-[11px] tracking-wider text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition"
+                  className="inline-flex items-center gap-2 border border-[#CBD5E1] bg-white px-5 py-3 font-mono text-[11px] tracking-wider text-[#0A192F] font-bold hover:bg-[#F0F4F9] hover:text-[#0284C7] transition rounded uppercase"
                 >
                   BROWSE LABS <FlaskConical className="h-4 w-4" />
                 </Link>
@@ -802,37 +786,37 @@ export function CyberIntelligenceHome() {
             </div>
 
             {/* Terminal widget */}
-            <div className="intel-hud-border border border-cyan-400/40 bg-[#0a0f1d] p-6 shadow-[0_0_25px_rgba(0,210,255,0.12)]">
-              <div className="mb-5 flex items-center justify-between border-b border-slate-700 pb-4 font-mono text-xs text-cyan-300">
+            <div className="border border-[#CBD5E1] bg-white rounded-md shadow-sm p-6 overflow-hidden">
+              <div className="mb-5 flex items-center justify-between border-b border-[#CBD5E1] pb-4 font-mono text-xs text-[#0A192F] font-bold">
                 <span>
-                  <Terminal className="mr-2 inline h-4 w-4" />
+                  <Terminal className="mr-2 inline h-4 w-4 text-[#64748B]" />
                   VANGUARD_CYBER_RANGE.LOG
                 </span>
                 <span className="flex gap-1.5">
-                  <i className="h-2.5 w-2.5 rounded-full bg-red-400" />
-                  <i className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-                  <i className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                  <i className="h-2.5 w-2.5 rounded-full bg-[#E2E8F0] border border-[#CBD5E1]" />
+                  <i className="h-2.5 w-2.5 rounded-full bg-[#E2E8F0] border border-[#CBD5E1]" />
+                  <i className="h-2.5 w-2.5 rounded-full bg-[#E2E8F0] border border-[#CBD5E1]" />
                 </span>
               </div>
-              <div className="space-y-3 font-mono text-xs leading-relaxed text-slate-300">
-                <p className="text-cyan-300">&gt; initializing cyber range environment...</p>
+              <div className="space-y-3 font-mono text-xs leading-relaxed text-[#64748B]">
+                <p className="text-[#0284C7]">&gt; initializing cyber range environment...</p>
                 <p>
                   &gt; loading lab:{" "}
-                  <span className="text-emerald-400">LAB-07 — Network Intrusion Detection</span>
+                  <span className="text-[#059669] font-bold">LAB-07 — Network Intrusion Detection</span>
                 </p>
-                <p className="text-cyan-300">&gt; provisioning isolated subnet: 10.0.99.0/24</p>
+                <p className="text-[#0284C7]">&gt; provisioning isolated subnet: 10.0.99.0/24</p>
                 <p>
                   &gt; deploying attacker node:{" "}
-                  <span className="text-red-400">192.168.1.105 [THREAT ACTOR]</span>
+                  <span className="text-[#DC2626] font-bold">192.168.1.105 [THREAT ACTOR]</span>
                 </p>
                 <p>
                   &gt; deploying defender node:{" "}
-                  <span className="text-emerald-400">10.0.99.5 [YOU]</span>
+                  <span className="text-[#059669] font-bold">10.0.99.5 [YOU]</span>
                 </p>
-                <p className="text-amber-300">
+                <p className="text-[#D97706] font-bold">
                   &gt; OBJECTIVE: Detect and block the SYN flood attack
                 </p>
-                <p className="text-emerald-400">&gt; status: RANGE ACTIVE — GOOD HUNTING.</p>
+                <p className="text-[#059669] font-bold">&gt; status: RANGE ACTIVE — GOOD HUNTING.</p>
               </div>
             </div>
           </div>
@@ -840,7 +824,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 6: THREAT INTELLIGENCE ─────────────────────────────────── */}
-      <section id="intelligence" className="border-t border-slate-800 bg-slate-950 py-24">
+      <section id="intelligence" className="border-t border-[#CBD5E1] bg-[#F0F4F9] py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <SectionHeading
             eyebrow="THREAT INTELLIGENCE"
@@ -873,11 +857,11 @@ export function CyberIntelligenceHome() {
             ].map(({ icon: Icon, label, desc }) => (
               <div
                 key={label}
-                className="border border-slate-700 bg-[#0a0f1d] p-6 hover:border-cyan-400/40 transition-colors"
+                className="border border-[#CBD5E1] bg-white p-6 hover:border-[#0284C7] transition-colors rounded-md shadow-sm"
               >
-                <Icon className="mb-4 h-6 w-6 text-cyan-300" />
-                <h3 className="font-display text-base font-semibold text-white">{label}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-slate-400">{desc}</p>
+                <Icon className="mb-4 h-6 w-6 text-[#0A192F]" />
+                <h3 className="font-display text-base font-semibold text-[#0A192F]">{label}</h3>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-[#64748B]">{desc}</p>
               </div>
             ))}
           </div>
@@ -885,7 +869,7 @@ export function CyberIntelligenceHome() {
           <div className="mt-10 text-center">
             <Link
               to="/intelligence"
-              className="inline-flex items-center gap-2 border border-cyan-400/60 bg-cyan-400/10 px-6 py-3 font-mono text-[11px] tracking-wider text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition"
+              className="inline-flex items-center gap-2 border border-[#CBD5E1] bg-white px-6 py-3 font-mono text-[11px] tracking-wider text-[#0A192F] font-bold hover:bg-[#F0F4F9] hover:text-[#0284C7] transition rounded uppercase"
             >
               VIEW INTELLIGENCE PLATFORM <ChevronRight className="h-4 w-4" />
             </Link>
@@ -894,7 +878,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 7: COMMUNITY ────────────────────────────────────────────── */}
-      <section id="community" className="border-t border-slate-800 bg-[#030712] py-24">
+      <section id="community" className="border-t border-[#CBD5E1] bg-white py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <SectionHeading
             eyebrow="NISQ VANGUARD COMMUNITY"
@@ -906,13 +890,13 @@ export function CyberIntelligenceHome() {
             {COMMUNITY.map(({ icon: Icon, title, body }) => (
               <div
                 key={title}
-                className="group border border-slate-700 bg-[#0a0f1d] p-7 transition hover:border-cyan-400/60"
+                className="group border border-[#CBD5E1] bg-[#F0F4F9] p-7 transition hover:border-[#0284C7] rounded-md shadow-sm"
               >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-slate-950">
+                <div className="mb-5 flex h-11 w-11 items-center justify-center border border-[#CBD5E1] bg-white text-[#0A192F] transition group-hover:bg-[#0284C7] group-hover:border-[#0284C7] group-hover:text-white rounded">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-display text-base font-bold text-white">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-slate-400">{body}</p>
+                <h3 className="font-display text-base font-bold text-[#0A192F]">{title}</h3>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-[#64748B]">{body}</p>
               </div>
             ))}
           </div>
@@ -920,32 +904,32 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── FINAL CTA ────────────────────────────────────────────────────────── */}
-      <section className="border-t border-slate-800 bg-gradient-to-b from-slate-950 to-[#030712] py-24">
+      <section className="border-t border-[#CBD5E1] bg-[#F0F4F9] py-24">
         <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
           <div className="mb-6 flex justify-center">
             <img
               src={nisqLogo}
               alt="NISQ Vanguard"
-              className="h-14 w-14 rounded-full object-cover shadow-[0_0_32px_rgba(0,210,255,0.3)]"
+              className="h-14 w-14 rounded-full object-cover shadow-sm border border-[#CBD5E1]"
             />
           </div>
-          <h2 className="font-display text-4xl font-bold tracking-wide text-white sm:text-5xl">
-            BEGIN YOUR <span className="text-cyan-300">DEFENCE JOURNEY</span>
+          <h2 className="font-display text-4xl font-bold tracking-wide text-[#0A192F] sm:text-5xl">
+            BEGIN YOUR <span className="text-[#0284C7]">DEFENCE JOURNEY</span>
           </h2>
-          <p className="mt-5 font-mono text-sm leading-relaxed text-slate-400">
+          <p className="mt-5 font-mono text-sm leading-relaxed text-[#64748B]">
             Access the full NISQ Vanguard Academy, Cyber Range, and Threat Intelligence platform.
             Learning is free. Your defence starts now.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               to="/learn"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 px-8 py-4 font-display text-sm font-bold tracking-wider text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
+              className="inline-flex items-center gap-2 bg-[#0A192F] px-8 py-4 font-display text-sm font-bold tracking-wider text-white shadow-sm transition hover:bg-[#0284C7] rounded"
             >
               START LEARNING FREE <GraduationCap className="h-4 w-4" />
             </Link>
             <Link
               to="/reporting"
-              className="inline-flex items-center gap-2 border border-slate-600 bg-slate-800/40 px-8 py-4 font-mono text-sm tracking-wider text-slate-300 hover:border-cyan-400/60 hover:text-cyan-300 transition"
+              className="inline-flex items-center gap-2 border border-[#CBD5E1] bg-white px-8 py-4 font-mono text-sm tracking-wider text-[#0A192F] hover:bg-[#F0F4F9] hover:text-[#0284C7] hover:border-[#0284C7] transition rounded"
             >
               <Shield className="h-4 w-4" /> REPORT A THREAT
             </Link>
@@ -954,7 +938,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── FOOTER ───────────────────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-800 bg-[#030712] py-12">
+      <footer className="border-t border-[#CBD5E1] bg-white py-12">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-4">
             <div className="sm:col-span-1">
@@ -964,11 +948,11 @@ export function CyberIntelligenceHome() {
                   alt="NISQ Vanguard"
                   className="h-8 w-8 rounded-sm object-cover"
                 />
-                <span className="font-display text-xs font-bold tracking-widest text-white">
+                <span className="font-display text-xs font-bold tracking-widest text-[#0A192F]">
                   NISQ VANGUARD
                 </span>
               </div>
-              <p className="font-mono text-[10px] leading-relaxed text-slate-500">
+              <p className="font-mono text-[10px] leading-relaxed text-[#64748B]">
                 Defence Technologies · Cyber Education · Threat Intelligence
                 <br />
                 Secure Today. Defend Tomorrow. Empower Forever.
@@ -976,7 +960,7 @@ export function CyberIntelligenceHome() {
             </div>
 
             <div>
-              <div className="font-mono text-[9px] tracking-[0.2em] text-cyan-400 mb-4 uppercase">
+              <div className="font-mono text-[9px] tracking-[0.2em] text-[#0284C7] mb-4 uppercase">
                 Academy
               </div>
               <div className="space-y-2">
@@ -989,7 +973,7 @@ export function CyberIntelligenceHome() {
                   <div key={label}>
                     <Link
                       to={to as any}
-                      className="font-mono text-[10px] text-slate-500 hover:text-cyan-300 transition-colors"
+                      className="font-mono text-[10px] text-[#64748B] hover:text-[#0284C7] transition-colors"
                     >
                       {label}
                     </Link>
@@ -999,7 +983,7 @@ export function CyberIntelligenceHome() {
             </div>
 
             <div>
-              <div className="font-mono text-[9px] tracking-[0.2em] text-cyan-400 mb-4 uppercase">
+              <div className="font-mono text-[9px] tracking-[0.2em] text-[#0284C7] mb-4 uppercase">
                 Organisation
               </div>
               <div className="space-y-2">
@@ -1012,7 +996,7 @@ export function CyberIntelligenceHome() {
                   <div key={label}>
                     <Link
                       to={to as any}
-                      className="font-mono text-[10px] text-slate-500 hover:text-cyan-300 transition-colors"
+                      className="font-mono text-[10px] text-[#64748B] hover:text-[#0284C7] transition-colors"
                     >
                       {label}
                     </Link>
@@ -1022,7 +1006,7 @@ export function CyberIntelligenceHome() {
             </div>
 
             <div>
-              <div className="font-mono text-[9px] tracking-[0.2em] text-cyan-400 mb-4 uppercase">
+              <div className="font-mono text-[9px] tracking-[0.2em] text-[#0284C7] mb-4 uppercase">
                 Legal
               </div>
               <div className="space-y-2">
@@ -1035,7 +1019,7 @@ export function CyberIntelligenceHome() {
                   <div key={label}>
                     <Link
                       to={to as any}
-                      className="font-mono text-[10px] text-slate-500 hover:text-cyan-300 transition-colors"
+                      className="font-mono text-[10px] text-[#64748B] hover:text-[#0284C7] transition-colors"
                     >
                       {label}
                     </Link>
@@ -1045,7 +1029,7 @@ export function CyberIntelligenceHome() {
             </div>
           </div>
 
-          <div className="mt-12 border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="mt-12 border-t border-[#CBD5E1] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="font-mono text-[10px] text-slate-600">
               © 2025 NISQ Vanguard Defence Technologies · IVVAB Labs Engine · All rights reserved.
             </p>
@@ -1063,8 +1047,8 @@ export function CyberIntelligenceHome() {
 function IntelStat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <div className="font-display text-xl font-bold text-white sm:text-2xl">{value}</div>
-      <div className="mt-1 font-mono text-[9px] uppercase tracking-widest text-cyan-300">
+      <div className="font-display text-xl font-bold text-[#0A192F] sm:text-2xl">{value}</div>
+      <div className="mt-1 font-mono text-[9px] uppercase tracking-widest text-[#64748B] font-bold">
         {label}
       </div>
     </div>
@@ -1082,13 +1066,13 @@ function SectionHeading({
 }) {
   return (
     <div className="mx-auto mb-14 max-w-3xl text-center">
-      <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
+      <span className="font-mono text-[10px] tracking-[0.3em] text-[#0284C7] uppercase">
         {eyebrow}
       </span>
-      <h2 className="mt-4 font-display text-3xl font-bold tracking-wide text-white sm:text-5xl">
+      <h2 className="mt-4 font-display text-3xl font-bold tracking-wide text-[#0A192F] sm:text-5xl">
         {title}
       </h2>
-      <p className="mt-4 font-mono text-sm leading-relaxed text-slate-400">{body}</p>
+      <p className="mt-4 font-mono text-sm leading-relaxed text-[#64748B]">{body}</p>
     </div>
   );
 }
