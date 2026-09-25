@@ -228,7 +228,7 @@ function StudentDashboard() {
   ];
 
   const skillLevelBadges = {
-    BEGINNER: "bg-[#F0F4F9] text-[#64748B] border-[#CBD5E1]",
+    BEGINNER: "bg-[#112240] text-[#94A3B8] border-[#1E2D4A]",
     DEVELOPING: "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD]",
     PRACTICED: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
     PROFICIENT: "bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]",
@@ -501,55 +501,55 @@ function StudentDashboard() {
         {/* Metric Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="p-5 nv-card space-y-1 shadow-sm hover:border-amber-500/30 transition-colors">
-            <div className="flex items-center justify-between text-[#64748B]">
+            <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="text-xs font-mono uppercase text-[#D97706] font-bold">Active Streak</span>
               <Activity className="w-4 h-4 text-[#D97706]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
-              7 <span className="text-sm text-[#64748B]">Days</span>
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
+              7 <span className="text-sm text-[#94A3B8]">Days</span>
             </div>
-            <div className="text-[0.65rem] font-mono text-[#64748B]">Keep it up!</div>
+            <div className="text-[0.65rem] font-mono text-[#94A3B8]">Keep it up!</div>
           </div>
 
           <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#64748B]">
+            <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="text-xs font-mono uppercase">Verified Skill XP</span>
               <Zap className="w-4 h-4 text-[#D97706]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
               {totalXp}
             </div>
-            <div className="text-[0.65rem] font-mono text-[#64748B]">Level 1 Defender</div>
+            <div className="text-[0.65rem] font-mono text-[#94A3B8]">Level 1 Defender</div>
           </div>
 
           <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#64748B]">
+            <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="text-xs font-mono uppercase">Lessons Completed</span>
               <BookOpen className="w-4 h-4 text-[#0284C7]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
               {completedModulesCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-[#64748B]">Across curriculum</div>
+            <div className="text-[0.65rem] font-mono text-[#94A3B8]">Across curriculum</div>
           </div>
 
           <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#64748B]">
+            <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="text-xs font-mono uppercase">Labs Solved</span>
               <Terminal className="w-4 h-4 text-[#059669]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
               {completedLabsCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-[#64748B]">In IVVAB LABS</div>
+            <div className="text-[0.65rem] font-mono text-[#94A3B8]">In IVVAB LABS</div>
           </div>
 
           <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#64748B]">
+            <div className="flex items-center justify-between text-[#94A3B8]">
               <span className="text-xs font-mono uppercase">Badges Earned</span>
               <Award className="w-4 h-4 text-[#8B5CF6]" />
             </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
+            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
               {totalBadgesEarned}
             </div>
             <Link
@@ -562,20 +562,20 @@ function StudentDashboard() {
         </div>
 
         {/* Dynamic "Next Step Engine" Hero */}
-        <div className="rounded-2xl border border-[#CBD5E1] bg-white p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
+        <div className="rounded-2xl border border-[#1E2D4A] bg-[#F0F4F9] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#0284C7] text-white font-semibold">
                 {nextStepAction.stage}
               </span>
-              <span className="text-xs font-mono text-[#64748B]">
+              <span className="text-xs font-mono text-[#94A3B8]">
                 Automated Recommendation
               </span>
             </div>
-            <h3 className="font-display font-bold text-2xl text-[#0A192F]">
+            <h3 className="font-display font-bold text-2xl text-[#F0F4F9]">
               {nextStepAction.title}
             </h3>
-            <p className="text-sm text-[#64748B] leading-relaxed">
+            <p className="text-sm text-[#94A3B8] leading-relaxed">
               {nextStepAction.description}
             </p>
           </div>
@@ -583,7 +583,7 @@ function StudentDashboard() {
           <div className="shrink-0 flex items-center gap-3">
             <Link
               to={nextStepAction.linkTo as any}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0A192F] text-white font-semibold text-sm hover:bg-[#0284C7] shadow-sm transition-all uppercase"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F0F4F9] text-white font-semibold text-sm hover:bg-[#0284C7] shadow-sm transition-all uppercase"
             >
               <Play className="w-4 h-4 fill-white" />
               <span>{nextStepAction.ctaText}</span>

@@ -21,7 +21,7 @@ function AppointmentsPage() {
   const requestedService = searchParams.get('service');
 
   return (
-    <main className="min-h-screen bg-[#070A0F] text-slate-100">
+    <main className="min-h-screen bg-[#112240] text-slate-100">
       <PageHeader
         badge="TACTICAL ADVISORY"
         badgeVariant="primary"

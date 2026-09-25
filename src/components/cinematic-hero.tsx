@@ -206,7 +206,7 @@ export function CinematicHero() {
               to="/appointments"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
-                "hero-action border-white/40 bg-white/5 text-[#0A192F] hover:bg-white/15 hover:text-[#0A192F]",
+                "hero-action border-white/40 bg-[#F0F4F9]/5 text-[#F0F4F9] hover:bg-[#F0F4F9]/15 hover:text-[#F0F4F9]",
               )}
             >
               Book a Consultation <ArrowRight />
@@ -220,7 +220,7 @@ export function CinematicHero() {
             <Button
               variant="outline"
               size="lg"
-              className="hero-action border-white/40 bg-white/5 text-[#0A192F] hover:bg-white/15 hover:text-[#0A192F]"
+              className="hero-action border-white/40 bg-[#F0F4F9]/5 text-[#F0F4F9] hover:bg-[#F0F4F9]/15 hover:text-[#F0F4F9]"
               onClick={enterLabs}
             >
               Start Your Defence Journey <ArrowRight />

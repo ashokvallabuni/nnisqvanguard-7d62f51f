@@ -9,6 +9,8 @@ export const labDefinitions: Record<string, LabDefinition> = {
   [suricataNidsLab.slug]: suricataNidsLab,
   [sqliInvestigationLab.slug]: sqliInvestigationLab,
   [memoryForensicsLab.slug]: memoryForensicsLab,
+  // Alias for backward compatibility
+  "linux-security-fundamentals": linuxSshBruteforceLab,
 };
 
 export function getLabDefinition(slug: string): LabDefinition | null {

@@ -60,7 +60,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
           <span
             className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${
               levelStyles[course.level.toLowerCase()] ||
-              "bg-[#E2E8F0] text-[#64748B] border-[#CBD5E1]"
+              "bg-[#E2E8F0] text-[#94A3B8] border-[#1E2D4A]"
             }`}
           >
             {course.level}
@@ -68,12 +68,12 @@ export function CourseCard({ course, progress }: CourseCardProps) {
 
           <div className="flex items-center gap-1.5 flex-wrap">
             {course.category && !notAccessible && (
-              <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-tight">
+              <span className="text-[10px] font-mono text-[#94A3B8] uppercase tracking-tight">
                 {course.category}
               </span>
             )}
             {isComingSoon && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-[#CBD5E1] bg-[#F1F5F9] text-[#64748B]">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-[#1E2D4A] bg-[#F1F5F9] text-[#94A3B8]">
                 <Sparkles className="w-3 h-3" />
                 <span>Coming Soon</span>
               </span>
@@ -105,7 +105,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
             {course.tags.slice(0, 4).map((tag, i) => (
               <span
                 key={i}
-                className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#E2E8F0] text-[#64748B] border border-[#CBD5E1] truncate text-center"
+                className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#E2E8F0] text-[#94A3B8] border border-[#1E2D4A] truncate text-center"
               >
                 {tag}
               </span>

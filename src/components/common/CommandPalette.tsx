@@ -78,46 +78,46 @@ export function CommandPalette() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0A192F]/20 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#F0F4F9]/20 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
       <div 
-        className="w-full max-w-lg bg-white border border-[#CBD5E1] rounded-2xl shadow-2xl overflow-hidden"
+        className="w-full max-w-lg bg-[#F0F4F9] border border-[#1E2D4A] rounded-2xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-4 border-b border-[#CBD5E1] flex items-center gap-3 focus-within:bg-[#F0F4F9] transition-colors">
+        <div className="p-4 border-b border-[#1E2D4A] flex items-center gap-3 focus-within:bg-[#112240] transition-colors">
           <Search className="w-5 h-5 text-[#0284C7]" />
           <input
             ref={inputRef}
             type="text"
-            className="flex-1 bg-transparent border-none outline-none text-[#0A192F] placeholder:text-[#64748B] font-mono text-sm focus:ring-0"
+            className="flex-1 bg-transparent border-none outline-none text-[#F0F4F9] placeholder:text-[#94A3B8] font-mono text-sm focus:ring-0"
             placeholder="Search tactical operations..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <kbd className="hidden sm:inline-block px-2 py-1 text-[0.6rem] font-mono font-semibold text-[#64748B] bg-[#E2E8F0] rounded border border-[#CBD5E1]">ESC</kbd>
+          <kbd className="hidden sm:inline-block px-2 py-1 text-[0.6rem] font-mono font-semibold text-[#94A3B8] bg-[#E2E8F0] rounded border border-[#1E2D4A]">ESC</kbd>
         </div>
 
         <div className="max-h-[300px] overflow-y-auto p-2">
           {filteredRoutes.map((route) => (
             <button
               key={route.to}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#F0F4F9] focus:bg-[#F0F4F9] focus:outline-none focus:ring-2 focus:ring-[#0284C7] transition-all text-left text-sm font-semibold text-[#0A192F] hover:text-[#0284C7] focus:text-[#0284C7]"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#112240] focus:bg-[#112240] focus:outline-none focus:ring-2 focus:ring-[#0284C7] transition-all text-left text-sm font-semibold text-[#F0F4F9] hover:text-[#0284C7] focus:text-[#0284C7]"
               onClick={() => handleSelect(route.to)}
             >
-              <route.icon className="w-4 h-4 text-[#64748B]" />
+              <route.icon className="w-4 h-4 text-[#94A3B8]" />
               {route.label}
             </button>
           ))}
           {filteredRoutes.length === 0 && (
-            <div className="px-4 py-8 text-center text-[#64748B] text-sm font-mono">
+            <div className="px-4 py-8 text-center text-[#94A3B8] text-sm font-mono">
               No tactical operations found.
             </div>
           )}
           
           {user && (
             <>
-              <div className="h-px bg-[#CBD5E1] my-2" />
+              <div className="h-px bg-[#1E2D4A] my-2" />
               <button
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#FEF2F2] hover:text-[#DC2626] focus:bg-[#FEF2F2] focus:text-[#DC2626] focus:outline-none focus:ring-2 focus:ring-[#DC2626] transition-all text-left text-sm font-semibold text-[#64748B]"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#FEF2F2] hover:text-[#DC2626] focus:bg-[#FEF2F2] focus:text-[#DC2626] focus:outline-none focus:ring-2 focus:ring-[#DC2626] transition-all text-left text-sm font-semibold text-[#94A3B8]"
                 onClick={handleLogout}
               >
                 <LogOut className="w-4 h-4" />

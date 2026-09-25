@@ -8,51 +8,23 @@ export default defineConfig({
   vite: {
     plugins: [
       VitePWA({
+        strategies: 'injectManifest',
+        srcDir: 'src',
+        filename: 'sw.ts',
         registerType: 'autoUpdate',
         devOptions: {
           enabled: true
         },
-        workbox: {
+        injectManifest: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,json,wasm}'],
-          navigateFallback: '/index.html',
           maximumFileSizeToCacheInBytes: 10485760, // 10MB
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'google-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            {
-              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'gstatic-fonts-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            }
-          ]
         },
         manifest: {
           name: 'IVVAB LABS',
           short_name: 'IVVAB',
           description: 'Offline-First Cybersecurity Practical Environment',
-          theme_color: '#000000',
-          background_color: '#000000',
+          theme_color: '#112240',
+          background_color: '#112240',
           display: 'standalone',
           icons: [
             {

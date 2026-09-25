@@ -44,11 +44,11 @@ export function LabCard({ lab }: LabCardProps) {
   const normalizedDiff = (lab.difficulty || "medium").toLowerCase();
 
   let statusLabel = "AVAILABLE";
-  let statusVariant = "bg-[#F1F5F9] text-[#64748B] border-[#CBD5E1]";
+  let statusVariant = "bg-[#F1F5F9] text-[#94A3B8] border-[#1E2D4A]";
   let ctaLabel = "OPEN LAB";
   let ctaIcon: typeof Play = Play;
   let ctaVariant =
-    "border border-[#CBD5E1] bg-white text-[#0A192F] hover:bg-[#F8FAFC]";
+    "border border-[#1E2D4A] bg-[#F0F4F9] text-[#F0F4F9] hover:bg-[#F8FAFC]";
 
   if (lab.is_active_session) {
     statusLabel = "IN PROGRESS";
@@ -78,13 +78,13 @@ export function LabCard({ lab }: LabCardProps) {
           <div className="flex items-center gap-1.5 flex-wrap">
             <span
               className={`text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border ${
-                difficultyStyles[normalizedDiff] || "bg-[#E2E8F0] text-[#64748B] border-[#CBD5E1]"
+                difficultyStyles[normalizedDiff] || "bg-[#E2E8F0] text-[#94A3B8] border-[#1E2D4A]"
               }`}
             >
               {lab.difficulty}
             </span>
             {lab.category && (
-              <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wide">
+              <span className="text-[10px] font-mono text-[#94A3B8] uppercase tracking-wide">
                 · {lab.category}
               </span>
             )}
@@ -125,7 +125,7 @@ export function LabCard({ lab }: LabCardProps) {
                 {lab.mitre_attack_ids.slice(0, 4).map((mitre, i) => (
                   <span
                     key={i}
-                    className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-[#0A192F] text-white border border-[#CBD5E1] truncate text-center"
+                    className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-[#F0F4F9] text-white border border-[#1E2D4A] truncate text-center"
                   >
                     ATT&CK® {mitre}
                   </span>
@@ -137,7 +137,7 @@ export function LabCard({ lab }: LabCardProps) {
                 {lab.skills.slice(0, 4).map((skill, i) => (
                   <span
                     key={i}
-                    className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-[#E2E8F0] text-[#64748B] border border-[#CBD5E1] truncate text-center"
+                    className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-[#E2E8F0] text-[#94A3B8] border border-[#1E2D4A] truncate text-center"
                   >
                     {skill}
                   </span>

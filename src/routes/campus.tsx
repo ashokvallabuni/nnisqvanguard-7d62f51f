@@ -201,7 +201,7 @@ function CampusPrograms() {
           </header>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-cyan-400/30 bg-white/5 hover:bg-white/10 text-cyan-200 font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-cyan-400/30 bg-[#F0F4F9]/5 hover:bg-[#F0F4F9]/10 text-cyan-200 font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
           >
             <Home className="w-4 h-4" />
             <span>HOME</span>

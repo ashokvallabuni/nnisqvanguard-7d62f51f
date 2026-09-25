@@ -269,7 +269,7 @@ function AdminTacticalPreviewBarWrapper() {
   const { isAdmin } = useAuth();
   return (
     <div className="min-h-screen relative pb-20 md:pb-0">
-      <header className="sticky top-0 z-50 w-full flex flex-col bg-[#070A0F]/90 backdrop-blur-md shadow-md border-b border-slate-800/50">
+      <header className="sticky top-0 z-50 w-full flex flex-col bg-[#112240]/90 backdrop-blur-md shadow-md border-b border-slate-800/50">
         {isAdmin && <AdminTacticalPreviewBar />}
         <TelemetryTicker />
         <TopNav />

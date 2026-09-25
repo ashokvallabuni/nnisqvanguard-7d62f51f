@@ -324,7 +324,7 @@ const RAW_COURSES_META = [
     title: "Digital Safety & Hygiene",
     level: "BEGINNER" as const,
     duration: 45,
-    lab: "linux-security-fundamentals",
+    lab: "linux-ssh-brute-force-investigation",
   },
   {
     num: 2,
