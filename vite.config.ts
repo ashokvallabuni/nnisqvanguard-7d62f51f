@@ -13,7 +13,9 @@ export default defineConfig({
           enabled: true
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,json,wasm}'],
+          navigateFallback: '/index.html',
+          maximumFileSizeToCacheInBytes: 10485760, // 10MB
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
