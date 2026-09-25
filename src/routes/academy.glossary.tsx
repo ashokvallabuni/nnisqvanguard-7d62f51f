@@ -21,7 +21,7 @@ export const Route = createFileRoute("/academy/glossary")({
       {
         name: "description",
         content:
-          "Searchable cybersecurity dictionary mapping definitions to first-principles lessons, real-world datasets, and practical cyber range labs.",
+          "Searchable cybersecurity dictionary mapping definitions to first-principles lessons, real-world datasets, and practical IVVAB LABS labs.",
       },
     ],
   }),

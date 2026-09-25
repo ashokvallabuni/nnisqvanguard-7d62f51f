@@ -34,7 +34,7 @@ const ARCHITECTURE_CONTRIBUTIONS = [
   {
     icon: Shield,
     title: "IVVAB Labs Engine",
-    body: "Designed and architected the IVVAB Labs engine — the technical core that powers NISQ Vanguard's Cyber Range, Academy Labs, and containerised training environments.",
+    body: "Designed and architected the IVVAB Labs engine — the technical core that powers NISQ Vanguard's IVVAB LABS, Academy Labs, and containerised training environments.",
   },
   {
     icon: GraduationCap,
@@ -43,13 +43,13 @@ const ARCHITECTURE_CONTRIBUTIONS = [
   },
   {
     icon: Terminal,
-    title: "Cyber Range Architecture",
+    title: "IVVAB LABS Architecture",
     body: "Designed the isolated network environments, scenario-based lab infrastructure, and verification systems that power hands-on practitioner training at NISQ Vanguard.",
   },
   {
     icon: Eye,
     title: "Threat Intelligence Framework",
-    body: "Established the threat intelligence methodology and data pipeline that ingests real incident telemetry into Academy modules and Cyber Range scenarios.",
+    body: "Established the threat intelligence methodology and data pipeline that ingests real incident telemetry into Academy modules and IVVAB LABS scenarios.",
   },
   {
     icon: Building2,
@@ -181,7 +181,7 @@ function FounderProfilePage() {
                   cybersecurity knowledge and the people who need it most is not a technical problem
                   — it is an access problem. Through the{" "}
                   <strong className="text-cyan-300">IVVAB Labs engine</strong>, he architects
-                  real-world cyber ranges, structured course curriculums, and threat intelligence
+                  real-world IVVAB LABSs, structured course curriculums, and threat intelligence
                   frameworks designed for learners at every stage of their security journey.
                 </p>
                 <p>
@@ -224,7 +224,7 @@ function FounderProfilePage() {
             <p>
               The <strong className="text-cyan-300">IVVAB Labs engine</strong> powers the technical
               core — providing the containerised environments, real-data pipelines, and verification
-              systems that make NISQ Vanguard's cyber range and academy uniquely authentic. Every
+              systems that make NISQ Vanguard's IVVAB LABS and academy uniquely authentic. Every
               lab scenario, every telemetry dataset, every curriculum module passes through the
               IVVAB Labs architecture before it reaches a learner.
             </p>
@@ -296,7 +296,7 @@ function FounderProfilePage() {
             EXPLORE <span className="text-cyan-300">NISQ VANGUARD</span>
           </h2>
           <p className="mt-4 font-mono text-sm leading-relaxed text-slate-400">
-            Visit the Academy, enter the Cyber Range, or connect with the NISQ Vanguard community.
+            Visit the Academy, enter the IVVAB LABS, or connect with the NISQ Vanguard community.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link

@@ -35,7 +35,7 @@ import nisqLogo from "@/assets/nisq-logo.jpeg";
 const navItems = [
   { to: "/", label: "Home" },
   { to: "/academy", label: "Academy" },
-  { to: "/cyber-range", label: "Cyber Range" },
+  { to: "/cyber-range", label: "IVVAB LABS" },
   { to: "/intelligence", label: "Threat Intel" },
   { to: "/programs", label: "Campus" },
 ] as const;
@@ -219,7 +219,7 @@ export function CyberIntelligenceHome() {
             </h1>
             <p className="max-w-2xl font-mono text-sm leading-relaxed text-[#64748B] sm:text-base">
               Enterprise-grade cybersecurity training, real data threat investigations, and hands-on
-              cyber range labs — built by defenders for defenders.
+              IVVAB LABS labs — built by defenders for defenders.
             </p>
 
             <div className="relative max-w-2xl border border-[#CBD5E1] bg-white p-5 rounded-md shadow-sm">
@@ -352,7 +352,7 @@ export function CyberIntelligenceHome() {
                 Ashok Vallabhuni is the Founder and Chief Architect of NISQ Vanguard Defence
                 Technologies — an organisation dedicated to making cybersecurity education
                 accessible, practical, and impactful across India and beyond. Through the IVVAB Labs
-                engine, he architects real-world cyber ranges, structured course curriculums, and
+                engine, he architects real-world IVVAB LABSs, structured course curriculums, and
                 threat intelligence frameworks.
               </p>
 
@@ -391,7 +391,7 @@ export function CyberIntelligenceHome() {
               {
                 icon: Sparkles,
                 heading: "Technology Vision",
-                body: "Build AI-augmented threat intelligence tools and interactive cyber ranges that replicate real-world attack scenarios for authentic learning.",
+                body: "Build AI-augmented threat intelligence tools and interactive IVVAB LABSs that replicate real-world attack scenarios for authentic learning.",
               },
               {
                 icon: GraduationCap,
@@ -717,7 +717,7 @@ export function CyberIntelligenceHome() {
         </div>
       </section>
 
-      {/* ── PRIORITY 5: CYBER RANGE ──────────────────────────────────────────── */}
+      {/* ── PRIORITY 5: IVVAB LABS ──────────────────────────────────────────── */}
       <section id="cyber-range" className="border-t border-[#CBD5E1] bg-white py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -726,10 +726,10 @@ export function CyberIntelligenceHome() {
                 Practical Training Infrastructure
               </span>
               <h2 className="mt-4 font-display text-4xl font-bold text-[#0A192F] sm:text-5xl">
-                NISQ <span className="text-[#0284C7]">CYBER RANGE</span>
+                NISQ <span className="text-[#0284C7]">IVVAB LABS</span>
               </h2>
               <p className="mt-5 font-mono text-sm leading-relaxed text-[#0A192F]">
-                The NISQ Cyber Range provides isolated, containerised lab environments for hands-on
+                The NISQ IVVAB LABS provides isolated, containerised lab environments for hands-on
                 practitioner training. Each lab scenario is built around real incident telemetry,
                 adversary simulation, and defensive verification objectives.
               </p>
@@ -774,7 +774,7 @@ export function CyberIntelligenceHome() {
                   to="/cyber-range"
                   className="inline-flex items-center gap-2 bg-[#0A192F] px-5 py-3 font-mono text-[11px] tracking-wider text-white font-bold hover:bg-[#0284C7] transition rounded uppercase"
                 >
-                  ENTER CYBER RANGE <ArrowRight className="h-4 w-4" />
+                  ENTER IVVAB LABS <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   to="/cyber-range/labs"
@@ -799,7 +799,7 @@ export function CyberIntelligenceHome() {
                 </span>
               </div>
               <div className="space-y-3 font-mono text-xs leading-relaxed text-[#64748B]">
-                <p className="text-[#0284C7]">&gt; initializing cyber range environment...</p>
+                <p className="text-[#0284C7]">&gt; initializing IVVAB LABS environment...</p>
                 <p>
                   &gt; loading lab:{" "}
                   <span className="text-[#059669] font-bold">LAB-07 — Network Intrusion Detection</span>
@@ -917,7 +917,7 @@ export function CyberIntelligenceHome() {
             BEGIN YOUR <span className="text-[#0284C7]">DEFENCE JOURNEY</span>
           </h2>
           <p className="mt-5 font-mono text-sm leading-relaxed text-[#64748B]">
-            Access the full NISQ Vanguard Academy, Cyber Range, and Threat Intelligence platform.
+            Access the full NISQ Vanguard Academy, IVVAB LABS, and Threat Intelligence platform.
             Learning is free. Your defence starts now.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -966,7 +966,7 @@ export function CyberIntelligenceHome() {
               <div className="space-y-2">
                 {[
                   ["Courses", "/learn"],
-                  ["Cyber Range", "/cyber-range"],
+                  ["IVVAB LABS", "/cyber-range"],
                   ["Learning Paths", "/cyber-range/learning-paths"],
                   ["My Progress", "/dashboard"],
                 ].map(([label, to]) => (

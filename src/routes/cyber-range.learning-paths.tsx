@@ -258,7 +258,7 @@ function LearningPathsPage() {
         badge="Career Roadmaps"
         badgeVariant="primary"
         title="Structured Cybersecurity Learning Paths"
-        subtitle="Follow step-by-step career tracks connecting foundational theory, real telemetry datasets, and isolated cyber range workbenches."
+        subtitle="Follow step-by-step career tracks connecting foundational theory, real telemetry datasets, and isolated IVVAB LABS workbenches."
         breadcrumbs={[{ label: "Home", to: "/" }, { label: "Learning Paths" }]}
       />
 

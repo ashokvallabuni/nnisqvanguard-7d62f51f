@@ -27,7 +27,7 @@ export const Route = createFileRoute("/achievements")({
       {
         name: "description",
         content:
-          "Track verified cybersecurity skill badges earned through completed course tracks, real data analysis, and cyber range labs.",
+          "Track verified cybersecurity skill badges earned through completed course tracks, real data analysis, and IVVAB LABS labs.",
       },
     ],
   }),
@@ -112,7 +112,7 @@ function AchievementsPage() {
         badge="SKILL RECOGNITION"
         badgeVariant="primary"
         title="Verified Cybersecurity Badges & Credentials"
-        subtitle="Badges are awarded strictly upon verified completion of curriculum theory, authentic data analysis exercises, and cyber range labs."
+        subtitle="Badges are awarded strictly upon verified completion of curriculum theory, authentic data analysis exercises, and IVVAB LABS labs."
         breadcrumbs={[{ label: "Home", to: "/" }, { label: "Achievements" }]}
       />
 

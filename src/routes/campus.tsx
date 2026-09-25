@@ -245,7 +245,7 @@ function CampusPrograms() {
           <Filter
             value={typeFilter}
             onChange={setTypeFilter}
-            options={["Webinar", "Seminar", "Workshop", "Cyber Range"]}
+            options={["Webinar", "Seminar", "Workshop", "IVVAB LABS"]}
             placeholder="Program Type"
           />
           <Filter

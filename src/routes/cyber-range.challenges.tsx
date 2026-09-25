@@ -5,7 +5,7 @@ export const Route = createFileRoute("/cyber-range/challenges")({
     <BackendPage
       eyebrow="CHALLENGES"
       title="Cyber challenges"
-      description="Configured challenges will be loaded from the Cyber Range database."
+      description="Configured challenges will be loaded from the IVVAB LABS database."
     />
   ),
 });

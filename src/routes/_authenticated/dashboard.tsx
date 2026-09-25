@@ -180,7 +180,7 @@ function StudentDashboard() {
         title: "Launch Linux SSH Brute Force Investigation Lab",
         description: "Triage live authentication logs inside an isolated Docker sandbox container.",
         linkTo: "/_authenticated/cyber-range/lab/linux-ssh-brute-force-investigation",
-        ctaText: "Enter Cyber Range",
+        ctaText: "Enter IVVAB LABS",
       };
     }
 
@@ -240,7 +240,7 @@ function StudentDashboard() {
         badge="STUDENT COMMAND CENTER"
         badgeVariant="primary"
         title={`Welcome back, ${profile?.full_name || user?.email?.split("@")[0] || "Defender"}`}
-        subtitle="Authoritative learning trajectory, verified skill competencies, and active Cyber Range sandboxes."
+        subtitle="Authoritative learning trajectory, verified skill competencies, and active IVVAB LABS sandboxes."
         breadcrumbs={[{ label: "Home", to: "/" }, { label: "Command Center" }]}
       />
 
@@ -541,7 +541,7 @@ function StudentDashboard() {
             <div className="font-display font-bold text-2xl sm:text-3xl text-[#0A192F]">
               {completedLabsCount}
             </div>
-            <div className="text-[0.65rem] font-mono text-[#64748B]">In Cyber Range</div>
+            <div className="text-[0.65rem] font-mono text-[#64748B]">In IVVAB LABS</div>
           </div>
 
           <div className="p-5 nv-card space-y-1 shadow-sm">

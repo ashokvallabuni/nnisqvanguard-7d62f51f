@@ -195,7 +195,7 @@ const RESEARCH_TOPICS = [
     researcher: "Defensive Research Unit",
     eta: "In Review",
     summary:
-      "Mapping real intrusions detected on the sensor grid into reusable, student-safe CTF scenario blueprints for the Cyber Range with verifiable detection engineering outcomes.",
+      "Mapping real intrusions detected on the sensor grid into reusable, student-safe CTF scenario blueprints for the IVVAB LABS with verifiable detection engineering outcomes.",
   },
   {
     title: "LLM-based SOC alert triage — hallucination mitigation & deterministic guardrails",

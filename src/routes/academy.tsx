@@ -29,7 +29,7 @@ export const Route = createFileRoute("/academy")({
       {
         name: "description",
         content:
-          "Enterprise cybersecurity education: foundational concepts, threat telemetry analysis, defensive engineering, and hands-on cyber range labs.",
+          "Enterprise cybersecurity education: foundational concepts, threat telemetry analysis, defensive engineering, and hands-on IVVAB LABS labs.",
       },
     ],
   }),

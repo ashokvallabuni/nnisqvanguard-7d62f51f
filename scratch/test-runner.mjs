@@ -1,7 +1,7 @@
 import fs from "fs";
 
 const secret = "nisq_lab_runner_secret_2026_dev";
-const tunnelUrl = "https://dish-ralph-satisfaction-abstract.trycloudflare.com";
+const tunnelUrl = "https://favorites-confident-minneapolis-transcripts.trycloudflare.com";
 
 console.log("Checking health over Cloudflare tunnel...");
 const healthRes = await fetch(`${tunnelUrl}/health`, {

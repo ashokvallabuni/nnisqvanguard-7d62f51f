@@ -84,7 +84,7 @@ export const ACADEMY_BADGES: BadgeDefinition[] = [
     courseSlug: "digital-forensics-foundations",
     skills: ["Memory Forensics", "Volatility 3", "Registry Triage", "Timeline Reconstruction"],
     criteria:
-      "Complete Digital Forensics Foundations and extract flags from memory dump dumps in Cyber Range.",
+      "Complete Digital Forensics Foundations and extract flags from memory dump dumps in IVVAB LABS.",
   },
   {
     id: "badge-cloud-sec",

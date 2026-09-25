@@ -1158,7 +1158,7 @@ const RAW_COURSES_META = [
     num: 102,
     path: "path-10",
     slug: "capstone-full-cyber-range-assault-defense",
-    title: "Capstone Project — Full Cyber Range Assault & Defense",
+    title: "Capstone Project — Full IVVAB LABS Assault & Defense",
     level: "ADVANCED" as const,
     duration: 180,
     lab: "suricata-network-threat-hunting",
@@ -1179,7 +1179,7 @@ export const ALL_102_COURSES: CurriculumCourse[] = RAW_COURSES_META.map((meta) =
     tier: meta.num <= 20 ? "free" : "pro",
     estimated_minutes: meta.duration,
     summary: `Structured enterprise curriculum for ${meta.title}. Covers threat surface, protocol details, practical defensive analysis, and validation.`,
-    description: `Complete standard course in ${meta.title}. Develops verifiable expertise through rigorous technical documentation, interactive diagrams, real dataset exercises, and cyber range verification.`,
+    description: `Complete standard course in ${meta.title}. Develops verifiable expertise through rigorous technical documentation, interactive diagrams, real dataset exercises, and IVVAB LABS verification.`,
     objectives: [
       `Analyze fundamental mechanics and threat models of ${meta.title}`,
       `Identify attack vectors, misconfigurations, and telemetry anomalies`,

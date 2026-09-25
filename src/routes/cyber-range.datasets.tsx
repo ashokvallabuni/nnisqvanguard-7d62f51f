@@ -190,7 +190,7 @@ function DatasetsCatalogPage() {
               Learn with Industry-Standard Threat Datasets
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Every course module in the Academy and exercise in the Cyber Range is tied to
+              Every course module in the Academy and exercise in the IVVAB LABS is tied to
               verifiable forensic telemetry, allowing students to transition directly from
               theoretical study to genuine data exploration.
             </p>

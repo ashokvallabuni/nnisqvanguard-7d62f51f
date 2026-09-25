@@ -19,6 +19,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
+import { getLabsForCourse } from "@/data/lab-registry";
+import { LabCard } from "@/components/cyber-range/LabCard";
 import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
 import {
   isCourseAccessible,
@@ -199,6 +201,7 @@ function CourseDetailPage() {
 
   // First uncompleted module or the first module
   const nextModule = modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];
+  const courseLabs = course ? getLabsForCourse(course.id) : [];
 
   return (
     <div className="min-h-screen pt-16 pb-24">
@@ -347,6 +350,23 @@ function CourseDetailPage() {
               </div>
             </div>
           </div>
+
+
+            {courseLabs.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
+                    <Terminal className="w-5 h-5 text-primary" />
+                    <span>PRACTICE WITH IVVAB LABS</span>
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {courseLabs.map((lab) => (
+                    <LabCard key={lab.id} lab={lab as any} />
+                  ))}
+                </div>
+              </div>
+            )}
 
           {/* Sidebar Action / Progress Widget */}
           <div className="space-y-6">

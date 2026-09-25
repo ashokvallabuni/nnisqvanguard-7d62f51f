@@ -59,7 +59,7 @@ function AppointmentsPage() {
                   defaultValue={requestedService || "general"}
                 >
                   <option value="general">General Security Consultation</option>
-                  <option value="cyber-ranges">Enterprise Cyber Ranges</option>
+                  <option value="cyber-ranges">Enterprise IVVAB LABSs</option>
                   <option value="audits">Security Audits & Compliance</option>
                   <option value="threat-simulation">Adversary Threat Simulation</option>
                   <option value="incident-response">Incident Response & Forensics</option>
@@ -89,7 +89,7 @@ function AppointmentsPage() {
                 </li>
                 <li className="flex gap-3 items-start">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" /> 
-                  <span>Custom cyber range deployment for internal red/blue teams.</span>
+                  <span>Custom IVVAB LABS deployment for internal red/blue teams.</span>
                 </li>
                 <li className="flex gap-3 items-start">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" /> 

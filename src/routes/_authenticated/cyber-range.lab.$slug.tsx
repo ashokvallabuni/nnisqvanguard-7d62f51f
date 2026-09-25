@@ -36,7 +36,7 @@ export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
         title: `${params.slug
           .split("-")
           .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-          .join(" ")} — Cyber Range Workbench`,
+          .join(" ")} — IVVAB LABS Workbench`,
       },
     ],
   }),
@@ -197,7 +197,7 @@ function getLabConfig(slug: string): LabData {
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
       .join(" "),
     difficulty: "MEDIUM",
-    category: "Cyber Range",
+    category: "IVVAB LABS",
     description:
       "Investigate security artifacts in this containerized sandbox workbench. Use Linux forensics commands to analyze telemetry, fulfill tasks, and locate the challenge flag.",
     estimated_minutes: 45,
@@ -257,7 +257,7 @@ function CyberLabWorkbenchPage() {
   // Terminal state
   const [commandInput, setCommandInput] = useState("");
   const [history, setHistory] = useState<string[]>([
-    "NISQ Cyber Range Container v2.4 (Ubuntu 22.04 LTS)",
+    "NISQ IVVAB LABS Container v2.4 (Ubuntu 22.04 LTS)",
     "Type 'help' for available commands.",
     "Session initialized. Sandbox storage mounted at /var/log and /opt/nisq.",
     "",
@@ -338,7 +338,7 @@ function CyberLabWorkbenchPage() {
           `[${new Date().toLocaleTimeString()}] Isolated container environment ready.`,
           "analyst@nisq-range:~$ ",
         ]);
-        toast.success("Cyber Range container started successfully.");
+        toast.success("IVVAB LABS container started successfully.");
         // Switch to terminal tab on mobile after start
         setMobileTab("terminal");
       } else {
@@ -374,7 +374,7 @@ function CyberLabWorkbenchPage() {
     try {
       await resetLabSession({ data: { labId: slug, sessionId: activeSessionId } });
       setHistory([
-        "NISQ Cyber Range Container v2.4 (Ubuntu 22.04 LTS)",
+        "NISQ IVVAB LABS Container v2.4 (Ubuntu 22.04 LTS)",
         `[${new Date().toLocaleTimeString()}] Container reset. Fresh environment ready.`,
         "analyst@nisq-range:~$ ",
       ]);

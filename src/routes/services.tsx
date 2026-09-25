@@ -16,7 +16,7 @@ function ServicesPage() {
   const services = [
     {
       id: "cyber-ranges",
-      title: "Enterprise Cyber Ranges",
+      title: "Enterprise IVVAB LABSs",
       icon: Server,
       desc: "Custom-built, isolated virtual environments replicating your corporate network. Train your blue and red teams on real-world exploits without risking production data.",
       features: ["Custom Network Topologies", "Live Attack Simulation", "Automated Grading & Metrics", "Vulnerability Injection"]

@@ -11,13 +11,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/cyber-range")({
   head: () => ({
     meta: [
-      { title: "NISQ Cyber Range — Professional Cyber Training" },
+      { title: "NISQ IVVAB LABS — Professional Cyber Training" },
       {
         name: "description",
         content:
           "Enter NISQ Vanguard's professional cyber training environment for guided learning and practical labs.",
       },
-      { property: "og:title", content: "NISQ Cyber Range — Professional Cyber Training" },
+      { property: "og:title", content: "NISQ IVVAB LABS — Professional Cyber Training" },
       {
         property: "og:description",
         content:
@@ -61,7 +61,7 @@ function CyberRangePage() {
               className="size-24 object-contain mx-auto lg:mx-0 mb-5 rounded-full"
             />
             <p className="mono text-xs text-cyber mb-3">// PROFESSIONAL TRAINING ENVIRONMENT</p>
-            <h1 className="display text-6xl md:text-8xl leading-none mb-5">NISQ Cyber Range</h1>
+            <h1 className="display text-6xl md:text-8xl leading-none mb-5">NISQ IVVAB LABS</h1>
             <p className="text-lg text-muted-foreground mb-8">
               Build practical cybersecurity skills through real-world security datasets, structured
               learning paths, isolated laboratories, investigations and challenges.

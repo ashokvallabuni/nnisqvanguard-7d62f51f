@@ -131,7 +131,7 @@ function VerifyCertificatePage() {
               </h2>
               <div className="text-xs font-mono text-muted-foreground">
                 has successfully fulfilled all curriculum, real telemetry exercises, and practical
-                cyber range assessments for:
+                IVVAB LABS assessments for:
               </div>
               <h3 className="font-display font-bold text-xl sm:text-2xl text-primary">
                 {certData.courseTitle}

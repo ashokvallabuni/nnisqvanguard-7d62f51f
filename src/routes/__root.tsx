@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "NISQ Vanguard Academy & Cyber Labs: Enterprise-grade cybersecurity training, real data threat investigations, and hands-on cyber range labs.",
+          "NISQ Vanguard Academy & Cyber Labs: Enterprise-grade cybersecurity training, real data threat investigations, and hands-on IVVAB LABS labs.",
       },
       { name: "author", content: "NISQ Vanguard — Defence Technologies" },
       { name: "application-name", content: "NISQ Vanguard" },
@@ -129,7 +129,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Real-data cybersecurity learning platform, containerized cyber ranges, and defense intelligence.",
+          "Real-data cybersecurity learning platform, containerized IVVAB LABSs, and defense intelligence.",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "NISQ Vanguard" },
@@ -143,7 +143,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "twitter:description",
         content:
-          "Master defensive operations, network forensics, and threat hunting with real data and live cyber ranges.",
+          "Master defensive operations, network forensics, and threat hunting with real data and live IVVAB LABSs.",
       },
       { name: "twitter:image", content: "/assets/nisq-logo.jpeg" },
     ],

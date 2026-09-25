@@ -9,7 +9,7 @@ function ChallengePage() {
     <BackendPage
       eyebrow={`CHALLENGE ${slug.toUpperCase()}`}
       title="Challenge session"
-      description="Challenge execution is not enabled until the isolated Cyber Range service is connected."
+      description="Challenge execution is not enabled until the isolated IVVAB LABS service is connected."
     />
   );
 }

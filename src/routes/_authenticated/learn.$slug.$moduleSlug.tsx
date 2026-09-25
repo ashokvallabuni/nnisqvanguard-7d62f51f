@@ -145,7 +145,7 @@ function getModuleDataset(slug: string, title: string): DatasetSample {
 
   return {
     name: `${title} — Real Incident Telemetry`,
-    source: "NISQ Defense Cyber Range Sensor Grid",
+    source: "NISQ Defense IVVAB LABS Sensor Grid",
     format: "json",
     description:
       "Real-world captured system events and indicators of compromise (IOCs) mapped to this module's learning objectives.",
@@ -924,7 +924,7 @@ function ModuleLearningPage() {
                 </span>
                 <h2 className="font-display font-bold text-lg text-foreground flex items-center gap-2">
                   <Terminal className="w-4 h-4 text-primary" />
-                  <span>Hands-on Cyber Range Workbench</span>
+                  <span>Hands-on IVVAB LABS Workbench</span>
                 </h2>
               </div>
 

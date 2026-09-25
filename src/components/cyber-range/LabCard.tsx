@@ -17,6 +17,7 @@ export interface LabData {
   slug: string;
   title: string;
   summary: string;
+  courseId?: string;
   difficulty: "beginner" | "easy" | "medium" | "hard" | "insane" | string;
   category?: string;
   estimated_minutes?: number;
