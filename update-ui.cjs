@@ -1,11 +1,11 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let content = fs.readFileSync('src/routes/cyber-range.labs.tsx', 'utf8');
+let content = fs.readFileSync("src/routes/cyber-range.labs.tsx", "utf8");
 
-if (!content.includes('COURSE_LAB_MAPPINGS')) {
+if (!content.includes("COURSE_LAB_MAPPINGS")) {
   content = content.replace(
     "import { LAB_DEFINITIONS } from '@/data/lab-registry';",
-    "import { LAB_DEFINITIONS, COURSE_LAB_MAPPINGS } from '@/data/lab-registry';\nimport { AVAILABLE_COURSES } from '@/data/courses-curriculum';"
+    "import { LAB_DEFINITIONS, COURSE_LAB_MAPPINGS } from '@/data/lab-registry';\nimport { AVAILABLE_COURSES } from '@/data/courses-curriculum';",
   );
 }
 
@@ -54,5 +54,5 @@ const replacement = `          ) : (
           )}`;
 
 content = content.replace(/          \) : \([\s\S]*?<\/[dD]iv>\s*\)\}/, replacement);
-fs.writeFileSync('src/routes/cyber-range.labs.tsx', content);
-console.log('updated cyber-range.labs.tsx');
+fs.writeFileSync("src/routes/cyber-range.labs.tsx", content);
+console.log("updated cyber-range.labs.tsx");

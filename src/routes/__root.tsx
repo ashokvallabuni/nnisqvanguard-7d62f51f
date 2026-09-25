@@ -15,7 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider, useAuth } from "../lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useRegisterSW } from 'virtual:pwa-register/react';
+import { useRegisterSW } from "virtual:pwa-register/react";
 import { TopNav, BottomNav, TelemetryTicker } from "@/components/common/Navigation";
 import { CommandPalette } from "@/components/common/CommandPalette";
 import {
@@ -213,7 +213,9 @@ function AdminTacticalPreviewBar() {
             <label
               key={view}
               className={`flex items-center gap-1.5 cursor-pointer transition-colors ${
-                adminView === view ? "text-cyan-400 font-semibold" : "text-zinc-500 hover:text-white"
+                adminView === view
+                  ? "text-cyan-400 font-semibold"
+                  : "text-zinc-500 hover:text-white"
               }`}
             >
               <input
@@ -225,11 +227,7 @@ function AdminTacticalPreviewBar() {
                 className="w-3 h-3 accent-cyan-400"
               />
               <span>
-                {view === "ADMIN"
-                  ? "Admin"
-                  : view === "LEARNER"
-                  ? "Learner"
-                  : "Organization"}
+                {view === "ADMIN" ? "Admin" : view === "LEARNER" ? "Learner" : "Organization"}
               </span>
             </label>
           ))}
@@ -241,13 +239,13 @@ function AdminTacticalPreviewBar() {
 
 function PWARegister() {
   useRegisterSW({
-    onRegistered(r) {
-      console.log('SW Registered: ' + r)
+    onRegistered(r: any) {
+      console.log("SW Registered: " + r);
     },
-    onRegisterError(error) {
-      console.log('SW registration error', error)
-    }
-  })
+    onRegisterError(error: any) {
+      console.log("SW registration error", error);
+    },
+  });
   return null;
 }
 

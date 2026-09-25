@@ -1,18 +1,18 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let content = fs.readFileSync('src/routes/learn.$slug.tsx', 'utf8');
+let content = fs.readFileSync("src/routes/learn.$slug.tsx", "utf8");
 
-if (!content.includes('COURSE_LAB_MAPPINGS')) {
+if (!content.includes("COURSE_LAB_MAPPINGS")) {
   content = content.replace(
     'import { PageHeader } from "@/components/common/PageHeader";',
-    'import { PageHeader } from "@/components/common/PageHeader";\nimport { getLabsForCourse } from "@/data/lab-registry";\nimport { LabCard } from "@/components/cyber-range/LabCard";'
+    'import { PageHeader } from "@/components/common/PageHeader";\nimport { getLabsForCourse } from "@/data/lab-registry";\nimport { LabCard } from "@/components/cyber-range/LabCard";',
   );
 }
 
 // Add the call to getLabsForCourse
 content = content.replace(
-  'const nextModule = modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];',
-  'const nextModule = modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];\n  const courseLabs = course ? getLabsForCourse(course.id) : [];'
+  "const nextModule = modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];",
+  "const nextModule = modules?.find((m) => !completedModuleIds.has(m.id)) || modules?.[0];\n  const courseLabs = course ? getLabsForCourse(course.id) : [];",
 );
 
 const uiInjection = `
@@ -34,9 +34,9 @@ const uiInjection = `
 `;
 
 content = content.replace(
-  '          {/* Sidebar Action / Progress Widget */}',
-  uiInjection + '\n          {/* Sidebar Action / Progress Widget */}'
+  "          {/* Sidebar Action / Progress Widget */}",
+  uiInjection + "\n          {/* Sidebar Action / Progress Widget */}",
 );
 
-fs.writeFileSync('src/routes/learn.$slug.tsx', content);
-console.log('updated learn.$slug.tsx');
+fs.writeFileSync("src/routes/learn.$slug.tsx", content);
+console.log("updated learn.$slug.tsx");

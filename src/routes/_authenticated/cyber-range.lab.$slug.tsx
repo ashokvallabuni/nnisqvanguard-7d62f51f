@@ -19,7 +19,7 @@ import {
   BarChart3,
   Home,
   LogOut,
-  FolderOpen
+  FolderOpen,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
@@ -28,7 +28,13 @@ import { VirtualFileSystem } from "@/labs/engine/filesystem/vfs";
 import { executeCommandString, CommandContext } from "@/labs/engine/commands";
 import { TaskEngine } from "@/labs/engine/tasks/task-engine";
 import { getLabDefinition } from "@/labs/definitions";
-import { saveVfsState, loadVfsState, clearVfsState, saveLocalProgress, loadLocalProgress } from "@/labs/engine/persistence";
+import {
+  saveVfsState,
+  loadVfsState,
+  clearVfsState,
+  saveLocalProgress,
+  loadLocalProgress,
+} from "@/labs/engine/persistence";
 
 export const Route = createFileRoute("/_authenticated/cyber-range/lab/$slug")({
   head: ({ params }) => ({
@@ -50,11 +56,13 @@ function CyberLabWorkbenchPage() {
   const { slug } = Route.useParams();
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  
+
   const labConfig = useMemo(() => getLabDefinition(slug), [slug]);
-  
+
   const [sessionActive, setSessionActive] = useState(false);
-  const [sessionTimer, setSessionTimer] = useState(labConfig ? labConfig.estimated_minutes * 60 : 0);
+  const [sessionTimer, setSessionTimer] = useState(
+    labConfig ? labConfig.estimated_minutes * 60 : 0,
+  );
   const [mobileTab, setMobileTab] = useState<MobileTab>("terminal");
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
@@ -74,7 +82,7 @@ function CyberLabWorkbenchPage() {
   const [revealedHints, setRevealedHints] = useState<number[]>([]);
   const [flagInput, setFlagInput] = useState("");
   const [labSolved, setLabSolved] = useState(false);
-  
+
   // Progress tracking
   const [tasksCompleted, setTasksCompleted] = useState(0);
 
@@ -82,12 +90,12 @@ function CyberLabWorkbenchPage() {
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    }
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
   }, []);
 
   // Fetch persistent progress from Supabase & Local
@@ -96,7 +104,7 @@ function CyberLabWorkbenchPage() {
     queryFn: async () => {
       if (!user || !labConfig) return null;
       if (isOffline) return null; // skip if offline
-      
+
       const { data } = await supabase
         .from("lab_progress")
         .select("completed, tasks_completed, total_tasks, points")
@@ -114,7 +122,7 @@ function CyberLabWorkbenchPage() {
     const local = loadLocalProgress(labConfig.id);
     let solved = false;
     let completed = 0;
-    
+
     if (dbProgress) {
       solved = dbProgress.completed;
       completed = dbProgress.tasks_completed ?? 0;
@@ -122,7 +130,7 @@ function CyberLabWorkbenchPage() {
       solved = local.completed;
       completed = local.tasksCompleted;
     }
-    
+
     setLabSolved(solved);
     setTasksCompleted(completed);
   }, [dbProgress, labConfig]);
@@ -150,24 +158,24 @@ function CyberLabWorkbenchPage() {
   // ── Session management ────────────────────────────────────────────────────
   const handleStartSession = () => {
     if (!labConfig) return;
-    
+
     // Load VFS from local storage or initialize fresh
     let initialVfs = loadVfsState(labConfig.id);
     if (!initialVfs) {
       initialVfs = labConfig.setupFilesystem();
       saveVfsState(labConfig.id, initialVfs);
     }
-    
+
     setVfs(initialVfs);
     setCwd("/home/analyst");
-    
+
     // Init task engine
     const engine = new TaskEngine(labConfig.tasks);
-    
+
     // Restore completed tasks
     const localProgress = loadLocalProgress(labConfig.id);
     if (localProgress) {
-      localProgress.completedTaskIds.forEach(id => engine.completedIds.add(id));
+      localProgress.completedTaskIds.forEach((id) => engine.completedIds.add(id));
     }
     setTaskEngine(engine);
 
@@ -176,7 +184,7 @@ function CyberLabWorkbenchPage() {
       "IVVAB LABS Client-Side Engine v3.0 (Offline-First Sandbox)",
       `[${new Date().toLocaleTimeString()}] Local virtual filesystem mounted.`,
       "Type 'help' for available commands.",
-      ""
+      "",
     ]);
     toast.success("IVVAB LABS browser environment started successfully.");
     setMobileTab("terminal");
@@ -196,28 +204,28 @@ function CyberLabWorkbenchPage() {
   const handleResetSession = () => {
     if (!labConfig) return;
     clearVfsState(labConfig.id);
-    
+
     const freshVfs = labConfig.setupFilesystem();
     setVfs(freshVfs);
     saveVfsState(labConfig.id, freshVfs);
     setCwd("/home/analyst");
-    
+
     const engine = new TaskEngine(labConfig.tasks);
     setTaskEngine(engine);
     setTasksCompleted(0);
-    
+
     // reset local progress safely
     saveLocalProgress(labConfig.id, {
       completed: false,
       tasksCompleted: 0,
       points: 0,
-      completedTaskIds: []
+      completedTaskIds: [],
     });
 
     setHistory([
       "IVVAB LABS Client-Side Engine v3.0 (Offline-First Sandbox)",
       `[${new Date().toLocaleTimeString()}] Sandbox reset to clean state.`,
-      ""
+      "",
     ]);
     toast.success("Sandbox reset to clean state.");
   };
@@ -231,13 +239,13 @@ function CyberLabWorkbenchPage() {
     setCommandHistory((prev) => [...prev, cmd]);
     setHistoryIndex(-1);
     setCommandInput("");
-    
+
     const ctx: CommandContext = {
       vfs,
       cwd,
       setCwd,
       stdout: [],
-      stderr: []
+      stderr: [],
     };
 
     const newLogs = [`analyst@ivvab-labs:${cwd}$ ${cmd}`];
@@ -253,28 +261,28 @@ function CyberLabWorkbenchPage() {
         "  clear          - Clear terminal screen",
         "  help           - Show this manual",
         "",
-        "Note: This is an educational browser-based simulation. Real commands operate on the virtual dataset filesystem."
+        "Note: This is an educational browser-based simulation. Real commands operate on the virtual dataset filesystem.",
       );
     } else {
       executeCommandString(cmd, ctx);
       if (ctx.stdout.length > 0) newLogs.push(...ctx.stdout);
       if (ctx.stderr.length > 0) newLogs.push(...ctx.stderr);
-      
+
       // Save VFS state in case of mutations
       saveVfsState(labConfig.id, vfs);
-      
+
       // Evaluate tasks
       const newlyCompleted = taskEngine.evaluate(ctx, cmd);
       if (newlyCompleted.length > 0) {
         toast.success(`Task Completed!`);
         const totalDone = taskEngine.completedIds.size;
         setTasksCompleted(totalDone);
-        
+
         saveLocalProgress(labConfig.id, {
           completed: labSolved,
           tasksCompleted: totalDone,
           points: labSolved ? labConfig.reward_points : 0,
-          completedTaskIds: Array.from(taskEngine.completedIds)
+          completedTaskIds: Array.from(taskEngine.completedIds),
         });
       }
     }
@@ -310,34 +318,39 @@ function CyberLabWorkbenchPage() {
     if (flagInput.trim() === labConfig.flag) {
       setLabSolved(true);
       setFlagInput("");
-      
+
       const newProgress = {
         completed: true,
         tasksCompleted: taskEngine?.completedIds.size ?? labConfig.tasks.length,
         points: labConfig.reward_points,
-        completedTaskIds: Array.from(taskEngine?.completedIds ?? [])
+        completedTaskIds: Array.from(taskEngine?.completedIds ?? []),
       };
-      
+
       saveLocalProgress(labConfig.id, newProgress);
 
       if (!isOffline && user) {
         try {
-          await supabase.from("lab_progress").upsert({
-            user_id: user.id,
-            lab_id: labConfig.id,
-            completed: true,
-            tasks_completed: newProgress.tasksCompleted,
-            total_tasks: labConfig.tasks.length,
-            points: labConfig.reward_points,
-            completed_at: new Date().toISOString()
-          }, { onConflict: "user_id, lab_id" });
-          
+          await supabase.from("lab_progress").upsert(
+            {
+              user_id: user.id,
+              lab_id: labConfig.id,
+              completed: true,
+              tasks_completed: newProgress.tasksCompleted,
+              total_tasks: labConfig.tasks.length,
+              points: labConfig.reward_points,
+              completed_at: new Date().toISOString(),
+            },
+            { onConflict: "user_id, lab_id" },
+          );
+
           queryClient.invalidateQueries({ queryKey: ["lab-progress"] });
         } catch {
           toast.warning("Flag verified! Saved locally (offline). Will sync when online.");
         }
       } else {
-        toast.success(`Flag Verified Offline! +${labConfig.reward_points} XP awarded locally.`, { duration: 5000 });
+        toast.success(`Flag Verified Offline! +${labConfig.reward_points} XP awarded locally.`, {
+          duration: 5000,
+        });
       }
     } else {
       toast.error("Incorrect flag. Inspect the logs and try again.");
@@ -351,13 +364,14 @@ function CyberLabWorkbenchPage() {
   };
 
   if (!labConfig) {
-    return <div className="p-8 text-center text-foreground font-mono">Lab definition not found.</div>;
+    return (
+      <div className="p-8 text-center text-foreground font-mono">Lab definition not found.</div>
+    );
   }
 
   // ── Derived progress stats ─────────────────────────────────────────────────
-  const progressPct = labConfig.tasks.length > 0
-    ? Math.round((tasksCompleted / labConfig.tasks.length) * 100)
-    : 0;
+  const progressPct =
+    labConfig.tasks.length > 0 ? Math.round((tasksCompleted / labConfig.tasks.length) * 100) : 0;
 
   // ── Tasks Panel ────────────────────────────────────────────────────────────
   const TasksPanel = () => (
@@ -399,7 +413,10 @@ function CyberLabWorkbenchPage() {
         </div>
         <div className="space-y-3">
           {labConfig.tasks.map((task, index) => {
-            const isCompleted = labSolved || (taskEngine && taskEngine.completedIds.has(task.id)) || (index < tasksCompleted);
+            const isCompleted =
+              labSolved ||
+              (taskEngine && taskEngine.completedIds.has(task.id)) ||
+              index < tasksCompleted;
             return (
               <div
                 key={task.id}
@@ -514,7 +531,9 @@ function CyberLabWorkbenchPage() {
         <div className="space-y-3">
           <div className="flex justify-between text-xs font-mono text-muted-foreground">
             <span>Tasks</span>
-            <span>{tasksCompleted} / {labConfig.tasks.length}</span>
+            <span>
+              {tasksCompleted} / {labConfig.tasks.length}
+            </span>
           </div>
           <div className="w-full bg-muted rounded-full h-2">
             <div
@@ -538,7 +557,7 @@ function CyberLabWorkbenchPage() {
       )}
     </div>
   );
-  
+
   // ── File Explorer (New) ──────────────────────────────────────────────────
   const FilesPanel = () => (
     <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-xs">
@@ -547,9 +566,10 @@ function CyberLabWorkbenchPage() {
         Dataset Browser
       </h3>
       <p className="text-xs text-muted-foreground">
-        This lab operates on a virtual in-browser filesystem. You can use terminal commands like <code>ls</code> and <code>cat</code> to explore it.
+        This lab operates on a virtual in-browser filesystem. You can use terminal commands like{" "}
+        <code>ls</code> and <code>cat</code> to explore it.
       </p>
-      
+
       {!sessionActive ? (
         <div className="p-4 text-center border rounded-lg bg-muted/20 text-xs text-muted-foreground font-mono">
           Start sandbox to load dataset.
@@ -565,7 +585,7 @@ function CyberLabWorkbenchPage() {
                   return acc;
                 }, {} as any),
                 null,
-                2
+                2,
               )}
             </pre>
           )}
@@ -585,7 +605,9 @@ function CyberLabWorkbenchPage() {
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
           </div>
-          <span className="font-mono text-xs text-slate-300 ml-2">IVVAB LABS Sandbox (Browser)</span>
+          <span className="font-mono text-xs text-slate-300 ml-2">
+            IVVAB LABS Sandbox (Browser)
+          </span>
         </div>
         <div className="flex items-center gap-3 text-[0.65rem] font-mono text-muted-foreground">
           {isOffline && (
@@ -596,14 +618,10 @@ function CyberLabWorkbenchPage() {
           <span className="flex items-center gap-1.5">
             <span
               className={`inline-block w-2 h-2 rounded-full ${
-                sessionActive
-                  ? "bg-green-400 animate-pulse"
-                  : "bg-slate-500"
+                sessionActive ? "bg-green-400 animate-pulse" : "bg-slate-500"
               }`}
             />
-            <span>
-              {sessionActive ? "SANDBOX ONLINE" : "OFFLINE"}
-            </span>
+            <span>{sessionActive ? "SANDBOX ONLINE" : "OFFLINE"}</span>
           </span>
         </div>
       </div>
@@ -772,40 +790,24 @@ function CyberLabWorkbenchPage() {
         {/* ── Mobile View ──────────────────────────────────────────────── */}
         <div className="md:hidden">
           {mobileTab === "terminal" && (
-            <div className="h-[65vh] flex flex-col">
-              <TerminalPanel />
-            </div>
+            <div className="h-[65vh] flex flex-col">{TerminalPanel()}</div>
           )}
-          {mobileTab === "tasks" && (
-            <div className="overflow-y-auto pb-6">
-              <TasksPanel />
-            </div>
-          )}
-          {mobileTab === "progress" && (
-            <div className="pb-6">
-              <ProgressPanel />
-            </div>
-          )}
-          {mobileTab === "files" && (
-            <div className="pb-6">
-              <FilesPanel />
-            </div>
-          )}
+          {mobileTab === "tasks" && <div className="overflow-y-auto pb-6">{TasksPanel()}</div>}
+          {mobileTab === "progress" && <div className="pb-6">{ProgressPanel()}</div>}
+          {mobileTab === "files" && <div className="pb-6">{FilesPanel()}</div>}
         </div>
 
         {/* ── Desktop Split View (≥ 768px) ──────────────────────────────── */}
         <div className="hidden md:grid grid-cols-12 gap-6">
           {/* Left: Tasks + Hints + Flag (5 cols) */}
           <div className="col-span-5 space-y-4">
-            <TasksPanel />
-            <FilesPanel />
-            <ProgressPanel />
+            {TasksPanel()}
+            {FilesPanel()}
+            {ProgressPanel()}
           </div>
 
           {/* Right: Terminal (7 cols) */}
-          <div className="col-span-7 h-[680px] flex flex-col">
-            <TerminalPanel />
-          </div>
+          <div className="col-span-7 h-[680px] flex flex-col">{TerminalPanel()}</div>
         </div>
       </div>
     </div>

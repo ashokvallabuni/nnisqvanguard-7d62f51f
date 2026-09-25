@@ -16,21 +16,21 @@ function AdminCoursesPage() {
   const { data: courses, isLoading } = useQuery({
     queryKey: ["admin-courses"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("courses")
-        .select("*")
-        .order("sort_order");
+      const { data, error } = await supabase.from("courses").select("*").order("sort_order");
       if (error) throw error;
       return data ?? [];
     },
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: "PUBLISHED" | "DRAFT" | "LOCKED" | "ARCHIVED" }) => {
-      const { error } = await supabase
-        .from("courses")
-        .update({ status })
-        .eq("id", id);
+    mutationFn: async ({
+      id,
+      status,
+    }: {
+      id: string;
+      status: "PUBLISHED" | "DRAFT" | "LOCKED" | "ARCHIVED";
+    }) => {
+      const { error } = await supabase.from("courses").update({ status }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -62,14 +62,19 @@ function AdminCoursesPage() {
 
       <div className="grid gap-4">
         {courses?.map((course) => (
-          <div key={course.id} className="bg-card border border-border rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div
+            key={course.id}
+            className="bg-card border border-border rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4"
+          >
             <div className="flex items-start gap-4">
               <div className="p-3 bg-primary/10 rounded-lg text-primary mt-1">
                 <BookOpen className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="font-semibold text-lg text-foreground">{course.title}</h3>
-                <p className="text-sm text-muted-foreground max-w-xl line-clamp-1">{course.description}</p>
+                <p className="text-sm text-muted-foreground max-w-xl line-clamp-1">
+                  {course.description}
+                </p>
                 <div className="flex items-center gap-3 mt-2 text-xs font-mono text-muted-foreground">
                   <span className="uppercase">{course.level}</span>
                   <span>•</span>
@@ -90,7 +95,9 @@ function AdminCoursesPage() {
                       : "bg-warning/10 text-warning border-warning/30"
                   }`}
                   value={course.status || "DRAFT"}
-                  onChange={(e) => updateStatusMutation.mutate({ id: course.id, status: e.target.value as any })}
+                  onChange={(e) =>
+                    updateStatusMutation.mutate({ id: course.id, status: e.target.value as any })
+                  }
                   disabled={updateStatusMutation.isPending}
                 >
                   <option value="PUBLISHED">PUBLISHED</option>

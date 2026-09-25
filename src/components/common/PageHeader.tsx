@@ -10,7 +10,7 @@ interface BreadcrumbItem {
 interface PageHeaderProps {
   badge?: string;
   badgeVariant?: "primary" | "accent" | "success" | "warning" | "destructive" | "muted";
-  title: string;
+  title: ReactNode;
   subtitle?: string;
   breadcrumbs?: BreadcrumbItem[];
   children?: ReactNode;

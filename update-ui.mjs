@@ -1,11 +1,11 @@
-import fs from 'fs';
+import fs from "fs";
 
-let content = fs.readFileSync('src/routes/cyber-range.labs.tsx', 'utf8');
+let content = fs.readFileSync("src/routes/cyber-range.labs.tsx", "utf8");
 
-if (!content.includes('COURSE_LAB_MAPPINGS')) {
+if (!content.includes("COURSE_LAB_MAPPINGS")) {
   content = content.replace(
     "import { LAB_DEFINITIONS } from '@/data/lab-registry';",
-    "import { LAB_DEFINITIONS, COURSE_LAB_MAPPINGS } from '@/data/lab-registry';\nimport { AVAILABLE_COURSES } from '@/data/courses-curriculum';"
+    "import { LAB_DEFINITIONS, COURSE_LAB_MAPPINGS } from '@/data/lab-registry';\nimport { AVAILABLE_COURSES } from '@/data/courses-curriculum';",
   );
 }
 
@@ -57,9 +57,9 @@ const regex = /          \) : \([\s\S]*?<\/[dD]iv>\s*\)\}/;
 
 if (regex.test(content)) {
   content = content.replace(regex, replacement);
-  fs.writeFileSync('src/routes/cyber-range.labs.tsx', content);
-  console.log('updated cyber-range.labs.tsx');
+  fs.writeFileSync("src/routes/cyber-range.labs.tsx", content);
+  console.log("updated cyber-range.labs.tsx");
 } else {
-  console.error('Target regex not found!');
+  console.error("Target regex not found!");
   process.exit(1);
 }

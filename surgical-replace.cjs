@@ -1,11 +1,11 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let content = fs.readFileSync('src/routes/cyber-range.labs.tsx', 'utf8');
+let content = fs.readFileSync("src/routes/cyber-range.labs.tsx", "utf8");
 
-if (!content.includes('COURSE_LAB_MAPPINGS')) {
+if (!content.includes("COURSE_LAB_MAPPINGS")) {
   content = content.replace(
-    'import { LAB_DEFINITIONS } from \'@/data/lab-registry\';',
-    'import { LAB_DEFINITIONS, COURSE_LAB_MAPPINGS } from \'@/data/lab-registry\';\nimport { AVAILABLE_COURSES } from \'@/data/courses-curriculum\';'
+    "import { LAB_DEFINITIONS } from '@/data/lab-registry';",
+    "import { LAB_DEFINITIONS, COURSE_LAB_MAPPINGS } from '@/data/lab-registry';\nimport { AVAILABLE_COURSES } from '@/data/courses-curriculum';",
   );
 }
 
@@ -59,9 +59,9 @@ const replacement = `            <div className="space-y-12">
 
 if (content.includes(target)) {
   content = content.replace(target, replacement);
-  fs.writeFileSync('src/routes/cyber-range.labs.tsx', content);
-  console.log('Successfully updated cyber-range.labs.tsx');
+  fs.writeFileSync("src/routes/cyber-range.labs.tsx", content);
+  console.log("Successfully updated cyber-range.labs.tsx");
 } else {
-  console.log('Target string not found in cyber-range.labs.tsx');
+  console.log("Target string not found in cyber-range.labs.tsx");
   process.exit(1);
 }

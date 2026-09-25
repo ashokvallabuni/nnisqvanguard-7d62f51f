@@ -6,7 +6,11 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Enterprise Defense Services — NISQ Vanguard" },
-      { name: "description", content: "Professional cybersecurity services, audits, and threat simulations for organizations." },
+      {
+        name: "description",
+        content:
+          "Professional cybersecurity services, audits, and threat simulations for organizations.",
+      },
     ],
   }),
   component: ServicesPage,
@@ -19,29 +23,49 @@ function ServicesPage() {
       title: "Enterprise IVVAB LABSs",
       icon: Server,
       desc: "Custom-built, isolated virtual environments replicating your corporate network. Train your blue and red teams on real-world exploits without risking production data.",
-      features: ["Custom Network Topologies", "Live Attack Simulation", "Automated Grading & Metrics", "Vulnerability Injection"]
+      features: [
+        "Custom Network Topologies",
+        "Live Attack Simulation",
+        "Automated Grading & Metrics",
+        "Vulnerability Injection",
+      ],
     },
     {
       id: "audits",
       title: "Security Audits & Compliance",
       icon: Shield,
       desc: "Comprehensive security architecture reviews and compliance readiness assessments. We identify structural vulnerabilities before adversaries do.",
-      features: ["Infrastructure Review", "Cloud Security Posture", "Zero-Trust Architecture", "ISO/SOC2 Readiness"]
+      features: [
+        "Infrastructure Review",
+        "Cloud Security Posture",
+        "Zero-Trust Architecture",
+        "ISO/SOC2 Readiness",
+      ],
     },
     {
       id: "threat-simulation",
       title: "Adversary Threat Simulation",
       icon: Target,
       desc: "Full-scope Red Team engagements mimicking advanced persistent threats (APTs). Test your detection and response capabilities under realistic pressure.",
-      features: ["Assume Breach Scenarios", "Social Engineering", "Lateral Movement Testing", "Actionable Remediation Reports"]
+      features: [
+        "Assume Breach Scenarios",
+        "Social Engineering",
+        "Lateral Movement Testing",
+        "Actionable Remediation Reports",
+      ],
     },
     {
       id: "incident-response",
       title: "Incident Response & Forensics",
       icon: Activity,
       desc: "Rapid deployment for breach containment, eradication, and digital forensics. Limit damage and restore operations with tactical precision.",
-      features: ["24/7 SLA Available", "Malware Reverse Engineering", "Root Cause Analysis", "Post-Incident Hardening"]
-    }
+      features: [
+        "24/7 SLA Available",
+        "Malware Reverse Engineering",
+        "Root Cause Analysis",
+        "Post-Incident Hardening",
+      ],
+    },
   ];
 
   return (
@@ -56,22 +80,32 @@ function ServicesPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-16">
         <div className="grid md:grid-cols-2 gap-6">
           {services.map((service) => (
-            <div key={service.id} className="nv-card p-8 group flex flex-col hover:border-primary/40 transition-all duration-300">
+            <div
+              key={service.id}
+              className="nv-card p-8 group flex flex-col hover:border-primary/40 transition-all duration-300"
+            >
               <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <service.icon className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="text-2xl font-display font-bold text-foreground mb-3">{service.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">{service.desc}</p>
-              
+              <h3 className="text-2xl font-display font-bold text-foreground mb-3">
+                {service.title}
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
+                {service.desc}
+              </p>
+
               <ul className="space-y-2 mb-8">
                 {service.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-foreground font-mono text-[0.7rem]">
+                  <li
+                    key={i}
+                    className="flex items-center gap-2 text-sm text-foreground font-mono text-[0.7rem]"
+                  >
                     <Crosshair className="w-3.5 h-3.5 text-success" /> {feature}
                   </li>
                 ))}
               </ul>
 
-              <Link 
+              <Link
                 to="/appointments"
                 search={{ service: service.id }}
                 className="mt-auto inline-flex items-center justify-between w-full px-5 py-3 rounded-xl bg-background border border-border text-sm font-semibold text-primary hover:bg-primary/10 hover:border-primary/50 transition-all group/btn"

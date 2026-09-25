@@ -1,8 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://cbyoozhtubavksiolgxz.supabase.co";
-const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNieW9vemh0dWJhdmtzaW9sZ3h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4MTI0MDAsImV4cCI6MjEwMDM4ODQwMH0.-6D2ECGXcXmPakY-ATRfKOvr2SKnMgAagu3E9Aft1T0";
-const serviceRoleKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNieW9vemh0dWJhdmtzaW9sZ3h6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDgxMjQwMCwiZXhwIjoyMTAwMzg4NDAwfQ.GlcmJk1guLMRlumcK28nkIeKS_Vn9eR2Lyud2qswJDg";
+const anonKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNieW9vemh0dWJhdmtzaW9sZ3h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4MTI0MDAsImV4cCI6MjEwMDM4ODQwMH0.-6D2ECGXcXmPakY-ATRfKOvr2SKnMgAagu3E9Aft1T0";
+const serviceRoleKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNieW9vemh0dWJhdmtzaW9sZ3h6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDgxMjQwMCwiZXhwIjoyMTAwMzg4NDAwfQ.GlcmJk1guLMRlumcK28nkIeKS_Vn9eR2Lyud2qswJDg";
 
 const supabaseAnon = createClient(supabaseUrl, anonKey);
 const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
@@ -20,7 +22,9 @@ async function testBookingAndColleges() {
 
   if (colErr) throw new Error("Colleges query failed: " + colErr.message);
   console.log(`  Fetched ${allColleges.length} colleges successfully. Samples:`);
-  allColleges.slice(0, 3).forEach((c) => console.log(`    - ${c.name} (${c.city || c.state || "India"}) [ID: ${c.id}]`));
+  allColleges
+    .slice(0, 3)
+    .forEach((c) => console.log(`    - ${c.name} (${c.city || c.state || "India"}) [ID: ${c.id}]`));
 
   // Search filter test (e.g. 'IIT' or 'Institute')
   const searchQuery = "Technology";
@@ -30,7 +34,10 @@ async function testBookingAndColleges() {
     .ilike("name", `%${searchQuery}%`)
     .limit(5);
 
-  console.log(`  Search for '${searchQuery}' returned ${searchResults?.length} matches:`, searchResults?.map(c => c.name));
+  console.log(
+    `  Search for '${searchQuery}' returned ${searchResults?.length} matches:`,
+    searchResults?.map((c) => c.name),
+  );
 
   const targetCollege = allColleges[0];
 
@@ -70,7 +77,11 @@ async function testBookingAndColleges() {
     .limit(3);
 
   console.log(`  Admin verified ${adminList?.length} recent bookings in Supabase:`);
-  adminList?.forEach((b) => console.log(`    - [${b.status.toUpperCase()}] ${b.contact_person} (${b.email}): "${b.topic}" at ${b.colleges?.name || "Independent Organization"}`));
+  adminList?.forEach((b) =>
+    console.log(
+      `    - [${b.status.toUpperCase()}] ${b.contact_person} (${b.email}): "${b.topic}" at ${b.colleges?.name || "Independent Organization"}`,
+    ),
+  );
 
   console.log("\n=== College Dropdown & Appointment Booking Passed Successfully ===");
 }

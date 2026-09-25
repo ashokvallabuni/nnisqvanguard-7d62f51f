@@ -159,15 +159,13 @@ function AcademyPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 xl:grid-cols-4 gap-8 lg:gap-10">
-        
         {/* Main Content Column (Catalog) */}
         <div className="xl:col-span-3 space-y-8">
-          
           <section aria-label="Course Catalog">
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
               <Layers className="w-3.5 h-3.5" /> Learning Tracks
             </h2>
-            
+
             {/* Filter & Search Bar */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
               <div className="relative flex-1 max-w-md">
@@ -183,7 +181,9 @@ function AcademyPage() {
 
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 text-xs font-mono shadow-sm">
-                  <span className="px-2 text-muted-foreground font-semibold uppercase tracking-wider text-[0.65rem]">Level</span>
+                  <span className="px-2 text-muted-foreground font-semibold uppercase tracking-wider text-[0.65rem]">
+                    Level
+                  </span>
                   {["all", "beginner", "intermediate", "advanced"].map((lvl) => (
                     <button
                       key={lvl}
@@ -255,7 +255,6 @@ function AcademyPage() {
 
         {/* Sidebar Column */}
         <div className="space-y-8 xl:col-span-1">
-          
           {/* Recommended First Step / Start Here Card */}
           {beginnerCourse && (
             <section aria-label="Recommended Start">
@@ -269,12 +268,14 @@ function AcademyPage() {
                   </h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Start your cybersecurity journey with the foundational architecture: threat
-                    modeling, network traffic protocols, access controls, and authentication hygiene.
+                    modeling, network traffic protocols, access controls, and authentication
+                    hygiene.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 text-[0.65rem] font-mono text-muted-foreground pt-1 pb-2 border-b border-border/60">
                   <span className="flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5 text-primary" /> {beginnerCourse.module_count} Modules
+                    <BookOpen className="w-3.5 h-3.5 text-primary" /> {beginnerCourse.module_count}{" "}
+                    Modules
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Database className="w-3.5 h-3.5 text-accent" /> Real Telemetry Included
@@ -305,8 +306,12 @@ function AcademyPage() {
                   01
                 </div>
                 <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">Step 1</div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">Learn Theory</div>
+                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
+                    Step 1
+                  </div>
+                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
+                    Learn Theory
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
@@ -314,8 +319,12 @@ function AcademyPage() {
                   02
                 </div>
                 <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">Step 2</div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">Explore Data</div>
+                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
+                    Step 2
+                  </div>
+                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
+                    Explore Data
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
@@ -323,8 +332,12 @@ function AcademyPage() {
                   03
                 </div>
                 <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">Step 3</div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">Practice Labs</div>
+                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
+                    Step 3
+                  </div>
+                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
+                    Practice Labs
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
@@ -332,8 +345,12 @@ function AcademyPage() {
                   04
                 </div>
                 <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">Step 4</div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">Assess & Defend</div>
+                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
+                    Step 4
+                  </div>
+                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
+                    Assess & Defend
+                  </div>
                 </div>
               </div>
             </div>
@@ -349,8 +366,8 @@ function AcademyPage() {
                   Ready for live command-line execution?
                 </h4>
                 <p className="text-[0.7rem] text-muted-foreground">
-                  Apply what you've learned inside real Docker-isolated virtual environments with live
-                  attack traffic and forensic telemetry.
+                  Apply what you've learned inside real Docker-isolated virtual environments with
+                  live attack traffic and forensic telemetry.
                 </p>
               </div>
               <Link
@@ -362,7 +379,6 @@ function AcademyPage() {
               </Link>
             </div>
           </section>
-
         </div>
       </div>
     </div>

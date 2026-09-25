@@ -47,8 +47,7 @@ export function LabCard({ lab }: LabCardProps) {
   let statusVariant = "bg-muted text-muted-foreground border-border";
   let ctaLabel = "OPEN LAB";
   let ctaIcon: typeof Play = Play;
-  let ctaVariant =
-    "border border-border bg-foreground text-background hover:bg-foreground/90";
+  let ctaVariant = "border border-border bg-foreground text-background hover:bg-foreground/90";
 
   if (lab.is_active_session) {
     statusLabel = "IN PROGRESS";

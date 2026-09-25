@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://cbyoozhtubavksiolgxz.supabase.co";
-const serviceRoleKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNieW9vemh0dWJhdmtzaW9sZ3h6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDgxMjQwMCwiZXhwIjoyMTAwMzg4NDAwfQ.GlcmJk1guLMRlumcK28nkIeKS_Vn9eR2Lyud2qswJDg";
+const serviceRoleKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNieW9vemh0dWJhdmtzaW9sZ3h6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDgxMjQwMCwiZXhwIjoyMTAwMzg4NDAwfQ.GlcmJk1guLMRlumcK28nkIeKS_Vn9eR2Lyud2qswJDg";
 
 const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
@@ -11,9 +12,12 @@ async function testIncidentReporting() {
   // 1. Verify 'evidence' bucket exists
   const { data: buckets, error: bErr } = await supabaseAdmin.storage.listBuckets();
   if (bErr) throw new Error("Failed to list buckets: " + bErr.message);
-  
+
   const evidenceBucket = buckets.find((b) => b.id === "evidence" || b.name === "evidence");
-  console.log(`[Storage Verification] 'evidence' bucket found:`, evidenceBucket ? "YES (Configured)" : "NO");
+  console.log(
+    `[Storage Verification] 'evidence' bucket found:`,
+    evidenceBucket ? "YES (Configured)" : "NO",
+  );
   if (!evidenceBucket) throw new Error("Evidence bucket missing!");
 
   // 2. Test text-only report submission (No attachment)
@@ -41,7 +45,10 @@ async function testIncidentReporting() {
 
   // 3. Test Evidence File Upload to Storage Bucket
   console.log("\n[Test 2: Upload Evidence Attachment to 'evidence' Bucket]");
-  const fileContent = Buffer.from("SUSPICIOUS PHISHING HEADER LOG:\nFrom: support@evil.com\nSubject: Password Reset Required", "utf-8");
+  const fileContent = Buffer.from(
+    "SUSPICIOUS PHISHING HEADER LOG:\nFrom: support@evil.com\nSubject: Password Reset Required",
+    "utf-8",
+  );
   const fileName = `test_evidence_${Date.now()}.txt`;
   const filePath = `evidence_logs/${fileName}`;
 
@@ -76,7 +83,9 @@ async function testIncidentReporting() {
     console.error("Failed to insert complaint with attachment:", insErr2.message);
     throw insErr2;
   }
-  console.log(`  Successfully submitted report with attachment! Reference ID: ${insertedWithAtt.id}, Evidence URL: ${insertedWithAtt.evidence_url}`);
+  console.log(
+    `  Successfully submitted report with attachment! Reference ID: ${insertedWithAtt.id}, Evidence URL: ${insertedWithAtt.evidence_url}`,
+  );
 
   // 5. Verify reading complaint from Admin view
   const { data: verifyComplaint } = await supabaseAdmin
@@ -85,7 +94,9 @@ async function testIncidentReporting() {
     .eq("id", insertedWithAtt.id)
     .single();
 
-  console.log(`\n[Database Record Confirmation] Complaint ${verifyComplaint.id} confirmed stored in Supabase with name='${verifyComplaint.name}', evidence_url='${verifyComplaint.evidence_url}', status='${verifyComplaint.status}'`);
+  console.log(
+    `\n[Database Record Confirmation] Complaint ${verifyComplaint.id} confirmed stored in Supabase with name='${verifyComplaint.name}', evidence_url='${verifyComplaint.evidence_url}', status='${verifyComplaint.status}'`,
+  );
 
   console.log("\n=== Incident Reporting Tests Passed Successfully ===");
 }

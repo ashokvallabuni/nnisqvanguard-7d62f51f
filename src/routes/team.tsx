@@ -78,7 +78,11 @@ function TeamMemberCard({ member }: { member: Member }) {
       <div className="mono text-[0.65rem] text-primary mb-3 tracking-wide uppercase break-words w-full">
         {member.role}
       </div>
-      {member.bio && <p className="text-sm text-muted-foreground mt-auto pt-4 border-t border-border/50">{member.bio}</p>}
+      {member.bio && (
+        <p className="text-sm text-muted-foreground mt-auto pt-4 border-t border-border/50">
+          {member.bio}
+        </p>
+      )}
     </div>
   );
 }
@@ -90,16 +94,19 @@ function Team() {
       const { data } = await supabase.from("team_members").select("*").order("display_order");
       const raw = (data ?? []) as Member[];
       const filteredDb = filterPublic(raw);
-      if (filteredDb.length === 0) {
-        return APPROVED_PUBLIC_TEAM.map((m, i) => ({
-          id: `approved-${i}`,
-          name: m.name,
-          role: m.role,
-          bio: null,
-          image_url: null,
-        })) as Member[];
-      }
-      return filteredDb;
+
+      const missingMembers = APPROVED_PUBLIC_TEAM.filter(
+        (approved) =>
+          !filteredDb.some((dbMember) => normalize(dbMember.name) === normalize(approved.name)),
+      ).map((m, i) => ({
+        id: `approved-missing-${i}`,
+        name: m.name,
+        role: m.role,
+        bio: null,
+        image_url: null,
+      })) as Member[];
+
+      return [...filteredDb, ...missingMembers];
     },
   });
 

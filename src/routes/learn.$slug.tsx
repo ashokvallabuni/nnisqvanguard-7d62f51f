@@ -187,7 +187,10 @@ function CourseDetailPage() {
 
   if (course.isLocked && !isAdmin) {
     // TanStack router will handle this, but we show a toast when it mounts
-    setTimeout(() => toast.error(course.description || "Course is not published or currently unavailable."), 0);
+    setTimeout(
+      () => toast.error(course.description || "Course is not published or currently unavailable."),
+      0,
+    );
     return <Navigate to="/academy" replace />;
   }
 
@@ -351,22 +354,21 @@ function CourseDetailPage() {
             </div>
           </div>
 
-
-            {courseLabs.length > 0 && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
-                    <Terminal className="w-5 h-5 text-primary" />
-                    <span>PRACTICE WITH IVVAB LABS</span>
-                  </h3>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {courseLabs.map((lab) => (
-                    <LabCard key={lab.id} lab={lab as any} />
-                  ))}
-                </div>
+          {courseLabs.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
+                  <Terminal className="w-5 h-5 text-primary" />
+                  <span>PRACTICE WITH IVVAB LABS</span>
+                </h3>
               </div>
-            )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {courseLabs.map((lab) => (
+                  <LabCard key={lab.id} lab={lab as any} />
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Sidebar Action / Progress Widget */}
           <div className="space-y-6 xl:col-span-1">

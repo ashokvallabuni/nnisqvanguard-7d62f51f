@@ -180,7 +180,9 @@ export function LinuxPermissionsVisualizer() {
       <div className="p-5 rounded-xl border border-border bg-slate-950 text-slate-100 font-mono text-xs space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-border pb-3">
           <div>
-            <div className="text-muted-foreground text-[0.65rem] uppercase">Symbolic Representation:</div>
+            <div className="text-muted-foreground text-[0.65rem] uppercase">
+              Symbolic Representation:
+            </div>
             <div className="text-2xl font-bold tracking-wider text-green-400 mt-0.5">
               {symbolic}
             </div>

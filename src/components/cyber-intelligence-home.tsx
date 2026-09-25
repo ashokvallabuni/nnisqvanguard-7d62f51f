@@ -202,7 +202,10 @@ export function CyberIntelligenceHome() {
       <section id="hero" className="relative flex min-h-[720px] items-center overflow-hidden">
         {/* Background elements */}
         <div className="absolute inset-0 bg-background" aria-hidden="true" />
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#1E2D4A_1px,transparent_1px)] [background-size:16px_16px]" aria-hidden="true" />
+        <div
+          className="absolute inset-0 opacity-10 bg-[radial-gradient(#1E2D4A_1px,transparent_1px)] [background-size:16px_16px]"
+          aria-hidden="true"
+        />
 
         <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12">
           <div className="space-y-7 lg:col-span-7">
@@ -211,11 +214,7 @@ export function CyberIntelligenceHome() {
               NISQ VANGUARD — DEFENCE TECHNOLOGIES
             </div>
             <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-foreground sm:text-7xl">
-              SECURE TODAY.{" "}
-              <span className="text-primary">
-                DEFEND TOMORROW.
-              </span>{" "}
-              EMPOWER FOREVER.
+              SECURE TODAY. <span className="text-primary">DEFEND TOMORROW.</span> EMPOWER FOREVER.
             </h1>
             <p className="max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground sm:text-base">
               Enterprise-grade cybersecurity training, real data threat investigations, and hands-on
@@ -275,10 +274,7 @@ export function CyberIntelligenceHome() {
       </section>
 
       {/* ── PRIORITY 1: FOUNDER SECTION ─────────────────────────────────────── */}
-      <section
-        id="founder"
-        className="border-t border-border bg-muted py-24"
-      >
+      <section id="founder" className="border-t border-border bg-muted py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-6 text-center">
             <span className="inline-block border border-border bg-background px-4 py-1 font-mono text-[10px] tracking-[0.2em] text-foreground uppercase font-bold rounded">
@@ -422,7 +418,9 @@ export function CyberIntelligenceHome() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-semibold text-foreground">{heading}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                  {body}
+                </p>
               </div>
             ))}
           </div>
@@ -518,7 +516,9 @@ export function CyberIntelligenceHome() {
                   <Icon className="h-6 w-6" />
                 </div>
                 <div className="font-mono text-[10px] tracking-[0.2em] text-primary">{pillar}</div>
-                <p className="mt-3 font-mono text-xs leading-relaxed text-muted-foreground">{desc}</p>
+                <p className="mt-3 font-mono text-xs leading-relaxed text-muted-foreground">
+                  {desc}
+                </p>
               </div>
             ))}
           </div>
@@ -544,7 +544,9 @@ export function CyberIntelligenceHome() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-semibold text-foreground">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                  {body}
+                </p>
               </div>
             ))}
           </div>
@@ -609,7 +611,9 @@ export function CyberIntelligenceHome() {
                 <Icon className="mb-5 h-8 w-8 text-cyan-300" />
                 <div className="font-mono text-[10px] tracking-widest text-cyan-300">{label}</div>
                 <h3 className="mt-2 font-display text-lg font-semibold text-foreground">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{desc}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                  {desc}
+                </p>
                 <div className="mt-8 flex items-center justify-between border-t border-border pt-4 font-mono text-xs text-muted-foreground">
                   <span>Continue pathway</span>
                   <ArrowRight className="h-4 w-4 text-cyan-300 transition group-hover:translate-x-1" />
@@ -670,7 +674,9 @@ export function CyberIntelligenceHome() {
                   </div>
 
                   <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                    <span className="font-mono text-[10px] text-success font-bold">● AVAILABLE NOW</span>
+                    <span className="font-mono text-[10px] text-success font-bold">
+                      ● AVAILABLE NOW
+                    </span>
                     <Link
                       to="/learn/$slug"
                       params={{ slug }}
@@ -762,7 +768,9 @@ export function CyberIntelligenceHome() {
                       <Icon className="h-3.5 w-3.5" />
                     </div>
                     <div>
-                      <div className="font-display text-sm font-semibold text-foreground">{label}</div>
+                      <div className="font-display text-sm font-semibold text-foreground">
+                        {label}
+                      </div>
                       <div className="font-mono text-[11px] text-muted-foreground">{desc}</div>
                     </div>
                   </div>
@@ -802,7 +810,9 @@ export function CyberIntelligenceHome() {
                 <p className="text-primary">&gt; initializing IVVAB LABS environment...</p>
                 <p>
                   &gt; loading lab:{" "}
-                  <span className="text-success font-bold">LAB-07 — Network Intrusion Detection</span>
+                  <span className="text-success font-bold">
+                    LAB-07 — Network Intrusion Detection
+                  </span>
                 </p>
                 <p className="text-primary">&gt; provisioning isolated subnet: 10.0.99.0/24</p>
                 <p>
@@ -861,7 +871,9 @@ export function CyberIntelligenceHome() {
               >
                 <Icon className="mb-4 h-6 w-6 text-foreground" />
                 <h3 className="font-display text-base font-semibold text-foreground">{label}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{desc}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                  {desc}
+                </p>
               </div>
             ))}
           </div>
@@ -896,7 +908,9 @@ export function CyberIntelligenceHome() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-bold text-foreground">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                  {body}
+                </p>
               </div>
             ))}
           </div>

@@ -224,9 +224,9 @@ function FounderProfilePage() {
             <p>
               The <strong className="text-cyan-300">IVVAB Labs engine</strong> powers the technical
               core — providing the containerised environments, real-data pipelines, and verification
-              systems that make NISQ Vanguard's IVVAB LABS and academy uniquely authentic. Every
-              lab scenario, every telemetry dataset, every curriculum module passes through the
-              IVVAB Labs architecture before it reaches a learner.
+              systems that make NISQ Vanguard's IVVAB LABS and academy uniquely authentic. Every lab
+              scenario, every telemetry dataset, every curriculum module passes through the IVVAB
+              Labs architecture before it reaches a learner.
             </p>
             <p>
               Today, NISQ Vanguard stands as a mission-driven cybersecurity organisation — bringing
@@ -282,7 +282,9 @@ function FounderProfilePage() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-bold text-white">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                  {body}
+                </p>
               </div>
             ))}
           </div>

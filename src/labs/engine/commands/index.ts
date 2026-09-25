@@ -48,7 +48,7 @@ commands.ls = (args, ctx) => {
   for (const p of paths) {
     const absPath = ctx.vfs.normalizePath(ctx.cwd, p);
     const node = ctx.vfs.getNode(absPath);
-    
+
     if (!node) {
       ctx.stderr.push(`ls: cannot access '${p}': No such file or directory`);
       continue;
@@ -58,20 +58,23 @@ commands.ls = (args, ctx) => {
       ctx.stdout.push(node.name);
     } else {
       const children = Object.values(node.children || {});
-      const names = children.map(c => c.name);
+      const names = children.map((c) => c.name);
       if (showAll) {
         names.unshift(".", "..");
       }
-      
-      const filtered = showAll ? names : names.filter(n => !n.startsWith("."));
+
+      const filtered = showAll ? names : names.filter((n) => !n.startsWith("."));
       filtered.sort();
 
       if (showLong) {
         for (const name of filtered) {
-          const cNode = name === "." || name === ".." ? {type: "dir"} : children.find(c => c.name === name);
+          const cNode =
+            name === "." || name === ".." ? { type: "dir" } : children.find((c) => c.name === name);
           const typeChar = cNode?.type === "dir" ? "d" : "-";
           const size = cNode?.type === "file" ? (cNode as any).content?.length || 0 : 4096;
-          ctx.stdout.push(`${typeChar}rw-r--r-- 1 analyst analyst ${size.toString().padStart(6, " ")} Jan 01 00:00 ${name}`);
+          ctx.stdout.push(
+            `${typeChar}rw-r--r-- 1 analyst analyst ${size.toString().padStart(6, " ")} Jan 01 00:00 ${name}`,
+          );
         }
       } else {
         if (filtered.length > 0) {
@@ -104,14 +107,17 @@ commands.grep = (args, ctx) => {
   // Very simple grep
   let pattern = args[0];
   const files = args.slice(1);
-  
+
   if (!pattern) {
     ctx.stderr.push("grep: missing operand");
     return;
   }
 
   // Handle quotes
-  if ((pattern.startsWith("'") && pattern.endsWith("'")) || (pattern.startsWith('"') && pattern.endsWith('"'))) {
+  if (
+    (pattern.startsWith("'") && pattern.endsWith("'")) ||
+    (pattern.startsWith('"') && pattern.endsWith('"'))
+  ) {
     pattern = pattern.substring(1, pattern.length - 1);
   }
 
@@ -208,7 +214,7 @@ commands.tail = (args, ctx) => {
 
 commands.wc = (args, ctx) => {
   const countLines = (str: string) => str.split("\n").length;
-  const countWords = (str: string) => str.split(/\s+/).filter(x => x.length > 0).length;
+  const countWords = (str: string) => str.split(/\s+/).filter((x) => x.length > 0).length;
   const countBytes = (str: string) => str.length;
 
   const stdin = ctx.stdout.splice(0, ctx.stdout.length);
@@ -218,7 +224,9 @@ commands.wc = (args, ctx) => {
     return;
   }
 
-  let l = false, w = false, c = false;
+  let l = false,
+    w = false,
+    c = false;
   const files = [];
   for (const arg of args) {
     if (arg.startsWith("-")) {
@@ -230,7 +238,9 @@ commands.wc = (args, ctx) => {
     }
   }
   if (!l && !w && !c) {
-    l = true; w = true; c = true;
+    l = true;
+    w = true;
+    c = true;
   }
 
   for (const file of files) {
@@ -251,7 +261,7 @@ commands.wc = (args, ctx) => {
 commands.sort = (args, ctx) => {
   const stdin = ctx.stdout.splice(0, ctx.stdout.length);
   let lines: string[] = [];
-  
+
   if (args.length === 0) {
     lines = stdin.join("\n").split("\n");
   } else {
@@ -261,7 +271,7 @@ commands.sort = (args, ctx) => {
       if (content !== null) lines.push(...content.split("\n"));
     }
   }
-  
+
   lines.sort();
   ctx.stdout.push(lines.join("\n"));
 };
@@ -272,8 +282,8 @@ commands.uniq = (args, ctx) => {
 
   const stdin = ctx.stdout.splice(0, ctx.stdout.length);
   let lines: string[] = [];
-  const files = args.filter(a => !a.startsWith("-"));
-  
+  const files = args.filter((a) => !a.startsWith("-"));
+
   if (files.length === 0) {
     lines = stdin.join("\n").split("\n");
   } else {
@@ -303,15 +313,18 @@ commands.awk = (args, ctx) => {
   // Extremely basic awk implementation just for print $N
   let script = args[0];
   const files = args.slice(1);
-  
+
   if (!script) return;
-  if ((script.startsWith("'") && script.endsWith("'")) || (script.startsWith('"') && script.endsWith('"'))) {
+  if (
+    (script.startsWith("'") && script.endsWith("'")) ||
+    (script.startsWith('"') && script.endsWith('"'))
+  ) {
     script = script.substring(1, script.length - 1);
   }
 
   const stdin = ctx.stdout.splice(0, ctx.stdout.length);
   let lines: string[] = [];
-  
+
   if (files.length === 0) {
     lines = stdin.join("\n").split("\n");
   } else {
@@ -343,19 +356,22 @@ commands.whoami = (args, ctx) => {
 
 // Parser to handle pipes
 export function executeCommandString(cmdStr: string, ctx: CommandContext) {
-  const parts = cmdStr.split("|").map(p => p.trim()).filter(p => p.length > 0);
-  
+  const parts = cmdStr
+    .split("|")
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+
   for (const part of parts) {
     // Split by spaces respecting quotes
-    const args = (part.match(/([^\s"']+|"[^"]*"|'[^']*')/g) || []).map(a => 
-      a.replace(/^['"](.*)['"]$/, '$1')
+    const args = (part.match(/([^\s"']+|"[^"]*"|'[^']*')/g) || []).map((a) =>
+      a.replace(/^['"](.*)['"]$/, "$1"),
     );
-    
+
     if (args.length === 0) continue;
-    
+
     const cmd = args[0];
     const cmdArgs = args.slice(1);
-    
+
     if (commands[cmd]) {
       commands[cmd](cmdArgs, ctx);
     } else {

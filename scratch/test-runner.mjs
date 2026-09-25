@@ -6,8 +6,8 @@ const tunnelUrl = "https://favorites-confident-minneapolis-transcripts.trycloudf
 console.log("Checking health over Cloudflare tunnel...");
 const healthRes = await fetch(`${tunnelUrl}/health`, {
   headers: {
-    "x-lab-runner-secret": secret
-  }
+    "x-lab-runner-secret": secret,
+  },
 });
 const health = await healthRes.json();
 console.log("Health status:", healthRes.status, health);

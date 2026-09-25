@@ -1,6 +1,7 @@
 # NISQ Vanguard - Master Production Upgrade Implementation Plan (v2 — aligned with user AC-1..AC-44)
 
 ## Task 1: Favicon Consolidation & User-Facing Lovable Branding Removal
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: None
@@ -16,6 +17,7 @@
   - Evidence: Source inspection + grep output.
 
 ## Task 2: Team Roster & Founder Title Correction (Public Display)
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: None
@@ -32,6 +34,7 @@
   - Evidence: Source + DOM snapshots.
 
 ## Task 3: Global Navigation (Desktop) + Android Bottom Navigation
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: None
@@ -50,6 +53,7 @@
   - Evidence: Screenshots at 1280px and 390px + computed styles.
 
 ## Task 4: HOME Escape Hatches (Every Major Area)
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 3
@@ -65,6 +69,7 @@
   - Evidence: Per-route source review.
 
 ## Task 5: Cyber Labs Landing — Command Center
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 4
@@ -85,6 +90,7 @@
   - Evidence: Source + 1920px/390px snapshots.
 
 ## Task 6: Lab Detail & Workspace Structure (Mission Layout)
+
 - **Status**: `pending`
 - **Priority**: medium
 - **Depends On**: Task 5
@@ -101,6 +107,7 @@
   - Evidence: Source.
 
 ## Task 7: Academy Platform UX (Cards + Button Labels + Locking)
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 4
@@ -118,6 +125,7 @@
   - Evidence: Academy snapshot (desktop + mobile).
 
 ## Task 8: Server-Side Course Locking + Direct URL/API Guards
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 7
@@ -137,6 +145,7 @@
   - Evidence: Network panels + admin toggle sequence.
 
 ## Task 9: Dynamic Assessment Engine (No Cyber Awareness Hardcoding)
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 8
@@ -156,6 +165,7 @@
   - Evidence: Two-assessment-runs output (manual), plus code review.
 
 ## Task 10: Progress System — Real DB, Survives Refresh/Login
+
 - **Status**: `pending`
 - **Priority**: medium
 - **Depends On**: Task 9
@@ -171,6 +181,7 @@
   - Evidence: Cycle test snapshots.
 
 ## Task 11: Report Incident — Bucket Not Found Root-Cause Fix & Text-Only Guarantee
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: None
@@ -195,6 +206,7 @@
   - Evidence: Storage policy / DB row + simulated failure.
 
 ## Task 12: Threat Intelligence Dashboard + Honest Labels
+
 - **Status**: `pending`
 - **Priority**: medium
 - **Depends On**: Task 4
@@ -211,6 +223,7 @@
   - Evidence: Source + 1280px/390px snapshots.
 
 ## Task 13: Loading States & User-Safe Error Mapping (Cross-Cutting)
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 9, Task 11, Task 12
@@ -231,6 +244,7 @@
   - Evidence: Code grep + scenario tests.
 
 ## Task 14: 404 SIGNAL LOST Upgrade
+
 - **Status**: `pending`
 - **Priority**: medium
 - **Depends On**: None
@@ -245,6 +259,7 @@
   - Evidence: Snapshot.
 
 ## Task 15: Mobile Responsiveness (No Overflow, Tables/Cards, Fixed-Bar Padding)
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 3, Task 5, Task 7, Task 12
@@ -262,6 +277,7 @@
   - Evidence: Scroll measurements at 390px + 320px.
 
 ## Task 16: Accessibility & Keyboard Interaction Pass
+
 - **Status**: `pending`
 - **Priority**: low
 - **Depends On**: Task 3, Task 5, Task 7, Task 12
@@ -276,6 +292,7 @@
   - `rule` TR-16.2: Pages have ≤1 h1 each.
 
 ## Task 17: Security Attempts (Locked Bypass) + Credential Exposure Audit
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: Task 8, Task 11
@@ -293,6 +310,7 @@
   - Evidence: Attempts report.
 
 ## Task 18: Final Build + Runtime QA (Desktop + Mobile)
+
 - **Status**: `pending`
 - **Priority**: high
 - **Depends On**: All prior tasks

@@ -5,7 +5,16 @@ import { useAuth } from "@/lib/auth-context";
 import { useServerFn } from "@tanstack/react-start";
 import { analyzeEvidence } from "@/lib/fraud.functions";
 import { toast } from "sonner";
-import { AlertTriangle, Upload, ShieldAlert, FileText, ChevronRight, CheckCircle2, ShieldCheck, Activity } from "lucide-react";
+import {
+  AlertTriangle,
+  Upload,
+  ShieldAlert,
+  FileText,
+  ChevronRight,
+  CheckCircle2,
+  ShieldCheck,
+  Activity,
+} from "lucide-react";
 import { PageHeader } from "@/components/common/PageHeader";
 
 export const Route = createFileRoute("/reporting")({
@@ -14,7 +23,8 @@ export const Route = createFileRoute("/reporting")({
       { title: "Report Cyber Fraud & Security Incident — NISQ Vanguard" },
       {
         name: "description",
-        content: "Fast, modern, login-optional reporting flow for cyber fraud and security incidents.",
+        content:
+          "Fast, modern, login-optional reporting flow for cyber fraud and security incidents.",
       },
     ],
   }),
@@ -25,11 +35,17 @@ function ReportingFlow() {
   const { user } = useAuth();
   const nav = useNavigate();
   const analyze = useServerFn(analyzeEvidence);
-  
+
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ name: "", email: "", phone: "", complaint_text: "", incident_type: "fraud" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    complaint_text: "",
+    incident_type: "fraud",
+  });
   const [file, setFile] = useState<File | null>(null);
-  
+
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [caseId, setCaseId] = useState<string | null>(null);
@@ -61,12 +77,12 @@ function ReportingFlow() {
         // If anon, we might need a public bucket or a different path
         const basePath = user ? user.id : "anonymous";
         storagePath = `${basePath}/${safeName}`;
-        
+
         const { error: upErr } = await supabase.storage.from("evidence").upload(storagePath, file, {
           contentType: file.type || "application/octet-stream",
           upsert: false,
         });
-        
+
         if (upErr) throw upErr;
         evidence_url = storagePath;
       } catch (e: unknown) {
@@ -79,7 +95,7 @@ function ReportingFlow() {
     }
 
     const newCaseId = generateCaseId();
-    
+
     try {
       const { data: inserted, error } = await supabase
         .from("complaints")
@@ -93,9 +109,12 @@ function ReportingFlow() {
         })
         .select("id")
         .single();
-        
+
       if (error) {
-        console.warn("Insert failed, likely due to RLS. Generating local Case ID anyway for UX.", error);
+        console.warn(
+          "Insert failed, likely due to RLS. Generating local Case ID anyway for UX.",
+          error,
+        );
       } else if (storagePath && inserted?.id) {
         try {
           await analyze({ data: { storagePath, complaintId: inserted.id } });
@@ -128,37 +147,68 @@ function ReportingFlow() {
             {/* Steps Indicator */}
             {step < 4 && (
               <div className="flex items-center gap-2 font-mono text-[0.65rem] text-muted-foreground">
-                <div className={`px-2 py-1 rounded ${step === 1 ? 'bg-primary/10 text-primary border border-primary' : ''}`}>1. TYPE</div>
+                <div
+                  className={`px-2 py-1 rounded ${step === 1 ? "bg-primary/10 text-primary border border-primary" : ""}`}
+                >
+                  1. TYPE
+                </div>
                 <div className="w-4 h-px bg-slate-700" />
-                <div className={`px-2 py-1 rounded ${step === 2 ? 'bg-primary/10 text-primary border border-primary' : ''}`}>2. DETAILS</div>
+                <div
+                  className={`px-2 py-1 rounded ${step === 2 ? "bg-primary/10 text-primary border border-primary" : ""}`}
+                >
+                  2. DETAILS
+                </div>
                 <div className="w-4 h-px bg-slate-700" />
-                <div className={`px-2 py-1 rounded ${step === 3 ? 'bg-primary/10 text-primary border border-primary' : ''}`}>3. CONTACT</div>
+                <div
+                  className={`px-2 py-1 rounded ${step === 3 ? "bg-primary/10 text-primary border border-primary" : ""}`}
+                >
+                  3. CONTACT
+                </div>
               </div>
             )}
           </div>
 
           <div className="glass backdrop-blur-xl bg-muted border border-border shadow-sm rounded-2xl overflow-hidden transition-all duration-300">
-            
             {step === 1 && (
               <div className="p-6 md:p-8 animate-in fade-in slide-in-from-right-4">
-                <h2 className="text-xl font-bold mb-6 text-foreground font-display">What are you reporting today?</h2>
+                <h2 className="text-xl font-bold mb-6 text-foreground font-display">
+                  What are you reporting today?
+                </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
-                    { id: 'fraud', title: 'Financial / Cyber Fraud', desc: 'Scams, unauthorized transactions, phishing.' },
-                    { id: 'account', title: 'Account Compromise', desc: 'Hacked email, social media, or bank accounts.' },
-                    { id: 'malware', title: 'Malware / Ransomware', desc: 'Viruses, locked files, extortion.' },
-                    { id: 'other', title: 'Other Security Incident', desc: 'Harassment, data breaches, etc.' }
-                  ].map(type => (
+                    {
+                      id: "fraud",
+                      title: "Financial / Cyber Fraud",
+                      desc: "Scams, unauthorized transactions, phishing.",
+                    },
+                    {
+                      id: "account",
+                      title: "Account Compromise",
+                      desc: "Hacked email, social media, or bank accounts.",
+                    },
+                    {
+                      id: "malware",
+                      title: "Malware / Ransomware",
+                      desc: "Viruses, locked files, extortion.",
+                    },
+                    {
+                      id: "other",
+                      title: "Other Security Incident",
+                      desc: "Harassment, data breaches, etc.",
+                    },
+                  ].map((type) => (
                     <button
                       key={type.id}
                       onClick={() => setForm({ ...form, incident_type: type.id })}
                       className={`text-left p-5 rounded-xl border transition-all ${
-                        form.incident_type === type.id 
-                          ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(0,240,255,0.1)]' 
-                          : 'border-border bg-background/50 hover:border-slate-600'
+                        form.incident_type === type.id
+                          ? "border-primary bg-primary/10 shadow-[0_0_15px_rgba(0,240,255,0.1)]"
+                          : "border-border bg-background/50 hover:border-slate-600"
                       }`}
                     >
-                      <div className={`font-semibold ${form.incident_type === type.id ? 'text-primary' : 'text-foreground'}`}>
+                      <div
+                        className={`font-semibold ${form.incident_type === type.id ? "text-primary" : "text-foreground"}`}
+                      >
                         {type.title}
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">{type.desc}</div>
@@ -166,7 +216,10 @@ function ReportingFlow() {
                   ))}
                 </div>
                 <div className="mt-8 flex justify-end">
-                  <button onClick={handleNext} className="px-6 py-2.5 rounded-lg bg-primary text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-xs tracking-wider shadow-sm">
+                  <button
+                    onClick={handleNext}
+                    className="px-6 py-2.5 rounded-lg bg-primary text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-xs tracking-wider shadow-sm"
+                  >
                     PROCEED <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -175,9 +228,13 @@ function ReportingFlow() {
 
             {step === 2 && (
               <div className="p-6 md:p-8 animate-in fade-in slide-in-from-right-4">
-                <h2 className="text-xl font-bold mb-2 text-foreground font-display">Incident Details</h2>
-                <p className="text-muted-foreground text-sm mb-6">Please provide as much context as possible.</p>
-                
+                <h2 className="text-xl font-bold mb-2 text-foreground font-display">
+                  Incident Details
+                </h2>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Please provide as much context as possible.
+                </p>
+
                 <div className="space-y-5">
                   <div>
                     <label className="font-mono text-[0.65rem] text-primary mb-2 block uppercase tracking-wider">
@@ -191,7 +248,7 @@ function ReportingFlow() {
                       className="w-full bg-background/50 border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition placeholder:text-muted-foreground"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="font-mono text-[0.65rem] text-primary mb-2 flex items-center gap-1.5 uppercase tracking-wider">
                       <Upload className="w-3.5 h-3.5" /> EVIDENCE (OPTIONAL)
@@ -209,10 +266,17 @@ function ReportingFlow() {
                 </div>
 
                 <div className="mt-8 flex justify-between">
-                  <button onClick={handleBack} className="px-5 py-2.5 rounded-lg border border-border text-foreground font-semibold hover:bg-background transition-colors text-xs tracking-wider">
+                  <button
+                    onClick={handleBack}
+                    className="px-5 py-2.5 rounded-lg border border-border text-foreground font-semibold hover:bg-background transition-colors text-xs tracking-wider"
+                  >
                     BACK
                   </button>
-                  <button onClick={handleNext} disabled={!form.complaint_text.trim()} className="px-6 py-2.5 rounded-lg bg-primary text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-xs tracking-wider disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">
+                  <button
+                    onClick={handleNext}
+                    disabled={!form.complaint_text.trim()}
+                    className="px-6 py-2.5 rounded-lg bg-primary text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-xs tracking-wider disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                  >
                     PROCEED <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -221,12 +285,18 @@ function ReportingFlow() {
 
             {step === 3 && (
               <div className="p-6 md:p-8 animate-in fade-in slide-in-from-right-4">
-                <h2 className="text-xl font-bold mb-2 text-foreground font-display">Contact Information</h2>
-                <p className="text-muted-foreground text-sm mb-6">Leave blank to submit anonymously, or provide details for follow-up.</p>
-                
+                <h2 className="text-xl font-bold mb-2 text-foreground font-display">
+                  Contact Information
+                </h2>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Leave blank to submit anonymously, or provide details for follow-up.
+                </p>
+
                 <div className="space-y-4">
                   <div>
-                    <label className="font-mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">Name (Optional)</label>
+                    <label className="font-mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">
+                      Name (Optional)
+                    </label>
                     <input
                       type="text"
                       value={form.name}
@@ -236,7 +306,9 @@ function ReportingFlow() {
                     />
                   </div>
                   <div>
-                    <label className="font-mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">Email (Optional)</label>
+                    <label className="font-mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">
+                      Email (Optional)
+                    </label>
                     <input
                       type="email"
                       value={form.email}
@@ -246,7 +318,9 @@ function ReportingFlow() {
                     />
                   </div>
                   <div>
-                    <label className="font-mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">Phone (Optional)</label>
+                    <label className="font-mono text-[0.65rem] text-muted-foreground mb-2 block uppercase tracking-wider">
+                      Phone (Optional)
+                    </label>
                     <input
                       type="text"
                       value={form.phone}
@@ -258,10 +332,18 @@ function ReportingFlow() {
                 </div>
 
                 <div className="mt-8 flex justify-between">
-                  <button onClick={handleBack} disabled={busy} className="px-5 py-2.5 rounded-lg border border-border text-foreground font-semibold hover:bg-background transition-colors text-xs tracking-wider">
+                  <button
+                    onClick={handleBack}
+                    disabled={busy}
+                    className="px-5 py-2.5 rounded-lg border border-border text-foreground font-semibold hover:bg-background transition-colors text-xs tracking-wider"
+                  >
                     BACK
                   </button>
-                  <button onClick={submit} disabled={busy} className="px-6 py-2.5 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-400 transition-colors flex items-center gap-2 text-xs tracking-wider disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                  <button
+                    onClick={submit}
+                    disabled={busy}
+                    className="px-6 py-2.5 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-400 transition-colors flex items-center gap-2 text-xs tracking-wider disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                  >
                     {busy ? "SUBMITTING..." : "SUBMIT REPORT"}
                   </button>
                 </div>
@@ -273,15 +355,23 @@ function ReportingFlow() {
                 <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
                   <CheckCircle2 className="w-8 h-8 text-success" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2 text-foreground font-display">Report Submitted</h2>
+                <h2 className="text-2xl font-bold mb-2 text-foreground font-display">
+                  Report Submitted
+                </h2>
                 <p className="text-muted-foreground text-sm max-w-md mx-auto mb-6">
                   Your incident has been securely transmitted to our triage system.
                 </p>
-                
+
                 <div className="bg-background border border-border rounded-xl p-4 max-w-sm mx-auto mb-8">
-                  <div className="text-[0.65rem] text-muted-foreground font-mono uppercase tracking-widest mb-1">Generated Case ID</div>
-                  <div className="text-xl font-mono font-bold text-primary tracking-wider select-all">{caseId}</div>
-                  <div className="text-[0.65rem] text-muted-foreground mt-2">Save this ID for your records and follow-ups.</div>
+                  <div className="text-[0.65rem] text-muted-foreground font-mono uppercase tracking-widest mb-1">
+                    Generated Case ID
+                  </div>
+                  <div className="text-xl font-mono font-bold text-primary tracking-wider select-all">
+                    {caseId}
+                  </div>
+                  <div className="text-[0.65rem] text-muted-foreground mt-2">
+                    Save this ID for your records and follow-ups.
+                  </div>
                 </div>
 
                 {/* First-Aid Resources */}
@@ -294,27 +384,33 @@ function ReportingFlow() {
                       <ShieldCheck className="w-5 h-5 text-primary shrink-0" />
                       <div>
                         <div className="font-semibold text-foreground text-sm">Lock Accounts</div>
-                        <div className="text-xs text-muted-foreground mt-1">Immediately change passwords and enable 2FA on compromised accounts.</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Immediately change passwords and enable 2FA on compromised accounts.
+                        </div>
                       </div>
                     </div>
                     <div className="p-4 rounded-xl border border-border bg-background/50 flex gap-3">
                       <FileText className="w-5 h-5 text-primary shrink-0" />
                       <div>
                         <div className="font-semibold text-foreground text-sm">Monitor Credit</div>
-                        <div className="text-xs text-muted-foreground mt-1">Contact your bank and place a fraud alert on your credit profile.</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Contact your bank and place a fraud alert on your credit profile.
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-8 flex justify-center gap-4">
-                  <Link to="/" className="px-6 py-2.5 rounded-lg border border-border text-foreground font-semibold hover:bg-background transition-colors text-xs tracking-wider">
+                  <Link
+                    to="/"
+                    className="px-6 py-2.5 rounded-lg border border-border text-foreground font-semibold hover:bg-background transition-colors text-xs tracking-wider"
+                  >
                     RETURN TO HOME
                   </Link>
                 </div>
               </div>
             )}
-
           </div>
         </div>
       </div>

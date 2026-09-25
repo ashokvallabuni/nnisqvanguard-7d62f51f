@@ -49,15 +49,17 @@ interface SkillLevel {
 function StudentDashboard() {
   const { user, profile, isAdmin, adminView, signOut } = useAuth();
   const rawRole = (profile as any)?.role?.toString()?.toUpperCase();
-  
+
   let activeRole: "STUDENT" | "ORGANIZATION" | "COLLEGE" | "ADMIN" = "STUDENT";
   if (isAdmin) {
     if (adminView === "LEARNER") activeRole = "STUDENT";
     else if (adminView === "ORGANIZATION") activeRole = "ORGANIZATION";
     else activeRole = "ADMIN";
   } else {
-    activeRole = 
-      profile?.account_type === "ORGANIZATION" || rawRole === "ORGANIZATION" || profile?.organization
+    activeRole =
+      profile?.account_type === "ORGANIZATION" ||
+      rawRole === "ORGANIZATION" ||
+      profile?.organization
         ? "ORGANIZATION"
         : profile?.account_type === "COLLEGE" || rawRole === "COLLEGE" || profile?.college
           ? "COLLEGE"
@@ -245,10 +247,8 @@ function StudentDashboard() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 xl:grid-cols-3 gap-8 lg:gap-10">
-        
         {/* Main Content Column */}
         <div className="xl:col-span-2 space-y-8">
-          
           {/* SECTION: NEXT UP */}
           <section aria-label="Next Action">
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -351,7 +351,10 @@ function StudentDashboard() {
             <div className="nv-card p-6 shadow-sm">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {skillsMatrix.map((skill, i) => (
-                  <div key={i} className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between space-y-3">
+                  <div
+                    key={i}
+                    className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between space-y-3"
+                  >
                     <div className="flex items-center justify-between">
                       <span className="text-[0.6rem] font-mono text-muted-foreground uppercase">
                         {skill.category}
@@ -364,7 +367,7 @@ function StudentDashboard() {
                     </div>
                     <h4 className="font-bold text-sm text-foreground line-clamp-1">{skill.name}</h4>
                     <div className="text-[0.65rem] font-mono text-muted-foreground flex items-center gap-1">
-                      <Zap className="w-3 h-3 text-primary"/> {skill.points} Verified Points
+                      <Zap className="w-3 h-3 text-primary" /> {skill.points} Verified Points
                     </div>
                   </div>
                 ))}
@@ -375,7 +378,6 @@ function StudentDashboard() {
 
         {/* Sidebar Column */}
         <div className="space-y-8">
-          
           {/* SECTION: YOUR PROFILE & STATS */}
           <section aria-label="Your Profile">
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -394,18 +396,53 @@ function StudentDashboard() {
               <div className="flex flex-wrap gap-2 items-center">
                 {activeRole === "STUDENT" && (
                   <>
-                    <Link to="/profile" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">PROFILE</Link>
-                    <Link to="/achievements" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors">BADGES</Link>
-                    <Link to="/certificates" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">CERTIFICATES</Link>
-                    <Link to="/cyber-range/my-progress" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">PROGRESS</Link>
-                    <button onClick={() => void signOut()} className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors">LOGOUT</button>
+                    <Link
+                      to="/profile"
+                      className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                    >
+                      PROFILE
+                    </Link>
+                    <Link
+                      to="/achievements"
+                      className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
+                    >
+                      BADGES
+                    </Link>
+                    <Link
+                      to="/certificates"
+                      className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                    >
+                      CERTIFICATES
+                    </Link>
+                    <Link
+                      to="/cyber-range/my-progress"
+                      className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                    >
+                      PROGRESS
+                    </Link>
+                    <button
+                      onClick={() => void signOut()}
+                      className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
+                    >
+                      LOGOUT
+                    </button>
                   </>
                 )}
                 {/* Fallback for other roles */}
                 {activeRole !== "STUDENT" && (
                   <>
-                    <Link to="/profile" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">PROFILE</Link>
-                    <button onClick={() => void signOut()} className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors">LOGOUT</button>
+                    <Link
+                      to="/profile"
+                      className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+                    >
+                      PROFILE
+                    </Link>
+                    <button
+                      onClick={() => void signOut()}
+                      className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
+                    >
+                      LOGOUT
+                    </button>
                   </>
                 )}
               </div>
@@ -413,20 +450,30 @@ function StudentDashboard() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 nv-card space-y-1 shadow-sm hover:border-amber-500/30 transition-colors">
-                <div className="text-[0.65rem] font-mono uppercase text-warning font-bold">Streak</div>
-                <div className="font-display font-bold text-2xl text-foreground">7 <span className="text-xs text-muted-foreground">Days</span></div>
+                <div className="text-[0.65rem] font-mono uppercase text-warning font-bold">
+                  Streak
+                </div>
+                <div className="font-display font-bold text-2xl text-foreground">
+                  7 <span className="text-xs text-muted-foreground">Days</span>
+                </div>
               </div>
               <div className="p-4 nv-card space-y-1 shadow-sm">
-                <div className="text-[0.65rem] font-mono uppercase text-muted-foreground">Skill XP</div>
+                <div className="text-[0.65rem] font-mono uppercase text-muted-foreground">
+                  Skill XP
+                </div>
                 <div className="font-display font-bold text-2xl text-foreground">{totalXp}</div>
               </div>
               <div className="p-4 nv-card space-y-1 shadow-sm">
                 <div className="text-[0.65rem] font-mono uppercase text-primary">Lessons</div>
-                <div className="font-display font-bold text-2xl text-foreground">{completedModulesCount}</div>
+                <div className="font-display font-bold text-2xl text-foreground">
+                  {completedModulesCount}
+                </div>
               </div>
               <div className="p-4 nv-card space-y-1 shadow-sm">
                 <div className="text-[0.65rem] font-mono uppercase text-success">Labs</div>
-                <div className="font-display font-bold text-2xl text-foreground">{completedLabsCount}</div>
+                <div className="font-display font-bold text-2xl text-foreground">
+                  {completedLabsCount}
+                </div>
               </div>
             </div>
           </section>
@@ -437,30 +484,50 @@ function StudentDashboard() {
               <Layers className="w-3.5 h-3.5" /> Quick Tools
             </h2>
             <div className="grid grid-cols-1 gap-3">
-              <Link to="/cyber-range/labs" className="p-4 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between">
+              <Link
+                to="/cyber-range/labs"
+                className="p-4 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between"
+              >
                 <div>
-                  <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">Practice</div>
-                  <div className="font-display font-bold text-sm text-foreground mt-0.5">IVVAB LABS</div>
+                  <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">
+                    Practice
+                  </div>
+                  <div className="font-display font-bold text-sm text-foreground mt-0.5">
+                    IVVAB LABS
+                  </div>
                 </div>
                 <Terminal className="w-4 h-4 text-primary" />
               </Link>
-              <Link to="/academy/glossary" className="p-4 rounded-xl border border-border bg-card hover:border-accent/40 transition-colors flex items-center justify-between">
+              <Link
+                to="/academy/glossary"
+                className="p-4 rounded-xl border border-border bg-card hover:border-accent/40 transition-colors flex items-center justify-between"
+              >
                 <div>
-                  <div className="text-[0.65rem] font-mono text-accent uppercase font-semibold">Lexicon</div>
-                  <div className="font-display font-bold text-sm text-foreground mt-0.5">Glossary</div>
+                  <div className="text-[0.65rem] font-mono text-accent uppercase font-semibold">
+                    Lexicon
+                  </div>
+                  <div className="font-display font-bold text-sm text-foreground mt-0.5">
+                    Glossary
+                  </div>
                 </div>
                 <BookOpen className="w-4 h-4 text-accent" />
               </Link>
-              <Link to="/achievements" className="p-4 rounded-xl border border-border bg-card hover:border-[#8B5CF6]/40 transition-colors flex items-center justify-between">
+              <Link
+                to="/achievements"
+                className="p-4 rounded-xl border border-border bg-card hover:border-[#8B5CF6]/40 transition-colors flex items-center justify-between"
+              >
                 <div>
-                  <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">Portfolio</div>
-                  <div className="font-display font-bold text-sm text-foreground mt-0.5">Achievements</div>
+                  <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">
+                    Portfolio
+                  </div>
+                  <div className="font-display font-bold text-sm text-foreground mt-0.5">
+                    Achievements
+                  </div>
                 </div>
                 <Award className="w-4 h-4 text-primary" />
               </Link>
             </div>
           </section>
-          
         </div>
       </div>
     </div>

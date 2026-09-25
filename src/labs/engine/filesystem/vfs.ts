@@ -9,7 +9,7 @@ export interface VfsNode {
 
 export class VirtualFileSystem {
   root: VfsNode;
-  
+
   constructor(initialState?: VfsNode) {
     if (initialState) {
       this.root = JSON.parse(JSON.stringify(initialState));
@@ -20,7 +20,7 @@ export class VirtualFileSystem {
 
   // Parses path to parts
   private getParts(path: string): string[] {
-    return path.split("/").filter(p => p.length > 0 && p !== ".");
+    return path.split("/").filter((p) => p.length > 0 && p !== ".");
   }
 
   // Normalizes path based on cwd
@@ -70,7 +70,7 @@ export class VirtualFileSystem {
   writeFile(path: string, content: string): boolean {
     const parts = this.getParts(path);
     if (parts.length === 0) return false;
-    
+
     let current = this.root;
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i];
@@ -81,18 +81,18 @@ export class VirtualFileSystem {
       }
       current = current.children[part];
     }
-    
+
     const filename = parts[parts.length - 1];
     if (current.type !== "dir") return false;
     if (!current.children) current.children = {};
-    
+
     const existing = current.children[filename];
     if (existing && existing.type === "dir") return false;
-    
+
     current.children[filename] = {
       name: filename,
       type: "file",
-      content
+      content,
     };
     return true;
   }
@@ -100,7 +100,7 @@ export class VirtualFileSystem {
   mkdir(path: string): boolean {
     const parts = this.getParts(path);
     if (parts.length === 0) return false;
-    
+
     let current = this.root;
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i];
@@ -111,17 +111,17 @@ export class VirtualFileSystem {
       }
       current = current.children[part];
     }
-    
+
     const dirname = parts[parts.length - 1];
     if (current.type !== "dir") return false;
     if (!current.children) current.children = {};
-    
+
     if (current.children[dirname]) return false; // already exists
-    
+
     current.children[dirname] = {
       name: dirname,
       type: "dir",
-      children: {}
+      children: {},
     };
     return true;
   }

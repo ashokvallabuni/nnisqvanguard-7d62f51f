@@ -57,7 +57,10 @@ export function CommandPalette() {
   ];
 
   const rawRole = profile?.role?.toString()?.toUpperCase();
-  const isOrg = profile?.account_type === "ORGANIZATION" || rawRole === "ORGANIZATION" || !!profile?.organization;
+  const isOrg =
+    profile?.account_type === "ORGANIZATION" ||
+    rawRole === "ORGANIZATION" ||
+    !!profile?.organization;
   const isStudent = !isOrg && !isAdmin;
 
   let routes = publicRoutes;
@@ -78,8 +81,11 @@ export function CommandPalette() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#F0F4F9]/20 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
-      <div 
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#F0F4F9]/20 backdrop-blur-sm"
+      onClick={() => setIsOpen(false)}
+    >
+      <div
         className="w-full max-w-lg bg-[#F0F4F9] border border-border rounded-2xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
@@ -93,7 +99,9 @@ export function CommandPalette() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <kbd className="hidden sm:inline-block px-2 py-1 text-[0.6rem] font-mono font-semibold text-muted-foreground bg-[#E2E8F0] rounded border border-border">ESC</kbd>
+          <kbd className="hidden sm:inline-block px-2 py-1 text-[0.6rem] font-mono font-semibold text-muted-foreground bg-[#E2E8F0] rounded border border-border">
+            ESC
+          </kbd>
         </div>
 
         <div className="max-h-[300px] overflow-y-auto p-2">
@@ -112,7 +120,7 @@ export function CommandPalette() {
               No tactical operations found.
             </div>
           )}
-          
+
           {user && (
             <>
               <div className="h-px bg-muted my-2" />

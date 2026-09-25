@@ -280,10 +280,8 @@ function CyberLabsCatalogPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 xl:grid-cols-4 gap-8 lg:gap-10 pb-24">
-        
         {/* Main Content Column (Catalog) */}
         <div className="xl:col-span-3 space-y-8">
-          
           <section aria-label="Available labs" className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-2">
@@ -364,8 +362,8 @@ function CyberLabsCatalogPage() {
                   No labs match your current filters
                 </h4>
                 <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                  Try clearing your search query, choosing a different difficulty level, or browse all
-                  categories using the capability map.
+                  Try clearing your search query, choosing a different difficulty level, or browse
+                  all categories using the capability map.
                 </p>
                 <button
                   onClick={() => {
@@ -380,11 +378,11 @@ function CyberLabsCatalogPage() {
               </div>
             ) : (
               <div className="space-y-10">
-                {COURSE_LAB_MAPPINGS.map(mapping => {
-                  const course = AVAILABLE_COURSES.find(c => c.id === mapping.courseId);
-                  const courseLabs = filteredLabs.filter(l => mapping.labs.includes(l.id));
+                {COURSE_LAB_MAPPINGS.map((mapping) => {
+                  const course = AVAILABLE_COURSES.find((c) => c.id === mapping.courseId);
+                  const courseLabs = filteredLabs.filter((l) => mapping.labs.includes(l.id));
                   if (courseLabs.length === 0) return null;
-                  
+
                   return (
                     <div key={mapping.courseId} className="space-y-4">
                       <h4 className="font-display text-sm font-bold text-foreground border-b border-border pb-2 uppercase tracking-wide flex items-center gap-2">
@@ -399,12 +397,12 @@ function CyberLabsCatalogPage() {
                     </div>
                   );
                 })}
-                
+
                 {(() => {
-                  const mappedLabIds = new Set(COURSE_LAB_MAPPINGS.flatMap(m => m.labs));
-                  const unmappedLabs = filteredLabs.filter(l => !mappedLabIds.has(l.id));
+                  const mappedLabIds = new Set(COURSE_LAB_MAPPINGS.flatMap((m) => m.labs));
+                  const unmappedLabs = filteredLabs.filter((l) => !mappedLabIds.has(l.id));
                   if (unmappedLabs.length === 0) return null;
-                  
+
                   return (
                     <div className="space-y-4">
                       <h4 className="font-display text-sm font-bold text-foreground border-b border-border pb-2 uppercase tracking-wide flex items-center gap-2">
@@ -426,7 +424,6 @@ function CyberLabsCatalogPage() {
 
         {/* Sidebar Column */}
         <div className="space-y-8 xl:col-span-1">
-          
           {/* KPI STATS */}
           <section aria-label="Statistics">
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -434,7 +431,12 @@ function CyberLabsCatalogPage() {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-2 gap-3 sm:gap-4">
               {[
-                { label: "AVAILABLE LABS", value: stats.available, icon: Layers, variant: "primary" },
+                {
+                  label: "AVAILABLE LABS",
+                  value: stats.available,
+                  icon: Layers,
+                  variant: "primary",
+                },
                 {
                   label: "IN PROGRESS",
                   value: stats.inProgress,
@@ -501,7 +503,7 @@ function CyberLabsCatalogPage() {
                 Reset
               </button>
             </div>
-            
+
             <div className="flex flex-col gap-2 p-4 rounded-xl border border-border bg-card shadow-sm">
               <button
                 onClick={() => setSelectedCategory("all")}
@@ -512,11 +514,13 @@ function CyberLabsCatalogPage() {
                 }`}
               >
                 <span>ALL LABS</span>
-                <span className={`px-1.5 py-0.5 rounded-xs text-[0.6rem] ${selectedCategory === "all" ? "bg-primary-foreground/20" : "bg-muted"}`}>
+                <span
+                  className={`px-1.5 py-0.5 rounded-xs text-[0.6rem] ${selectedCategory === "all" ? "bg-primary-foreground/20" : "bg-muted"}`}
+                >
                   {allLabs.length}
                 </span>
               </button>
-              
+
               {STANDARD_CATEGORIES.map((std) => {
                 const stdKey = std.toLowerCase().replace(/[\s\-_]/g, "");
                 const match = (categories.slice(1).filter(Boolean) as string[]).find(
@@ -531,9 +535,9 @@ function CyberLabsCatalogPage() {
                         (l) => (l.category || "").toLowerCase().replace(/[\s\-_]/g, "") === stdKey,
                       ).length
                     : 0;
-                
+
                 if (!hasContent) return null; // Hide empty categories in sidebar to save space
-                
+
                 return (
                   <button
                     key={std}
@@ -558,7 +562,6 @@ function CyberLabsCatalogPage() {
               })}
             </div>
           </section>
-
         </div>
       </div>
     </div>
