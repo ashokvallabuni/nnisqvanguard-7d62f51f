@@ -178,17 +178,17 @@ export function LinuxPermissionsVisualizer() {
 
       {/* Visual Symbolic & Command Result */}
       <div className="p-5 rounded-xl border border-border bg-slate-950 text-slate-100 font-mono text-xs space-y-3">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-border pb-3">
           <div>
-            <div className="text-slate-400 text-[0.65rem] uppercase">Symbolic Representation:</div>
+            <div className="text-muted-foreground text-[0.65rem] uppercase">Symbolic Representation:</div>
             <div className="text-2xl font-bold tracking-wider text-green-400 mt-0.5">
               {symbolic}
             </div>
           </div>
 
           <div className="text-right">
-            <div className="text-slate-400 text-[0.65rem] uppercase">Linux Command:</div>
-            <div className="text-base font-bold text-primary bg-slate-900 px-3 py-1.5 rounded-md border border-slate-800">
+            <div className="text-muted-foreground text-[0.65rem] uppercase">Linux Command:</div>
+            <div className="text-base font-bold text-primary bg-slate-900 px-3 py-1.5 rounded-md border border-border">
               chmod {octal} filename
             </div>
           </div>

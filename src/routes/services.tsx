@@ -45,7 +45,7 @@ function ServicesPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#112240] text-[#F0F4F9]">
+    <main className="min-h-screen bg-background text-foreground">
       <PageHeader
         badge="DEFENSE SERVICES"
         badgeVariant="primary"
@@ -60,13 +60,13 @@ function ServicesPage() {
               <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <service.icon className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="text-2xl font-display font-bold text-[#F0F4F9] mb-3">{service.title}</h3>
-              <p className="text-[#94A3B8] text-sm leading-relaxed mb-6 flex-grow">{service.desc}</p>
+              <h3 className="text-2xl font-display font-bold text-foreground mb-3">{service.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">{service.desc}</p>
               
               <ul className="space-y-2 mb-8">
                 {service.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-[#F0F4F9] font-mono text-[0.7rem]">
-                    <Crosshair className="w-3.5 h-3.5 text-[#059669]" /> {feature}
+                  <li key={i} className="flex items-center gap-2 text-sm text-foreground font-mono text-[0.7rem]">
+                    <Crosshair className="w-3.5 h-3.5 text-success" /> {feature}
                   </li>
                 ))}
               </ul>

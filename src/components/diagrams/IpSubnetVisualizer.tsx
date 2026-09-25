@@ -158,27 +158,27 @@ export function IpSubnetVisualizer() {
 
           {/* Usable Host Range Visualizer */}
           <div className="p-4 rounded-xl border border-border bg-slate-950 text-slate-100 font-mono text-xs space-y-3">
-            <div className="text-slate-400 text-[0.7rem] uppercase border-b border-slate-800 pb-1">
+            <div className="text-muted-foreground text-[0.7rem] uppercase border-b border-border pb-1">
               Network Topology Segment Range:
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left py-1">
-              <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                <div className="text-[0.65rem] text-slate-400">NETWORK (ID)</div>
+              <div className="p-2 rounded bg-slate-900 border border-border">
+                <div className="text-[0.65rem] text-muted-foreground">NETWORK (ID)</div>
                 <div className="text-primary font-bold">{calculation.networkAddress}</div>
               </div>
               <div className="text-slate-500 font-bold">$\longrightarrow$</div>
-              <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                <div className="text-[0.65rem] text-slate-400">FIRST HOST</div>
+              <div className="p-2 rounded bg-slate-900 border border-border">
+                <div className="text-[0.65rem] text-muted-foreground">FIRST HOST</div>
                 <div className="text-green-400 font-bold">{calculation.firstHost}</div>
               </div>
               <div className="text-slate-500 font-bold">...</div>
-              <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                <div className="text-[0.65rem] text-slate-400">LAST HOST</div>
+              <div className="p-2 rounded bg-slate-900 border border-border">
+                <div className="text-[0.65rem] text-muted-foreground">LAST HOST</div>
                 <div className="text-green-400 font-bold">{calculation.lastHost}</div>
               </div>
               <div className="text-slate-500 font-bold">$\longrightarrow$</div>
-              <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                <div className="text-[0.65rem] text-slate-400">BROADCAST</div>
+              <div className="p-2 rounded bg-slate-900 border border-border">
+                <div className="text-[0.65rem] text-muted-foreground">BROADCAST</div>
                 <div className="text-accent font-bold">{calculation.broadcastAddress}</div>
               </div>
             </div>

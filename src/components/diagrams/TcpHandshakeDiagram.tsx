@@ -114,7 +114,7 @@ export function TcpHandshakeDiagram() {
 
       {/* Visual Sequence Animation Diagram */}
       <div className="p-6 rounded-xl border border-border bg-slate-950 text-slate-100 font-mono text-xs space-y-4">
-        <div className="flex justify-between items-center text-slate-400 border-b border-slate-800 pb-2">
+        <div className="flex justify-between items-center text-muted-foreground border-b border-border pb-2">
           <span className="text-primary font-bold">CLIENT (192.168.1.10:54102)</span>
           <span className="text-xs text-slate-500">PACKET TRANSMISSION</span>
           <span className="text-accent font-bold">SERVER (203.0.113.50:443)</span>
@@ -127,7 +127,7 @@ export function TcpHandshakeDiagram() {
             className={`cursor-pointer p-3 rounded-lg border transition-all ${
               activeStep === 1
                 ? "border-primary bg-primary/20 ring-1 ring-primary text-white"
-                : "border-slate-800 bg-slate-900/40 text-slate-400 opacity-60 hover:opacity-100"
+                : "border-border bg-slate-900/40 text-muted-foreground opacity-60 hover:opacity-100"
             }`}
           >
             <div className="flex items-center justify-between">
@@ -145,7 +145,7 @@ export function TcpHandshakeDiagram() {
             className={`cursor-pointer p-3 rounded-lg border transition-all ${
               activeStep === 2
                 ? "border-accent bg-accent/20 ring-1 ring-accent text-white"
-                : "border-slate-800 bg-slate-900/40 text-slate-400 opacity-60 hover:opacity-100"
+                : "border-border bg-slate-900/40 text-muted-foreground opacity-60 hover:opacity-100"
             }`}
           >
             <div className="flex items-center justify-between">
@@ -165,7 +165,7 @@ export function TcpHandshakeDiagram() {
             className={`cursor-pointer p-3 rounded-lg border transition-all ${
               activeStep === 3
                 ? "border-success bg-success/20 ring-1 ring-success text-white"
-                : "border-slate-800 bg-slate-900/40 text-slate-400 opacity-60 hover:opacity-100"
+                : "border-border bg-slate-900/40 text-muted-foreground opacity-60 hover:opacity-100"
             }`}
           >
             <div className="flex items-center justify-between">

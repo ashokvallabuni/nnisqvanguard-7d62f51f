@@ -116,7 +116,7 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
         {viewMode === "table" && isArrayData ? (
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 text-[0.7rem] uppercase">
+              <tr className="border-b border-border text-muted-foreground text-[0.7rem] uppercase">
                 {headers.map((h) => (
                   <th key={h} className="p-2 whitespace-nowrap font-medium">
                     {h}

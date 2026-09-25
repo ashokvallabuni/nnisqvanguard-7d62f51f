@@ -29,14 +29,14 @@ const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 /* ─── Telemetry Ticker ─────────────────────────────────────────────── */
 export function TelemetryTicker() {
   return (
-    <div className="w-full bg-[#E2E8F0] border-b border-[#1E2D4A]/60 text-[0.6rem] font-mono flex items-center justify-center px-4 py-1 overflow-hidden select-none">
-      <div className="flex items-center gap-3 whitespace-nowrap text-[#94A3B8]">
-        <span className="text-[#059669] text-[0.5rem]">●</span>
-        <span className="text-[#94A3B8] tracking-[0.15em]">NISQ VANGUARD</span>
+    <div className="w-full bg-muted border-b border-border/60 text-[0.6rem] font-mono flex items-center justify-center px-4 py-1 overflow-hidden select-none">
+      <div className="flex items-center gap-3 whitespace-nowrap text-muted-foreground">
+        <span className="text-success text-[0.5rem]">●</span>
+        <span className="text-muted-foreground tracking-[0.15em]">NISQ VANGUARD</span>
         <span className="text-slate-700">—</span>
-        <span className="text-[#94A3B8] tracking-wider">DEFENCE TECHNOLOGIES</span>
+        <span className="text-muted-foreground tracking-wider">DEFENCE TECHNOLOGIES</span>
         <span className="text-slate-700">—</span>
-        <span className="text-[#059669]/70 tracking-wider">SYSTEMS OPERATIONAL</span>
+        <span className="text-success/70 tracking-wider">SYSTEMS OPERATIONAL</span>
       </div>
     </div>
   );
@@ -137,7 +137,7 @@ export function TopNav() {
     <nav className="w-full z-50 px-4 py-3 pointer-events-none flex items-center justify-between transition-all" aria-label="Main navigation">
       {/* Logo */}
       <Link to="/" className="pointer-events-auto flex items-center gap-2.5 group shrink-0" aria-label="NISQ Vanguard home">
-        <div className="w-10 h-10 rounded-lg border border-[#0284C7] bg-[#112240] backdrop-blur-md overflow-hidden shadow-[0_0_12px_rgba(0,240,255,0.1)] flex items-center justify-center">
+        <div className="w-10 h-10 rounded-lg border border-primary bg-background backdrop-blur-md overflow-hidden shadow-[0_0_12px_rgba(0,240,255,0.1)] flex items-center justify-center">
           <img src={nisqLogoUrl} alt="NISQ Vanguard logo" className="w-full h-full object-cover" />
         </div>
       </Link>
@@ -153,8 +153,8 @@ export function TopNav() {
               to={item.to}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono font-semibold text-[0.65rem] tracking-wider transition-all duration-200 ${
                 isActive
-                  ? "bg-[#E0F2FE] text-[#0284C7] shadow-[inset_0_0_12px_rgba(0,240,255,0.08)]"
-                  : "text-[#94A3B8] hover:text-[#F0F4F9] hover:bg-[#112240]"
+                  ? "bg-primary/10 text-primary shadow-[inset_0_0_12px_rgba(0,240,255,0.08)]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background"
               }`}
               aria-current={isActive ? "page" : undefined}
             >
@@ -169,38 +169,38 @@ export function TopNav() {
       <div className="pointer-events-auto flex items-center gap-2 glass px-3 py-1.5 rounded-full shrink-0">
         {isPublic ? (
           <>
-            <Link to="/login" className="px-3 py-1.5 text-xs font-semibold text-[#F0F4F9] hover:text-[#F0F4F9] transition-colors tracking-wide">
+            <Link to="/login" className="px-3 py-1.5 text-xs font-semibold text-foreground hover:text-foreground transition-colors tracking-wide">
               SIGN IN
             </Link>
-            <Link to="/auth" className="px-4 py-1.5 rounded-full bg-[#0284C7] text-black font-semibold text-xs hover:bg-cyan-400 transition-all duration-200 tracking-wide">
+            <Link to="/auth" className="px-4 py-1.5 rounded-full bg-primary text-black font-semibold text-xs hover:bg-cyan-400 transition-all duration-200 tracking-wide">
               GET STARTED
             </Link>
           </>
         ) : (
           <div className="relative group/profile flex items-center gap-2 pl-2 cursor-pointer">
-            <div className="w-8 h-8 rounded-full bg-[#112240] border border-[#1E2D4A] flex items-center justify-center overflow-hidden">
-              <User className="w-4 h-4 text-[#94A3B8]" />
+            <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center overflow-hidden">
+              <User className="w-4 h-4 text-muted-foreground" />
             </div>
-            <ChevronDown className="w-3 h-3 text-[#94A3B8] group-hover/profile:text-[#F0F4F9] transition-colors" />
+            <ChevronDown className="w-3 h-3 text-muted-foreground group-hover/profile:text-foreground transition-colors" />
             {/* Dropdown */}
-            <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-[#F0F4F9] backdrop-blur-xl border border-[#1E2D4A] shadow-sm opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-200 py-1.5 z-50">
-              <div className="px-4 py-2.5 border-b border-[#1E2D4A]/60 mb-1">
-                <div className="text-[0.6rem] font-mono text-[#0284C7]/80 tracking-wider">ACCOUNT</div>
-                <div className="text-xs text-[#F0F4F9] truncate mt-0.5">{user?.email}</div>
+            <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-muted backdrop-blur-xl border border-border shadow-sm opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-200 py-1.5 z-50">
+              <div className="px-4 py-2.5 border-b border-border/60 mb-1">
+                <div className="text-[0.6rem] font-mono text-primary/80 tracking-wider">ACCOUNT</div>
+                <div className="text-xs text-foreground truncate mt-0.5">{user?.email}</div>
               </div>
-              <Link to="/dashboard" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[#F0F4F9] hover:text-[#F0F4F9] hover:bg-[#112240] transition-colors">
+              <Link to="/dashboard" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors">
                 <BarChart3 className="w-3.5 h-3.5" /> VIEW PROGRESS
               </Link>
-              <Link to="/achievements" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[#F0F4F9] hover:text-[#F0F4F9] hover:bg-[#112240] transition-colors">
+              <Link to="/achievements" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors">
                 <Award className="w-3.5 h-3.5" /> CERTIFICATES & BADGES
               </Link>
-              <Link to="/profile" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[#F0F4F9] hover:text-[#F0F4F9] hover:bg-[#112240] transition-colors">
+              <Link to="/profile" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors">
                 <User className="w-3.5 h-3.5" /> ACCOUNT SETTINGS
               </Link>
-              <Link to="/reporting" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[#F0F4F9] hover:text-[#F0F4F9] hover:bg-[#112240] transition-colors">
+              <Link to="/reporting" className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors">
                 <AlertTriangle className="w-3.5 h-3.5" /> REPORT INCIDENT
               </Link>
-              <div className="h-px bg-[#112240] my-1" />
+              <div className="h-px bg-background my-1" />
               <button
                 onClick={() => void signOut()}
                 className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-red-400 hover:bg-red-500/10 transition-colors"
@@ -214,7 +214,7 @@ export function TopNav() {
 
       {/* Mobile Menu Toggle */}
       <button
-        className="pointer-events-auto md:hidden p-2 rounded-full glass text-[#F0F4F9] hover:text-[#F0F4F9] ml-2"
+        className="pointer-events-auto md:hidden p-2 rounded-full glass text-foreground hover:text-foreground ml-2"
         onClick={() => setOpen(!open)}
         aria-label={open ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={open}
@@ -224,7 +224,7 @@ export function TopNav() {
 
       {/* Mobile Menu Overlay */}
       {open && (
-        <div className="md:hidden absolute top-20 inset-x-4 bg-[#112240]/95 backdrop-blur-xl border border-[#1E2D4A] rounded-2xl p-4 flex flex-col gap-1 shadow-sm pointer-events-auto animate-in slide-in-from-top-4 z-50">
+        <div className="md:hidden absolute top-20 inset-x-4 bg-background/95 backdrop-blur-xl border border-border rounded-2xl p-4 flex flex-col gap-1 shadow-sm pointer-events-auto animate-in slide-in-from-top-4 z-50">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
@@ -235,8 +235,8 @@ export function TopNav() {
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                   isActive
-                    ? "bg-[#E0F2FE] text-[#0284C7] border border-[#0284C7]"
-                    : "text-[#F0F4F9] hover:bg-[#112240] hover:text-[#F0F4F9]"
+                    ? "bg-primary/10 text-primary border border-primary"
+                    : "text-foreground hover:bg-background hover:text-foreground"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -245,17 +245,17 @@ export function TopNav() {
             );
           })}
           {!isPublic && (
-            <div className="border-t border-[#1E2D4A] mt-2 pt-2 space-y-1">
-              <Link to="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#F0F4F9] hover:bg-[#112240]">
+            <div className="border-t border-border mt-2 pt-2 space-y-1">
+              <Link to="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background">
                 <BarChart3 className="w-4 h-4" /> VIEW PROGRESS
               </Link>
-              <Link to="/achievements" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#F0F4F9] hover:bg-[#112240]">
+              <Link to="/achievements" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background">
                 <Award className="w-4 h-4" /> CERTIFICATES & BADGES
               </Link>
-              <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#F0F4F9] hover:bg-[#112240]">
+              <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background">
                 <User className="w-4 h-4" /> ACCOUNT SETTINGS
               </Link>
-              <Link to="/reporting" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#F0F4F9] hover:bg-[#112240]">
+              <Link to="/reporting" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background">
                 <AlertTriangle className="w-4 h-4" /> REPORT INCIDENT
               </Link>
               <button
@@ -328,7 +328,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-50 md:hidden pointer-events-auto safe-area-bottom" aria-label="Mobile navigation">
-      <div className="mx-3 mb-3 h-16 glass rounded-2xl border border-[#1E2D4A]/60 shadow-sm">
+      <div className="mx-3 mb-3 h-16 glass rounded-2xl border border-border/60 shadow-sm">
         <ul className="h-full grid items-center px-1" style={{ gridTemplateColumns: `repeat(${items.length}, 1fr)` }}>
           {items.map((item) => {
             const Icon = item.icon;
@@ -340,13 +340,13 @@ export function BottomNav() {
                   to={item.to}
                   className={`h-full w-full flex flex-col items-center justify-center gap-0.5 transition-colors min-h-[48px] ${
                     isActive
-                      ? isWarning ? "text-[#D97706]" : "text-[#0284C7]"
-                      : "text-[#94A3B8] hover:text-[#F0F4F9]"
+                      ? isWarning ? "text-warning" : "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                   aria-current={isActive ? "page" : undefined}
                   aria-label={item.label}
                 >
-                  <div className={`p-1 rounded-lg ${isActive ? (isWarning ? "bg-amber-400/15" : "bg-[#0284C7]/15") : ""}`}>
+                  <div className={`p-1 rounded-lg ${isActive ? (isWarning ? "bg-amber-400/15" : "bg-primary/15") : ""}`}>
                     <Icon className="w-5 h-5 shrink-0" strokeWidth={isActive ? 2.2 : 1.6} />
                   </div>
                   <span className="font-mono text-[7px] font-semibold tracking-wider leading-none truncate w-full text-center px-0.5">

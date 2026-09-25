@@ -84,9 +84,9 @@ const PHILOSOPHY_POINTS = [
 
 function FounderProfilePage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-200">
+    <div className="min-h-screen bg-background text-slate-200">
       {/* ── Header bar ────────────────────────────────────────────────────── */}
-      <div className="border-b border-slate-800 bg-[#030712]/90 px-5 py-4 sm:px-8">
+      <div className="border-b border-border bg-background/90 px-5 py-4 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center gap-3 font-mono text-[10px] tracking-widest text-slate-500">
           <Link to="/" className="hover:text-cyan-300 transition-colors">
             HOME
@@ -122,7 +122,7 @@ function FounderProfilePage() {
                 />
 
                 {/* NISQ badge */}
-                <div className="absolute -bottom-5 -right-5 z-20 flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan-400 bg-[#030712] shadow-[0_0_20px_rgba(0,210,255,0.4)]">
+                <div className="absolute -bottom-5 -right-5 z-20 flex h-16 w-16 items-center justify-center rounded-full border-2 border-cyan-400 bg-background shadow-[0_0_20px_rgba(0,210,255,0.4)]">
                   <img
                     src={nisqLogo}
                     alt="NISQ Vanguard"
@@ -130,7 +130,7 @@ function FounderProfilePage() {
                   />
                 </div>
 
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap border border-cyan-400 bg-[#030712] px-3 py-1 font-mono text-[9px] tracking-[0.2em] text-cyan-300">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap border border-cyan-400 bg-background px-3 py-1 font-mono text-[9px] tracking-[0.2em] text-cyan-300">
                   <span className="mr-1.5 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
                   VERIFIED · CHIEF ARCHITECT
                 </div>
@@ -169,7 +169,7 @@ function FounderProfilePage() {
                 ))}
               </div>
 
-              <div className="border border-slate-700 bg-[#0a0f1d] p-6 space-y-3 font-mono text-xs leading-relaxed text-slate-300">
+              <div className="border border-slate-700 bg-card p-6 space-y-3 font-mono text-xs leading-relaxed text-slate-300">
                 <p>
                   Ashok Vallabhuni is the{" "}
                   <strong className="text-white">Founder and Chief Architect</strong> of NISQ
@@ -196,7 +196,7 @@ function FounderProfilePage() {
       </section>
 
       {/* ── Founding Story ────────────────────────────────────────────────── */}
-      <section className="border-t border-slate-800 bg-slate-950 py-20">
+      <section className="border-t border-border bg-slate-950 py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8">
           <div className="mb-10">
             <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
@@ -238,7 +238,7 @@ function FounderProfilePage() {
       </section>
 
       {/* ── Philosophy ───────────────────────────────────────────────────── */}
-      <section className="border-t border-slate-800 bg-[#030712] py-20">
+      <section className="border-t border-border bg-background py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-12">
             <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
@@ -251,9 +251,9 @@ function FounderProfilePage() {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {PHILOSOPHY_POINTS.map(({ heading, body }) => (
-              <div key={heading} className="border border-slate-700 bg-[#0a0f1d] p-7">
+              <div key={heading} className="border border-slate-700 bg-card p-7">
                 <h3 className="font-display text-lg font-bold text-white mb-3">{heading}</h3>
-                <p className="font-mono text-xs leading-relaxed text-slate-400">{body}</p>
+                <p className="font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
               </div>
             ))}
           </div>
@@ -261,7 +261,7 @@ function FounderProfilePage() {
       </section>
 
       {/* ── Architectural Contributions ───────────────────────────────────── */}
-      <section className="border-t border-slate-800 bg-slate-950 py-20">
+      <section className="border-t border-border bg-slate-950 py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-12">
             <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
@@ -276,13 +276,13 @@ function FounderProfilePage() {
             {ARCHITECTURE_CONTRIBUTIONS.map(({ icon: Icon, title, body }) => (
               <div
                 key={title}
-                className="border border-slate-700 bg-[#0a0f1d] p-7 hover:border-cyan-400/40 transition-colors"
+                className="border border-slate-700 bg-card p-7 hover:border-cyan-400/40 transition-colors"
               >
                 <div className="mb-5 flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-bold text-white">{title}</h3>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-slate-400">{body}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
               </div>
             ))}
           </div>
@@ -290,12 +290,12 @@ function FounderProfilePage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="border-t border-slate-800 bg-[#030712] py-20">
+      <section className="border-t border-border bg-background py-20">
         <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
           <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
             EXPLORE <span className="text-cyan-300">NISQ VANGUARD</span>
           </h2>
-          <p className="mt-4 font-mono text-sm leading-relaxed text-slate-400">
+          <p className="mt-4 font-mono text-sm leading-relaxed text-muted-foreground">
             Visit the Academy, enter the IVVAB LABS, or connect with the NISQ Vanguard community.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -307,7 +307,7 @@ function FounderProfilePage() {
             </Link>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 border border-slate-600 px-6 py-3 font-mono text-xs tracking-wider text-slate-400 hover:border-cyan-400/60 hover:text-cyan-300 transition"
+              className="inline-flex items-center gap-2 border border-slate-600 px-6 py-3 font-mono text-xs tracking-wider text-muted-foreground hover:border-cyan-400/60 hover:text-cyan-300 transition"
             >
               BACK TO HOME <ArrowRight className="h-4 w-4" />
             </Link>

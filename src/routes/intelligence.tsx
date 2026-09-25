@@ -38,10 +38,10 @@ type DataAccuracy = "LIVE" | "RESEARCH" | "STATIC" | "COMING SOON";
 
 function AccuracyBadge({ accuracy }: { accuracy: DataAccuracy }) {
   const styles: Record<DataAccuracy, string> = {
-    LIVE: "bg-emerald-500/15 text-[#059669] border-emerald-500/40 animate-pulse",
-    RESEARCH: "bg-violet-500/15 text-[#8B5CF6] border-violet-500/40",
+    LIVE: "bg-emerald-500/15 text-success border-emerald-500/40 animate-pulse",
+    RESEARCH: "bg-violet-500/15 text-primary border-violet-500/40",
     STATIC: "bg-sky-500/15 text-sky-400 border-sky-500/40",
-    "COMING SOON": "bg-amber-500/15 text-[#D97706] border-amber-500/40",
+    "COMING SOON": "bg-amber-500/15 text-warning border-amber-500/40",
   };
   const icon: Record<DataAccuracy, typeof Radio> = {
     LIVE: Radio,
@@ -255,9 +255,9 @@ function severityBadgeClass(severity: string) {
     case "high":
       return "bg-orange-500/15 text-orange-400 border-orange-500/40 border";
     case "medium":
-      return "bg-amber-500/15 text-[#D97706] border-amber-500/40 border";
+      return "bg-amber-500/15 text-warning border-amber-500/40 border";
     case "low":
-      return "bg-emerald-500/15 text-[#059669] border-emerald-500/40 border";
+      return "bg-emerald-500/15 text-success border-emerald-500/40 border";
     case "info":
       return "bg-sky-500/15 text-sky-400 border-sky-500/40 border";
     default:
@@ -307,14 +307,14 @@ function ThreatIntelligenceDashboard() {
                 label: "CVEs TRACKED",
                 value: "312",
                 icon: Bug,
-                tone: "text-[#8B5CF6]",
+                tone: "text-primary",
                 sub: "42 critical severity",
               },
               {
                 label: "RESEARCH NOTES",
                 value: "18",
                 icon: Microscope,
-                tone: "text-[#059669]",
+                tone: "text-success",
                 sub: "6 in peer review",
               },
             ].map((kpi) => (
@@ -367,7 +367,7 @@ function ThreatIntelligenceDashboard() {
                     {cat.count}
                   </span>
                   {isSoon && (
-                    <span className="text-[0.6rem] font-mono px-1.5 py-0.5 rounded border border-amber-500/30 bg-[#FFFBEB] text-[#D97706]">
+                    <span className="text-[0.6rem] font-mono px-1.5 py-0.5 rounded border border-amber-500/30 bg-warning/10 text-warning">
                       COMING SOON
                     </span>
                   )}
@@ -432,8 +432,8 @@ function ThreatIntelligenceDashboard() {
                 </article>
               ))}
               <div className="rounded-lg border border-dashed border-border p-5 text-center space-y-2">
-                <Lock className="w-5 h-5 text-[#D97706] mx-auto" />
-                <p className="text-xs font-mono font-bold text-[#D97706] tracking-wider">
+                <Lock className="w-5 h-5 text-warning mx-auto" />
+                <p className="text-xs font-mono font-bold text-warning tracking-wider">
                   COMING SOON
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -480,7 +480,7 @@ function ThreatIntelligenceDashboard() {
                 </div>
               ))}
               <div className="rounded-md border border-dashed border-border p-3 text-center">
-                <p className="text-[0.65rem] font-mono font-bold text-[#D97706] tracking-wider">
+                <p className="text-[0.65rem] font-mono font-bold text-warning tracking-wider">
                   COMING SOON
                 </p>
                 <p className="text-[0.65rem] text-muted-foreground mt-1">
@@ -531,8 +531,8 @@ function ThreatIntelligenceDashboard() {
             ))}
           </div>
           <div className="rounded-md border border-dashed border-border p-4 text-center">
-            <AlertCircle className="w-4 h-4 text-[#D97706] mx-auto mb-1" />
-            <p className="text-[0.7rem] font-mono text-[#D97706] tracking-wider font-bold">
+            <AlertCircle className="w-4 h-4 text-warning mx-auto mb-1" />
+            <p className="text-[0.7rem] font-mono text-warning tracking-wider font-bold">
               CHART VISUALIZATION — COMING SOON
             </p>
             <p className="text-[0.65rem] text-muted-foreground mt-1">
@@ -572,7 +572,7 @@ function ThreatIntelligenceDashboard() {
                   <span className="text-[0.65rem] font-mono text-muted-foreground">
                     {r.researcher}
                   </span>
-                  <button className="inline-flex items-center gap-1 text-[0.65rem] font-mono font-semibold px-2.5 py-1 rounded border border-border bg-background hover:bg-muted hover:border-violet-500/40 text-[#8B5CF6]">
+                  <button className="inline-flex items-center gap-1 text-[0.65rem] font-mono font-semibold px-2.5 py-1 rounded border border-border bg-background hover:bg-muted hover:border-violet-500/40 text-primary">
                     <Microscope className="w-3 h-3" />
                     <span>READ DRAFT</span>
                   </button>
@@ -652,8 +652,8 @@ function ThreatIntelligenceDashboard() {
             </div>
           </div>
           <div className="rounded-md border border-dashed border-border p-4 text-center">
-            <Shield className="w-4 h-4 text-[#059669] mx-auto mb-1" />
-            <p className="text-[0.7rem] font-mono font-bold tracking-wider text-[#059669]">
+            <Shield className="w-4 h-4 text-success mx-auto mb-1" />
+            <p className="text-[0.7rem] font-mono font-bold tracking-wider text-success">
               LIVE FEED — COMING SOON
             </p>
             <p className="text-[0.65rem] text-muted-foreground mt-1">

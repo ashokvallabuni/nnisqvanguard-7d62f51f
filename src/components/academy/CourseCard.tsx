@@ -37,9 +37,9 @@ export function CourseCard({ course, progress }: CourseCardProps) {
   const isCompleted = currentProgress >= 100;
 
   const levelStyles: Record<string, string> = {
-    beginner: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
-    intermediate: "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD]",
-    advanced: "bg-[#FFFBEB] text-[#D97706] border-[#FDE68A]",
+    beginner: "bg-success/10 text-success border-success/30",
+    intermediate: "bg-primary/10 text-primary border-primary/30",
+    advanced: "bg-warning/10 text-warning border-warning/30",
   };
 
   const isLocked = !!course.isLocked;
@@ -56,11 +56,11 @@ export function CourseCard({ course, progress }: CourseCardProps) {
       aria-label={`${course.title} ${notAccessible ? "locked course" : "course"}`}
     >
       <div className="p-5 sm:p-6 space-y-3.5">
-        <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 flex-wrap">
           <span
             className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${
               levelStyles[course.level.toLowerCase()] ||
-              "bg-[#E2E8F0] text-[#94A3B8] border-[#1E2D4A]"
+              "bg-muted text-muted-foreground border-border"
             }`}
           >
             {course.level}
@@ -68,18 +68,18 @@ export function CourseCard({ course, progress }: CourseCardProps) {
 
           <div className="flex items-center gap-1.5 flex-wrap">
             {course.category && !notAccessible && (
-              <span className="text-[10px] font-mono text-[#94A3B8] uppercase tracking-tight">
+              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-tight">
                 {course.category}
               </span>
             )}
             {isComingSoon && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-[#1E2D4A] bg-[#F1F5F9] text-[#94A3B8]">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-border bg-muted/50 text-muted-foreground">
                 <Sparkles className="w-3 h-3" />
                 <span>Coming Soon</span>
               </span>
             )}
             {isLocked && !isComingSoon && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-[#FECACA] bg-[#FEF2F2] text-[#DC2626]">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-destructive/30 bg-destructive/10 text-destructive">
                 <Lock className="w-3 h-3" />
                 <span>Locked</span>
               </span>
@@ -87,9 +87,9 @@ export function CourseCard({ course, progress }: CourseCardProps) {
           </div>
         </div>
 
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 pt-1">
           <h3
-            className={`font-display font-bold text-lg sm:text-xl group-hover:text-primary transition-colors line-clamp-1 ${
+            className={`font-display font-bold text-lg sm:text-xl group-hover:text-primary transition-colors line-clamp-2 ${
               notAccessible ? "text-muted-foreground" : "text-foreground"
             }`}
           >
@@ -101,11 +101,11 @@ export function CourseCard({ course, progress }: CourseCardProps) {
         </div>
 
         {course.tags && course.tags.length > 0 && (
-          <div className="grid grid-cols-2 gap-2 pt-1">
+          <div className="flex flex-wrap gap-2 pt-2">
             {course.tags.slice(0, 4).map((tag, i) => (
               <span
                 key={i}
-                className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#E2E8F0] text-[#94A3B8] border border-[#1E2D4A] truncate text-center"
+                className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border truncate text-center"
               >
                 {tag}
               </span>

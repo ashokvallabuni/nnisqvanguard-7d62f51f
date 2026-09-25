@@ -116,7 +116,7 @@ export function LinuxFilesystemTree() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Side: Interactive Tree */}
         <div className="lg:col-span-5 p-4 rounded-xl border border-border bg-slate-950 text-slate-100 font-mono text-xs space-y-1.5">
-          <div className="text-slate-400 text-[0.7rem] uppercase border-b border-slate-800 pb-2 mb-2 flex items-center gap-2">
+          <div className="text-muted-foreground text-[0.7rem] uppercase border-b border-border pb-2 mb-2 flex items-center gap-2">
             <FolderOpen className="w-4 h-4 text-primary" />
             <span>Root Filesystem ( / )</span>
           </div>

@@ -269,7 +269,7 @@ function CyberLabsCatalogPage() {
         title={
           <div className="flex items-center gap-3">
             <span>Lab Command Center</span>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-[#059669]/30 bg-[#059669]/10 text-[#059669] text-[10px] font-mono tracking-widest font-bold">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-success/30 bg-success/10 text-success text-[10px] font-mono tracking-widest font-bold">
               <WifiOff className="w-3 h-3" />
               AVAILABLE OFFLINE
             </div>

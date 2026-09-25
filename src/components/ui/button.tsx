@@ -5,20 +5,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-xs font-bold tracking-widest uppercase cursor-pointer transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-xs font-bold tracking-widest uppercase cursor-pointer transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-[#0284C7] text-white hover:bg-[#0369A1] shadow-sm",
+          "bg-primary text-white hover:bg-[#0369A1] shadow-sm",
         destructive:
-          "bg-[#DC2626] text-white hover:bg-[#B91C1C] shadow-sm",
+          "bg-destructive text-white hover:bg-[#B91C1C] shadow-sm",
         outline:
-          "bg-[#F0F4F9] text-[#F0F4F9] border border-[#1E2D4A] hover:bg-[#F8FAFC] shadow-sm",
+          "bg-[#F0F4F9] text-foreground border border-border hover:bg-[#F8FAFC] shadow-sm",
         secondary:
-          "bg-[#F0F4F9] text-[#F0F4F9] border border-[#1E2D4A] hover:bg-[#F8FAFC] shadow-sm",
-        ghost: "hover:bg-[#E2E8F0] text-[#F0F4F9]",
-        link: "text-[#0284C7] underline-offset-4 hover:underline",
+          "bg-[#F0F4F9] text-foreground border border-border hover:bg-[#F8FAFC] shadow-sm",
+        ghost: "hover:bg-[#E2E8F0] text-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "h-12 md:h-10 px-5 py-2",

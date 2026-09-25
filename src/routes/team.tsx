@@ -10,7 +10,7 @@ export const Route = createFileRoute("/team")({
       {
         name: "description",
         content:
-          "Meet the NISQ Vanguard leadership team: Ashok Vallabhuni (Founder · Chief Architect), Varun Gajula (Co-Founder), and Sannith Reddy (CPO · Product Marketer).",
+          "Meet the NISQ Vanguard leadership team: Ashok Vallabhuni, Varun Gajula, Sai Tanaku, Sannith Reddy, and Chitireddy Janaki Raghu Rami Reddy.",
       },
     ],
   }),
@@ -28,10 +28,12 @@ type Member = {
 const APPROVED_PUBLIC_TEAM: ReadonlyArray<{ name: string; role: string }> = [
   { name: "Ashok Vallabhuni", role: "Founder · Chief Architect" },
   { name: "Varun Gajula", role: "Co-Founder" },
-  { name: "Sannith Reddy", role: "CPO · Product Marketer" },
+  { name: "Sai Tanaku", role: "Chief Technology Officer" },
+  { name: "Sannith Reddy", role: "Product Manager" },
+  { name: "Chitireddy Janaki Raghu Rami Reddy", role: "Chief Technology Officer" },
 ] as const;
 
-const REMOVED_PUBLIC_NAMES = new Set(["Sai Tanaku", "Pulijala Bhavani", "Bhavani Pulijala"]);
+const REMOVED_PUBLIC_NAMES = new Set(["Pulijala Bhavani", "Bhavani Pulijala"]);
 
 const normalize = (value: string) => value.replace(/\s+/g, " ").trim().toLowerCase();
 
@@ -62,6 +64,25 @@ function filterPublic(members: Member[]): Member[] {
     );
 }
 
+function TeamMemberCard({ member }: { member: Member }) {
+  return (
+    <div className="glass flex flex-col items-center rounded-xl p-6 hover:glow-cyber transition h-full text-center">
+      <div className="w-24 h-24 shrink-0 rounded-full bg-primary/10 border border-primary/40 mx-auto flex items-center justify-center overflow-hidden mb-4">
+        {member.image_url ? (
+          <img src={member.image_url} alt={member.name} className="w-full h-full object-cover" />
+        ) : (
+          <User className="w-10 h-10 text-cyber" />
+        )}
+      </div>
+      <h3 className="display text-xl text-foreground mb-1 break-words w-full">{member.name}</h3>
+      <div className="mono text-[0.65rem] text-primary mb-3 tracking-wide uppercase break-words w-full">
+        {member.role}
+      </div>
+      {member.bio && <p className="text-sm text-muted-foreground mt-auto pt-4 border-t border-border/50">{member.bio}</p>}
+    </div>
+  );
+}
+
 function Team() {
   const { data } = useQuery({
     queryKey: ["team"],
@@ -85,8 +106,8 @@ function Team() {
   return (
     <main className="pt-24 pb-20 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="mono text-xs text-cyber mb-2">// PEOPLE · NISQ VANGUARD LEADERSHIP</div>
-        <h1 className="display text-4xl md:text-5xl mb-4">Leadership Team</h1>
+        <div className="mono text-xs text-primary mb-2">// PEOPLE · NISQ VANGUARD LEADERSHIP</div>
+        <h1 className="display text-4xl md:text-5xl mb-4 text-foreground">Leadership Team</h1>
         <p className="text-muted-foreground mb-10 max-w-2xl">
           The cybersecurity strategists, educators, and product leaders building accessible,
           practical, and impactful defence education across India.
@@ -96,22 +117,9 @@ function Team() {
             Team members will appear here once added by an administrator.
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {data.map((m) => (
-              <div key={m.id} className="glass rounded-xl p-6 hover:glow-cyber transition">
-                <div className="w-24 h-24 rounded-full bg-primary/10 border border-primary/40 mx-auto flex items-center justify-center overflow-hidden mb-4">
-                  {m.image_url ? (
-                    <img src={m.image_url} alt={m.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-10 h-10 text-cyber" />
-                  )}
-                </div>
-                <h3 className="display text-xl text-center">{m.name}</h3>
-                <div className="mono text-[0.65rem] text-cyber text-center mb-3 tracking-wide uppercase">
-                  {m.role}
-                </div>
-                {m.bio && <p className="text-sm text-muted-foreground text-center">{m.bio}</p>}
-              </div>
+              <TeamMemberCard key={m.id} member={m} />
             ))}
           </div>
         )}

@@ -576,9 +576,9 @@ function CyberLabWorkbenchPage() {
 
   // ── Terminal Panel ─────────────────────────────────────────────────────────
   const TerminalPanel = () => (
-    <div className="flex flex-col h-full rounded-xl border border-slate-800 bg-slate-950 overflow-hidden shadow-md">
+    <div className="flex flex-col h-full rounded-xl border border-border bg-slate-950 overflow-hidden shadow-md">
       {/* Terminal top bar */}
-      <div className="bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between shrink-0">
+      <div className="bg-slate-900 border-b border-border px-4 py-2.5 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
@@ -587,7 +587,7 @@ function CyberLabWorkbenchPage() {
           </div>
           <span className="font-mono text-xs text-slate-300 ml-2">IVVAB LABS Sandbox (Browser)</span>
         </div>
-        <div className="flex items-center gap-3 text-[0.65rem] font-mono text-slate-400">
+        <div className="flex items-center gap-3 text-[0.65rem] font-mono text-muted-foreground">
           {isOffline && (
             <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30">
               AVAILABLE OFFLINE
@@ -610,8 +610,8 @@ function CyberLabWorkbenchPage() {
 
       {/* Terminal body */}
       {!sessionActive ? (
-        <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-slate-400">
-          <Terminal className="w-8 h-8 text-slate-600" />
+        <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-muted-foreground">
+          <Terminal className="w-8 h-8 text-muted-foreground" />
           <p className="text-xs max-w-md">
             Click <span className="text-primary font-semibold">&quot;Start Lab Sandbox&quot;</span>{" "}
             above to provision your client-side isolated environment. No server required.
@@ -631,7 +631,7 @@ function CyberLabWorkbenchPage() {
       {/* Command input */}
       <form
         onSubmit={handleExecuteCommand}
-        className="border-t border-slate-800 bg-slate-900/60 p-2.5 flex items-center gap-2 shrink-0"
+        className="border-t border-border bg-slate-900/60 p-2.5 flex items-center gap-2 shrink-0"
       >
         <span className="font-mono text-xs text-green-400 pl-2 shrink-0">
           analyst@ivvab-labs:{cwd}$
@@ -653,7 +653,7 @@ function CyberLabWorkbenchPage() {
         <button
           type="submit"
           disabled={!sessionActive || !commandInput.trim()}
-          className="px-3 py-1 rounded bg-slate-800 text-slate-200 font-mono text-xs hover:bg-slate-700 disabled:opacity-40 transition-colors shrink-0"
+          className="px-3 py-1 rounded bg-muted text-slate-200 font-mono text-xs hover:bg-slate-700 disabled:opacity-40 transition-colors shrink-0"
         >
           Send ↵
         </button>

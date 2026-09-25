@@ -228,10 +228,10 @@ function StudentDashboard() {
   ];
 
   const skillLevelBadges = {
-    BEGINNER: "bg-[#112240] text-[#94A3B8] border-[#1E2D4A]",
-    DEVELOPING: "bg-[#E0F2FE] text-[#0284C7] border-[#BAE6FD]",
-    PRACTICED: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
-    PROFICIENT: "bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]",
+    BEGINNER: "bg-background text-muted-foreground border-border",
+    DEVELOPING: "bg-primary/10 text-primary border-primary/30",
+    PRACTICED: "bg-success/10 text-success border-success/30",
+    PROFICIENT: "bg-destructive/10 text-destructive border-destructive/30",
   };
 
   return (
@@ -254,20 +254,20 @@ function StudentDashboard() {
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
               <Play className="w-3.5 h-3.5" /> Next Up
             </h2>
-            <div className="rounded-2xl border border-[#1E2D4A] bg-[#F0F4F9] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
+            <div className="rounded-2xl border border-border bg-muted p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
               <div className="space-y-2 max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#0284C7] text-white font-semibold">
+                  <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary text-white font-semibold">
                     {nextStepAction.stage}
                   </span>
-                  <span className="text-xs font-mono text-[#94A3B8]">
+                  <span className="text-xs font-mono text-muted-foreground">
                     Automated Recommendation
                   </span>
                 </div>
-                <h3 className="font-display font-bold text-2xl text-[#112240]">
+                <h3 className="font-display font-bold text-2xl text-foreground">
                   {nextStepAction.title}
                 </h3>
-                <p className="text-sm text-[#475569] leading-relaxed font-medium">
+                <p className="text-sm text-muted-foreground leading-relaxed font-medium">
                   {nextStepAction.description}
                 </p>
               </div>
@@ -275,7 +275,7 @@ function StudentDashboard() {
               <div className="shrink-0 flex items-center gap-3">
                 <Link
                   to={nextStepAction.linkTo as any}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#112240] text-white font-semibold text-sm hover:bg-[#0284C7] shadow-sm transition-all uppercase"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-background text-white font-semibold text-sm hover:bg-primary shadow-sm transition-all uppercase"
                 >
                   <Play className="w-4 h-4 fill-white" />
                   <span>{nextStepAction.ctaText}</span>
@@ -413,20 +413,20 @@ function StudentDashboard() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 nv-card space-y-1 shadow-sm hover:border-amber-500/30 transition-colors">
-                <div className="text-[0.65rem] font-mono uppercase text-[#D97706] font-bold">Streak</div>
-                <div className="font-display font-bold text-2xl text-[#F0F4F9]">7 <span className="text-xs text-[#94A3B8]">Days</span></div>
+                <div className="text-[0.65rem] font-mono uppercase text-warning font-bold">Streak</div>
+                <div className="font-display font-bold text-2xl text-foreground">7 <span className="text-xs text-muted-foreground">Days</span></div>
               </div>
               <div className="p-4 nv-card space-y-1 shadow-sm">
-                <div className="text-[0.65rem] font-mono uppercase text-[#94A3B8]">Skill XP</div>
-                <div className="font-display font-bold text-2xl text-[#F0F4F9]">{totalXp}</div>
+                <div className="text-[0.65rem] font-mono uppercase text-muted-foreground">Skill XP</div>
+                <div className="font-display font-bold text-2xl text-foreground">{totalXp}</div>
               </div>
               <div className="p-4 nv-card space-y-1 shadow-sm">
-                <div className="text-[0.65rem] font-mono uppercase text-[#0284C7]">Lessons</div>
-                <div className="font-display font-bold text-2xl text-[#F0F4F9]">{completedModulesCount}</div>
+                <div className="text-[0.65rem] font-mono uppercase text-primary">Lessons</div>
+                <div className="font-display font-bold text-2xl text-foreground">{completedModulesCount}</div>
               </div>
               <div className="p-4 nv-card space-y-1 shadow-sm">
-                <div className="text-[0.65rem] font-mono uppercase text-[#059669]">Labs</div>
-                <div className="font-display font-bold text-2xl text-[#F0F4F9]">{completedLabsCount}</div>
+                <div className="text-[0.65rem] font-mono uppercase text-success">Labs</div>
+                <div className="font-display font-bold text-2xl text-foreground">{completedLabsCount}</div>
               </div>
             </div>
           </section>
@@ -453,10 +453,10 @@ function StudentDashboard() {
               </Link>
               <Link to="/achievements" className="p-4 rounded-xl border border-border bg-card hover:border-[#8B5CF6]/40 transition-colors flex items-center justify-between">
                 <div>
-                  <div className="text-[0.65rem] font-mono text-[#8B5CF6] uppercase font-semibold">Portfolio</div>
+                  <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">Portfolio</div>
                   <div className="font-display font-bold text-sm text-foreground mt-0.5">Achievements</div>
                 </div>
-                <Award className="w-4 h-4 text-[#8B5CF6]" />
+                <Award className="w-4 h-4 text-primary" />
               </Link>
             </div>
           </section>

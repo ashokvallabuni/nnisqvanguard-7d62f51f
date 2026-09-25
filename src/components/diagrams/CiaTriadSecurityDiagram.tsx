@@ -184,7 +184,7 @@ export function CiaTriadSecurityDiagram() {
 
       {/* Threat Modeling Flow Diagram */}
       <div className="p-4 rounded-xl border border-border bg-slate-950 text-slate-100 font-mono text-xs space-y-3">
-        <div className="text-slate-400 text-[0.7rem] uppercase border-b border-slate-800 pb-1">
+        <div className="text-muted-foreground text-[0.7rem] uppercase border-b border-border pb-1">
           The Universal Threat Model Lifecycle:
         </div>
         <div className="flex flex-wrap items-center justify-center gap-2 text-center py-2 text-[0.7rem]">
