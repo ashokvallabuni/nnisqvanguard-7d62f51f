@@ -244,515 +244,223 @@ function StudentDashboard() {
         breadcrumbs={[{ label: "Home", to: "/" }, { label: "Command Center" }]}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
-        {/* Role-Specific Action Strip */}
-        <div className="nv-card p-4 sm:p-5 shadow-sm">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-border/60">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-                ROLE WORKSPACE: <span className="text-primary font-bold">{activeRole}</span>
-              </span>
-            </div>
-            <span className="font-mono text-[0.65rem] text-muted-foreground uppercase">
-              Authenticated Session
-            </span>
-          </div>
-
-          <div className="flex flex-wrap gap-2 sm:gap-2.5 items-center">
-            {activeRole === "STUDENT" && (
-              <>
-                <Link
-                  to="/"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  HOME
-                </Link>
-                <Link
-                  to="/academy"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
-                >
-                  ACADEMY
-                </Link>
-                <Link
-                  to="/cyber-range/labs"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  CYBER LABS
-                </Link>
-                <Link
-                  to="/cyber-range/my-progress"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  PROGRESS
-                </Link>
-                <Link
-                  to="/achievements"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  BADGES
-                </Link>
-                <Link
-                  to="/certificates"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  CERTIFICATES
-                </Link>
-                <Link
-                  to="/reporting"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
-                >
-                  REPORT INCIDENT
-                </Link>
-                <Link
-                  to="/appointments"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  APPOINTMENTS
-                </Link>
-                <Link
-                  to="/profile"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  PROFILE
-                </Link>
-                <button
-                  onClick={() => void signOut()}
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
-                >
-                  LOGOUT
-                </button>
-              </>
-            )}
-
-            {activeRole === "ORGANIZATION" && (
-              <>
-                <Link
-                  to="/"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  HOME
-                </Link>
-                <Link
-                  to="/services"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
-                >
-                  SERVICES
-                </Link>
-                <Link
-                  to="/appointments"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 transition-colors"
-                >
-                  REQUEST CONSULTATION
-                </Link>
-                <Link
-                  to="/reporting"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
-                >
-                  REPORT INCIDENT
-                </Link>
-                <Link
-                  to="/appointments"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  APPOINTMENTS
-                </Link>
-                <Link
-                  to="/profile"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  PROFILE
-                </Link>
-                <button
-                  onClick={() => void signOut()}
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
-                >
-                  LOGOUT
-                </button>
-              </>
-            )}
-
-            {activeRole === "COLLEGE" && (
-              <>
-                <Link
-                  to="/"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  HOME
-                </Link>
-                <Link
-                  to="/campus"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
-                >
-                  CAMPUS
-                </Link>
-                <Link
-                  to="/programs"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  PROGRAMS
-                </Link>
-                <Link
-                  to="/campus"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 transition-colors"
-                >
-                  REQUEST WORKSHOP
-                </Link>
-                <Link
-                  to="/reporting"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
-                >
-                  REPORT INCIDENT
-                </Link>
-                <Link
-                  to="/appointments"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  APPOINTMENTS
-                </Link>
-                <Link
-                  to="/profile"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  PROFILE
-                </Link>
-                <button
-                  onClick={() => void signOut()}
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
-                >
-                  LOGOUT
-                </button>
-              </>
-            )}
-
-            {activeRole === "ADMIN" && (
-              <>
-                <Link
-                  to="/"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  HOME
-                </Link>
-                <Link
-                  to="/admin"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
-                >
-                  ADMIN CONSOLE
-                </Link>
-                <Link
-                  to="/admin/content"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  COURSES
-                </Link>
-                <Link
-                  to="/admin/content"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  ASSESSMENTS
-                </Link>
-                <Link
-                  to="/admin"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  PROGRESS
-                </Link>
-                <Link
-                  to="/admin/team"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  STUDENTS
-                </Link>
-                <Link
-                  to="/admin/colleges"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  COLLEGES
-                </Link>
-                <Link
-                  to="/admin/complaints"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
-                >
-                  COMPLAINTS
-                </Link>
-                <Link
-                  to="/admin/bookings"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  BOOKINGS
-                </Link>
-                <Link
-                  to="/profile"
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
-                >
-                  SETTINGS
-                </Link>
-                <button
-                  onClick={() => void signOut()}
-                  className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
-                >
-                  LOGOUT
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Metric Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="p-5 nv-card space-y-1 shadow-sm hover:border-amber-500/30 transition-colors">
-            <div className="flex items-center justify-between text-[#94A3B8]">
-              <span className="text-xs font-mono uppercase text-[#D97706] font-bold">Active Streak</span>
-              <Activity className="w-4 h-4 text-[#D97706]" />
-            </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
-              7 <span className="text-sm text-[#94A3B8]">Days</span>
-            </div>
-            <div className="text-[0.65rem] font-mono text-[#94A3B8]">Keep it up!</div>
-          </div>
-
-          <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#94A3B8]">
-              <span className="text-xs font-mono uppercase">Verified Skill XP</span>
-              <Zap className="w-4 h-4 text-[#D97706]" />
-            </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
-              {totalXp}
-            </div>
-            <div className="text-[0.65rem] font-mono text-[#94A3B8]">Level 1 Defender</div>
-          </div>
-
-          <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#94A3B8]">
-              <span className="text-xs font-mono uppercase">Lessons Completed</span>
-              <BookOpen className="w-4 h-4 text-[#0284C7]" />
-            </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
-              {completedModulesCount}
-            </div>
-            <div className="text-[0.65rem] font-mono text-[#94A3B8]">Across curriculum</div>
-          </div>
-
-          <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#94A3B8]">
-              <span className="text-xs font-mono uppercase">Labs Solved</span>
-              <Terminal className="w-4 h-4 text-[#059669]" />
-            </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
-              {completedLabsCount}
-            </div>
-            <div className="text-[0.65rem] font-mono text-[#94A3B8]">In IVVAB LABS</div>
-          </div>
-
-          <div className="p-5 nv-card space-y-1 shadow-sm">
-            <div className="flex items-center justify-between text-[#94A3B8]">
-              <span className="text-xs font-mono uppercase">Badges Earned</span>
-              <Award className="w-4 h-4 text-[#8B5CF6]" />
-            </div>
-            <div className="font-display font-bold text-2xl sm:text-3xl text-[#F0F4F9]">
-              {totalBadgesEarned}
-            </div>
-            <Link
-              to="/achievements"
-              className="text-[0.65rem] font-mono text-[#0284C7] hover:underline"
-            >
-              View Portfolio →
-            </Link>
-          </div>
-        </div>
-
-        {/* Dynamic "Next Step Engine" Hero */}
-        <div className="rounded-2xl border border-[#1E2D4A] bg-[#F0F4F9] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
-          <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#0284C7] text-white font-semibold">
-                {nextStepAction.stage}
-              </span>
-              <span className="text-xs font-mono text-[#94A3B8]">
-                Automated Recommendation
-              </span>
-            </div>
-            <h3 className="font-display font-bold text-2xl text-[#F0F4F9]">
-              {nextStepAction.title}
-            </h3>
-            <p className="text-sm text-[#94A3B8] leading-relaxed">
-              {nextStepAction.description}
-            </p>
-          </div>
-
-          <div className="shrink-0 flex items-center gap-3">
-            <Link
-              to={nextStepAction.linkTo as any}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F0F4F9] text-white font-semibold text-sm hover:bg-[#0284C7] shadow-sm transition-all uppercase"
-            >
-              <Play className="w-4 h-4 fill-white" />
-              <span>{nextStepAction.ctaText}</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Verified Skill Progression Matrix */}
-        <div className="nv-card p-6 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between border-b border-border/80 pb-3">
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
-              <h3 className="font-display font-bold text-lg text-foreground">
-                Demonstrated Cybersecurity Skill Matrix
-              </h3>
-            </div>
-            <span className="text-[0.65rem] font-mono text-muted-foreground uppercase">
-              Calculated From Verified Activity
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {skillsMatrix.map((skill, i) => (
-              <div key={i} className="p-4 rounded-xl border border-border bg-muted/20 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[0.6rem] font-mono text-muted-foreground uppercase">
-                    {skill.category}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 xl:grid-cols-3 gap-8 lg:gap-10">
+        
+        {/* Main Content Column */}
+        <div className="xl:col-span-2 space-y-8">
+          
+          {/* SECTION: NEXT UP */}
+          <section aria-label="Next Action">
+            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+              <Play className="w-3.5 h-3.5" /> Next Up
+            </h2>
+            <div className="rounded-2xl border border-[#1E2D4A] bg-[#F0F4F9] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
+              <div className="space-y-2 max-w-2xl">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#0284C7] text-white font-semibold">
+                    {nextStepAction.stage}
                   </span>
-                  <span
-                    className={`text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-md border font-semibold ${skillLevelBadges[skill.level]}`}
+                  <span className="text-xs font-mono text-[#94A3B8]">
+                    Automated Recommendation
+                  </span>
+                </div>
+                <h3 className="font-display font-bold text-2xl text-[#112240]">
+                  {nextStepAction.title}
+                </h3>
+                <p className="text-sm text-[#475569] leading-relaxed font-medium">
+                  {nextStepAction.description}
+                </p>
+              </div>
+
+              <div className="shrink-0 flex items-center gap-3">
+                <Link
+                  to={nextStepAction.linkTo as any}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#112240] text-white font-semibold text-sm hover:bg-[#0284C7] shadow-sm transition-all uppercase"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  <span>{nextStepAction.ctaText}</span>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* SECTION: ENROLLED TRACKS */}
+          <section aria-label="Enrolled Tracks">
+            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+              <BookOpen className="w-3.5 h-3.5" /> Enrolled Tracks
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {(courses ?? []).map((c) => {
+                const cModules = (allModules ?? []).filter((m) => m.course_id === c.id);
+                const cDone = cModules.filter((m) => completedModuleIds.has(m.id)).length;
+                const pct = cModules.length ? Math.round((cDone / cModules.length) * 100) : 0;
+
+                return (
+                  <div
+                    key={c.id}
+                    className="rounded-xl border border-border bg-card p-5 flex flex-col justify-between space-y-4 hover:border-primary/40 transition-colors shadow-xs"
                   >
-                    {skill.level}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full border bg-muted text-muted-foreground">
+                          {c.level}
+                        </span>
+                        <span className="text-xs font-mono text-muted-foreground font-semibold">
+                          {pct}% Complete
+                        </span>
+                      </div>
+                      <h4 className="font-display font-bold text-lg text-foreground line-clamp-1">
+                        {c.title}
+                      </h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{c.description}</p>
+                    </div>
+
+                    <div className="space-y-3 pt-2 border-t border-border/60">
+                      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-full bg-primary transition-all duration-300"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-mono text-muted-foreground">
+                          {cDone} / {cModules.length || 5} Modules
+                        </span>
+                        <Link
+                          to="/learn/$slug"
+                          params={{ slug: c.slug }}
+                          className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
+                        >
+                          <span>{pct > 0 ? "Resume" : "Start"}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* SECTION: SKILL MATRIX */}
+          <section aria-label="Skill Matrix">
+            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+              <Shield className="w-3.5 h-3.5" /> Verified Skill Matrix
+            </h2>
+            <div className="nv-card p-6 shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {skillsMatrix.map((skill, i) => (
+                  <div key={i} className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[0.6rem] font-mono text-muted-foreground uppercase">
+                        {skill.category}
+                      </span>
+                      <span
+                        className={`text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-md border font-semibold ${skillLevelBadges[skill.level]}`}
+                      >
+                        {skill.level}
+                      </span>
+                    </div>
+                    <h4 className="font-bold text-sm text-foreground line-clamp-1">{skill.name}</h4>
+                    <div className="text-[0.65rem] font-mono text-muted-foreground flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-primary"/> {skill.points} Verified Points
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Sidebar Column */}
+        <div className="space-y-8">
+          
+          {/* SECTION: YOUR PROFILE & STATS */}
+          <section aria-label="Your Profile">
+            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+              <Activity className="w-3.5 h-3.5" /> Profile & Stats
+            </h2>
+            <div className="nv-card p-4 sm:p-5 shadow-sm mb-4">
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-border/60">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+                    WORKSPACE: <span className="text-primary font-bold">{activeRole}</span>
                   </span>
                 </div>
-                <h4 className="font-bold text-xs text-foreground line-clamp-1">{skill.name}</h4>
-                <div className="text-[0.65rem] font-mono text-muted-foreground">
-                  {skill.points} Verified Points
+              </div>
+
+              <div className="flex flex-wrap gap-2 items-center">
+                {activeRole === "STUDENT" && (
+                  <>
+                    <Link to="/profile" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">PROFILE</Link>
+                    <Link to="/achievements" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors">BADGES</Link>
+                    <Link to="/certificates" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">CERTIFICATES</Link>
+                    <Link to="/cyber-range/my-progress" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">PROGRESS</Link>
+                    <button onClick={() => void signOut()} className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors">LOGOUT</button>
+                  </>
+                )}
+                {/* Fallback for other roles */}
+                {activeRole !== "STUDENT" && (
+                  <>
+                    <Link to="/profile" className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors">PROFILE</Link>
+                    <button onClick={() => void signOut()} className="px-3 py-1.5 rounded-lg text-[0.65rem] font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors">LOGOUT</button>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 nv-card space-y-1 shadow-sm hover:border-amber-500/30 transition-colors">
+                <div className="text-[0.65rem] font-mono uppercase text-[#D97706] font-bold">Streak</div>
+                <div className="font-display font-bold text-2xl text-[#F0F4F9]">7 <span className="text-xs text-[#94A3B8]">Days</span></div>
+              </div>
+              <div className="p-4 nv-card space-y-1 shadow-sm">
+                <div className="text-[0.65rem] font-mono uppercase text-[#94A3B8]">Skill XP</div>
+                <div className="font-display font-bold text-2xl text-[#F0F4F9]">{totalXp}</div>
+              </div>
+              <div className="p-4 nv-card space-y-1 shadow-sm">
+                <div className="text-[0.65rem] font-mono uppercase text-[#0284C7]">Lessons</div>
+                <div className="font-display font-bold text-2xl text-[#F0F4F9]">{completedModulesCount}</div>
+              </div>
+              <div className="p-4 nv-card space-y-1 shadow-sm">
+                <div className="text-[0.65rem] font-mono uppercase text-[#059669]">Labs</div>
+                <div className="font-display font-bold text-2xl text-[#F0F4F9]">{completedLabsCount}</div>
+              </div>
+            </div>
+          </section>
+
+          {/* SECTION: QUICK TOOLS */}
+          <section aria-label="Quick Tools">
+            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+              <Layers className="w-3.5 h-3.5" /> Quick Tools
+            </h2>
+            <div className="grid grid-cols-1 gap-3">
+              <Link to="/cyber-range/labs" className="p-4 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between">
+                <div>
+                  <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">Practice</div>
+                  <div className="font-display font-bold text-sm text-foreground mt-0.5">IVVAB LABS</div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Curriculum Tracks Progress */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-display font-bold text-xl text-foreground flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-primary" />
-              <span>Enrolled Curriculum Tracks</span>
-            </h3>
-            <Link to="/academy" className="text-xs font-mono text-primary hover:underline">
-              Academy Catalog →
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(courses ?? []).map((c) => {
-              const cModules = (allModules ?? []).filter((m) => m.course_id === c.id);
-              const cDone = cModules.filter((m) => completedModuleIds.has(m.id)).length;
-              const pct = cModules.length ? Math.round((cDone / cModules.length) * 100) : 0;
-
-              return (
-                <div
-                  key={c.id}
-                  className="rounded-xl border border-border bg-card p-5 flex flex-col justify-between space-y-4 hover:border-primary/40 transition-colors shadow-xs"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full border bg-muted text-muted-foreground">
-                        {c.level}
-                      </span>
-                      <span className="text-xs font-mono text-muted-foreground font-semibold">
-                        {pct}% Complete
-                      </span>
-                    </div>
-                    <h4 className="font-display font-bold text-lg text-foreground line-clamp-1">
-                      {c.title}
-                    </h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{c.description}</p>
-                  </div>
-
-                  <div className="space-y-3 pt-2 border-t border-border/60">
-                    <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-                      <div
-                        className="h-full bg-primary transition-all duration-300"
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono text-muted-foreground">
-                        {cDone} / {cModules.length || 5} Modules
-                      </span>
-                      <Link
-                        to="/learn/$slug"
-                        params={{ slug: c.slug }}
-                        className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
-                      >
-                        <span>{pct > 0 ? "Resume" : "Start"}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </div>
+                <Terminal className="w-4 h-4 text-primary" />
+              </Link>
+              <Link to="/academy/glossary" className="p-4 rounded-xl border border-border bg-card hover:border-accent/40 transition-colors flex items-center justify-between">
+                <div>
+                  <div className="text-[0.65rem] font-mono text-accent uppercase font-semibold">Lexicon</div>
+                  <div className="font-display font-bold text-sm text-foreground mt-0.5">Glossary</div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Quick Reference Tools */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <Link
-            to="/"
-            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between"
-          >
-            <div>
-              <div className="text-[0.65rem] font-mono text-cyber uppercase font-semibold">
-                Public Site
-              </div>
-              <div className="font-display font-bold text-sm text-foreground mt-0.5">Home</div>
+                <BookOpen className="w-4 h-4 text-accent" />
+              </Link>
+              <Link to="/achievements" className="p-4 rounded-xl border border-border bg-card hover:border-[#8B5CF6]/40 transition-colors flex items-center justify-between">
+                <div>
+                  <div className="text-[0.65rem] font-mono text-[#8B5CF6] uppercase font-semibold">Portfolio</div>
+                  <div className="font-display font-bold text-sm text-foreground mt-0.5">Achievements</div>
+                </div>
+                <Award className="w-4 h-4 text-[#8B5CF6]" />
+              </Link>
             </div>
-            <HomeIcon className="w-5 h-5 text-cyber" />
-          </Link>
-
-          <Link
-            to="/achievements"
-            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between"
-          >
-            <div>
-              <div className="text-[0.65rem] font-mono text-primary uppercase font-semibold">
-                Verified Badges
-              </div>
-              <div className="font-display font-bold text-sm text-foreground mt-0.5">
-                Achievements Portfolio
-              </div>
-            </div>
-            <Award className="w-5 h-5 text-primary" />
-          </Link>
-
-          <Link
-            to="/academy/glossary"
-            className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors flex items-center justify-between"
-          >
-            <div>
-              <div className="text-[0.65rem] font-mono text-accent uppercase font-semibold">
-                Technical Lexicon
-              </div>
-              <div className="font-display font-bold text-sm text-foreground mt-0.5">
-                Cybersecurity Glossary
-              </div>
-            </div>
-            <BookOpen className="w-5 h-5 text-accent" />
-          </Link>
-
-          <Link
-            to="/verify/$certificateId"
-            params={{ certificateId: "NISQ-CERT-NET-2026-001" }}
-            className="p-5 rounded-xl border border-border bg-card hover:border-success/40 transition-colors flex items-center justify-between"
-          >
-            <div>
-              <div className="text-[0.65rem] font-mono text-success uppercase font-semibold">
-                Credential Verification
-              </div>
-              <div className="font-display font-bold text-sm text-foreground mt-0.5">
-                Public Certificate Portal
-              </div>
-            </div>
-            <CheckCircle2 className="w-5 h-5 text-success" />
-          </Link>
+          </section>
+          
         </div>
       </div>
     </div>

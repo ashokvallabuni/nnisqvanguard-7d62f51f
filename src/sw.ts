@@ -1,6 +1,7 @@
 import { precacheAndRoute } from 'workbox-precaching';
-import { NavigationRoute, registerRoute } from 'workbox-routing';
+import { registerRoute } from 'workbox-routing';
 import { NetworkFirst, CacheFirst } from 'workbox-strategies';
+import { ExpirationPlugin } from 'workbox-expiration';
 
 // Ensure the SW gets the pre-cached assets injected during build
 declare let self: ServiceWorkerGlobalScope;
@@ -19,11 +20,32 @@ registerRoute(
   })
 );
 
+// Cache Supabase API requests for offline fallback
+registerRoute(
+  ({ url }) => url.origin.includes('supabase.co') && url.pathname.startsWith('/rest/v1/'),
+  new NetworkFirst({
+    cacheName: 'supabase-api',
+    networkTimeoutSeconds: 3,
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 24 * 60 * 60, // 24 hours
+      }),
+    ],
+  })
+);
+
 // Cache Google Fonts
 registerRoute(
   ({ url }) => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com',
   new CacheFirst({
     cacheName: 'google-fonts',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 30,
+        maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+      }),
+    ],
   })
 );
 

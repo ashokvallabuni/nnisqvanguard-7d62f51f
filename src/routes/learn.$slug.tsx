@@ -221,9 +221,9 @@ function CourseDetailPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 lg:gap-10">
           {/* Main Course Syllabus & Overview */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="xl:col-span-3 space-y-8">
             {/* Overview Card */}
             <div className="rounded-xl border border-border bg-card p-6 space-y-4">
               <h2 className="font-display font-bold text-xl text-foreground">
@@ -369,7 +369,7 @@ function CourseDetailPage() {
             )}
 
           {/* Sidebar Action / Progress Widget */}
-          <div className="space-y-6">
+          <div className="space-y-6 xl:col-span-1">
             <div className="rounded-xl border border-border bg-card p-6 space-y-5 sticky top-20 shadow-xs">
               <div className="space-y-2">
                 <span className="text-[0.65rem] font-mono uppercase px-2.5 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/20 font-medium">
