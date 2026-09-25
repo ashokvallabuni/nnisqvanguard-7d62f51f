@@ -246,7 +246,7 @@ function StudentDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-10">
         {/* Role-Specific Action Strip */}
-        <div className="glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-2xl">
+        <div className="nv-card p-4 sm:p-5 shadow-2xl">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-border/60">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
@@ -500,7 +500,7 @@ function StudentDashboard() {
 
         {/* Metric Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl hover:border-amber-500/30 transition-colors">
+          <div className="p-5 nv-card space-y-1 shadow-2xl hover:border-amber-500/30 transition-colors">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase text-amber-500 font-bold">Active Streak</span>
               <Activity className="w-4 h-4 text-amber-500" />
@@ -511,7 +511,7 @@ function StudentDashboard() {
             <div className="text-[0.65rem] font-mono text-slate-500">Keep it up!</div>
           </div>
 
-          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+          <div className="p-5 nv-card space-y-1 shadow-2xl">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase">Verified Skill XP</span>
               <Zap className="w-4 h-4 text-amber-400" />
@@ -522,7 +522,7 @@ function StudentDashboard() {
             <div className="text-[0.65rem] font-mono text-slate-500">Level 1 Defender</div>
           </div>
 
-          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+          <div className="p-5 nv-card space-y-1 shadow-2xl">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase">Lessons Completed</span>
               <BookOpen className="w-4 h-4 text-cyan-400" />
@@ -533,7 +533,7 @@ function StudentDashboard() {
             <div className="text-[0.65rem] font-mono text-slate-500">Across curriculum</div>
           </div>
 
-          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+          <div className="p-5 nv-card space-y-1 shadow-2xl">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase">Labs Solved</span>
               <Terminal className="w-4 h-4 text-emerald-400" />
@@ -544,7 +544,7 @@ function StudentDashboard() {
             <div className="text-[0.65rem] font-mono text-slate-500">In Cyber Range</div>
           </div>
 
-          <div className="p-5 glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl space-y-1 shadow-2xl">
+          <div className="p-5 nv-card space-y-1 shadow-2xl">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-xs font-mono uppercase">Badges Earned</span>
               <Award className="w-4 h-4 text-purple-400" />
@@ -592,7 +592,7 @@ function StudentDashboard() {
         </div>
 
         {/* Verified Skill Progression Matrix */}
-        <div className="glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-xl p-6 space-y-4 shadow-2xl">
+        <div className="nv-card p-6 space-y-4 shadow-2xl">
           <div className="flex items-center justify-between border-b border-border/80 pb-3">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-primary" />

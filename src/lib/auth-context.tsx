@@ -32,7 +32,7 @@ export async function ensureUserProfile(user: User): Promise<Profile | null> {
   let lastError: unknown = null;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const { error } = await supabase.from("profiles").upsert(profile, { onConflict: "id" });
+      const { error } = await supabase.from("profiles").upsert(profile as any, { onConflict: "id" });
       if (error) {
         lastError = error;
         if (error.code === "PGRST301" || /Invalid|JWT|token/i.test(error.message)) {

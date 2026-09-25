@@ -196,49 +196,10 @@ const COMMUNITY = [
 export function CyberIntelligenceHome() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#030712] text-slate-200">
-      {/* ── 0. HEADER / NAV ─────────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/80 bg-[#030712]/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={nisqLogo} alt="NISQ Vanguard" className="h-8 w-8 rounded-sm object-cover" />
-            <span className="font-display text-sm font-bold tracking-wider text-white hidden sm:block">
-              NISQ VANGUARD<span className="text-cyan-400">·</span>DEFENCE TECHNOLOGIES
-            </span>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className="font-mono text-[11px] tracking-widest text-slate-400 hover:text-cyan-300 transition-colors uppercase"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              to="/login"
-              search={{ next: "/dashboard" }}
-              className="font-mono text-[11px] tracking-wider text-slate-400 hover:text-cyan-300 transition-colors hidden sm:block"
-            >
-              SIGN IN
-            </Link>
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-1.5 border border-cyan-400/70 bg-cyan-400/10 px-4 py-2 font-mono text-[10px] tracking-wider text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition-all"
-            >
-              <Shield className="h-3 w-3" />
-              COMMAND CENTER
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Navigation is provided by the root layout TopNav */}
 
       {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
-      <section id="hero" className="relative flex min-h-[780px] items-center overflow-hidden pt-20">
+      <section id="hero" className="relative flex min-h-[720px] items-center overflow-hidden">
         {/* Grid background */}
         <div className="absolute inset-0 intel-grid" aria-hidden="true" />
         <div className="absolute inset-0 intel-scanlines" aria-hidden="true" />
@@ -284,13 +245,13 @@ export function CyberIntelligenceHome() {
                 to="/learn"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 px-5 py-3 font-display text-xs font-bold tracking-wider text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
               >
-                ENTER ACADEMY <GraduationCap className="h-4 w-4" />
+                START YOUR DEFENCE JOURNEY <GraduationCap className="h-4 w-4" />
               </Link>
               <Link
                 to="/cyber-range"
                 className="inline-flex items-center gap-2 border border-cyan-400/70 bg-slate-950/70 px-5 py-3 font-display text-xs font-bold tracking-wider text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-950"
               >
-                EXPLORE CYBER RANGE <FlaskConical className="h-4 w-4" />
+                EXPLORE NISQ VANGUARD <FlaskConical className="h-4 w-4" />
               </Link>
             </div>
 
@@ -983,7 +944,7 @@ export function CyberIntelligenceHome() {
               START LEARNING FREE <GraduationCap className="h-4 w-4" />
             </Link>
             <Link
-              to="/complaint"
+              to="/reporting"
               className="inline-flex items-center gap-2 border border-slate-600 bg-slate-800/40 px-8 py-4 font-mono text-sm tracking-wider text-slate-300 hover:border-cyan-400/60 hover:text-cyan-300 transition"
             >
               <Shield className="h-4 w-4" /> REPORT A THREAT

@@ -174,7 +174,7 @@ function FraudCheck() {
                     <p className="text-sm">{result.recommended_action}</p>
                   </div>
                   <Link
-                    to="/complaint"
+                    to="/reporting"
                     className="block text-center mt-4 border border-primary/40 rounded-md py-2 mono text-xs hover:bg-primary/10"
                   >
                     FILE A FORMAL COMPLAINT →

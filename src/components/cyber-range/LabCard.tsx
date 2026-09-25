@@ -44,7 +44,7 @@ export function LabCard({ lab }: LabCardProps) {
 
   let statusLabel = "AVAILABLE";
   let statusVariant = "bg-muted/70 text-muted-foreground border-border";
-  let ctaLabel = "START LAB";
+  let ctaLabel = "OPEN LAB";
   let ctaIcon: typeof Play = Play;
   let ctaVariant =
     "border border-border bg-card text-foreground hover:border-primary hover:text-primary hover:bg-primary/5";
@@ -58,7 +58,7 @@ export function LabCard({ lab }: LabCardProps) {
   } else if (lab.completed) {
     statusLabel = "COMPLETED";
     statusVariant = "bg-success/15 text-success border-success/30";
-    ctaLabel = "REVIEW LAB";
+    ctaLabel = "VIEW LAB DETAILS";
     ctaIcon = Award;
     ctaVariant = "border border-success/40 bg-success/5 text-success hover:bg-success/10";
   }

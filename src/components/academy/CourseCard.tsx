@@ -194,7 +194,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
               className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 group/btn transition-colors"
               aria-label={`Continue ${course.title}`}
             >
-              <span>CONTINUE</span>
+              <span>CONTINUE LEARNING</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
             </Link>
           ) : (

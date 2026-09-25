@@ -568,3 +568,71 @@
     transform: translateY(-10px);
   }
 }
+
+/* ─── Design System: Cards ─────────────────────────────────────────── */
+@utility nv-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+@utility nv-card-hover {
+  &:hover {
+    border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
+    box-shadow: 0 4px 20px -4px rgb(0 240 255 / 0.08);
+  }
+}
+
+@utility nv-card-interactive {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+  &:hover {
+    border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
+    box-shadow: 0 4px 20px -4px rgb(0 240 255 / 0.08);
+  }
+}
+
+/* ─── Design System: Section ───────────────────────────────────────── */
+@utility nv-section {
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 2rem;
+  }
+}
+
+/* ─── Design System: Section Divider ───────────────────────────────── */
+@utility nv-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+}
+
+/* ─── Design System: Stat Card ─────────────────────────────────────── */
+@utility nv-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+}
+
+/* ─── Focus visible ring for custom interactive elements ────────────── */
+@utility nv-focus {
+  &:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+  }
+}
+

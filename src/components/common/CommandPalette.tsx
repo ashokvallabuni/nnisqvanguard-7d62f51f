@@ -9,7 +9,7 @@ export function CommandPalette() {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const { user, isPublic, isOrg, isStudent } = useAuth();
+  const { user, profile, isAdmin, adminView } = useAuth();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -56,9 +56,14 @@ export function CommandPalette() {
     { label: "Reporting", to: "/reporting", icon: Shield },
   ];
 
+  const rawRole = profile?.role?.toString()?.toUpperCase();
+  const isOrg = profile?.account_type === "ORGANIZATION" || rawRole === "ORGANIZATION" || !!profile?.organization;
+  const isStudent = !isOrg && !isAdmin;
+
   let routes = publicRoutes;
-  if (isStudent) routes = studentRoutes;
-  if (isOrg) routes = orgRoutes;
+  if (!user) routes = publicRoutes;
+  else if (isStudent) routes = studentRoutes;
+  else if (isOrg) routes = orgRoutes;
 
   const filteredRoutes = routes.filter((r) => r.label.toLowerCase().includes(query.toLowerCase()));
 

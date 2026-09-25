@@ -115,23 +115,19 @@ function ReportingFlow() {
 
   return (
     <main className="min-h-screen bg-[#070A0F] text-slate-100">
-      <div className="pt-24 pb-12">
-        <div className="max-w-3xl mx-auto px-4 md:px-8">
-          
-          <div className="mb-8 flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-display font-bold text-white flex items-center gap-3">
-                <ShieldAlert className="w-8 h-8 text-amber-500" />
-                Citizen Cyber Intake
-              </h1>
-              <p className="text-slate-400 mt-2 font-mono text-xs uppercase tracking-wider">
-                Secure, Anonymous-Optional Incident Reporting
-              </p>
-            </div>
-            
+      <PageHeader
+        badge="INCIDENT RESPONSE"
+        badgeVariant="destructive"
+        title="Citizen Cyber Intake"
+        subtitle="Secure, Anonymous-Optional Incident Reporting."
+        breadcrumbs={[{ label: "HOME", to: "/" }, { label: "REPORT INCIDENT" }]}
+      />
+      <div className="pb-12">
+        <div className="max-w-3xl mx-auto px-4 md:px-8 mt-8">
+          <div className="mb-6">
             {/* Steps Indicator */}
             {step < 4 && (
-              <div className="hidden md:flex items-center gap-2 font-mono text-[0.65rem] text-slate-500">
+              <div className="flex items-center gap-2 font-mono text-[0.65rem] text-slate-500">
                 <div className={`px-2 py-1 rounded ${step === 1 ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : ''}`}>1. TYPE</div>
                 <div className="w-4 h-px bg-slate-700" />
                 <div className={`px-2 py-1 rounded ${step === 2 ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : ''}`}>2. DETAILS</div>
@@ -170,8 +166,8 @@ function ReportingFlow() {
                   ))}
                 </div>
                 <div className="mt-8 flex justify-end">
-                  <button onClick={handleNext} className="px-6 py-2.5 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-sm shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                    Continue <ChevronRight className="w-4 h-4" />
+                  <button onClick={handleNext} className="px-6 py-2.5 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-xs tracking-wider shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                    PROCEED <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -213,11 +209,11 @@ function ReportingFlow() {
                 </div>
 
                 <div className="mt-8 flex justify-between">
-                  <button onClick={handleBack} className="px-5 py-2.5 rounded-lg border border-slate-800 text-slate-300 font-semibold hover:bg-slate-800 transition-colors text-sm">
-                    Back
+                  <button onClick={handleBack} className="px-5 py-2.5 rounded-lg border border-slate-800 text-slate-300 font-semibold hover:bg-slate-800 transition-colors text-xs tracking-wider">
+                    BACK
                   </button>
-                  <button onClick={handleNext} disabled={!form.complaint_text.trim()} className="px-6 py-2.5 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                    Continue <ChevronRight className="w-4 h-4" />
+                  <button onClick={handleNext} disabled={!form.complaint_text.trim()} className="px-6 py-2.5 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-colors flex items-center gap-2 text-xs tracking-wider disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                    PROCEED <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -262,11 +258,11 @@ function ReportingFlow() {
                 </div>
 
                 <div className="mt-8 flex justify-between">
-                  <button onClick={handleBack} disabled={busy} className="px-5 py-2.5 rounded-lg border border-slate-800 text-slate-300 font-semibold hover:bg-slate-800 transition-colors text-sm">
-                    Back
+                  <button onClick={handleBack} disabled={busy} className="px-5 py-2.5 rounded-lg border border-slate-800 text-slate-300 font-semibold hover:bg-slate-800 transition-colors text-xs tracking-wider">
+                    BACK
                   </button>
-                  <button onClick={submit} disabled={busy} className="px-6 py-2.5 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-400 transition-colors flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                    {busy ? "Submitting..." : "Submit Report"}
+                  <button onClick={submit} disabled={busy} className="px-6 py-2.5 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-400 transition-colors flex items-center gap-2 text-xs tracking-wider disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                    {busy ? "SUBMITTING..." : "SUBMIT REPORT"}
                   </button>
                 </div>
               </div>
@@ -312,8 +308,8 @@ function ReportingFlow() {
                 </div>
                 
                 <div className="mt-8 flex justify-center gap-4">
-                  <Link to="/" className="px-6 py-2.5 rounded-lg border border-slate-800 text-slate-300 font-semibold hover:bg-slate-800 transition-colors text-sm">
-                    Return to Home
+                  <Link to="/" className="px-6 py-2.5 rounded-lg border border-slate-800 text-slate-300 font-semibold hover:bg-slate-800 transition-colors text-xs tracking-wider">
+                    RETURN TO HOME
                   </Link>
                 </div>
               </div>

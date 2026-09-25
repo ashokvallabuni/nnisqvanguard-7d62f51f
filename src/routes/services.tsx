@@ -56,9 +56,9 @@ function ServicesPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-16">
         <div className="grid md:grid-cols-2 gap-6">
           {services.map((service) => (
-            <div key={service.id} className="glass backdrop-blur-xl bg-slate-900/75 border border-slate-800 rounded-2xl p-8 hover:border-cyan-500/40 transition-all duration-300 group flex flex-col">
-              <div className="w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <service.icon className="w-7 h-7 text-cyan-400" />
+            <div key={service.id} className="nv-card p-8 group flex flex-col hover:border-primary/40 transition-all duration-300">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <service.icon className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-2xl font-display font-bold text-white mb-3">{service.title}</h3>
               <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">{service.desc}</p>
@@ -74,7 +74,7 @@ function ServicesPage() {
               <Link 
                 to="/appointments"
                 search={{ service: service.id }}
-                className="mt-auto inline-flex items-center justify-between w-full px-5 py-3 rounded-xl bg-slate-950 border border-slate-800 text-sm font-semibold text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-500/50 transition-all group/btn"
+                className="mt-auto inline-flex items-center justify-between w-full px-5 py-3 rounded-xl bg-background border border-border text-sm font-semibold text-primary hover:bg-primary/10 hover:border-primary/50 transition-all group/btn"
               >
                 REQUEST CONSULTATION
                 <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

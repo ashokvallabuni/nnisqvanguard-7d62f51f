@@ -262,10 +262,10 @@ function CyberLabsCatalogPage() {
   return (
     <div className="min-h-screen">
       <PageHeader
-        badge="CYBER RANGE COMMAND CENTER"
+        badge="NISQ CYBER RANGE"
         badgeVariant="primary"
-        title="CYBER LABS"
-        subtitle="Train. Attack. Defend. Prove. — Launch isolated containerized mission workbenches, analyze real capture telemetry, and submit validated flags."
+        title="Lab Command Center"
+        subtitle="Practical cybersecurity training through controlled laboratories and real-world security exercises."
         breadcrumbs={[{ label: "PLATFORM", to: "/" }, { label: "CYBER LABS" }]}
       />
 

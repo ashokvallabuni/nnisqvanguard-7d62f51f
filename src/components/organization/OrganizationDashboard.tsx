@@ -10,7 +10,7 @@ export function OrganizationDashboard() {
     <div className="min-h-screen pt-16 pb-24">
       <PageHeader
         badge="ORGANIZATION PORTAL"
-        badgeVariant="secondary"
+        badgeVariant="accent"
         title={`Welcome back, ${profile?.full_name || profile?.organization || user?.email?.split("@")[0] || "Partner"}`}
         subtitle="Manage enterprise security services, incident reporting, and consulting appointments."
         breadcrumbs={[{ label: "Home", to: "/" }, { label: "Organization Dashboard" }]}
@@ -38,25 +38,25 @@ export function OrganizationDashboard() {
               HOME
             </Link>
             <Link
-              to="/solutions"
+              to="/services"
               className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
             >
               SERVICES
             </Link>
             <Link
-              to="/solutions/consulting"
+              to="/appointments"
               className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 transition-colors"
             >
               REQUEST CONSULTATION
             </Link>
             <Link
-              to="/complaint"
+              to="/reporting"
               className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
             >
               REPORT INCIDENT
             </Link>
             <Link
-              to="/solutions/consulting"
+              to="/appointments"
               className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
             >
               APPOINTMENTS
@@ -78,7 +78,7 @@ export function OrganizationDashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Link
-            to="/complaint"
+            to="/reporting"
             className="p-6 rounded-xl border border-border bg-card hover:border-destructive/40 transition-colors space-y-4"
           >
             <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
@@ -93,7 +93,7 @@ export function OrganizationDashboard() {
           </Link>
 
           <Link
-            to="/solutions/consulting"
+            to="/appointments"
             className="p-6 rounded-xl border border-border bg-card hover:border-accent/40 transition-colors space-y-4"
           >
             <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
@@ -108,7 +108,7 @@ export function OrganizationDashboard() {
           </Link>
 
           <Link
-            to="/solutions"
+            to="/services"
             className="p-6 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors space-y-4"
           >
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">

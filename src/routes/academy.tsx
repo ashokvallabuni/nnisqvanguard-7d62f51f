@@ -235,7 +235,7 @@ function AcademyPage() {
                   params={{ slug: beginnerCourse.slug }}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 shadow-md transition-all group"
                 >
-                  <span>Start Learning Now</span>
+                  <span>START COURSE</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
@@ -357,7 +357,7 @@ function AcademyPage() {
             to="/cyber-range/labs"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-primary/40 bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/20 transition-colors shrink-0"
           >
-            <span>Explore Cyber Labs</span>
+            <span>OPEN CYBER LABS</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
