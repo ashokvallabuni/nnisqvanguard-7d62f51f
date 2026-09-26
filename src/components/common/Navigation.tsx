@@ -29,14 +29,18 @@ const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 /* ─── Telemetry Ticker ─────────────────────────────────────────────── */
 export function TelemetryTicker() {
   return (
-    <div className="w-full bg-muted border-b border-border/60 text-[0.6rem] font-mono flex items-center justify-center px-4 py-1 overflow-hidden select-none">
+    <div className="w-full bg-[#050B14] border-b border-[#123047] text-[0.6rem] font-mono flex items-center justify-center px-4 py-1 overflow-hidden select-none">
       <div className="flex items-center gap-3 whitespace-nowrap text-muted-foreground">
-        <span className="text-success text-[0.5rem]">●</span>
-        <span className="text-muted-foreground tracking-[0.15em]">NISQ VANGUARD</span>
-        <span className="text-slate-700">—</span>
-        <span className="text-muted-foreground tracking-wider">DEFENCE TECHNOLOGIES</span>
-        <span className="text-slate-700">—</span>
-        <span className="text-success/70 tracking-wider">SYSTEMS OPERATIONAL</span>
+        <span className="text-[#00D9FF] text-[0.5rem] drop-shadow-[0_0_8px_#00D9FF]">●</span>
+        <span className="text-[#00D9FF] tracking-[0.15em]">NISQ DEFENSE ENGINE: ONLINE</span>
+        <span className="text-[#123047]">—</span>
+        <span className="text-[#00D68F] text-[0.5rem] drop-shadow-[0_0_8px_#00D68F]">●</span>
+        <span className="text-[#00D68F] tracking-[0.15em]">DEFENSE GRID: ACTIVE</span>
+        <span className="text-[#123047]">—</span>
+        <span className="text-[#FFB020] text-[0.5rem] drop-shadow-[0_0_8px_#FFB020]">●</span>
+        <span className="text-[#FFB020] tracking-[0.15em]">THREAT TELEMETRY: REAL-TIME</span>
+        <span className="text-[#123047]">—</span>
+        <span className="text-[#F5FAFF] tracking-[0.15em]">CITIZEN INTAKE: OPEN 24/7</span>
       </div>
     </div>
   );
@@ -49,7 +53,7 @@ function getPublicNav(): NavItem[] {
   return [
     { to: "/", label: "HOME", icon: Home },
     { to: "/academy", label: "ACADEMY", icon: BookOpen },
-    { to: "/cyber-range/labs", label: "CYBER LABS", icon: Terminal },
+    { to: "/cyber-range/labs", label: "IVVAB LABS", icon: Terminal },
     { to: "/services", label: "SERVICES", icon: Shield },
     { to: "/intelligence", label: "THREAT INTEL", icon: Radar },
   ];
@@ -59,7 +63,7 @@ function getLearnerNav(): NavItem[] {
   return [
     { to: "/", label: "HOME", icon: Home },
     { to: "/academy", label: "ACADEMY", icon: BookOpen },
-    { to: "/cyber-range/labs", label: "CYBER LABS", icon: Terminal },
+    { to: "/cyber-range/labs", label: "IVVAB LABS", icon: Terminal },
     { to: "/dashboard", label: "PROGRESS", icon: BarChart3 },
     { to: "/intelligence", label: "THREAT INTEL", icon: Radar },
   ];
@@ -89,7 +93,7 @@ function getAdminNav(): NavItem[] {
   return [
     { to: "/", label: "HOME", icon: Home },
     { to: "/academy", label: "ACADEMY", icon: BookOpen },
-    { to: "/cyber-range/labs", label: "CYBER LABS", icon: Terminal },
+    { to: "/cyber-range/labs", label: "IVVAB LABS", icon: Terminal },
     { to: "/intelligence", label: "THREAT INTEL", icon: Radar },
     { to: "/admin", label: "ADMIN", icon: Settings },
   ];
@@ -169,7 +173,7 @@ export function TopNav() {
               to={item.to}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono font-semibold text-[0.65rem] tracking-wider transition-all duration-200 ${
                 isActive
-                  ? "bg-primary/10 text-primary shadow-[inset_0_0_12px_rgba(0,240,255,0.08)]"
+                  ? "bg-primary/20 text-primary shadow-[0_0_20px_rgba(0,217,255,0.12)] border border-primary/50"
                   : "text-muted-foreground hover:text-foreground hover:bg-background"
               }`}
               aria-current={isActive ? "page" : undefined}
@@ -272,7 +276,7 @@ export function TopNav() {
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                   isActive
-                    ? "bg-primary/10 text-primary border border-primary"
+                    ? "bg-primary/20 text-primary border border-primary shadow-[0_0_20px_rgba(0,217,255,0.12)]"
                     : "text-foreground hover:bg-background hover:text-foreground"
                 }`}
               >
@@ -343,7 +347,7 @@ export function BottomNav() {
     items = [
       { to: "/", label: "HOME", icon: Home },
       { to: "/academy", label: "ACADEMY", icon: BookOpen },
-      { to: "/cyber-range/labs", label: "LABS", icon: Terminal },
+      { to: "/cyber-range/labs", label: "IVVAB LABS", icon: Terminal },
       { to: "/services", label: "SERVICES", icon: Shield },
       { to: "/login", label: "SIGN IN", icon: User },
     ];
@@ -376,7 +380,7 @@ export function BottomNav() {
     items = [
       { to: "/", label: "HOME", icon: Home },
       { to: "/academy", label: "ACADEMY", icon: BookOpen },
-      { to: "/cyber-range/labs", label: "LABS", icon: Terminal },
+      { to: "/cyber-range/labs", label: "IVVAB LABS", icon: Terminal },
       { to: "/reporting", label: "REPORT", icon: AlertTriangle },
       { to: "/profile", label: "PROFILE", icon: User },
     ];

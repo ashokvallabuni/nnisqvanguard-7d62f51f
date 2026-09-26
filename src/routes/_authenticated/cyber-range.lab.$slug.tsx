@@ -599,49 +599,52 @@ function CyberLabWorkbenchPage() {
 
   // ── Terminal Panel ─────────────────────────────────────────────────────────
   const TerminalPanel = () => (
-    <div className="flex flex-col h-full rounded-xl border border-border bg-slate-950 overflow-hidden shadow-md">
+    <div className="flex flex-col h-full rounded-xl border border-[#123047] bg-[#010409] overflow-hidden shadow-[0_0_20px_rgba(0,217,255,0.08)]">
       {/* Terminal top bar */}
-      <div className="bg-slate-900 border-b border-border px-4 py-2.5 flex items-center justify-between shrink-0">
+      <div className="bg-[#050B14] border-b border-[#123047] px-4 py-2.5 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
           </div>
-          <span className="font-mono text-xs text-slate-300 ml-2">
-            IVVAB LABS Sandbox (Browser)
-          </span>
+          <span className="font-mono text-xs text-[#8FA8BA] ml-2">IVVAB LABS Workbench</span>
         </div>
         <div className="flex items-center gap-3 text-[0.65rem] font-mono text-muted-foreground">
           {isOffline && (
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30">
-              AVAILABLE OFFLINE
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-500/20 text-[#00D9FF] font-bold border border-blue-500/30">
+              OFFLINE READY
             </span>
           )}
           <span className="flex items-center gap-1.5">
             <span
               className={`inline-block w-2 h-2 rounded-full ${
-                sessionActive ? "bg-green-400 animate-pulse" : "bg-slate-500"
+                sessionActive
+                  ? "bg-[#00D68F] animate-pulse shadow-[0_0_8px_#00D68F]"
+                  : "bg-slate-500"
               }`}
             />
-            <span>{sessionActive ? "SANDBOX ONLINE" : "OFFLINE"}</span>
+            <span className="text-[#00D9FF]">
+              {sessionActive ? "DATASET LOADED | VFS READY" : "OFFLINE READY"}
+            </span>
           </span>
         </div>
       </div>
 
       {/* Terminal body */}
       {!sessionActive ? (
-        <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-muted-foreground">
-          <Terminal className="w-8 h-8 text-muted-foreground" />
+        <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-[#8FA8BA]">
+          <Terminal className="w-8 h-8 text-[#5E7485]" />
           <p className="text-xs max-w-md">
-            Click <span className="text-primary font-semibold">&quot;Start Lab Sandbox&quot;</span>{" "}
+            Click{" "}
+            <span className="text-[#00D9FF] font-semibold">&quot;Start Lab Sandbox&quot;</span>{" "}
             above to provision your client-side isolated environment. No server required.
           </p>
         </div>
       ) : (
         <div
           ref={terminalScrollRef}
-          className="flex-1 p-4 overflow-y-auto overflow-x-auto font-mono text-xs text-slate-200 space-y-1 selection:bg-primary selection:text-white"
+          className="flex-1 p-4 overflow-y-auto overflow-x-auto font-mono text-xs text-[#00F0FF] space-y-1 selection:bg-[#00D9FF] selection:text-[#02060D]"
         >
           {history.map((line, idx) => (
             <div key={idx} className="whitespace-pre leading-relaxed min-w-0 break-all">
@@ -654,9 +657,9 @@ function CyberLabWorkbenchPage() {
       {/* Command input */}
       <form
         onSubmit={handleExecuteCommand}
-        className="border-t border-border bg-slate-900/60 p-2.5 flex items-center gap-2 shrink-0"
+        className="border-t border-[#123047] bg-[#02060D]/80 p-2.5 flex items-center gap-2 shrink-0"
       >
-        <span className="font-mono text-xs text-green-400 pl-2 shrink-0">
+        <span className="font-mono text-xs text-[#00D9FF] pl-2 shrink-0">
           analyst@ivvab-labs:{cwd}$
         </span>
         <input
@@ -670,13 +673,13 @@ function CyberLabWorkbenchPage() {
           value={commandInput}
           onChange={(e) => setCommandInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent font-mono text-xs text-white placeholder:text-slate-500 focus:outline-none disabled:opacity-50 min-w-0"
+          className="flex-1 bg-transparent font-mono text-xs text-[#00F0FF] placeholder:text-[#5E7485] focus:outline-none disabled:opacity-50 min-w-0"
           autoFocus
         />
         <button
           type="submit"
           disabled={!sessionActive || !commandInput.trim()}
-          className="px-3 py-1 rounded bg-muted text-slate-200 font-mono text-xs hover:bg-slate-700 disabled:opacity-40 transition-colors shrink-0"
+          className="px-3 py-1 rounded bg-[#08111D] border border-[#123047] text-[#00D9FF] font-mono text-xs hover:bg-[#00D9FF]/10 disabled:opacity-40 transition-colors shrink-0"
         >
           Send ↵
         </button>
@@ -803,16 +806,144 @@ function CyberLabWorkbenchPage() {
         </div>
 
         {/* ── Desktop Split View (≥ 768px) ──────────────────────────────── */}
-        <div className="hidden md:grid grid-cols-12 gap-6">
-          {/* Left: Tasks + Hints + Flag (5 cols) */}
-          <div className="col-span-5 space-y-4">
-            {TasksPanel()}
-            {FilesPanel()}
-            {ProgressPanel()}
+        <div className="hidden lg:grid grid-cols-12 gap-6">
+          {/* Left: Info/Tasks (3 cols) */}
+          <div className="col-span-3 space-y-4">
+            <div className="space-y-4 overflow-y-auto max-h-[680px]">
+              {/* Incident Briefing & Scenario */}
+              <div className="rounded-xl border border-border bg-card p-5 space-y-3 shadow-[0_0_15px_rgba(0,217,255,0.03)] hover:border-primary/50 transition-colors">
+                <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-primary" />
+                  <span>Incident Briefing</span>
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {labConfig.description}
+                </p>
+              </div>
+
+              {/* Interactive Tasks */}
+              <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-[0_0_15px_rgba(0,217,255,0.03)] hover:border-primary/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-success" />
+                    <span>Tasks</span>
+                  </h3>
+                  <span className="text-xs font-mono text-muted-foreground">
+                    {tasksCompleted}/{labConfig.tasks.length}
+                  </span>
+                </div>
+                <div className="space-y-3">
+                  {labConfig.tasks.map((task, index) => {
+                    const isCompleted =
+                      labSolved ||
+                      (taskEngine && taskEngine.completedIds.has(task.id)) ||
+                      index < tasksCompleted;
+                    return (
+                      <div
+                        key={task.id}
+                        className={`p-3 rounded-lg border text-xs space-y-1.5 transition-colors ${
+                          isCompleted
+                            ? "border-success/30 bg-success/5"
+                            : "border-border bg-muted/20"
+                        }`}
+                      >
+                        <div className="flex items-start gap-2 justify-between">
+                          <div className="flex items-start gap-2">
+                            {isCompleted ? (
+                              <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-0.5" />
+                            ) : (
+                              <Circle className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+                            )}
+                            <div>
+                              <div
+                                className={`font-semibold ${isCompleted ? "text-success" : "text-foreground"}`}
+                              >
+                                Task {index + 1}: {task.title}
+                              </div>
+                              <p className="text-muted-foreground mt-0.5">{task.description}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Right: Terminal (7 cols) */}
-          <div className="col-span-7 h-[680px] flex flex-col">{TerminalPanel()}</div>
+          {/* Center: Terminal (6 cols) */}
+          <div className="col-span-6 h-[680px] flex flex-col">{TerminalPanel()}</div>
+
+          {/* Right: Objectives/Hints (3 cols) */}
+          <div className="col-span-3 space-y-4">
+            <div className="space-y-4 overflow-y-auto max-h-[680px]">
+              {ProgressPanel()}
+
+              {/* Flag Submission */}
+              <div className="rounded-xl border border-primary/40 bg-card p-5 space-y-3 shadow-[0_0_15px_rgba(0,217,255,0.08)]">
+                <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2">
+                  <Flag className="w-4 h-4 text-primary" />
+                  <span>Submit Security Flag</span>
+                </h3>
+                <form onSubmit={handleSubmitFlag} className="flex flex-col gap-2">
+                  <input
+                    type="text"
+                    placeholder="FLAG{...}"
+                    value={flagInput}
+                    onChange={(e) => setFlagInput(e.target.value)}
+                    disabled={!sessionActive || labSolved}
+                    className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!sessionActive || !flagInput.trim() || labSolved}
+                    className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shrink-0 font-mono disabled:opacity-40"
+                  >
+                    Verify
+                  </button>
+                </form>
+              </div>
+
+              {/* Hints */}
+              <div className="rounded-xl border border-border bg-card p-5 space-y-3 shadow-xs hover:border-primary/50 transition-colors">
+                <h3 className="font-display font-bold text-sm text-foreground flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-warning" />
+                  <span>Investigative Hints ({labConfig.hints.length})</span>
+                </h3>
+                <div className="space-y-2">
+                  {labConfig.hints.map((hint, idx) => {
+                    const isRevealed = revealedHints.includes(idx);
+                    return (
+                      <div
+                        key={idx}
+                        className="p-3 rounded-lg border border-border/80 bg-muted/20 text-xs"
+                      >
+                        {isRevealed ? (
+                          <div className="text-foreground leading-relaxed">
+                            <span className="font-mono font-semibold text-primary">
+                              Hint {idx + 1}:{" "}
+                            </span>
+                            {hint}
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => revealHint(idx)}
+                            className="w-full text-left font-mono text-muted-foreground hover:text-primary transition-colors flex items-center justify-between"
+                          >
+                            <span>Reveal Hint {idx + 1}</span>
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {FilesPanel()}
+            </div>
+          </div>
         </div>
       </div>
     </div>

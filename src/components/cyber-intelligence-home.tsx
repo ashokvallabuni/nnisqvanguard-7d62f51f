@@ -210,7 +210,7 @@ export function CyberIntelligenceHome() {
         {/* Background elements */}
         <div className="absolute inset-0 bg-background" aria-hidden="true" />
         <div
-          className="absolute inset-0 opacity-10 bg-[radial-gradient(#1E2D4A_1px,transparent_1px)] [background-size:16px_16px]"
+          className="absolute inset-0 opacity-15 bg-[radial-gradient(#00D9FF_1px,transparent_1px)] [background-size:16px_16px]"
           aria-hidden="true"
         />
 
@@ -245,13 +245,13 @@ export function CyberIntelligenceHome() {
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/learn"
-                className="inline-flex items-center gap-2 bg-muted px-5 py-3 font-display text-xs font-bold tracking-wider text-foreground transition hover:bg-primary rounded-md uppercase"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] bg-[#00D9FF] px-5 py-2 font-display text-xs font-bold tracking-widest text-[#02060D] transition-all hover:bg-[#00F0FF] shadow-[0_0_20px_rgba(0,217,255,0.12)] hover:shadow-[0_0_28px_rgba(0,217,255,0.22)] rounded-md uppercase"
               >
                 START YOUR DEFENCE JOURNEY <GraduationCap className="h-4 w-4" />
               </Link>
               <Link
                 to="/cyber-range"
-                className="inline-flex items-center gap-2 border border-[#F0F4F9] bg-muted px-5 py-3 font-display text-xs font-bold tracking-wider text-foreground transition hover:bg-background hover:text-primary rounded-md uppercase"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] border border-[#00D9FF] bg-transparent px-5 py-2 font-display text-xs font-bold tracking-widest text-[#00D9FF] transition-all hover:bg-[#00D9FF]/10 shadow-[inset_0_0_12px_rgba(0,217,255,0.08)] rounded-md uppercase"
               >
                 EXPLORE IVVAB LABS <FlaskConical className="h-4 w-4" />
               </Link>
@@ -362,7 +362,7 @@ export function CyberIntelligenceHome() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/about/founder"
-                  className="inline-flex items-center gap-2 border border-border bg-muted px-5 py-2.5 font-mono text-[11px] tracking-wider text-foreground hover:bg-background transition-all rounded uppercase font-bold"
+                  className="inline-flex items-center justify-center gap-2 min-h-[44px] border border-[#123047] bg-[#0B1624] px-5 py-2 font-mono text-[11px] font-bold tracking-widest text-[#F5FAFF] transition-all hover:bg-[#0B1624]/80 shadow-[0_0_12px_rgba(0,217,255,0.05)] rounded-md uppercase"
                 >
                   VIEW FOUNDER PROFILE <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -561,7 +561,7 @@ export function CyberIntelligenceHome() {
           <div className="mt-12 text-center">
             <Link
               to="/programs"
-              className="inline-flex items-center gap-2 border border-primary/70 bg-primary/10 px-6 py-3 font-mono text-[11px] tracking-wider text-primary hover:bg-primary hover:text-primary-foreground hover:text-primary-foreground transition-all"
+              className="inline-flex items-center justify-center gap-2 min-h-[44px] border border-[#00D9FF] bg-transparent px-6 py-2 font-mono text-[11px] font-bold tracking-widest text-[#00D9FF] transition-all hover:bg-[#00D9FF]/10 shadow-[inset_0_0_12px_rgba(0,217,255,0.08)] rounded-md uppercase"
             >
               REQUEST A PROGRAM <ArrowRight className="h-4 w-4" />
             </Link>
@@ -687,7 +687,7 @@ export function CyberIntelligenceHome() {
                     <Link
                       to="/learn/$slug"
                       params={{ slug }}
-                      className="inline-flex items-center gap-1.5 border border-primary bg-muted px-4 py-2 font-mono text-[10px] tracking-wider text-primary font-bold hover:bg-primary hover:text-foreground transition-all uppercase rounded"
+                      className="inline-flex items-center justify-center gap-1.5 min-h-[40px] bg-[#00D9FF] px-4 py-2 font-mono text-[10px] tracking-wider text-[#02060D] font-bold hover:bg-[#00F0FF] shadow-[0_0_15px_rgba(0,217,255,0.1)] hover:shadow-[0_0_20px_rgba(0,217,255,0.2)] transition-all uppercase rounded-md"
                     >
                       START COURSE <ArrowRight className="h-3 w-3" />
                     </Link>
@@ -787,13 +787,13 @@ export function CyberIntelligenceHome() {
               <div className="mt-10 flex flex-wrap gap-3">
                 <Link
                   to="/cyber-range"
-                  className="inline-flex items-center gap-2 bg-muted px-5 py-3 font-mono text-[11px] tracking-wider text-foreground font-bold hover:bg-primary transition rounded uppercase"
+                  className="inline-flex items-center justify-center gap-2 min-h-[44px] bg-[#00D9FF] px-5 py-2 font-mono text-[11px] tracking-widest text-[#02060D] font-bold transition-all hover:bg-[#00F0FF] shadow-[0_0_20px_rgba(0,217,255,0.12)] hover:shadow-[0_0_28px_rgba(0,217,255,0.22)] rounded-md uppercase"
                 >
                   ENTER IVVAB LABS <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   to="/cyber-range/labs"
-                  className="inline-flex items-center gap-2 border border-border bg-muted px-5 py-3 font-mono text-[11px] tracking-wider text-foreground font-bold hover:bg-background hover:text-primary transition rounded uppercase"
+                  className="inline-flex items-center justify-center gap-2 min-h-[44px] border border-[#00D9FF] bg-transparent px-5 py-2 font-mono text-[11px] tracking-widest text-[#00D9FF] font-bold transition-all hover:bg-[#00D9FF]/10 shadow-[inset_0_0_12px_rgba(0,217,255,0.08)] rounded-md uppercase"
                 >
                   BROWSE LABS <FlaskConical className="h-4 w-4" />
                 </Link>
