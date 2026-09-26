@@ -39,8 +39,8 @@ function AppointmentsPage() {
 
       <section className="px-4 md:px-8 py-16">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start">
-          <div className="glass backdrop-blur-xl bg-slate-900/75 border border-border rounded-2xl p-6 md:p-10 shadow-2xl">
-            <h2 className="text-2xl font-display font-bold text-white mb-8 border-b border-border pb-4">
+          <div className="glass backdrop-blur-xl bg-card text-card-foreground border border-border rounded-2xl p-6 md:p-10 shadow-2xl">
+            <h2 className="text-2xl font-display font-bold text-foreground mb-8 border-b border-border pb-4">
               Request a Briefing
             </h2>
 
@@ -53,23 +53,23 @@ function AppointmentsPage() {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="font-mono text-[0.65rem] text-cyan-400 mb-2 block uppercase tracking-wider">
+                  <label className="font-mono text-[0.65rem] text-primary mb-2 block uppercase tracking-wider">
                     Representative Name
                   </label>
                   <input
                     type="text"
-                    className="w-full bg-slate-950/50 border border-border rounded-lg px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition placeholder:text-muted-foreground"
+                    className="w-full bg-background border-input border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition placeholder:text-muted-foreground"
                     placeholder="Jane Doe"
                     required
                   />
                 </div>
                 <div>
-                  <label className="font-mono text-[0.65rem] text-cyan-400 mb-2 block uppercase tracking-wider">
+                  <label className="font-mono text-[0.65rem] text-primary mb-2 block uppercase tracking-wider">
                     Official Email
                   </label>
                   <input
                     type="email"
-                    className="w-full bg-slate-950/50 border border-border rounded-lg px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition placeholder:text-muted-foreground"
+                    className="w-full bg-background border-input border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition placeholder:text-muted-foreground"
                     placeholder="jane@organization.com"
                     required
                   />
@@ -77,23 +77,23 @@ function AppointmentsPage() {
               </div>
 
               <div>
-                <label className="font-mono text-[0.65rem] text-cyan-400 mb-2 block uppercase tracking-wider">
+                <label className="font-mono text-[0.65rem] text-primary mb-2 block uppercase tracking-wider">
                   Organization Name
                 </label>
                 <input
                   type="text"
-                  className="w-full bg-slate-950/50 border border-border rounded-lg px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition placeholder:text-muted-foreground"
+                  className="w-full bg-background border-input border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition placeholder:text-muted-foreground"
                   placeholder="Acme Corp"
                   required
                 />
               </div>
 
               <div>
-                <label className="font-mono text-[0.65rem] text-cyan-400 mb-2 block uppercase tracking-wider">
+                <label className="font-mono text-[0.65rem] text-primary mb-2 block uppercase tracking-wider">
                   Area of Interest
                 </label>
                 <select
-                  className="w-full bg-slate-950/50 border border-border rounded-lg px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                  className="w-full bg-background border-input border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"
                   defaultValue={requestedService || "general"}
                 >
                   <option value="general">General Security Consultation</option>
@@ -106,12 +106,12 @@ function AppointmentsPage() {
               </div>
 
               <div>
-                <label className="font-mono text-[0.65rem] text-cyan-400 mb-2 block uppercase tracking-wider">
+                <label className="font-mono text-[0.65rem] text-primary mb-2 block uppercase tracking-wider">
                   Operational Context
                 </label>
                 <textarea
                   rows={4}
-                  className="w-full bg-slate-950/50 border border-border rounded-lg px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition placeholder:text-muted-foreground"
+                  className="w-full bg-background border-input border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition placeholder:text-muted-foreground"
                   placeholder="Briefly describe your objectives or current challenges..."
                   required
                 ></textarea>
@@ -119,7 +119,7 @@ function AppointmentsPage() {
 
               <button
                 type="submit"
-                className="w-full py-4 rounded-xl bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] font-mono tracking-wide text-sm flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-xl bg-primary text-black font-semibold hover:bg-primary hover:text-primary-foreground transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] font-mono tracking-wide text-sm flex items-center justify-center gap-2"
               >
                 SUBMIT BRIEFING REQUEST <ArrowRight className="w-4 h-4" />
               </button>
@@ -127,9 +127,9 @@ function AppointmentsPage() {
           </div>
 
           <div className="space-y-6">
-            <div className="glass backdrop-blur-xl bg-slate-900/75 border border-border rounded-2xl p-8 shadow-2xl">
-              <ShieldCheck className="w-12 h-12 text-cyan-400 mb-6" />
-              <h3 className="text-xl font-display font-bold text-white mb-4">
+            <div className="glass backdrop-blur-xl bg-card text-card-foreground border border-border rounded-2xl p-8 shadow-2xl">
+              <ShieldCheck className="w-12 h-12 text-primary mb-6" />
+              <h3 className="text-xl font-display font-bold text-foreground mb-4">
                 Advisory Capabilities
               </h3>
               <ul className="space-y-4 text-muted-foreground text-sm">
@@ -152,11 +152,11 @@ function AppointmentsPage() {
               </ul>
             </div>
 
-            <div className="glass backdrop-blur-xl bg-slate-900/75 border border-border rounded-2xl p-8 shadow-2xl">
-              <h3 className="text-sm font-mono text-cyan-400 font-bold mb-4 uppercase tracking-wider">
+            <div className="glass backdrop-blur-xl bg-card text-card-foreground border border-border rounded-2xl p-8 shadow-2xl">
+              <h3 className="text-sm font-mono text-primary font-bold mb-4 uppercase tracking-wider">
                 Logistics
               </h3>
-              <div className="space-y-4 text-sm text-slate-300">
+              <div className="space-y-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-3">
                   <Clock className="w-4 h-4 text-slate-500" />
                   <span>Typically 45-60 minute briefing</span>

@@ -57,11 +57,25 @@ const LEADERSHIP = [
     focus: ["Product Vision", "Platform Architecture", "Growth"],
   },
   {
+    name: "Sai Tanaku",
+    title: "Chief Technology Officer",
+    initials: "ST",
+    color: "from-[#FEE2E2] to-[#FECACA]",
+    focus: ["Engineering", "Product Infrastructure", "Cloud Security"],
+  },
+  {
     name: "Sannith Reddy",
-    title: "CPO · Product Marketer",
+    title: "Product Manager",
     initials: "SR",
     color: "from-[#F5F3FF] to-[#DDD6FE]",
     focus: ["Product Strategy", "Go-to-Market", "Campus Programs", "Brand Storytelling"],
+  },
+  {
+    name: "Chitireddy Janaki Raghu Rami Reddy",
+    title: "Chief Technology Officer",
+    initials: "CR",
+    color: "from-[#ECFEFF] to-[#CFFAFE]",
+    focus: ["Platform Architecture", "Infrastructure", "Engineering Excellence"],
   },
 ] as const;
 
@@ -238,7 +252,7 @@ export function CyberIntelligenceHome() {
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/learn"
-                className="inline-flex items-center gap-2 bg-muted px-5 py-3 font-display text-xs font-bold tracking-wider text-white transition hover:bg-primary rounded-md uppercase"
+                className="inline-flex items-center gap-2 bg-muted px-5 py-3 font-display text-xs font-bold tracking-wider text-foreground transition hover:bg-primary rounded-md uppercase"
               >
                 START YOUR DEFENCE JOURNEY <GraduationCap className="h-4 w-4" />
               </Link>
@@ -414,7 +428,7 @@ export function CyberIntelligenceHome() {
                 key={heading}
                 className="border border-border bg-card p-6 hover:border-cyan-400/40 transition-colors"
               >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center border border-primary/30 bg-primary/10 text-primary">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-semibold text-foreground">{heading}</h3>
@@ -510,9 +524,9 @@ export function CyberIntelligenceHome() {
             ].map(({ icon: Icon, pillar, desc }) => (
               <div
                 key={pillar}
-                className="group border border-border bg-card p-8 text-center transition hover:border-cyan-400/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]"
+                className="group border border-border bg-card p-8 text-center transition hover:border-primary/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]"
               >
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-slate-950">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center border border-primary/30 bg-primary/10 text-primary transition group-hover:bg-primary hover:text-primary-foreground group-hover:text-primary-foreground">
                   <Icon className="h-6 w-6" />
                 </div>
                 <div className="font-mono text-[10px] tracking-[0.2em] text-primary">{pillar}</div>
@@ -538,9 +552,9 @@ export function CyberIntelligenceHome() {
             {SERVICES.map(({ icon: Icon, title, body }) => (
               <div
                 key={title}
-                className="group border border-border bg-card p-7 transition hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,210,255,0.1)]"
+                className="group border border-border bg-card p-7 transition hover:border-primary/60 hover:shadow-[0_0_20px_rgba(0,210,255,0.1)]"
               >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-slate-950">
+                <div className="mb-5 flex h-11 w-11 items-center justify-center border border-primary/30 bg-primary/10 text-primary transition group-hover:bg-primary hover:text-primary-foreground group-hover:text-primary-foreground">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-semibold text-foreground">{title}</h3>
@@ -554,7 +568,7 @@ export function CyberIntelligenceHome() {
           <div className="mt-12 text-center">
             <Link
               to="/programs"
-              className="inline-flex items-center gap-2 border border-cyan-400/70 bg-cyan-400/10 px-6 py-3 font-mono text-[11px] tracking-wider text-cyan-300 hover:bg-cyan-400 hover:text-slate-950 transition-all"
+              className="inline-flex items-center gap-2 border border-primary/70 bg-primary/10 px-6 py-3 font-mono text-[11px] tracking-wider text-primary hover:bg-primary hover:text-primary-foreground hover:text-primary-foreground transition-all"
             >
               REQUEST A PROGRAM <ArrowRight className="h-4 w-4" />
             </Link>
@@ -570,8 +584,8 @@ export function CyberIntelligenceHome() {
               NISQ VANGUARD ACADEMY
             </span>
             <h2 className="mt-4 font-display text-4xl font-bold tracking-wide text-foreground sm:text-5xl">
-              LEARN. <span className="text-cyan-300">PRACTICE.</span> PROVE.{" "}
-              <span className="text-cyan-300">VERIFY.</span> CERTIFY.
+              LEARN. <span className="text-primary">PRACTICE.</span> PROVE.{" "}
+              <span className="text-primary">VERIFY.</span> CERTIFY.
             </h2>
             <p className="mt-5 mx-auto max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground">
               The NISQ Academy is the primary pillar of NISQ Vanguard — a structured, verifiable,
@@ -606,17 +620,17 @@ export function CyberIntelligenceHome() {
               <Link
                 key={title}
                 to={to}
-                className="group border border-border bg-card p-7 transition hover:border-cyan-400/70 hover:shadow-[0_0_24px_rgba(0,210,255,0.14)]"
+                className="group border border-border bg-card p-7 transition hover:border-primary/70 hover:shadow-[0_0_24px_rgba(0,210,255,0.14)]"
               >
-                <Icon className="mb-5 h-8 w-8 text-cyan-300" />
-                <div className="font-mono text-[10px] tracking-widest text-cyan-300">{label}</div>
+                <Icon className="mb-5 h-8 w-8 text-primary" />
+                <div className="font-mono text-[10px] tracking-widest text-primary">{label}</div>
                 <h3 className="mt-2 font-display text-lg font-semibold text-foreground">{title}</h3>
                 <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
                   {desc}
                 </p>
                 <div className="mt-8 flex items-center justify-between border-t border-border pt-4 font-mono text-xs text-muted-foreground">
                   <span>Continue pathway</span>
-                  <ArrowRight className="h-4 w-4 text-cyan-300 transition group-hover:translate-x-1" />
+                  <ArrowRight className="h-4 w-4 text-primary transition group-hover:translate-x-1" />
                 </div>
               </Link>
             ))}
@@ -641,7 +655,7 @@ export function CyberIntelligenceHome() {
                   className="group border border-border bg-background p-7 flex flex-col transition hover:border-primary hover:shadow-sm"
                 >
                   <div className="mb-5 flex items-center justify-between">
-                    <div className="flex h-11 w-11 items-center justify-center border border-border bg-muted text-foreground transition group-hover:bg-primary group-hover:border-primary group-hover:text-white rounded">
+                    <div className="flex h-11 w-11 items-center justify-center border border-border bg-muted text-foreground transition group-hover:bg-primary group-hover:border-primary group-hover:text-foreground rounded">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="flex gap-2">
@@ -680,7 +694,7 @@ export function CyberIntelligenceHome() {
                     <Link
                       to="/learn/$slug"
                       params={{ slug }}
-                      className="inline-flex items-center gap-1.5 border border-primary bg-muted px-4 py-2 font-mono text-[10px] tracking-wider text-primary font-bold hover:bg-primary hover:text-white transition-all uppercase rounded"
+                      className="inline-flex items-center gap-1.5 border border-primary bg-muted px-4 py-2 font-mono text-[10px] tracking-wider text-primary font-bold hover:bg-primary hover:text-foreground transition-all uppercase rounded"
                     >
                       START COURSE <ArrowRight className="h-3 w-3" />
                     </Link>
@@ -780,7 +794,7 @@ export function CyberIntelligenceHome() {
               <div className="mt-10 flex flex-wrap gap-3">
                 <Link
                   to="/cyber-range"
-                  className="inline-flex items-center gap-2 bg-muted px-5 py-3 font-mono text-[11px] tracking-wider text-white font-bold hover:bg-primary transition rounded uppercase"
+                  className="inline-flex items-center gap-2 bg-muted px-5 py-3 font-mono text-[11px] tracking-wider text-foreground font-bold hover:bg-primary transition rounded uppercase"
                 >
                   ENTER IVVAB LABS <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -904,7 +918,7 @@ export function CyberIntelligenceHome() {
                 key={title}
                 className="group border border-border bg-background p-7 transition hover:border-primary rounded-md shadow-sm"
               >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center border border-border bg-muted text-foreground transition group-hover:bg-primary group-hover:border-primary group-hover:text-white rounded">
+                <div className="mb-5 flex h-11 w-11 items-center justify-center border border-border bg-muted text-foreground transition group-hover:bg-primary group-hover:border-primary group-hover:text-foreground rounded">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-base font-bold text-foreground">{title}</h3>
@@ -937,7 +951,7 @@ export function CyberIntelligenceHome() {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               to="/learn"
-              className="inline-flex items-center gap-2 bg-muted px-8 py-4 font-display text-sm font-bold tracking-wider text-white shadow-sm transition hover:bg-primary rounded"
+              className="inline-flex items-center gap-2 bg-muted px-8 py-4 font-display text-sm font-bold tracking-wider text-foreground shadow-sm transition hover:bg-primary rounded"
             >
               START LEARNING FREE <GraduationCap className="h-4 w-4" />
             </Link>

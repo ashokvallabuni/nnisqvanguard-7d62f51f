@@ -23,8 +23,8 @@ export default defineConfig({
           name: "IVVAB LABS",
           short_name: "IVVAB",
           description: "Offline-First Cybersecurity Practical Environment",
-          theme_color: "#112240",
-          background_color: "#112240",
+          theme_color: "#e8eef6",
+          background_color: "#e8eef6",
           display: "standalone",
           icons: [
             {

@@ -84,15 +84,15 @@ const PHILOSOPHY_POINTS = [
 
 function FounderProfilePage() {
   return (
-    <div className="min-h-screen bg-background text-slate-200">
+    <div className="min-h-screen bg-background text-foreground">
       {/* ── Header bar ────────────────────────────────────────────────────── */}
       <div className="border-b border-border bg-background/90 px-5 py-4 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center gap-3 font-mono text-[10px] tracking-widest text-slate-500">
-          <Link to="/" className="hover:text-cyan-300 transition-colors">
+          <Link to="/" className="hover:text-primary transition-colors">
             HOME
           </Link>
           <ChevronRight className="h-3 w-3" />
-          <span className="text-cyan-400">FOUNDER PROFILE</span>
+          <span className="text-primary">FOUNDER PROFILE</span>
         </div>
       </div>
 
@@ -100,7 +100,7 @@ function FounderProfilePage() {
       <section className="relative overflow-hidden py-24">
         <div className="absolute inset-0 intel-grid opacity-30" aria-hidden="true" />
         <div
-          className="absolute left-1/4 top-1/3 h-[24rem] w-[24rem] rounded-full bg-cyan-500/8 blur-[120px]"
+          className="absolute left-1/4 top-1/3 h-[24rem] w-[24rem] rounded-full bg-primary/8 blur-[120px]"
           aria-hidden="true"
         />
 
@@ -130,7 +130,7 @@ function FounderProfilePage() {
                   />
                 </div>
 
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap border border-cyan-400 bg-background px-3 py-1 font-mono text-[9px] tracking-[0.2em] text-cyan-300">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap border border-cyan-400 bg-background px-3 py-1 font-mono text-[9px] tracking-[0.2em] text-primary">
                   <span className="mr-1.5 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
                   VERIFIED · CHIEF ARCHITECT
                 </div>
@@ -140,10 +140,10 @@ function FounderProfilePage() {
             {/* Bio */}
             <div className="space-y-6">
               <div>
-                <p className="font-mono text-[11px] tracking-[0.3em] text-cyan-400 uppercase mb-2">
+                <p className="font-mono text-[11px] tracking-[0.3em] text-primary uppercase mb-2">
                   FOUNDER · CHIEF ARCHITECT
                 </p>
-                <h1 className="font-display text-4xl font-bold tracking-wide text-white sm:text-5xl">
+                <h1 className="font-display text-4xl font-bold tracking-wide text-foreground sm:text-5xl">
                   ASHOK VALLABHUNI
                 </h1>
                 <p className="mt-2 font-mono text-xs text-slate-500 tracking-wider">
@@ -162,17 +162,17 @@ function FounderProfilePage() {
                 ].map((tag) => (
                   <span
                     key={tag}
-                    className="border border-cyan-400/30 bg-cyan-400/8 px-3 py-1 font-mono text-[10px] tracking-wider text-cyan-300"
+                    className="border border-primary/30 bg-cyan-400/8 px-3 py-1 font-mono text-[10px] tracking-wider text-primary"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              <div className="border border-slate-700 bg-card p-6 space-y-3 font-mono text-xs leading-relaxed text-slate-300">
+              <div className="border border-border bg-card p-6 space-y-3 font-mono text-xs leading-relaxed text-muted-foreground">
                 <p>
                   Ashok Vallabhuni is the{" "}
-                  <strong className="text-white">Founder and Chief Architect</strong> of NISQ
+                  <strong className="text-foreground">Founder and Chief Architect</strong> of NISQ
                   Vanguard Defence Technologies — an organisation dedicated to making cybersecurity
                   education accessible, practical, and impactful across India and beyond.
                 </p>
@@ -180,7 +180,7 @@ function FounderProfilePage() {
                   He founded NISQ Vanguard with a singular conviction: that the gap between
                   cybersecurity knowledge and the people who need it most is not a technical problem
                   — it is an access problem. Through the{" "}
-                  <strong className="text-cyan-300">IVVAB Labs engine</strong>, he architects
+                  <strong className="text-primary">IVVAB Labs engine</strong>, he architects
                   real-world IVVAB LABSs, structured course curriculums, and threat intelligence
                   frameworks designed for learners at every stage of their security journey.
                 </p>
@@ -196,18 +196,18 @@ function FounderProfilePage() {
       </section>
 
       {/* ── Founding Story ────────────────────────────────────────────────── */}
-      <section className="border-t border-border bg-slate-950 py-20">
+      <section className="border-t border-border bg-card text-card-foreground py-20">
         <div className="mx-auto max-w-5xl px-5 sm:px-8">
           <div className="mb-10">
-            <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
+            <span className="font-mono text-[10px] tracking-[0.3em] text-primary uppercase">
               The Founding Story
             </span>
-            <h2 className="mt-3 font-display text-3xl font-bold text-white">
+            <h2 className="mt-3 font-display text-3xl font-bold text-foreground">
               Why NISQ Vanguard Was Built
             </h2>
           </div>
 
-          <div className="space-y-5 font-mono text-sm leading-relaxed text-slate-300">
+          <div className="space-y-5 font-mono text-sm leading-relaxed text-muted-foreground">
             <p>
               NISQ Vanguard was born from a direct observation: cybersecurity as a discipline was
               fragmented, inaccessible, and often disconnected from the realities of how attacks
@@ -218,11 +218,11 @@ function FounderProfilePage() {
               Ashok Vallabhuni set out to build something different — a platform where every module
               is grounded in real threat data, every lab simulates an authentic attack scenario, and
               every learner walks away with skills that are immediately deployable. The name{" "}
-              <strong className="text-white">NISQ Vanguard</strong> reflects this forward posture:
-              always at the leading edge of the defence frontier.
+              <strong className="text-foreground">NISQ Vanguard</strong> reflects this forward
+              posture: always at the leading edge of the defence frontier.
             </p>
             <p>
-              The <strong className="text-cyan-300">IVVAB Labs engine</strong> powers the technical
+              The <strong className="text-primary">IVVAB Labs engine</strong> powers the technical
               core — providing the containerised environments, real-data pipelines, and verification
               systems that make NISQ Vanguard's IVVAB LABS and academy uniquely authentic. Every lab
               scenario, every telemetry dataset, every curriculum module passes through the IVVAB
@@ -241,18 +241,18 @@ function FounderProfilePage() {
       <section className="border-t border-border bg-background py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-12">
-            <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
+            <span className="font-mono text-[10px] tracking-[0.3em] text-primary uppercase">
               Core Philosophy
             </span>
-            <h2 className="mt-3 font-display text-3xl font-bold text-white">
+            <h2 className="mt-3 font-display text-3xl font-bold text-foreground">
               Principles That Drive the Platform
             </h2>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {PHILOSOPHY_POINTS.map(({ heading, body }) => (
-              <div key={heading} className="border border-slate-700 bg-card p-7">
-                <h3 className="font-display text-lg font-bold text-white mb-3">{heading}</h3>
+              <div key={heading} className="border border-border bg-card p-7">
+                <h3 className="font-display text-lg font-bold text-foreground mb-3">{heading}</h3>
                 <p className="font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
               </div>
             ))}
@@ -261,13 +261,13 @@ function FounderProfilePage() {
       </section>
 
       {/* ── Architectural Contributions ───────────────────────────────────── */}
-      <section className="border-t border-border bg-slate-950 py-20">
+      <section className="border-t border-border bg-card text-card-foreground py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="mb-12">
-            <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
+            <span className="font-mono text-[10px] tracking-[0.3em] text-primary uppercase">
               Architectural Contributions
             </span>
-            <h2 className="mt-3 font-display text-3xl font-bold text-white">
+            <h2 className="mt-3 font-display text-3xl font-bold text-foreground">
               What Ashok Has Built
             </h2>
           </div>
@@ -276,12 +276,12 @@ function FounderProfilePage() {
             {ARCHITECTURE_CONTRIBUTIONS.map(({ icon: Icon, title, body }) => (
               <div
                 key={title}
-                className="border border-slate-700 bg-card p-7 hover:border-cyan-400/40 transition-colors"
+                className="border border-border bg-card p-7 hover:border-cyan-400/40 transition-colors"
               >
-                <div className="mb-5 flex h-10 w-10 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300">
+                <div className="mb-5 flex h-10 w-10 items-center justify-center border border-primary/30 bg-primary/10 text-primary">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-display text-base font-bold text-white">{title}</h3>
+                <h3 className="font-display text-base font-bold text-foreground">{title}</h3>
                 <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
                   {body}
                 </p>
@@ -294,8 +294,8 @@ function FounderProfilePage() {
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="border-t border-border bg-background py-20">
         <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
-          <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
-            EXPLORE <span className="text-cyan-300">NISQ VANGUARD</span>
+          <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">
+            EXPLORE <span className="text-primary">NISQ VANGUARD</span>
           </h2>
           <p className="mt-4 font-mono text-sm leading-relaxed text-muted-foreground">
             Visit the Academy, enter the IVVAB LABS, or connect with the NISQ Vanguard community.
@@ -303,13 +303,13 @@ function FounderProfilePage() {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               to="/learn"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 px-6 py-3 font-display text-xs font-bold tracking-wider text-slate-950 hover:brightness-110 transition"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 px-6 py-3 font-display text-xs font-bold tracking-wider text-primary-foreground hover:brightness-110 transition"
             >
               ENTER ACADEMY <GraduationCap className="h-4 w-4" />
             </Link>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 border border-slate-600 px-6 py-3 font-mono text-xs tracking-wider text-muted-foreground hover:border-cyan-400/60 hover:text-cyan-300 transition"
+              className="inline-flex items-center gap-2 border border-slate-600 px-6 py-3 font-mono text-xs tracking-wider text-muted-foreground hover:border-primary/60 hover:text-primary transition"
             >
               BACK TO HOME <ArrowRight className="h-4 w-4" />
             </Link>

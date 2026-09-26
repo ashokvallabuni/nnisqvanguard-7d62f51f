@@ -193,7 +193,7 @@ export function TopNav() {
             </Link>
             <Link
               to="/auth"
-              className="px-4 py-1.5 rounded-full bg-primary text-black font-semibold text-xs hover:bg-cyan-400 transition-all duration-200 tracking-wide"
+              className="px-4 py-1.5 rounded-full bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-all duration-200 tracking-wide"
             >
               GET STARTED
             </Link>

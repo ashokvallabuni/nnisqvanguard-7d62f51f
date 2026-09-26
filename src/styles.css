@@ -51,38 +51,38 @@
 :root,
 .dark {
   --radius: 0.5rem;
-  --background: #112240;
-  --foreground: #f0f4f9;
-  --card: #0a192f;
-  --card-foreground: #f0f4f9;
-  --popover: #0a192f;
-  --popover-foreground: #f0f4f9;
-  --primary: #08a9d1;
+  --background: #e8eef6;
+  --foreground: #0f2240;
+  --card: #ffffff;
+  --card-foreground: #0f2240;
+  --popover: #ffffff;
+  --popover-foreground: #0f2240;
+  --primary: #1a6fb5;
   --primary-foreground: #ffffff;
-  --secondary: #1e2d4a;
-  --secondary-foreground: #94a3b8;
-  --muted: #1e2d4a;
-  --muted-foreground: #94a3b8;
-  --accent: #08a9d1;
+  --secondary: #d0dbe8;
+  --secondary-foreground: #3a5070;
+  --muted: #d0dbe8;
+  --muted-foreground: #4a6080;
+  --accent: #1a6fb5;
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --success: #059669;
   --warning: #f59e0b;
-  --border: #1e2d4a;
-  --input: #1e2d4a;
-  --ring: #08a9d1;
-  --cyber: #08a9d1;
-  --cyber-2: #0284c7;
-  --violet-accent: #0284c7;
-  --sidebar: #0a192f;
-  --sidebar-foreground: #f0f4f9;
-  --sidebar-primary: #08a9d1;
+  --border: #bccadb;
+  --input: #bccadb;
+  --ring: #1a6fb5;
+  --cyber: #1a6fb5;
+  --cyber-2: #155a94;
+  --violet-accent: #155a94;
+  --sidebar: #f0f4fa;
+  --sidebar-foreground: #0f2240;
+  --sidebar-primary: #1a6fb5;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1e2d4a;
-  --sidebar-accent-foreground: #f0f4f9;
-  --sidebar-border: #1e2d4a;
-  --sidebar-ring: #08a9d1;
+  --sidebar-accent: #d0dbe8;
+  --sidebar-accent-foreground: #0f2240;
+  --sidebar-border: #bccadb;
+  --sidebar-ring: #1a6fb5;
 }
 
 @layer base {
@@ -90,7 +90,9 @@
     border-color: var(--color-border);
   }
   html {
-    scroll-behavior: smooth;
+    /* scroll-behavior removed: global smooth scroll caused visible page-level jumps
+       when any JS called scrollIntoView or scrollTo. Use scroll-behavior on
+       individual containers that genuinely need it. */
   }
   body {
     background: var(--color-background);
@@ -111,8 +113,8 @@
     text-transform: uppercase;
   }
   ::selection {
-    background: #bcecf6;
-    color: #0b1f33;
+    background: #1a6fb5;
+    color: #ffffff;
   }
 }
 
@@ -120,14 +122,14 @@
   background: color-mix(in oklab, var(--color-card) 75%, transparent);
   backdrop-filter: blur(24px);
   border: 1px solid var(--color-border);
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.08);
   transition: all 300ms ease;
 }
 
 @utility glow-cyber {
   box-shadow:
-    0 0 0 1px rgb(0 240 255 / 0.2),
-    0 12px 28px rgb(0 240 255 / 0.14);
+    0 0 0 1px rgb(26 111 181 / 0.25),
+    0 12px 28px rgb(26 111 181 / 0.1);
 }
 
 @utility text-cyber {
@@ -136,8 +138,8 @@
 
 @utility grid-bg {
   background-image:
-    linear-gradient(rgb(22 119 168 / 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(22 119 168 / 0.07) 1px, transparent 1px);
+    linear-gradient(rgb(26 111 181 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(26 111 181 / 0.06) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -149,8 +151,8 @@
   min-height: min(820px, calc(100svh - 4rem));
   overflow: hidden;
   isolation: isolate;
-  background: #0b1f33;
-  color: #f4fafc;
+  background: #dbe5f0;
+  color: #0f2240;
 }
 
 .hero-environment,
@@ -180,20 +182,20 @@
   background:
     linear-gradient(
       90deg,
-      #071827 0%,
-      rgb(7 24 39 / 0.92) 32%,
-      rgb(7 24 39 / 0.35) 68%,
-      rgb(7 24 39 / 0.62)
+      #c5d3e8 0%,
+      rgb(197 211 232 / 0.92) 32%,
+      rgb(197 211 232 / 0.35) 68%,
+      rgb(197 211 232 / 0.62)
     ),
-    linear-gradient(180deg, rgb(7 24 39 / 0.25), #071827 100%);
+    linear-gradient(180deg, rgb(197 211 232 / 0.25), #c5d3e8 100%);
 }
 .hero-security-grid {
   position: absolute;
   inset: 0;
   opacity: 0.18;
   background-image:
-    linear-gradient(rgb(8 169 209 / 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(8 169 209 / 0.22) 1px, transparent 1px);
+    linear-gradient(rgb(26 111 181 / 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(26 111 181 / 0.15) 1px, transparent 1px);
   background-size: 54px 54px;
   mask-image: linear-gradient(90deg, #000, transparent 78%);
 }
@@ -204,7 +206,7 @@
   background: radial-gradient(
     circle at 32% 46%,
     transparent 0 14%,
-    rgb(8 169 209 / 0.16) 14.2% 14.35%,
+    rgb(26 111 181 / 0.12) 14.2% 14.35%,
     transparent 14.5% 100%
   );
 }
@@ -214,11 +216,11 @@
   aspect-ratio: 1;
   left: 13%;
   top: 27%;
-  border: 1px solid rgb(8 169 209 / 0.45);
+  border: 1px solid rgb(26 111 181 / 0.35);
   border-radius: 50%;
   box-shadow:
-    0 0 0 24px rgb(8 169 209 / 0.04),
-    0 0 0 48px rgb(8 169 209 / 0.03);
+    0 0 0 24px rgb(26 111 181 / 0.06),
+    0 0 0 48px rgb(26 111 181 / 0.03);
   animation: radar-pulse 4.8s ease-in-out infinite;
 }
 .hero-eye-glow {
@@ -226,8 +228,8 @@
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: #9ff5ff;
-  box-shadow: 0 0 18px 6px #08a9d1;
+  background: #1a6fb5;
+  box-shadow: 0 0 18px 6px rgb(26 111 181 / 0.5);
   opacity: 0.8;
 }
 .hero-eye-left {
@@ -243,7 +245,7 @@
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: #9ff5ff;
+  background: #1a6fb5;
   opacity: 0.45;
   animation: particle-float var(--duration) ease-in-out var(--delay) infinite alternate;
 }
@@ -265,11 +267,11 @@
   margin-bottom: 1.5rem;
   border-radius: 18px;
   object-fit: cover;
-  border: 1px solid rgb(159 245 255 / 0.55);
-  box-shadow: 0 0 30px rgb(8 169 209 / 0.25);
+  border: 1px solid rgb(26 111 181 / 0.4);
+  box-shadow: 0 0 30px rgb(26 111 181 / 0.15);
 }
 .hero-kicker {
-  color: #9ff5ff;
+  color: #1a6fb5;
   font-size: 0.68rem;
   margin-bottom: 0.9rem;
 }
@@ -281,19 +283,19 @@
 }
 .hero-division {
   margin-top: 0.7rem;
-  color: #9ff5ff;
+  color: #1a6fb5;
   font: 600 0.75rem var(--font-mono);
   letter-spacing: 0.28em;
 }
 .hero-motto {
   margin-top: 1.6rem;
   font: 600 1.2rem var(--font-display);
-  color: #fff;
+  color: #0f2240;
 }
 .hero-statement {
   max-width: 480px;
   margin-top: 0.7rem;
-  color: rgb(244 250 252 / 0.72);
+  color: rgb(15 34 64 / 0.65);
   line-height: 1.65;
 }
 .hero-actions {
@@ -310,11 +312,11 @@
   top: 5.5rem;
   right: 5rem;
   max-width: 250px;
-  color: rgb(244 250 252 / 0.6);
+  color: rgb(15 34 64 / 0.55);
   font: 0.75rem/1.6 var(--font-mono);
 }
 .hero-quote span {
-  color: #9ff5ff;
+  color: #1a6fb5;
   font-size: 2rem;
   line-height: 0;
   vertical-align: -0.35rem;
@@ -324,7 +326,7 @@
   align-items: center;
   gap: 0.7rem;
   inset: auto;
-  color: rgb(159 245 255 / 0.75);
+  color: rgb(26 111 181 / 0.75);
   font: 0.58rem/1.5 var(--font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -334,7 +336,7 @@
 }
 .hero-hud b {
   display: block;
-  color: #fff;
+  color: #0f2240;
   font-weight: 500;
 }
 .hero-hud-left {
@@ -359,26 +361,26 @@
 .hero-pillars svg {
   grid-row: span 2;
   width: 1.1rem;
-  color: #9ff5ff;
+  color: #1a6fb5;
 }
 .hero-pillars b {
   font-size: 0.78rem;
 }
 .hero-pillars span {
-  color: rgb(244 250 252 / 0.56);
+  color: rgb(15 34 64 / 0.5);
   font-size: 0.7rem;
 }
 .hero-transition-curtain {
   pointer-events: none;
   display: grid;
   place-items: center;
-  background: #071827;
+  background: #dbe5f0;
   opacity: 0;
   transform: translateY(100%);
   transition: 0.7s ease;
 }
 .hero-transition-curtain svg {
-  color: #9ff5ff;
+  color: #1a6fb5;
 }
 .cinematic-hero.is-transitioning .hero-transition-curtain {
   opacity: 1;
@@ -428,7 +430,7 @@
     opacity: 0.42;
   }
   .hero-atmosphere {
-    background: linear-gradient(180deg, rgb(7 24 39 / 0.75), #071827 88%);
+    background: linear-gradient(180deg, rgb(197 211 232 / 0.75), #c5d3e8 88%);
   }
   .hero-content {
     padding: 6.5rem 1.25rem 5rem;
@@ -533,7 +535,7 @@
   font: 0.62rem var(--font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #67e8f9;
+  color: #1a6fb5;
 }
 
 .intel-outline-link {
@@ -544,15 +546,15 @@
   padding: 0.65rem 0.8rem;
   font: 0.62rem var(--font-mono);
   letter-spacing: 0.08em;
-  color: #67e8f9;
+  color: #1a6fb5;
   transition:
     background-color 160ms ease,
     color 160ms ease;
 }
 
 .intel-outline-link:hover {
-  background: #00d2ff;
-  color: #030712;
+  background: #1a6fb5;
+  color: #ffffff;
 }
 
 @keyframes float {

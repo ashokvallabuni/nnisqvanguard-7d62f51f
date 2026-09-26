@@ -76,7 +76,7 @@ function CyberLabWorkbenchPage() {
   const [history, setHistory] = useState<string[]>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalScrollRef = useRef<HTMLDivElement>(null);
 
   // Hints and Flag state
   const [revealedHints, setRevealedHints] = useState<number[]>([]);
@@ -135,9 +135,12 @@ function CyberLabWorkbenchPage() {
     setTasksCompleted(completed);
   }, [dbProgress, labConfig]);
 
-  // Auto scroll terminal
+  // Auto scroll terminal — scroll only the terminal container, NOT the page
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = terminalScrollRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
   }, [history]);
 
   // Session timer countdown
@@ -636,13 +639,15 @@ function CyberLabWorkbenchPage() {
           </p>
         </div>
       ) : (
-        <div className="flex-1 p-4 overflow-y-auto overflow-x-auto font-mono text-xs text-slate-200 space-y-1 selection:bg-primary selection:text-white">
+        <div
+          ref={terminalScrollRef}
+          className="flex-1 p-4 overflow-y-auto overflow-x-auto font-mono text-xs text-slate-200 space-y-1 selection:bg-primary selection:text-white"
+        >
           {history.map((line, idx) => (
             <div key={idx} className="whitespace-pre leading-relaxed min-w-0 break-all">
               {line}
             </div>
           ))}
-          <div ref={terminalEndRef} />
         </div>
       )}
 

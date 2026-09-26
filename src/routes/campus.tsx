@@ -186,12 +186,12 @@ function CampusPrograms() {
   };
 
   return (
-    <main className="min-h-screen bg-background px-4 pb-24 pt-28 text-slate-200 md:px-8">
+    <main className="min-h-screen bg-background px-4 pb-24 pt-28 text-foreground md:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between mb-10 gap-4 flex-col md:flex-row">
           <header>
-            <div className="mono text-xs tracking-[0.18em] text-cyan-300">// CAMPUS PROGRAMS</div>
-            <h1 className="mt-3 font-display text-4xl font-bold text-white md:text-6xl">
+            <div className="mono text-xs tracking-[0.18em] text-primary">// CAMPUS PROGRAMS</div>
+            <h1 className="mt-3 font-display text-4xl font-bold text-foreground md:text-6xl">
               CONNECT THE CAMPUS
             </h1>
             <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground">
@@ -201,7 +201,7 @@ function CampusPrograms() {
           </header>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-cyan-400/30 bg-muted/5 hover:bg-muted/10 text-cyan-200 font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-primary/30 bg-muted/5 hover:bg-muted/10 text-cyan-200 font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
           >
             <Home className="w-4 h-4" />
             <span>HOME</span>
@@ -224,12 +224,12 @@ function CampusPrograms() {
 
         <section className="mb-8 grid gap-3 border border-border bg-card p-4 md:grid-cols-5">
           <label className="relative md:col-span-2">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-cyan-300" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-primary" />
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search college, city or state"
-              className="w-full border border-slate-700 bg-slate-950 px-10 py-2.5 font-mono text-xs text-white outline-none focus:border-cyan-400"
+              className="w-full border border-border bg-card text-card-foreground px-10 py-2.5 font-mono text-xs text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </label>
           <Filter
@@ -257,11 +257,11 @@ function CampusPrograms() {
         </section>
 
         {loading ? (
-          <p className="py-16 text-center font-mono text-sm text-cyan-300">
+          <p className="py-16 text-center font-mono text-sm text-primary">
             LOADING CAMPUS DIRECTORY...
           </p>
         ) : filteredPrograms.length === 0 ? (
-          <div className="border border-dashed border-slate-700 py-16 text-center font-mono text-sm text-muted-foreground">
+          <div className="border border-dashed border-border py-16 text-center font-mono text-sm text-muted-foreground">
             No active programs match these filters.
           </div>
         ) : (
@@ -278,14 +278,14 @@ function CampusPrograms() {
       </div>
 
       {selected && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/85 p-4 backdrop-blur-sm">
           <div className="w-full max-w-lg border border-cyan-400/50 bg-card p-6 shadow-[0_0_30px_rgba(0,210,255,0.18)]">
             <div className="mb-6 flex items-start justify-between">
               <div>
-                <div className="mono text-[10px] tracking-widest text-cyan-300">
+                <div className="mono text-[10px] tracking-widest text-primary">
                   APPLY / CONNECT CAMPUS
                 </div>
-                <h2 className="mt-2 font-display text-2xl font-semibold text-white">
+                <h2 className="mt-2 font-display text-2xl font-semibold text-foreground">
                   {selected.college_name}
                 </h2>
                 <p className="mt-1 font-mono text-xs text-muted-foreground">
@@ -295,7 +295,7 @@ function CampusPrograms() {
               <button
                 onClick={() => setSelected(null)}
                 aria-label="Close consultation form"
-                className="text-muted-foreground hover:text-white"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <X />
               </button>
@@ -334,7 +334,7 @@ function CampusPrograms() {
                   value={form.message}
                   onChange={(event) => setForm({ ...form, message: event.target.value })}
                   rows={3}
-                  className="w-full border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400"
+                  className="w-full border border-border bg-card text-card-foreground px-3 py-2 font-mono text-xs text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="Tell us about your campus goal..."
                 />
               </label>
@@ -342,14 +342,14 @@ function CampusPrograms() {
             <button
               onClick={submitConsultation}
               disabled={busy}
-              className="mt-5 w-full bg-gradient-to-r from-blue-600 to-cyan-400 py-3 font-display text-xs font-bold tracking-wider text-slate-950 disabled:opacity-60"
+              className="mt-5 w-full bg-primary hover:bg-primary/90 py-3 font-display text-xs font-bold tracking-wider text-primary-foreground disabled:opacity-60"
             >
               {busy ? "SUBMITTING..." : "SUBMIT CONSULTATION"}
             </button>
             {!user && (
               <p className="mt-3 text-center font-mono text-xs text-muted-foreground">
                 Please{" "}
-                <Link to="/login" search={{ next: "/campus" }} className="text-cyan-300">
+                <Link to="/login" search={{ next: "/campus" }} className="text-primary">
                   sign in
                 </Link>{" "}
                 to continue.
@@ -382,7 +382,7 @@ function Filter({
       value={value}
       onChange={(event) => onChange(event.target.value)}
       aria-label={placeholder}
-      className="border border-slate-700 bg-slate-950 px-3 py-2.5 font-mono text-xs text-slate-300 outline-none focus:border-cyan-400"
+      className="border border-border bg-card text-card-foreground px-3 py-2.5 font-mono text-xs text-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
     >
       <option value="All">All {placeholder === "City" ? "Cities" : `${placeholder}s`}</option>
       {options.map((option) => (
@@ -405,8 +405,8 @@ function StatCard({
 }) {
   return (
     <div className="border border-cyan-400/20 bg-card p-5">
-      <Icon className="h-5 w-5 text-cyan-300" />
-      <div className="mt-4 font-display text-3xl font-bold text-white">{value}</div>
+      <Icon className="h-5 w-5 text-primary" />
+      <div className="mt-4 font-display text-3xl font-bold text-foreground">{value}</div>
       <div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
         {label}
       </div>
@@ -420,38 +420,40 @@ function ProgramCard({ program, onApply }: { program: Program; onApply: () => vo
     { day: "numeric", month: "short", year: "numeric" },
   );
   return (
-    <article className="border border-slate-700 bg-card p-5 transition hover:border-cyan-400/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]">
+    <article className="border border-border bg-card p-5 transition hover:border-primary/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]">
       <div className="flex items-start justify-between gap-3">
-        <span className="mono border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[9px] tracking-widest text-cyan-300">
+        <span className="mono border border-primary/30 bg-primary/10 px-2 py-1 text-[9px] tracking-widest text-primary">
           {program.dynamic_tier}
         </span>
         <span className="mono text-[10px] text-muted-foreground">{program.security_level}</span>
       </div>
-      <h2 className="mt-5 font-display text-xl font-semibold text-white">{program.college_name}</h2>
+      <h2 className="mt-5 font-display text-xl font-semibold text-foreground">
+        {program.college_name}
+      </h2>
       <p className="mt-2 flex items-center gap-1 font-mono text-xs text-muted-foreground">
-        <MapPin className="h-3.5 w-3.5 text-cyan-300" />
+        <MapPin className="h-3.5 w-3.5 text-primary" />
         {program.city}, {program.state} · {program.country}
       </p>
       <p className="mt-4 min-h-12 font-mono text-xs leading-relaxed text-muted-foreground">
         {program.description}
       </p>
-      <div className="mt-5 grid grid-cols-2 gap-3 border-y border-slate-700 py-4 font-mono text-[10px] text-muted-foreground">
+      <div className="mt-5 grid grid-cols-2 gap-3 border-y border-border py-4 font-mono text-[10px] text-muted-foreground">
         <span>
-          <ShieldCheck className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />
+          <ShieldCheck className="mr-1 inline h-3.5 w-3.5 text-primary" />
           {program.program_type}
         </span>
         <span>
-          <Users className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />
+          <Users className="mr-1 inline h-3.5 w-3.5 text-primary" />
           {program.enrolled_students}/{program.seats} enrolled
         </span>
         <span className="col-span-2">
-          <CalendarDays className="mr-1 inline h-3.5 w-3.5 text-cyan-300" />
+          <CalendarDays className="mr-1 inline h-3.5 w-3.5 text-primary" />
           Apply by {deadline}
         </span>
       </div>
       <button
         onClick={onApply}
-        className="mt-5 w-full border border-cyan-400/60 py-2.5 font-display text-xs font-bold tracking-wider text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-950"
+        className="mt-5 w-full border border-primary/60 py-2.5 font-display text-xs font-bold tracking-wider text-primary transition hover:bg-primary hover:text-primary-foreground hover:text-primary-foreground"
       >
         APPLY / CONNECT CAMPUS
       </button>
@@ -477,7 +479,7 @@ function FormInput({
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400"
+        className="w-full border border-border bg-card text-card-foreground px-3 py-2 font-mono text-xs text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
       />
     </label>
   );

@@ -110,7 +110,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#0ea5e9" },
+      { name: "theme-color", content: "#1a6fb5" },
       {
         title:
           "NISQ Vanguard Academy & Cyber Labs — Advanced Cybersecurity & Threat Intelligence Platform",
@@ -201,21 +201,21 @@ function AdminTacticalPreviewBar() {
   if (!isAdmin) return null;
 
   return (
-    <div className="w-full bg-zinc-950/90 text-white border-b border-zinc-800 text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5">
+    <div className="w-full bg-[#1e3a5f] text-white border-b border-[#2a4a6f] text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5">
       <div className="flex items-center gap-2 text-accent">
         <Shield className="w-3.5 h-3.5" />
-        <span className="font-bold tracking-wider text-cyan-400">ADMIN CONSOLE ACTIVE</span>
+        <span className="font-bold tracking-wider text-sky-300">ADMIN CONSOLE ACTIVE</span>
       </div>
       <div className="flex items-center gap-4">
-        <span className="text-zinc-400 hidden sm:inline">VIEWING AS:</span>
+        <span className="text-sky-200/60 hidden sm:inline">VIEWING AS:</span>
         <div className="flex items-center gap-3">
           {(["ADMIN", "LEARNER", "ORGANIZATION"] as const).map((view) => (
             <label
               key={view}
               className={`flex items-center gap-1.5 cursor-pointer transition-colors ${
                 adminView === view
-                  ? "text-cyan-400 font-semibold"
-                  : "text-zinc-500 hover:text-white"
+                  ? "text-sky-300 font-semibold"
+                  : "text-sky-200/50 hover:text-white"
               }`}
             >
               <input
@@ -224,7 +224,7 @@ function AdminTacticalPreviewBar() {
                 value={view}
                 checked={adminView === view}
                 onChange={() => setAdminView(view)}
-                className="w-3 h-3 accent-cyan-400"
+                className="w-3 h-3 accent-sky-300"
               />
               <span>
                 {view === "ADMIN" ? "Admin" : view === "LEARNER" ? "Learner" : "Organization"}
