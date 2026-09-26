@@ -10,7 +10,7 @@ export const Route = createFileRoute("/team")({
       {
         name: "description",
         content:
-          "Meet the NISQ Vanguard leadership team: Ashok Vallabhuni, Varun Gajula, Sai Tanaku, Sannith Reddy, and Chitireddy Janaki Raghu Rami Reddy.",
+          "Meet the NISQ Vanguard leadership team: Ashok Vallabhuni, Varun Gajula, Sannith Reddy, and Chitireddy Janaki Raghu Rami Reddy.",
       },
     ],
   }),
@@ -28,12 +28,11 @@ type Member = {
 const APPROVED_PUBLIC_TEAM: ReadonlyArray<{ name: string; role: string }> = [
   { name: "Ashok Vallabhuni", role: "Founder · Chief Architect" },
   { name: "Varun Gajula", role: "Co-Founder" },
-  { name: "Sai Tanaku", role: "Chief Technology Officer" },
   { name: "Sannith Reddy", role: "Product Manager" },
   { name: "Chitireddy Janaki Raghu Rami Reddy", role: "Chief Technology Officer" },
 ] as const;
 
-const REMOVED_PUBLIC_NAMES = new Set(["Pulijala Bhavani", "Bhavani Pulijala"]);
+const REMOVED_PUBLIC_NAMES = new Set(["Pulijala Bhavani", "Bhavani Pulijala", "Sai Tanaku"]);
 
 const normalize = (value: string) => value.replace(/\s+/g, " ").trim().toLowerCase();
 

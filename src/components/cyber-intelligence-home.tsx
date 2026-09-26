@@ -57,13 +57,6 @@ const LEADERSHIP = [
     focus: ["Product Vision", "Platform Architecture", "Growth"],
   },
   {
-    name: "Sai Tanaku",
-    title: "Chief Technology Officer",
-    initials: "ST",
-    color: "from-[#FEE2E2] to-[#FECACA]",
-    focus: ["Engineering", "Product Infrastructure", "Cloud Security"],
-  },
-  {
     name: "Sannith Reddy",
     title: "Product Manager",
     initials: "SR",
