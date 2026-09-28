@@ -176,92 +176,33 @@ export function CyberIntelligenceHome() {
           {/* Subtle Glows */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#8B3DFF]/10 blur-[120px] rounded-full pointer-events-none" />
           
-          <div className="absolute inset-0 max-w-7xl mx-auto px-6 lg:px-12 pointer-events-none">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center justify-center space-y-6 text-center h-screen pointer-events-none">
             
-            {/* 0-15% Hero */}
-            <motion.div 
-              style={{ opacity: heroOpacity, y: heroY }}
-              className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
-            >
-              <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-[#2F9BFF] mb-4">NISQ Vanguard</h2>
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white/90 mb-6 bg-gradient-to-b from-white to-[#2F9BFF]/60 bg-clip-text text-transparent">
-                Defending the digital frontier.
-              </h1>
-              <p className="max-w-2xl text-lg md:text-xl text-white/60 font-light">
-                Next-generation cybersecurity for infrastructure, AI systems, and the models that power them.
-              </p>
-            </motion.div>
+            <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-[#2F9BFF]">NISQ Vanguard</h2>
+            
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white/90 bg-gradient-to-b from-white to-[#2F9BFF]/60 bg-clip-text text-transparent">
+              Defending the digital frontier.
+            </h1>
+            
+            <p className="max-w-2xl text-lg md:text-xl text-white/60 font-light">
+              Next-generation cybersecurity for infrastructure, AI systems, and the models that power them.
+            </p>
 
-            {/* 15-40% Threat */}
-            <motion.div 
-              style={{ opacity: threatOpacity, x: threatX }}
-              className="absolute left-6 lg:left-12 inset-y-0 w-full max-w-md flex flex-col justify-center"
-            >
-              <h2 className="text-4xl font-bold tracking-tight text-white/90 mb-4 bg-gradient-to-b from-white to-[#2F9BFF]/60 bg-clip-text text-transparent">
-                Built for threats that don't wait.
-              </h2>
-              <p className="text-lg text-white/60 font-light leading-relaxed">
-                Attackers now target networks, cloud, and AI models alike. Layered defense that detects, contains, and responds in real time.
-              </p>
-            </motion.div>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white/90 bg-gradient-to-b from-white to-[#8B3DFF]/60 bg-clip-text text-transparent mt-4">
+              Protect what matters.<br/>Report what threatens it.
+            </h2>
 
-            {/* 40-65% Enterprise */}
-            <motion.div 
-              style={{ opacity: entOpacity, x: entX }}
-              className="absolute right-6 lg:right-12 inset-y-0 w-full max-w-md flex flex-col justify-center items-start md:items-end text-left md:text-right"
-            >
-              <h2 className="text-4xl font-bold tracking-tight text-white/90 mb-4 bg-gradient-to-b from-white to-[#8B3DFF]/60 bg-clip-text text-transparent">
-                Enterprise protection,<br/>engineered end to end.
-              </h2>
-              <p className="text-lg text-white/60 font-light leading-relaxed mb-8">
-                Consulting, security assessment, threat simulation, incident response, and AI/LLM security.
-              </p>
-              <Link to="/services" className="pointer-events-auto bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] hover:opacity-90 text-white font-medium px-8 py-3 rounded-full transition-all shadow-[0_0_20px_rgba(47,155,255,0.3)]">
+            <div className="pointer-events-auto flex flex-row flex-wrap justify-center gap-4 mt-8">
+              <Link to="/services" className="bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] text-white font-medium px-8 py-3 rounded-full shadow-[0_0_20px_rgba(47,155,255,0.3)] hover:opacity-90 transition-all">
                 Request a Demo
               </Link>
-            </motion.div>
-
-            {/* 65-85% Academy */}
-            <motion.div 
-              style={{ opacity: acadOpacity, x: acadX }}
-              className="absolute left-6 lg:left-12 inset-y-0 w-full max-w-md flex flex-col justify-center"
-            >
-              <h2 className="text-4xl font-bold tracking-tight text-white/90 mb-4 bg-gradient-to-b from-white to-[#2F9BFF]/60 bg-clip-text text-transparent">
-                Learn. Practice. Defend.
-              </h2>
-              <p className="text-lg text-white/60 font-light leading-relaxed mb-8">
-                NISQ Academy courses and hands-on IVVAB Labs build elite defenders.
-              </p>
-              <div className="pointer-events-auto flex gap-4">
-                <Link to="/academy" className="bg-[#1E2B40] border border-[#2F9BFF]/30 hover:border-[#2F9BFF] text-white px-6 py-3 rounded-full transition-all">
-                  Explore Academy
-                </Link>
-                <Link to="/login" className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full transition-all backdrop-blur-sm">
-                  Sign Up
-                </Link>
-              </div>
-            </motion.div>
-
-            {/* 85-100% Final CTA */}
-            <motion.div 
-              style={{ opacity: ctaOpacity, y: ctaY }}
-              className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
-            >
-              <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white/90 mb-8 bg-gradient-to-b from-white to-[#8B3DFF]/60 bg-clip-text text-transparent">
-                Protect what matters.<br/>Report what threatens it.
-              </h2>
-              <div className="pointer-events-auto flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/services" className="bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] text-white font-medium px-8 py-3 rounded-full shadow-[0_0_20px_rgba(47,155,255,0.3)]">
-                  Request a Demo
-                </Link>
-                <Link to="/academy" className="bg-[#1E2B40] border border-[#2F9BFF]/30 text-white px-8 py-3 rounded-full">
-                  Enroll in Academy
-                </Link>
-                <Link to="/reporting" className="bg-white/5 border border-white/10 text-white px-8 py-3 rounded-full hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 transition-all">
-                  Report a Threat
-                </Link>
-              </div>
-            </motion.div>
+              <Link to="/academy" className="bg-[#1E2B40] border border-[#2F9BFF]/30 hover:border-[#2F9BFF] text-white px-8 py-3 rounded-full transition-all">
+                Enroll in Academy
+              </Link>
+              <Link to="/reporting" className="bg-white/5 border border-white/10 text-white px-8 py-3 rounded-full hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 transition-all">
+                Report a Threat
+              </Link>
+            </div>
 
           </div>
         </div>
