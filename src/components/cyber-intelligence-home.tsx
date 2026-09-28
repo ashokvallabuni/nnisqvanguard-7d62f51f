@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "framer-motion";
 import {
   ShieldCheck,
   GraduationCap,
@@ -14,196 +12,58 @@ import {
   Users,
   Target
 } from "lucide-react";
-import founderImg from "@/assets/founder.jpeg";
 import nisqLogo from "@/assets/nisq-logo.jpeg";
 
-import { MotionValue } from "framer-motion";
-
-const LayeredBadgeAnimation = ({ progress }: { progress: MotionValue<number> }) => {
-  // Global slow push-in effect
-  const globalScale = useTransform(progress, [0, 1], [1, 1.2]);
-
-  // Helper to create staggered, round-trip depth animations based on scroll progress
-  const useStaggeredDepth = (
-    startOut: number, 
-    endOut: number, 
-    yOffset: number, 
-    sOffset: number
-  ) => {
-    // Symmetrical timing for the reassembly phase
-    const startIn = 1 - endOut;
-    const endIn = 1 - startOut;
-    
-    return {
-      y: useTransform(progress, [0, startOut, endOut, startIn, endIn, 1], [0, 0, yOffset, yOffset, 0, 0]),
-      scale: useTransform(progress, [0, startOut, endOut, startIn, endIn, 1], [1, 1, sOffset, sOffset, 1, 1])
-    };
-  };
-
-  // 1. Cube & Pins (Highest, earliest)
-  const cube = useStaggeredDepth(0.0, 0.2, -150, 1.4);
-  
-  // 2. Lightning Bolt
-  const bolt = useStaggeredDepth(0.05, 0.25, -90, 1.25);
-  
-  // 3. Wolf Head
-  const wolf = useStaggeredDepth(0.1, 0.3, -40, 1.15);
-  
-  // 4. Shield
-  const shield = useStaggeredDepth(0.15, 0.35, 0, 1.05);
-  
-  // 5. Arcs & 6. Disc (moving backwards)
-  const arcs = useStaggeredDepth(0.2, 0.4, 40, 0.95);
-  const disc = useStaggeredDepth(0.2, 0.4, 50, 0.93);
-  
-  // 7. Outer Ring (Furthest back, latest)
-  const ring = useStaggeredDepth(0.25, 0.45, 100, 0.85);
-
-  // Soft pulsing glow for the arcs
-  const glowOpacity = useTransform(progress, (v) => 0.6 + Math.sin(v * 25) * 0.4);
-
-  return (
-    <div className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none overflow-hidden">
-      <motion.div 
-        style={{ scale: globalScale }} 
-        className="relative w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px]"
-      >
-        {/* Layer 7: Ring */}
-        <motion.img 
-          src="/badge/layer-7-ring.png" 
-          style={{ y: ring.y, scale: ring.scale }} 
-          className="absolute inset-0 w-full h-full object-contain drop-shadow-2xl" 
-          alt="Badge Ring"
-        />
-        
-        {/* Layer 6: Disc */}
-        <motion.img 
-          src="/badge/layer-6-disc.png" 
-          style={{ y: disc.y, scale: disc.scale }} 
-          className="absolute inset-0 w-full h-full object-contain drop-shadow-xl" 
-          alt="Badge Disc"
-        />
-
-        {/* Layer 5: Glowing Arcs */}
-        <motion.img 
-          src="/badge/layer-5-arcs.png" 
-          style={{ y: arcs.y, scale: arcs.scale, opacity: glowOpacity }} 
-          className="absolute inset-0 w-full h-full object-contain" 
-          alt="Glowing Arcs"
-        />
-
-        {/* Layer 4: Shield */}
-        <motion.img 
-          src="/badge/layer-4-shield.png" 
-          style={{ y: shield.y, scale: shield.scale }} 
-          className="absolute inset-0 w-full h-full object-contain drop-shadow-lg" 
-          alt="Badge Shield"
-        />
-
-        {/* Layer 3: Wolf */}
-        <motion.img 
-          src="/badge/layer-3-wolf.png" 
-          style={{ y: wolf.y, scale: wolf.scale }} 
-          className="absolute inset-0 w-full h-full object-contain drop-shadow-md" 
-          alt="Wolf Plate"
-        />
-
-        {/* Layer 2: Bolt */}
-        <motion.img 
-          src="/badge/layer-2-bolt.png" 
-          style={{ y: bolt.y, scale: bolt.scale }} 
-          className="absolute inset-0 w-full h-full object-contain drop-shadow-md" 
-          alt="Lightning Bolt"
-        />
-
-        {/* Layer 1: Cube & Pins */}
-        <motion.img 
-          src="/badge/layer-1-cube.png" 
-          style={{ y: cube.y, scale: cube.scale }} 
-          className="absolute inset-0 w-full h-full object-contain drop-shadow-xl" 
-          alt="Cube Core"
-        />
-      </motion.div>
-    </div>
-  );
-};
-
 export function CyberIntelligenceHome() {
-  const targetRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end end"]
-  });
-  
-  // We no longer need the number state since we pass the MotionValue directly
-  // to LayeredBadgeAnimation to avoid React re-renders on scroll
-  useEffect(() => {
-    // Left empty or use for other global side-effects
-  }, [scrollYProgress]);
-
-  // Scroll Beats Transformations
-  // 0-15% Hero Center
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 0.15], [0, -50]);
-  
-  // 15-40% Left Threat
-  const threatOpacity = useTransform(scrollYProgress, [0.15, 0.2, 0.35, 0.4], [0, 1, 1, 0]);
-  const threatX = useTransform(scrollYProgress, [0.15, 0.2, 0.35, 0.4], [-50, 0, 0, -50]);
-
-  // 40-65% Right Enterprise
-  const entOpacity = useTransform(scrollYProgress, [0.4, 0.45, 0.6, 0.65], [0, 1, 1, 0]);
-  const entX = useTransform(scrollYProgress, [0.4, 0.45, 0.6, 0.65], [50, 0, 0, 50]);
-
-  // 65-85% Left Academy
-  const acadOpacity = useTransform(scrollYProgress, [0.65, 0.7, 0.8, 0.85], [0, 1, 1, 0]);
-  const acadX = useTransform(scrollYProgress, [0.65, 0.7, 0.8, 0.85], [-50, 0, 0, -50]);
-
-  // 85-100% Center Final CTA
-  const ctaOpacity = useTransform(scrollYProgress, [0.85, 0.9, 1], [0, 1, 1]);
-  const ctaY = useTransform(scrollYProgress, [0.85, 0.9], [50, 0]);
-
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#05070D] text-white/60 font-sans selection:bg-[#2F9BFF] selection:text-white">
       
-      {/* 400vh Scrollytelling Section */}
-      <section ref={targetRef} className="relative h-[400vh] bg-[#05070D]">
+      {/* New Hero Section */}
+      <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
-        {/* Sticky Container */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-          <LayeredBadgeAnimation progress={scrollYProgress} />
+        {/* Full-screen video background */}
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="absolute inset-0 w-full h-full object-cover -z-20" 
+          src="/intro-video.mp4"
+        ></video>
+        
+        {/* Dark gradient overlay */}
+        <div className="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-transparent to-black -z-10"></div>
+        
+        {/* Content Container */}
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full px-4 text-center space-y-6">
+          <img src="/logo.png" alt="NISQ Vanguard" className="h-32 w-32 mb-6" />
           
-          {/* Subtle Glows */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#8B3DFF]/10 blur-[120px] rounded-full pointer-events-none" />
+          <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-[#2F9BFF]">
+            NISQ Vanguard
+          </h2>
           
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 flex flex-col items-center justify-center space-y-6 text-center h-screen pointer-events-none">
-            
-            <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-[#2F9BFF]">NISQ Vanguard</h2>
-            
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white/90 bg-gradient-to-b from-white to-[#2F9BFF]/60 bg-clip-text text-transparent">
-              Defending the digital frontier.
-            </h1>
-            
-            <p className="max-w-2xl text-lg md:text-xl text-white/60 font-light">
-              Next-generation cybersecurity for infrastructure, AI systems, and the models that power them.
-            </p>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white/90 bg-gradient-to-b from-white to-[#2F9BFF]/60 bg-clip-text text-transparent">
+            Defending the digital frontier.
+          </h1>
+          
+          <p className="max-w-2xl text-lg md:text-xl text-white/60 font-light">
+            Next-generation cybersecurity for infrastructure, AI systems, and the models that power them.
+          </p>
 
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white/90 bg-gradient-to-b from-white to-[#8B3DFF]/60 bg-clip-text text-transparent mt-4">
-              Protect what matters.<br/>Report what threatens it.
-            </h2>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white/90 bg-gradient-to-b from-white to-[#8B3DFF]/60 bg-clip-text text-transparent mt-4">
+            Protect what matters.<br/>Report what threatens it.
+          </h2>
 
-            <div className="pointer-events-auto flex flex-row flex-wrap justify-center gap-4 mt-8">
-              <Link to="/services" className="bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] text-white font-medium px-8 py-3 rounded-full shadow-[0_0_20px_rgba(47,155,255,0.3)] hover:opacity-90 transition-all">
-                Request a Demo
-              </Link>
-              <Link to="/academy" className="bg-[#1E2B40] border border-[#2F9BFF]/30 hover:border-[#2F9BFF] text-white px-8 py-3 rounded-full transition-all">
-                Enroll in Academy
-              </Link>
-              <Link to="/reporting" className="bg-white/5 border border-white/10 text-white px-8 py-3 rounded-full hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 transition-all">
-                Report a Threat
-              </Link>
-            </div>
-
+          <div className="flex flex-row flex-wrap justify-center gap-4 mt-8">
+            <Link to="/services" className="bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] text-white font-medium px-8 py-3 rounded-full shadow-[0_0_20px_rgba(47,155,255,0.3)] hover:opacity-90 transition-all">
+              Request a Demo
+            </Link>
+            <Link to="/academy" className="bg-[#1E2B40] border border-[#2F9BFF]/30 hover:border-[#2F9BFF] text-white px-8 py-3 rounded-full transition-all">
+              Enroll in Academy
+            </Link>
+            <Link to="/reporting" className="bg-white/5 border border-white/10 text-white px-8 py-3 rounded-full hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 transition-all">
+              Report a Threat
+            </Link>
           </div>
         </div>
       </section>
@@ -213,7 +73,9 @@ export function CyberIntelligenceHome() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <div className="absolute -inset-4 bg-gradient-to-r from-[#8B3DFF]/20 to-[#2F9BFF]/20 blur-xl rounded-full opacity-50" />
-            <img src={founderImg} alt="Founder" className="relative rounded-2xl w-full max-w-md mx-auto border border-white/10 grayscale hover:grayscale-0 transition-all duration-700" />
+            <div className="relative rounded-2xl w-full max-w-md mx-auto aspect-square bg-[#05070D] border border-white/10 flex items-center justify-center">
+              <span className="text-white/20 font-mono text-sm">IMAGE REDACTED</span>
+            </div>
           </div>
           <div>
             <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-[#8B3DFF] mb-4">Founder & Mission</h3>
