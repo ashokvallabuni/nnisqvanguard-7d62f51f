@@ -11,7 +11,8 @@ import {
   Search,
   Lock,
   Globe,
-  Users
+  Users,
+  Target
 } from "lucide-react";
 import founderImg from "@/assets/founder.jpeg";
 import nisqLogo from "@/assets/nisq-logo.jpeg";
