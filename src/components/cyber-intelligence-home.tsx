@@ -6,8 +6,13 @@ import { createPortal } from "react-dom";
 import founderImg from "@/assets/founder.jpeg";
 
 export function CyberIntelligenceHome() {
-  // Track entry state. 
-  const [hasEntered, setHasEntered] = useState(false);
+  // Track entry state to only show once per session.
+  const [hasEntered, setHasEntered] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('nisq_has_entered') === 'true';
+    }
+    return false;
+  });
   const [isEntering, setIsEntering] = useState(false);
   const { scrollY } = useScroll();
 
@@ -34,6 +39,9 @@ export function CyberIntelligenceHome() {
     setIsEntering(true);
     setTimeout(() => {
       setHasEntered(true);
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('nisq_has_entered', 'true');
+      }
       window.scrollTo(0, 0);
     }, 1200); // 1.2s light sweep transition
   };
@@ -96,15 +104,15 @@ export function CyberIntelligenceHome() {
             <img 
               src="/hero-bg-new.png" 
               alt="NISQ Vanguard Background" 
-              className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen scale-[1.05] brightness-75"
+              className="absolute inset-0 w-full h-full object-cover opacity-80 scale-[1.05]"
             />
-            {/* Dynamic Vignette for Blending */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(5,7,11,0.3)_0%,#05070B_100%)]" />
+            {/* Simple dark overlay for text readability without washing out the image */}
+            <div className="absolute inset-0 bg-[#05070B]/50" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-[#05070B]/50" />
           </motion.div>
           
-          {/* Subtle Grid and Gradient Overlay */}
+          {/* Subtle Grid Overlay */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#20283A_1px,transparent_1px),linear-gradient(to_bottom,#20283A_1px,transparent_1px)] bg-[size:32px_32px] opacity-20 pointer-events-none -z-10 [mask-image:radial-gradient(ellipse_80%_60%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#05070B]/40 via-[#05070B]/60 to-[#05070B] -z-10"></div>
           
           <motion.div 
             className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center justify-center pt-[20vh] pb-12"
