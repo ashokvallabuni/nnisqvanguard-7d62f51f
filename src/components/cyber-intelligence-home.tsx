@@ -94,10 +94,12 @@ export function CyberIntelligenceHome() {
             transition={{ type: "spring", stiffness: 50, damping: 40 }}
           >
             <img 
-              src="/main-bg.png" 
-              alt="NISQ Vanguard" 
-              className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-screen scale-[1.05]"
+              src="/hero-bg-new.png" 
+              alt="NISQ Vanguard Background" 
+              className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen scale-[1.05] brightness-75"
             />
+            {/* Dynamic Vignette for Blending */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(5,7,11,0.3)_0%,#05070B_100%)]" />
           </motion.div>
           
           {/* Subtle Grid and Gradient Overlay */}
