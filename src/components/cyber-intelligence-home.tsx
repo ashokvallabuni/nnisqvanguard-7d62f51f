@@ -13,45 +13,49 @@ import {
   Users,
   Target
 } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import founderImg from "@/assets/founder.jpeg";
 import nisqLogo from "@/assets/nisq-logo.jpeg";
 
 export function CyberIntelligenceHome() {
+  const { scrollY } = useScroll();
+  
+  // Parallax effects
+  const bgY = useTransform(scrollY, [0, 1000], ["0%", "50%"]);
+  const bgScale = useTransform(scrollY, [0, 1000], [1, 1.1]);
+  const contentY = useTransform(scrollY, [0, 500], [0, -50]);
+  const contentOpacity = useTransform(scrollY, [0, 500], [1, 0]);
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#05070D] text-white/60 font-sans selection:bg-[#2F9BFF] selection:text-white">
       
       {/* New Hero Section */}
-      <section className="relative min-h-[100vh] w-full flex items-center justify-center overflow-hidden pt-24 pb-16">
+      <section className="relative min-h-[100vh] w-full flex items-center justify-center overflow-hidden pt-24 pb-16 bg-[#05070D]">
         
-        {/* Full-screen video background */}
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
-          className="absolute inset-0 w-full h-full object-cover -z-20 opacity-70" 
-          src="/intro-video.mp4"
-        ></video>
+        {/* Parallax Background Image */}
+        <motion.div 
+          className="absolute inset-0 w-full h-full -z-20"
+          style={{ y: bgY, scale: bgScale }}
+        >
+          <img 
+            src="/hero-bg.png" 
+            alt="NISQ Vanguard" 
+            className="w-full h-full object-cover opacity-80 mix-blend-screen"
+          />
+        </motion.div>
         
-        {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#05070D]/90 via-[#05070D]/40 to-[#05070D] -z-10"></div>
+        {/* Advanced Grid Overlay */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none -z-10"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none -z-10 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        
+        {/* Dark gradient overlay for text readability at the bottom */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#05070D]/40 via-[#05070D]/60 to-[#05070D] -z-10"></div>
         
         {/* Content Container */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center justify-center space-y-8">
-          <div className="flex justify-center mb-2">
-            <img 
-              src="/logo.png" 
-              alt="NISQ Vanguard Logo" 
-              className="h-28 w-28 sm:h-36 sm:w-36 object-contain drop-shadow-[0_0_20px_rgba(47,155,255,0.4)]" 
-              onError={(e) => { e.currentTarget.style.display = 'none'; }} 
-            />
-          </div>
-          
-          <h2 className="font-mono text-sm sm:text-base uppercase tracking-[0.4em] text-[#2F9BFF] font-semibold">
-            NISQ Vanguard
-          </h2>
-          
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 pb-2">
+        <motion.div 
+          className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center justify-center pt-[35vh] pb-12"
+          style={{ y: contentY, opacity: contentOpacity }}
+        >
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 pb-2 drop-shadow-2xl">
             Defending the<br/>digital frontier.
           </h1>
           
@@ -74,7 +78,7 @@ export function CyberIntelligenceHome() {
               Report a Threat
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Trust Banner */}
