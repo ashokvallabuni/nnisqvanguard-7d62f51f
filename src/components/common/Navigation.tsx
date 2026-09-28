@@ -138,194 +138,91 @@ export function TopNav() {
   const { user, profile, isAdmin, adminView, signOut } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Added scroll effect for transparent top nav
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
 
-  const activeRole = resolveRole(profile, isAdmin, adminView);
-  const isPublic = !user;
-  const navItems = getNavForRole(activeRole, isPublic);
-
   return (
     <nav
-      className="w-full z-50 px-4 py-3 pointer-events-none flex items-center justify-between transition-all"
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 border-b ${
+        scrolled
+          ? "bg-[#05070D]/75 backdrop-blur-md border-white/5 py-3"
+          : "bg-transparent border-transparent py-5"
+      }`}
       aria-label="Main navigation"
     >
-      {/* Logo */}
-      <Link
-        to="/"
-        className="pointer-events-auto flex items-center gap-2.5 group shrink-0"
-        aria-label="NISQ Vanguard home"
-      >
-        <div className="w-10 h-10 rounded-lg border border-primary bg-background backdrop-blur-md overflow-hidden shadow-[0_0_12px_rgba(0,240,255,0.1)] flex items-center justify-center">
-          <img src={nisqLogoUrl} alt="NISQ Vanguard logo" className="w-full h-full object-cover" />
-        </div>
-      </Link>
-
-      {/* Desktop: Floating Glass Pill Nav */}
-      <div className="pointer-events-auto hidden md:flex items-center gap-0.5 glass px-1.5 py-1.5 rounded-full mx-auto">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono font-semibold text-[0.65rem] tracking-wider transition-all duration-200 ${
-                isActive
-                  ? "bg-primary/20 text-primary shadow-[0_0_20px_rgba(0,217,255,0.12)] border border-primary/50"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background"
-              }`}
-              aria-current={isActive ? "page" : undefined}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* Right: Auth Actions */}
-      <div className="pointer-events-auto flex items-center gap-2 glass px-3 py-1.5 rounded-full shrink-0">
-        {isPublic ? (
-          <>
-            <Link
-              to="/login"
-              className="px-3 py-1.5 text-xs font-semibold text-foreground hover:text-foreground transition-colors tracking-wide"
-            >
-              SIGN IN
-            </Link>
-            <Link
-              to="/auth"
-              className="px-4 py-1.5 rounded-full bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-all duration-200 tracking-wide"
-            >
-              GET STARTED
-            </Link>
-          </>
-        ) : (
-          <div className="relative group/profile flex items-center gap-2 pl-2 cursor-pointer">
-            <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center overflow-hidden">
-              <User className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <ChevronDown className="w-3 h-3 text-muted-foreground group-hover/profile:text-foreground transition-colors" />
-            {/* Dropdown */}
-            <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-muted backdrop-blur-xl border border-border shadow-sm opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-200 py-1.5 z-50">
-              <div className="px-4 py-2.5 border-b border-border/60 mb-1">
-                <div className="text-[0.6rem] font-mono text-primary/80 tracking-wider">
-                  ACCOUNT
-                </div>
-                <div className="text-xs text-foreground truncate mt-0.5">{user?.email}</div>
-              </div>
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors"
-              >
-                <BarChart3 className="w-3.5 h-3.5" /> VIEW PROGRESS
-              </Link>
-              <Link
-                to="/achievements"
-                className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors"
-              >
-                <Award className="w-3.5 h-3.5" /> CERTIFICATES & BADGES
-              </Link>
-              <Link
-                to="/profile"
-                className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors"
-              >
-                <User className="w-3.5 h-3.5" /> ACCOUNT SETTINGS
-              </Link>
-              <Link
-                to="/reporting"
-                className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-foreground hover:text-foreground hover:bg-background transition-colors"
-              >
-                <AlertTriangle className="w-3.5 h-3.5" /> REPORT INCIDENT
-              </Link>
-              <div className="h-px bg-background my-1" />
-              <button
-                onClick={() => void signOut()}
-                className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-red-400 hover:bg-red-500/10 transition-colors"
-              >
-                <LogOut className="w-3.5 h-3.5" /> SIGN OUT
-              </button>
-            </div>
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
+        
+        {/* Left: Logo */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="w-8 h-8 rounded-md overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center">
+            <img src={nisqLogoUrl} alt="Logo" className="w-full h-full object-cover" />
           </div>
-        )}
+          <span className="font-mono text-xs font-bold tracking-widest text-white/90 uppercase">
+            NISQ Vanguard
+          </span>
+        </Link>
+
+        {/* Center: Links */}
+        <div className="hidden lg:flex items-center gap-8 font-sans text-sm font-medium">
+          <Link to="/services" className="text-white/60 hover:text-white transition-colors">Services</Link>
+          <Link to="/academy" className="text-white/60 hover:text-white transition-colors">Academy</Link>
+          <Link to="/cyber-range/labs" className="text-white/60 hover:text-white transition-colors">IVVAB Labs</Link>
+          <Link to="/intelligence" className="text-white/60 hover:text-white transition-colors">Threat Intelligence</Link>
+          <Link to="/about" className="text-white/60 hover:text-white transition-colors">About</Link>
+          <Link to="/team" className="text-white/60 hover:text-white transition-colors">Team</Link>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="hidden lg:flex items-center gap-6">
+          <Link to="/reporting" className="flex items-center gap-2 group">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2F9BFF] animate-pulse group-hover:animate-none" />
+            <span className="font-mono text-[10px] uppercase tracking-wider text-white/50 group-hover:text-white/80 transition-colors">
+              Report a Threat
+            </span>
+          </Link>
+          
+          <div className="h-4 w-px bg-white/10" />
+          
+          <Link to="/login" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+            Sign In
+          </Link>
+          <Link to="/services" className="bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] text-white font-medium text-sm px-5 py-2 rounded-full hover:shadow-[0_0_15px_rgba(47,155,255,0.4)] transition-all">
+            Request a Demo
+          </Link>
+        </div>
+
+        {/* Mobile toggle */}
+        <button
+          className="lg:hidden text-white/80 hover:text-white"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
 
-      {/* Mobile Menu Toggle */}
-      <button
-        className="pointer-events-auto md:hidden p-2 rounded-full glass text-foreground hover:text-foreground ml-2"
-        onClick={() => setOpen(!open)}
-        aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-        aria-expanded={open}
-      >
-        {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-      </button>
-
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden absolute top-20 inset-x-4 bg-background/95 backdrop-blur-xl border border-border rounded-2xl p-4 flex flex-col gap-1 shadow-sm pointer-events-auto animate-in slide-in-from-top-4 z-50">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive =
-              pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                  isActive
-                    ? "bg-primary/20 text-primary border border-primary shadow-[0_0_20px_rgba(0,217,255,0.12)]"
-                    : "text-foreground hover:bg-background hover:text-foreground"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-          {!isPublic && (
-            <div className="border-t border-border mt-2 pt-2 space-y-1">
-              <Link
-                to="/dashboard"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background"
-              >
-                <BarChart3 className="w-4 h-4" /> VIEW PROGRESS
-              </Link>
-              <Link
-                to="/achievements"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background"
-              >
-                <Award className="w-4 h-4" /> CERTIFICATES & BADGES
-              </Link>
-              <Link
-                to="/profile"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background"
-              >
-                <User className="w-4 h-4" /> ACCOUNT SETTINGS
-              </Link>
-              <Link
-                to="/reporting"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-foreground hover:bg-background"
-              >
-                <AlertTriangle className="w-4 h-4" /> REPORT INCIDENT
-              </Link>
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  void signOut();
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10"
-              >
-                <LogOut className="w-4 h-4" /> SIGN OUT
-              </button>
-            </div>
-          )}
+        <div className="lg:hidden absolute top-full inset-x-0 bg-[#05070D]/95 backdrop-blur-xl border-b border-white/5 p-6 flex flex-col gap-4 shadow-xl">
+          <Link to="/services" className="text-lg text-white/80" onClick={() => setOpen(false)}>Services</Link>
+          <Link to="/academy" className="text-lg text-white/80" onClick={() => setOpen(false)}>Academy</Link>
+          <Link to="/cyber-range/labs" className="text-lg text-white/80" onClick={() => setOpen(false)}>IVVAB Labs</Link>
+          <Link to="/intelligence" className="text-lg text-white/80" onClick={() => setOpen(false)}>Threat Intelligence</Link>
+          <Link to="/about" className="text-lg text-white/80" onClick={() => setOpen(false)}>About</Link>
+          <Link to="/team" className="text-lg text-white/80" onClick={() => setOpen(false)}>Team</Link>
+          <div className="h-px bg-white/10 my-2" />
+          <Link to="/reporting" className="text-sm text-[#2F9BFF]" onClick={() => setOpen(false)}>Report a Threat</Link>
+          <Link to="/login" className="text-lg text-white" onClick={() => setOpen(false)}>Sign In</Link>
+          <Link to="/services" className="mt-2 text-center bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] text-white py-3 rounded-full" onClick={() => setOpen(false)}>
+            Request a Demo
+          </Link>
         </div>
       )}
     </nav>
