@@ -20,26 +20,39 @@ import nisqLogo from "@/assets/nisq-logo.jpeg";
 export function CyberIntelligenceHome() {
   const { scrollY } = useScroll();
   
-  // Parallax effects
-  const bgY = useTransform(scrollY, [0, 1000], ["0%", "50%"]);
-  const bgScale = useTransform(scrollY, [0, 1000], [1, 1.1]);
+  // Parallax and Cross-fade effects
+  const bgY = useTransform(scrollY, [0, 1000], ["0%", "30%"]);
+  const bgScale = useTransform(scrollY, [0, 1000], [1, 1.05]);
   const contentY = useTransform(scrollY, [0, 500], [0, -50]);
   const contentOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+  
+  // Cross-fade opacity between the two images
+  const image1Opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const image2Opacity = useTransform(scrollY, [0, 400], [0, 1]);
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#05070D] text-white/60 font-sans selection:bg-[#2F9BFF] selection:text-white">
       
       {/* New Hero Section */}
       <section className="relative min-h-[100vh] w-full flex items-center justify-center overflow-hidden pt-24 pb-16 bg-[#05070D]">
         
-        {/* Parallax Background Image */}
+        {/* Parallax Background Container */}
         <motion.div 
-          className="absolute inset-0 w-full h-full -z-20"
+          className="absolute inset-0 w-full h-full -z-20 bg-black"
           style={{ y: bgY, scale: bgScale }}
         >
-          <img 
-            src="/hero-bg.png" 
-            alt="NISQ Vanguard" 
-            className="w-full h-full object-cover opacity-80 mix-blend-screen"
+          {/* First Image: Starting Background (Dark Wolf) */}
+          <motion.img 
+            src="/hero-bg-1.png" 
+            alt="NISQ Vanguard Startup" 
+            className="absolute inset-0 w-full h-full object-cover mix-blend-screen"
+            style={{ opacity: image1Opacity }}
+          />
+          {/* Second Image: Scroll Background (Logo Badge) */}
+          <motion.img 
+            src="/hero-bg-2.png" 
+            alt="NISQ Vanguard Logo" 
+            className="absolute inset-0 w-full h-full object-cover mix-blend-screen"
+            style={{ opacity: image2Opacity }}
           />
         </motion.div>
         
