@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Shield, Target, BookOpen, Terminal, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
 import founderImg from "@/assets/founder.jpeg";
 import nisqLogo from "@/assets/nisq-logo.jpeg";
@@ -31,66 +32,66 @@ export function CyberIntelligenceHome() {
   return (
     <>
       {/* 1. CINEMATIC ENTRY EXPERIENCE */}
-      <AnimatePresence>
-        {!hasEntered && (
-          <motion.div 
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#05070B] overflow-hidden"
-            exit={{ opacity: 0, scale: 1.05, filter: "brightness(2)" }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
-          >
-            {/* Background Video */}
-            <video 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${isEntering ? 'opacity-0' : 'opacity-50'}`}
-              src="/intro-video.mp4"
-            />
-            {/* Cinematic overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#05070B]/80 via-[#05070B]/40 to-[#05070B] mix-blend-multiply pointer-events-none" />
-            
-            {/* Light sweep effect triggered on enter */}
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {!hasEntered && (
             <motion.div 
-              className="absolute inset-0 bg-[#20D9F5] mix-blend-overlay"
-              initial={{ opacity: 0, x: "-100%" }}
-              animate={isEntering ? { opacity: [0, 0.5, 0], x: ["-100%", "0%", "100%"] } : { opacity: 0 }}
+              className="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-[#05070B] overflow-hidden"
+              exit={{ opacity: 0, scale: 1.05, filter: "brightness(2)" }}
               transition={{ duration: 1.2, ease: "easeInOut" }}
-            />
-
-            <div className="relative z-10 flex flex-col items-center gap-10">
+            >
+              {/* Background Image */}
               <img 
-                src="/logo.png" 
-                alt="NISQ Vanguard" 
-                className="w-20 h-20 sm:w-24 sm:h-24 object-contain opacity-90 drop-shadow-[0_0_15px_rgba(32,217,245,0.3)]" 
-                onError={(e) => { e.currentTarget.src = nisqLogo; }} 
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${isEntering ? 'opacity-0' : 'opacity-70'}`}
+                src="/intro-bg.png"
+                alt="Cyber Wolf Background"
               />
+              {/* Cinematic overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#05070B]/80 via-[#05070B]/40 to-[#05070B] mix-blend-multiply pointer-events-none" />
               
-              {user ? (
-                <button 
-                  onClick={handleEnter}
-                  disabled={isEntering}
-                  className="group relative px-10 py-5 bg-[#0A0D14]/80 border border-[#20283A] hover:border-[#20D9F5] transition-all duration-500 overflow-hidden backdrop-blur-sm"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#20D9F5]/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
-                  <span className="relative z-10 text-[#F4F3F1] font-mono tracking-[0.25em] text-sm uppercase">Enter The Vanguard</span>
-                </button>
-              ) : (
-                <div className="flex flex-col items-center gap-6">
-                  <p className="text-[#A8B0BF] font-mono text-xs uppercase tracking-widest text-center">Authentication Required</p>
-                  <Link 
-                    to="/login"
-                    search={{ next: "/" }}
-                    className="px-10 py-4 bg-[#20D9F5]/10 border border-[#20D9F5]/30 text-[#20D9F5] tracking-[0.2em] text-sm uppercase font-mono hover:bg-[#20D9F5]/20 hover:border-[#20D9F5] transition-all duration-300 shadow-[0_0_20px_rgba(32,217,245,0.1)] hover:shadow-[0_0_30px_rgba(32,217,245,0.2)]"
+              {/* Light sweep effect triggered on enter */}
+              <motion.div 
+                className="absolute inset-0 bg-[#20D9F5] mix-blend-overlay"
+                initial={{ opacity: 0, x: "-100%" }}
+                animate={isEntering ? { opacity: [0, 0.5, 0], x: ["-100%", "0%", "100%"] } : { opacity: 0 }}
+                transition={{ duration: 1.2, ease: "easeInOut" }}
+              />
+
+              <div className="relative z-10 flex flex-col items-center gap-10">
+                <img 
+                  src="/logo.png" 
+                  alt="NISQ Vanguard" 
+                  className="w-20 h-20 sm:w-24 sm:h-24 object-contain opacity-90 drop-shadow-[0_0_15px_rgba(32,217,245,0.3)]" 
+                  onError={(e) => { e.currentTarget.src = nisqLogo; }} 
+                />
+                
+                {user ? (
+                  <button 
+                    onClick={handleEnter}
+                    disabled={isEntering}
+                    className="group relative px-10 py-5 bg-[#0A0D14]/80 border border-[#20283A] hover:border-[#20D9F5] transition-all duration-500 overflow-hidden backdrop-blur-sm"
                   >
-                    Authenticate
-                  </Link>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#20D9F5]/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
+                    <span className="relative z-10 text-[#F4F3F1] font-mono tracking-[0.25em] text-sm uppercase">Enter The Vanguard</span>
+                  </button>
+                ) : (
+                  <div className="flex flex-col items-center gap-6">
+                    <p className="text-[#A8B0BF] font-mono text-xs uppercase tracking-widest text-center">Authentication Required</p>
+                    <Link 
+                      to="/login"
+                      search={{ next: "/" }}
+                      className="px-10 py-4 bg-[#20D9F5]/10 border border-[#20D9F5]/30 text-[#20D9F5] tracking-[0.2em] text-sm uppercase font-mono hover:bg-[#20D9F5]/20 hover:border-[#20D9F5] transition-all duration-300 shadow-[0_0_20px_rgba(32,217,245,0.1)] hover:shadow-[0_0_30px_rgba(32,217,245,0.2)]"
+                    >
+                      Authenticate
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       {/* 2. MAIN HOME PAGE */}
       <main className="min-h-screen bg-[#05070B] text-[#F4F3F1] font-sans selection:bg-[#20D9F5]/30 selection:text-white">
