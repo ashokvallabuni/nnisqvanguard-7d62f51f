@@ -16,7 +16,7 @@ import { AuthProvider, useAuth } from "../lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useRegisterSW } from "virtual:pwa-register/react";
-import { TopNav, BottomNav, TelemetryTicker } from "@/components/common/Navigation";
+import { TopNav, BottomNav } from "@/components/common/Navigation";
 import { CommandPalette } from "@/components/common/CommandPalette";
 import {
   Shield,
@@ -270,7 +270,6 @@ function AdminTacticalPreviewBarWrapper() {
     <div className="min-h-screen relative pb-20 md:pb-0">
       <header className="sticky top-0 z-50 w-full flex flex-col bg-background/90 backdrop-blur-md shadow-md border-b border-border">
         {isAdmin && <AdminTacticalPreviewBar />}
-        <TelemetryTicker />
         <TopNav />
       </header>
       <div className="fixed inset-0 grid-bg opacity-[0.12] pointer-events-none" />
