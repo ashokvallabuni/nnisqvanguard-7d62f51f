@@ -153,7 +153,7 @@ export function TopNav() {
     <nav
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 border-b ${
         scrolled
-          ? "bg-[#05070D]/75 backdrop-blur-md border-white/5 py-3"
+          ? "bg-[#05070B]/80 backdrop-blur-md border-[#20283A] py-3"
           : "bg-transparent border-transparent py-5"
       }`}
       aria-label="Main navigation"
@@ -171,31 +171,30 @@ export function TopNav() {
         </Link>
 
         {/* Center: Links */}
-        <div className="hidden lg:flex items-center gap-8 font-sans text-sm font-medium">
-          <Link to="/services" className="text-white/60 hover:text-white transition-colors">Services</Link>
-          <Link to="/academy" className="text-white/60 hover:text-white transition-colors">Academy</Link>
-          <Link to="/cyber-range/labs" className="text-white/60 hover:text-white transition-colors">IVVAB Labs</Link>
-          <Link to="/intelligence" className="text-white/60 hover:text-white transition-colors">Threat Intelligence</Link>
-          <Link to="/about" className="text-white/60 hover:text-white transition-colors">About</Link>
-          <Link to="/team" className="text-white/60 hover:text-white transition-colors">Team</Link>
+        <div className="hidden lg:flex items-center gap-8 font-mono text-xs uppercase tracking-widest">
+          <Link to="/services" className="text-[#A8B0BF] hover:text-[#20D9F5] transition-colors">Services</Link>
+          <Link to="/academy" className="text-[#A8B0BF] hover:text-[#20D9F5] transition-colors">Academy</Link>
+          <Link to="/cyber-range/labs" className="text-[#A8B0BF] hover:text-[#20D9F5] transition-colors">IVVAB Labs</Link>
+          <Link to="/intelligence" className="text-[#A8B0BF] hover:text-[#20D9F5] transition-colors">Threat Intel</Link>
+          <Link to="/about" className="text-[#A8B0BF] hover:text-[#20D9F5] transition-colors">About</Link>
         </div>
 
         {/* Right: Actions */}
         <div className="hidden lg:flex items-center gap-6">
           <Link to="/reporting" className="flex items-center gap-2 group">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#2F9BFF] animate-pulse group-hover:animate-none" />
-            <span className="font-mono text-[10px] uppercase tracking-wider text-white/50 group-hover:text-white/80 transition-colors">
-              Report a Threat
+            <span className="w-1.5 h-1.5 rounded-full bg-[#F43F8F] animate-pulse group-hover:animate-none" />
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[#F4F3F1]/50 group-hover:text-[#F43F8F] transition-colors">
+              Report Threat
             </span>
           </Link>
           
-          <div className="h-4 w-px bg-white/10" />
+          <div className="h-4 w-px bg-[#20283A]" />
           
-          <Link to="/login" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+          <Link to="/login" className="font-mono text-xs uppercase tracking-widest text-[#F4F3F1]/80 hover:text-[#20D9F5] transition-colors">
             Sign In
           </Link>
-          <Link to="/services" className="bg-gradient-to-r from-[#8B3DFF] to-[#2F9BFF] text-white font-medium text-sm px-5 py-2 rounded-full hover:shadow-[0_0_15px_rgba(47,155,255,0.4)] transition-all">
-            Request a Demo
+          <Link to="/contact" className="bg-[#20D9F5]/10 border border-[#20D9F5]/30 text-[#20D9F5] font-mono text-xs uppercase tracking-widest px-5 py-2.5 hover:bg-[#20D9F5]/20 hover:border-[#20D9F5] transition-all">
+            Book Demo
           </Link>
         </div>
 
