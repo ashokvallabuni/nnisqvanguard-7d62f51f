@@ -1,6 +1,6 @@
 import { precacheAndRoute } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { NetworkFirst, CacheFirst } from "workbox-strategies";
+import { NetworkOnly, NetworkFirst, CacheFirst } from "workbox-strategies";
 import { ExpirationPlugin } from "workbox-expiration";
 
 // Ensure the SW gets the pre-cached assets injected during build
@@ -9,15 +9,10 @@ declare let self: ServiceWorkerGlobalScope;
 const precacheManifest = self.__WB_MANIFEST || [];
 precacheAndRoute(precacheManifest);
 
-// Handle offline fallback navigation for SPA routing
-// Instead of an index.html file, we use a NetworkFirst strategy for document navigations
-// If the network fails, we can fall back to the offline layout or root page if cached.
+// Instead of caching HTML (which causes stale app shells), we force network-only for navigations.
 registerRoute(
   ({ request }) => request.mode === "navigate",
-  new NetworkFirst({
-    cacheName: "pages",
-    networkTimeoutSeconds: 3,
-  }),
+  new NetworkOnly()
 );
 
 // Cache Supabase API requests for offline fallback
