@@ -1,29 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
+import { frameTimeline } from '@/lib/frames';
 
 interface HUDOverlayProps {
   scrollYProgress: MotionValue<number>;
 }
 
-const frames = [
-  { id: '01', name: 'HERO', boundary: 0 },
-  { id: '02', name: 'SERVICES', boundary: 0.2 },
-  { id: '03', name: 'ORIGIN', boundary: 0.4 },
-  { id: '04', name: 'LEADERSHIP', boundary: 0.6 },
-  { id: '05', name: 'CTA', boundary: 0.8 },
-];
-
 export function HUDOverlay({ scrollYProgress }: HUDOverlayProps) {
   const [activeFrame, setActiveFrame] = useState(0);
   
-  // Create a spring configuration for smoother progress bar
   const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on('change', (latest) => {
       let current = 0;
-      for (let i = frames.length - 1; i >= 0; i--) {
-        if (latest >= frames[i].boundary - 0.05) {
+      for (let i = 0; i < frameTimeline.hudBoundaries.length; i++) {
+        if (latest >= frameTimeline.hudBoundaries[i].start && latest <= frameTimeline.hudBoundaries[i].end) {
           current = i;
           break;
         }
@@ -32,6 +24,8 @@ export function HUDOverlay({ scrollYProgress }: HUDOverlayProps) {
     });
     return () => unsubscribe();
   }, [scrollYProgress]);
+
+  const frameText = frameTimeline.hudBoundaries[activeFrame]?.text || "FRAME 01/05 // HERO";
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-none">
@@ -42,20 +36,36 @@ export function HUDOverlay({ scrollYProgress }: HUDOverlayProps) {
       />
 
       {/* Top Left Readout */}
-      <div className="absolute top-6 left-6 font-mono text-xs tracking-widest uppercase">
-        <span className="text-[var(--chrome)]/50">SYS.OP.{frames[activeFrame].id} // </span>
-        <span className="text-[var(--cyan)] font-bold">{frames[activeFrame].name}</span>
+      <div className="absolute top-6 left-6 font-mono text-[12px] tracking-widest uppercase text-[var(--chrome)]/70">
+        {frameText.split('//').map((part, index) => (
+          index === 0 ? <span key={index} className="text-[var(--chrome)]/50">{part}//</span> : <span key={index} className="text-[var(--cyan)] font-bold">{part}</span>
+        ))}
       </div>
 
+      {/* Cyan corner brackets HUD style */}
+      <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[var(--cyan)]/40" />
+      <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-[var(--cyan)]/40" />
+      <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-[var(--cyan)]/40" />
+      <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-[var(--cyan)]/40" />
+
       {/* Right Edge Dot Nav */}
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-4">
-        {frames.map((frame, i) => (
-          <div 
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-4 pointer-events-auto">
+        {frameTimeline.hudBoundaries.map((frame, i) => (
+          <button 
             key={i} 
+            aria-label={`Scroll to ${frame.text}`}
+            onClick={() => {
+              // Basic scroll implementation
+              const target = i === 0 ? 0 : 
+                             i === 1 ? 0.22 : 
+                             i === 2 ? 0.44 : 
+                             i === 3 ? 0.64 : 1.0;
+              window.scrollTo({ top: document.body.scrollHeight * target, behavior: 'smooth' });
+            }}
             className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
               i === activeFrame 
                 ? 'bg-[var(--cyan)] scale-150 shadow-[0_0_8px_var(--cyan)]' 
-                : 'bg-[var(--line)]'
+                : 'bg-[var(--line)] hover:bg-[var(--chrome)]'
             }`} 
           />
         ))}

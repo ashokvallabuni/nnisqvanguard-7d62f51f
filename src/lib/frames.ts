@@ -1,28 +1,39 @@
 export const frameTimeline = {
-  // scrollYProgress values that define the start and end of each frame
-  // Frame 1: Hero (0.0 to 0.2)
-  // Frame 2: Services (0.2 to 0.4)
-  // Frame 3: Origin (0.4 to 0.6)
-  // Frame 4: Leadership (0.6 to 0.8)
-  // Frame 5: CTA/Footer (0.8 to 1.0)
+  // scrollYProgress values that define the boundaries of each frame
+  // F1 Hero (0-20% scroll)
+  // F2 Services (20-42%)
+  // F3 Founder (42-62%)
+  // F4 Leadership (62-82%)
+  // F5 CTA (82-100%)
   
-  // These represent the exact scrollYProgress at the exact center/active state of each frame
-  stops: [0.1, 0.3, 0.5, 0.7, 0.9],
+  // 8% overlap crossfade:
+  // e.g. F1 to F2 crossfade happens from 0.16 to 0.24 (center at 0.20)
   
-  // The actual scroll boundaries (for threshold detection)
-  boundaries: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+  inputRange: [0, 0.16, 0.24, 0.38, 0.46, 0.58, 0.66, 0.78, 0.86, 1],
 
-  // Background Opacity/Transition Arrays for useTransform
-  // For each frame, we can define an array of values corresponding to boundaries
-  // Example: Hero background should be opacity 1 between 0-0.2, then fade out
   backgroundOpacity: {
-    hero:       [1, 1, 0, 0, 0, 0],
-    services:   [0, 0.5, 1, 0.5, 0, 0],
-    origin:     [0, 0, 0.5, 1, 0.5, 0],
-    leadership: [0, 0, 0, 0.5, 1, 0.5],
-    cta:        [0, 0, 0, 0, 0.5, 1],
+    // 1 during F1, fades out 0.16 -> 0.24
+    hero:       [1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    
+    // Fades in 0.16 -> 0.24, stays 1 during F2, fades out 0.38 -> 0.46
+    services:   [0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+    
+    // Fades in 0.38 -> 0.46, stays 1 during F3, fades out 0.58 -> 0.66
+    founder:    [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+    
+    // Fades in 0.58 -> 0.66, stays 1 during F4, fades out 0.78 -> 0.86
+    leadership: [0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+    
+    // Fades in 0.78 -> 0.86, stays 1 during F5
+    cta:        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
   },
   
-  // Corresponding input points matching the opacity array length
-  inputRange: [0, 0.1, 0.3, 0.5, 0.7, 0.9]
+  // HUD text changes at exactly the 20%, 42%, 62%, 82% boundaries
+  hudBoundaries: [
+    { start: 0, end: 0.2, text: "FRAME 01/05 // HERO" },
+    { start: 0.2, end: 0.42, text: "FRAME 02/05 // SERVICES" },
+    { start: 0.42, end: 0.62, text: "FRAME 03/05 // FOUNDER" },
+    { start: 0.62, end: 0.82, text: "FRAME 04/05 // LEADERSHIP" },
+    { start: 0.82, end: 1.0, text: "FRAME 05/05 // CTA" },
+  ]
 };

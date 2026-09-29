@@ -9,6 +9,7 @@ import {
   useRouterState,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -270,8 +271,10 @@ function RootComponent() {
 
 function AdminTacticalPreviewBarWrapper() {
   const { isAdmin } = useAuth();
+  const location = useRouterState({ select: (s) => s.location });
+  
   return (
-    <div className="min-h-screen relative pb-20 md:pb-0">
+    <div className="min-h-screen relative pb-20 md:pb-0 overflow-x-hidden">
       <header className="sticky top-0 z-50 w-full flex flex-col bg-background/90 backdrop-blur-md shadow-md border-b border-border">
         {isAdmin && <AdminTacticalPreviewBar />}
         <TopNav />
@@ -279,8 +282,27 @@ function AdminTacticalPreviewBarWrapper() {
       <div className="fixed inset-0 grid-bg opacity-[0.12] pointer-events-none" />
       <BottomNav />
       <CommandPalette />
+      
       <div className="relative z-10 pt-4">
-        <Outlet />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative"
+          >
+            {/* Cyan scan line wipe effect on route enter */}
+            <motion.div 
+              initial={{ top: "0%", opacity: 1 }}
+              animate={{ top: "100%", opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="absolute left-0 right-0 h-[2px] bg-[var(--cyan)] shadow-[0_0_10px_var(--cyan)] pointer-events-none z-50"
+            />
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
