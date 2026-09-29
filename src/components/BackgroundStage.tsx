@@ -25,15 +25,27 @@ export function BackgroundStage({ scrollYProgress }: BackgroundStageProps) {
       {/* Frame 1: Hero */}
       <motion.div style={{ opacity: heroOpacity, y: yFar }} className="absolute inset-0">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="/hero-wolf.png" 
-            alt="Hero Background" 
-            className="w-full h-full object-cover opacity-80"
-          />
-          {/* Pulsing Eye Glow */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_45%,rgba(32,217,245,0.15)_0%,transparent_100%)] animate-[pulse_4s_ease-in-out_infinite]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--obsidian)]/60 to-[var(--obsidian)]" />
+          <div className="w-full h-full animate-[slowScale_20s_ease-in-out_infinite_alternate] origin-center">
+            <img 
+              src="/hero-wolf.png" 
+              alt="Hero Background" 
+              className="w-full h-full object-cover object-[80%_center] opacity-90 mix-blend-lighten contrast-125"
+            />
+          </div>
+          {/* Pulsing Eye Glow (aligned approximately to where the wolf eye is) */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_45%,rgba(32,217,245,0.25)_0%,transparent_40%)] animate-[pulse_4s_ease-in-out_infinite]" />
+          
+          {/* Left-to-right gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--obsidian)] via-[var(--obsidian)]/70 to-transparent" />
         </div>
+        
+        {/* Subtle Cyan Particles */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-30">
+          <div className="absolute w-2 h-2 rounded-full bg-[var(--cyan)] top-[20%] left-[60%] blur-[2px] animate-[float_10s_ease-in-out_infinite]" />
+          <div className="absolute w-1 h-1 rounded-full bg-[var(--cyan)] top-[40%] left-[80%] blur-[1px] animate-[float_15s_ease-in-out_infinite_reverse]" />
+          <div className="absolute w-3 h-3 rounded-full bg-[var(--cyan)] top-[70%] left-[70%] blur-[3px] animate-[float_12s_ease-in-out_infinite_1s]" />
+        </div>
+
         <div className="absolute inset-0 z-10 hidden md:block">
           <Suspense fallback={null}>
             <Logo3D />

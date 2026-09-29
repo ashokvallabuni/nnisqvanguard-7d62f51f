@@ -35,12 +35,6 @@ export function HUDOverlay({ scrollYProgress }: HUDOverlayProps) {
         style={{ scaleX }}
       />
 
-      {/* Top Left Readout */}
-      <div className="absolute top-6 left-6 font-mono text-[12px] tracking-widest uppercase text-[var(--chrome)]/70">
-        {frameText.split('//').map((part, index) => (
-          index === 0 ? <span key={index} className="text-[var(--chrome)]/50">{part}//</span> : <span key={index} className="text-[var(--cyan)] font-bold">{part}</span>
-        ))}
-      </div>
 
       {/* Cyan corner brackets HUD style */}
       <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[var(--cyan)]/40" />
@@ -51,23 +45,27 @@ export function HUDOverlay({ scrollYProgress }: HUDOverlayProps) {
       {/* Right Edge Dot Nav */}
       <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-4 pointer-events-auto">
         {frameTimeline.hudBoundaries.map((frame, i) => (
-          <button 
-            key={i} 
-            aria-label={`Scroll to ${frame.text}`}
-            onClick={() => {
-              // Basic scroll implementation
-              const target = i === 0 ? 0 : 
-                             i === 1 ? 0.22 : 
-                             i === 2 ? 0.44 : 
-                             i === 3 ? 0.64 : 1.0;
-              window.scrollTo({ top: document.body.scrollHeight * target, behavior: 'smooth' });
-            }}
-            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-              i === activeFrame 
-                ? 'bg-[var(--cyan)] scale-150 shadow-[0_0_8px_var(--cyan)]' 
-                : 'bg-[var(--line)] hover:bg-[var(--chrome)]'
-            }`} 
-          />
+          <div key={i} className="relative group">
+            <button 
+              aria-label={`Scroll to ${frame.text.split('//')[1]?.trim() || frame.text}`}
+              onClick={() => {
+                const target = i === 0 ? 0 : 
+                               i === 1 ? 0.22 : 
+                               i === 2 ? 0.44 : 
+                               i === 3 ? 0.64 : 1.0;
+                window.scrollTo({ top: document.body.scrollHeight * target, behavior: 'smooth' });
+              }}
+              className={`block w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                i === activeFrame 
+                  ? 'bg-[var(--cyan)] scale-150 shadow-[0_0_8px_var(--cyan)]' 
+                  : 'bg-[var(--line)] group-hover:bg-[var(--chrome)]'
+              }`} 
+            />
+            {/* Tooltip */}
+            <div className="absolute right-full top-1/2 -translate-y-1/2 mr-4 px-2 py-1 bg-[var(--obsidian)]/80 backdrop-blur border border-[var(--line)] text-[var(--chrome)] font-mono text-[10px] tracking-wider uppercase whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded">
+              {frame.text.split('//')[1]?.trim() || frame.text}
+            </div>
+          </div>
         ))}
       </div>
     </div>

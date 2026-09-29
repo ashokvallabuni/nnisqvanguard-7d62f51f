@@ -36,6 +36,8 @@ function LogoScene() {
   const material = useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
       map: texture,
+      alphaMap: texture,
+      alphaTest: 0.1,
       roughness: 0.25,
       metalness: 1.0,
       clearcoat: 1.0,
@@ -44,6 +46,7 @@ function LogoScene() {
       emissive: new THREE.Color('#20D9F5').multiplyScalar(0.05),
       transparent: true,
       opacity: 0.95,
+      side: THREE.DoubleSide
     });
   }, [texture]);
 
@@ -133,7 +136,9 @@ export default function LogoBackground() {
   }
 
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none mix-blend-screen opacity-50">
+    <div 
+      className="absolute inset-0 z-0 pointer-events-none mix-blend-screen opacity-50"
+    >
       <ErrorBoundary fallback={<StaticFallback />}>
         <Suspense fallback={null}>
           <Canvas

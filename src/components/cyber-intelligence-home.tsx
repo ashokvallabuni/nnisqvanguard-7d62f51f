@@ -77,7 +77,7 @@ export function CyberIntelligenceHome() {
             <div className="col-span-4 md:col-span-8 lg:col-span-12 flex flex-col gap-6 min-w-0">
               <motion.h1 
                 variants={itemVariants}
-                className="font-orbitron font-bold text-[clamp(56px,6vw,96px)] leading-[1.05] tracking-tight uppercase"
+                className="font-orbitron font-bold text-[clamp(56px,6vw,96px)] leading-[1.05] tracking-tight uppercase drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]"
               >
                 Secure<br />
                 The Future.
@@ -153,20 +153,36 @@ export function CyberIntelligenceHome() {
             
             <motion.div variants={itemVariants} className="col-span-4 md:col-span-4 lg:col-span-5 relative group min-w-0">
               <div className="relative aspect-[3/4] w-full overflow-hidden border border-[var(--line)] group-hover:border-[var(--cyan)]/50 transition-all duration-600 bg-black/50">
-                <img 
-                  src="/founder.jpeg" 
-                  alt="Ashok Vallabuni" 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                />
+                <picture>
+                  <source srcSet="/team/ashok-vallabuni.webp" type="image/webp" />
+                  <img 
+                    src="/team/ashok-vallabuni.jpg" 
+                    alt="Ashok Vallabuni" 
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const fallback = e.currentTarget.parentElement?.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                    className="w-full h-full object-cover object-top grayscale contrast-105 group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] relative z-10"
+                  />
+                </picture>
                 
+                {/* Fallback monogram */}
+                <div className="absolute inset-0 bg-[var(--obsidian)] hidden items-center justify-center z-0">
+                  <span className="font-orbitron text-[4rem] text-[var(--chrome)] font-bold tracking-widest">AV</span>
+                </div>
+                
+                {/* Soft dark gradient at bottom */}
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent z-20 pointer-events-none" />
+
                 {/* Scan-line sweep */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[var(--cyan)] opacity-0 group-hover:opacity-100 group-hover:animate-[scan_2s_ease-in-out_infinite] shadow-[0_0_10px_var(--cyan)] pointer-events-none" />
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[var(--cyan)] opacity-0 group-hover:opacity-100 group-hover:animate-[scan_2s_ease-in-out_infinite] shadow-[0_0_10px_var(--cyan)] pointer-events-none z-30" />
                 
                 {/* Expanding corner brackets */}
-                <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-[var(--cyan)] opacity-0 group-hover:opacity-100 -translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-500" />
-                <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-[var(--cyan)] opacity-0 group-hover:opacity-100 translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-500" />
+                <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-[var(--cyan)] opacity-0 group-hover:opacity-100 -translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-500 z-30 pointer-events-none" />
+                <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-[var(--cyan)] opacity-0 group-hover:opacity-100 translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-500 z-30 pointer-events-none" />
                 
-                <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(32,217,245,0)] group-hover:shadow-[inset_0_0_50px_rgba(32,217,245,0.15)] transition-shadow duration-600 pointer-events-none" />
+                <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(32,217,245,0)] group-hover:shadow-[inset_0_0_50px_rgba(32,217,245,0.15)] transition-shadow duration-600 pointer-events-none z-30" />
               </div>
             </motion.div>
 

@@ -79,27 +79,27 @@ export function TopNav() {
         }}
         animate={hidden ? "hidden" : "visible"}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 inset-x-0 z-50 transition-colors duration-300 ${
+        className={`fixed top-0 inset-x-0 z-[100] transition-colors duration-300 h-[72px] flex items-center ${
           scrolled
-            ? "bg-[var(--obsidian)]/80 backdrop-blur-md border-b border-[var(--line)] py-3"
-            : "bg-transparent border-b border-transparent py-5"
+            ? "bg-[var(--obsidian)]/80 backdrop-blur-md border-b border-[var(--line)]"
+            : "bg-transparent border-b border-transparent"
         }`}
         aria-label="Main navigation"
       >
-        <div className="max-w-[1280px] mx-auto px-[clamp(16px,4vw,48px)] flex items-center justify-between">
+        <div className="w-full max-w-[1280px] mx-auto px-[clamp(16px,4vw,48px)] flex items-center justify-between">
           
           {/* Left: Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-sm overflow-hidden bg-white/5 border border-[var(--line)] flex items-center justify-center group-hover:border-[var(--cyan)]/50 transition-colors">
+          <Link to="/" className="flex items-center gap-4 group mr-8">
+            <div className="w-10 h-10 rounded-sm overflow-hidden bg-white/5 border border-[var(--line)] flex items-center justify-center group-hover:border-[var(--cyan)]/50 transition-colors">
               <img src={nisqLogoUrl} alt="Logo" className="w-full h-full object-cover" />
             </div>
-            <span className="font-mono text-[13px] font-bold tracking-widest text-white/90 uppercase">
+            <span className="font-mono text-[14px] font-bold tracking-[0.2em] text-white/90 uppercase">
               NISQ Vanguard
             </span>
           </Link>
 
           {/* Center: Links */}
-          <div className="hidden lg:flex items-center gap-8 font-mono text-[13px] uppercase tracking-widest">
+          <div className="hidden min-[1100px]:flex items-center gap-8 font-mono text-[13px] uppercase tracking-widest">
             <Link to="/services" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">Services</Link>
             <Link to="/academy" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">Academy</Link>
             <Link to="/cyber-range/labs" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">IVVAB Labs</Link>
@@ -108,7 +108,7 @@ export function TopNav() {
           </div>
 
           {/* Right: Actions */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden min-[1100px]:flex items-center gap-6">
             <CyberButton variant="tertiary" to="/reporting" className="text-[var(--chrome)]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#F43F8F] shadow-[0_0_8px_#F43F8F]" />
               Report Threat
@@ -127,7 +127,7 @@ export function TopNav() {
 
           {/* Mobile toggle */}
           <button
-            className="lg:hidden text-[var(--chrome)] hover:text-white"
+            className="min-[1100px]:hidden text-[var(--chrome)] hover:text-white"
             onClick={() => setOpen(!open)}
           >
             {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -143,7 +143,7 @@ export function TopNav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-[var(--obsidian)]/95 backdrop-blur-xl flex flex-col pt-24 px-[clamp(16px,4vw,48px)] lg:hidden"
+            className="fixed inset-0 z-40 bg-[var(--obsidian)]/95 backdrop-blur-xl flex flex-col pt-24 px-[clamp(16px,4vw,48px)] min-[1100px]:hidden"
           >
             <div className="flex flex-col gap-6 font-orbitron text-2xl uppercase font-bold tracking-wider">
               <Link to="/services" className="text-white hover:text-[var(--cyan)]">Services</Link>
