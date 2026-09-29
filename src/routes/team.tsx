@@ -10,7 +10,7 @@ export const Route = createFileRoute("/team")({
       {
         name: "description",
         content:
-          "Meet the NISQ Vanguard leadership team: Ashok Vallabhuni, Varun Gajula, Sannith Reddy, and Chitireddy Janaki Raghu Rami Reddy.",
+          "Meet the NISQ Vanguard leadership team: Ashok Vallabuni, Varun Gajula, Sannith Reddy, and Chitireddy Janaki Raghu Rami Reddy.",
       },
     ],
   }),
@@ -26,9 +26,8 @@ type Member = {
 };
 
 const APPROVED_PUBLIC_TEAM: ReadonlyArray<{ name: string; role: string }> = [
-  { name: "Ashok Vallabhuni", role: "Founder · Chief Architect" },
   { name: "Varun Gajula", role: "Co-Founder" },
-  { name: "Sannith Reddy", role: "CPO · Product Marketer" },
+  { name: "Sannith Reddy", role: "Accountant" },
 ] as const;
 
 const REMOVED_PUBLIC_NAMES = new Set(["Pulijala Bhavani", "Bhavani Pulijala", "Sai Tanaku"]);

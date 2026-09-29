@@ -19,11 +19,11 @@ import nisqLogo from "@/assets/nisq-logo.jpeg";
 export const Route = createFileRoute("/about/founder")({
   head: () => ({
     meta: [
-      { title: "Ashok Vallabhuni — Founder & Chief Architect · NISQ Vanguard" },
+      { title: "Ashok Vallabuni — Founder & Chief Architect · NISQ Vanguard" },
       {
         name: "description",
         content:
-          "Ashok Vallabhuni is the Founder and Chief Architect of NISQ Vanguard Defence Technologies — building accessible, practical, and impactful cybersecurity education for India and beyond.",
+          "Ashok Vallabuni is the Founder and Chief Architect of NISQ Vanguard Defence Technologies — building accessible, practical, and impactful cybersecurity education for India and beyond.",
       },
     ],
   }),
@@ -117,7 +117,7 @@ function FounderProfilePage() {
                 <div className="absolute inset-0 rounded-lg bg-cyan-400/8 blur-2xl" />
                 <img
                   src={founderImg}
-                  alt="Ashok Vallabhuni — Founder & Chief Architect, NISQ Vanguard Defence Technologies"
+                  alt="Ashok Vallabuni — Founder & Chief Architect, NISQ Vanguard Defence Technologies"
                   className="relative z-10 h-80 w-80 rounded-lg object-cover shadow-[0_0_48px_rgba(0,210,255,0.25)]"
                 />
 
@@ -144,7 +144,7 @@ function FounderProfilePage() {
                   FOUNDER · CHIEF ARCHITECT
                 </p>
                 <h1 className="font-display text-4xl font-bold tracking-wide text-foreground sm:text-5xl">
-                  ASHOK VALLABHUNI
+                  ASHOK Vallabuni
                 </h1>
                 <p className="mt-2 font-mono text-xs text-slate-500 tracking-wider">
                   NISQ VANGUARD DEFENCE TECHNOLOGIES · IVVAB LABS ENGINE
@@ -171,7 +171,7 @@ function FounderProfilePage() {
 
               <div className="border border-border bg-card p-6 space-y-3 font-mono text-xs leading-relaxed text-muted-foreground">
                 <p>
-                  Ashok Vallabhuni is the{" "}
+                  Ashok Vallabuni is the{" "}
                   <strong className="text-foreground">Founder and Chief Architect</strong> of NISQ
                   Vanguard Defence Technologies — an organisation dedicated to making cybersecurity
                   education accessible, practical, and impactful across India and beyond.
@@ -215,7 +215,7 @@ function FounderProfilePage() {
               Awareness without action.
             </p>
             <p>
-              Ashok Vallabhuni set out to build something different — a platform where every module
+              Ashok Vallabuni set out to build something different — a platform where every module
               is grounded in real threat data, every lab simulates an authentic attack scenario, and
               every learner walks away with skills that are immediately deployable. The name{" "}
               <strong className="text-foreground">NISQ Vanguard</strong> reflects this forward

@@ -1288,7 +1288,7 @@ export const AVAILABLE_COURSES: CurriculumCourse[] = [
     tier: "free",
     duration_hours: 8,
     summary:
-      "Complete 20-lesson foundational curriculum from fundamentals to defender mindset by Founder Ashok Vallabhuni.",
+      "Complete 20-lesson foundational curriculum from fundamentals to defender mindset by Founder Ashok Vallabuni.",
     description:
       "The official gateway course for all security defenders. Master foundational threat principles, the CIA Triad, Parkerian Hexad, AAA framework, Lockheed Martin kill chain, password hygiene, cryptography, SOC triage, and incident response.",
     badge_slug: "cybersecurity-foundations-badge",
@@ -1361,7 +1361,7 @@ export const AVAILABLE_COURSES: CurriculumCourse[] = [
     summary:
       "150-page master handbook curriculum covering 52 sequential lessons from Reconnaissance & OSINT to Enterprise Active Directory.",
     description:
-      "The complete 52-lesson beginner-to-analyst roadmap. Spanning 4 modules (Module 1: Recon & OSINT, Module 2: System Exploitation, Module 3: Web Security, Module 4: Active Directory) powered by the IVVAB Labs engine and authorized by Chief Architect Ashok Vallabhuni.",
+      "The complete 52-lesson beginner-to-analyst roadmap. Spanning 4 modules (Module 1: Recon & OSINT, Module 2: System Exploitation, Module 3: Web Security, Module 4: Active Directory) powered by the IVVAB Labs engine and authorized by Chief Architect Ashok Vallabuni.",
     badge_slug: "soc-analyst-foundations-badge",
     badge_name: "Junior Cyber Defense Operative",
     skills: [

@@ -93,7 +93,7 @@ export function getLockedComingSoonCoursesStatic() {
     category: c.category,
     level: c.difficulty,
     duration_hours: parseInt(c.duration, 10) || undefined,
-    summary: `${c.title} — advanced cybersecurity track. Currently in production under review by Chief Architect Ashok Vallabhuni.`,
+    summary: `${c.title} — advanced cybersecurity track. Currently in production under review by Chief Architect Ashok Vallabuni.`,
     isLocked: true as const,
     comingSoon: true as const,
     tags: [c.category, c.difficulty, "Coming Soon"].filter(Boolean) as string[],
