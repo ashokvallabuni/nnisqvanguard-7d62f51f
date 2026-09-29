@@ -13,9 +13,9 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   const team = [
-    { name: "Ashok Vallabhuni", role: "Founder & Chief Architect", bio: "Cyber Strategy & AI Security" },
+    { name: "Ashok Vallabhuni", role: "Founder · Chief Architect", bio: "Cyber Strategy & AI Security" },
     { name: "Varun Gajula", role: "Co-Founder", bio: "Product Vision & Growth" },
-    { name: "Sannith Reddy", role: "Product Manager", bio: "Campus Programs & Brand Storytelling" }
+    { name: "Sannith Reddy", role: "CPO · Product Marketer", bio: "Campus Programs & Brand Storytelling" }
   ];
 
   return (
