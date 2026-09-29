@@ -142,6 +142,51 @@ function StudentDashboard() {
   const totalBadgesEarned = Math.max((userBadges ?? []).length, completedModulesCount > 0 ? 1 : 0);
   const totalXp = completedModulesCount * 25 + completedLabsCount * 100 + totalBadgesEarned * 100;
 
+  // Calculate Real Streak
+  const userStreak = useMemo(() => {
+    const dates = new Set<string>();
+    
+    (progress ?? []).forEach(p => {
+      if (p.updated_at) dates.add(new Date(p.updated_at).toISOString().split('T')[0]);
+    });
+    
+    (labProgress ?? []).forEach(l => {
+      if (l.updated_at) dates.add(new Date(l.updated_at).toISOString().split('T')[0]);
+    });
+    
+    const sortedDates = Array.from(dates).sort((a, b) => b.localeCompare(a));
+    if (sortedDates.length === 0) return 0;
+    
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    const todayStr = today.toISOString().split('T')[0];
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    
+    let currentStreak = 0;
+    let expectedDate = todayStr;
+    
+    if (!sortedDates.includes(todayStr) && sortedDates.includes(yesterdayStr)) {
+       expectedDate = yesterdayStr;
+    } else if (!sortedDates.includes(todayStr) && !sortedDates.includes(yesterdayStr)) {
+       return 0;
+    }
+    
+    let checkDate = new Date(expectedDate);
+    for (const d of sortedDates) {
+       const checkStr = checkDate.toISOString().split('T')[0];
+       if (d === checkStr) {
+          currentStreak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+       } else if (d < checkStr) {
+          break;
+       }
+    }
+    
+    return currentStreak;
+  }, [progress, labProgress]);
+
   // Active track to resume
   const activeCourse =
     courses?.find((c) => c.slug === "networking-fundamentals") ||
@@ -454,7 +499,7 @@ function StudentDashboard() {
                   Streak
                 </div>
                 <div className="font-display font-bold text-2xl text-foreground">
-                  7 <span className="text-xs text-muted-foreground">Days</span>
+                  {userStreak} <span className="text-xs text-muted-foreground">{userStreak === 1 ? 'Day' : 'Days'}</span>
                 </div>
               </div>
               <div className="p-4 nv-card space-y-1 shadow-sm">
