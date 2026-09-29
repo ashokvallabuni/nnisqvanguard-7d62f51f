@@ -153,19 +153,16 @@ export function CyberIntelligenceHome() {
             
             <motion.div variants={itemVariants} className="col-span-4 md:col-span-4 lg:col-span-5 relative group min-w-0">
               <div className="relative aspect-[3/4] w-full overflow-hidden border border-[var(--line)] group-hover:border-[var(--cyan)]/50 transition-all duration-600 bg-black/50">
-                <picture>
-                  <source srcSet="/team/ashok-vallabuni.webp" type="image/webp" />
-                  <img 
-                    src="/team/ashok-vallabuni.jpg" 
-                    alt="Ashok Vallabuni" 
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const fallback = e.currentTarget.parentElement?.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
-                    className="w-full h-full object-cover object-top grayscale contrast-105 group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] relative z-10"
-                  />
-                </picture>
+                <img 
+                  src="/assets/founder.jpeg" 
+                  alt="Ashok Vallabuni" 
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    const fallback = e.currentTarget.parentElement?.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
+                  className="w-full h-full object-cover object-[center_20%] grayscale contrast-105 group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] relative z-10"
+                />
                 
                 {/* Fallback monogram */}
                 <div className="absolute inset-0 bg-[var(--obsidian)] hidden items-center justify-center z-0">
