@@ -5,9 +5,17 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Space Grotesk", sans-serif;
+  --font-display: "Orbitron", sans-serif;
   --font-body: "Inter", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-mono: "Share Tech Mono", monospace;
+
+  /* Brand Tokens */
+  --obsidian: #05070B;
+  --panel: #0D1220;
+  --cyan: #20D9F5;
+  --violet: #8B5CF6;
+  --chrome: #E5E7EB;
+  --line: rgba(255, 255, 255, 0.08);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
