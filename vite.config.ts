@@ -9,6 +9,9 @@ export default defineConfig({
     preset: "vercel",
   },
   vite: {
+    resolve: {
+      dedupe: ['react', 'react-dom', 'three', '@react-three/fiber'],
+    },
     plugins: [
       VitePWA({
         strategies: "injectManifest",

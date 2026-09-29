@@ -90,16 +90,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <div className="mt-6 flex gap-2 justify-center">
           <button
             onClick={() => {
-              router.invalidate();
               reset();
+              window.location.reload();
             }}
             className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
           >
             Retry
           </button>
-          <a href="/" className="rounded-md border px-4 py-2 text-sm">
+          <Link
+            to="/"
+            onClick={() => reset()}
+            className="rounded-md border px-4 py-2 text-sm text-foreground"
+          >
             Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

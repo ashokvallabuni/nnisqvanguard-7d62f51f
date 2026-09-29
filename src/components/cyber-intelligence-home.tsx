@@ -4,7 +4,7 @@ import { Shield, Target, Lock, Zap, Activity, Cpu, Fingerprint, BookOpen, Users,
 import { Link } from '@tanstack/react-router';
 import founderImg from "@/assets/founder.jpeg";
 
-const Logo3D = React.lazy(() => import('@/components/Logo3D'));
+const Logo3D = React.lazy(() => import('@/components/three/LogoBackground'));
 
 // Easing for all entrances
 const customEase = [0.22, 1, 0.36, 1];
