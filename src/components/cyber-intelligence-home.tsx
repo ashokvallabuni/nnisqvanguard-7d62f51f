@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { BackgroundStage } from './BackgroundStage';
 import { HUDOverlay } from './HUDOverlay';
 import { Shield, Cpu, Activity, Radar, ArrowRight, User } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
 
 // ============================================================================
 // MOTION & ANIMATION CONFIG
@@ -58,6 +59,7 @@ const SectionWrapper = ({ children, id, className = '' }: { children: React.Reac
 
 export function CyberIntelligenceHome() {
   const { scrollYProgress } = useScroll();
+  const { user } = useAuth();
 
   return (
     <div className="relative bg-[var(--obsidian)] text-white font-sans selection:bg-[var(--cyan)] selection:text-black overflow-x-hidden">
@@ -101,7 +103,11 @@ export function CyberIntelligenceHome() {
               </motion.p>
               
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto">
-                <CyberButton variant="primary" to="/dashboard">Enter the NISQ VANGUARD</CyberButton>
+                {user ? (
+                  <CyberButton variant="primary" to="/dashboard">Access Dashboard</CyberButton>
+                ) : (
+                  <CyberButton variant="primary" to="/login">Enter the NISQ VANGUARD</CyberButton>
+                )}
                 <CyberButton variant="secondary" to="/services">Explore Capabilities</CyberButton>
               </motion.div>
             </div>
@@ -201,6 +207,9 @@ export function CyberIntelligenceHome() {
               
               <div className="space-y-6 text-[16px] md:text-[17px] text-[var(--chrome)] leading-[1.6] max-w-[65ch]">
                 <p>
+                  Ashok Vallabhuni is a seasoned cybersecurity engineer, architect of the NISQ VANGUARD platform, and a frequent mentor at advanced security events. He specializes in designing resilient networks capable of withstanding state-sponsored and zero-day threats.
+                </p>
+                <p className="italic text-[#00D2FF]/80">
                   "Cybersecurity is not a product you buy, but an architecture you build. At NISQ VANGUARD, we engineer defensive systems designed to adapt and outsmart adversarial operations in highly complex environments."
                 </p>
                 <div className="pt-6 border-t border-[var(--line)]">
@@ -259,7 +268,11 @@ export function CyberIntelligenceHome() {
             <p className="text-[16px] md:text-[17px] text-[var(--chrome)] leading-[1.6] mb-10 mx-auto">
               Deploy our advanced defense architecture to protect your critical infrastructure.
             </p>
-            <CyberButton variant="primary" to="/dashboard">Enter the NISQ VANGUARD</CyberButton>
+            {user ? (
+              <CyberButton variant="primary" to="/dashboard">Access Dashboard</CyberButton>
+            ) : (
+              <CyberButton variant="primary" to="/login">Enter the NISQ VANGUARD</CyberButton>
+            )}
           </motion.div>
         </SectionWrapper>
 

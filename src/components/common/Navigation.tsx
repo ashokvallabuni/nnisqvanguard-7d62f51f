@@ -110,7 +110,11 @@ export function TopNav() {
 
           {/* Right: Actions */}
           <div className="hidden min-[1100px]:flex items-center gap-6">
-            <CyberButton variant="primary" to="/dashboard">Enter the NISQ VANGUARD</CyberButton>
+            {user ? (
+              <CyberButton variant="primary" to="/dashboard">Access Dashboard</CyberButton>
+            ) : (
+              <CyberButton variant="primary" to="/login">Enter the NISQ VANGUARD</CyberButton>
+            )}
           </div>
 
           {/* Mobile toggle */}
@@ -145,7 +149,11 @@ export function TopNav() {
             <div className="h-px bg-white/10 my-8" />
             
             <div className="flex flex-col gap-4 w-full mt-auto mb-24">
-              <CyberButton variant="primary" to="/dashboard" className="w-full">Enter the NISQ VANGUARD</CyberButton>
+              {user ? (
+                <CyberButton variant="primary" to="/dashboard" className="w-full">Access Dashboard</CyberButton>
+              ) : (
+                <CyberButton variant="primary" to="/login" className="w-full">Enter the NISQ VANGUARD</CyberButton>
+              )}
             </div>
           </motion.div>
         )}
