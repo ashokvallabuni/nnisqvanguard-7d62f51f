@@ -112,9 +112,6 @@ export function TopNav() {
           <div className="hidden min-[1100px]:flex items-center gap-6">
             <CyberButton variant="primary" to="/dashboard">Enter the NISQ VANGUARD</CyberButton>
           </div>
-            
-
-          </div>
 
           {/* Mobile toggle */}
           <button
