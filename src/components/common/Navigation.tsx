@@ -100,29 +100,20 @@ export function TopNav() {
 
           {/* Center: Links */}
           <div className="hidden min-[1100px]:flex items-center gap-8 font-mono text-[13px] uppercase tracking-widest">
-            <Link to="/services" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">Services</Link>
-            <Link to="/academy" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">Academy</Link>
-            <Link to="/cyber-range/labs" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">IVVAB Labs</Link>
-            <Link to="/intelligence" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">Threat Intel</Link>
-            <Link to="/about" className="text-[var(--chrome)] hover:text-[var(--cyan)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]">About</Link>
+            <Link to="/services" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Security Matrix</Link>
+            <Link to="/intelligence" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Strategy Center</Link>
+            <Link to="/cyber-range/labs" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Operations Hub</Link>
+            <Link to="/services" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Technology Stack</Link>
+            <Link to="/about" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">About Team</Link>
+            <Link to="/academy" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Academy Programs</Link>
           </div>
 
           {/* Right: Actions */}
           <div className="hidden min-[1100px]:flex items-center gap-6">
-            <CyberButton variant="tertiary" to="/reporting" className="text-[var(--chrome)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F43F8F] shadow-[0_0_8px_#F43F8F]" />
-              Report Threat
-            </CyberButton>
+            <CyberButton variant="primary" to="/dashboard">Enter the NISQ VANGUARD</CyberButton>
+          </div>
             
-            <div className="h-4 w-px bg-[var(--line)]" />
-            
-            {user ? (
-              <CyberButton variant="secondary" to="/dashboard">Go to Dashboard</CyberButton>
-            ) : (
-              <CyberButton variant="secondary" to="/login">Sign In</CyberButton>
-            )}
-            
-            <CyberButton variant="primary" to="/contact">Book Demo</CyberButton>
+
           </div>
 
           {/* Mobile toggle */}
@@ -146,26 +137,18 @@ export function TopNav() {
             className="fixed inset-0 z-40 bg-[var(--obsidian)]/95 backdrop-blur-xl flex flex-col pt-24 px-[clamp(16px,4vw,48px)] min-[1100px]:hidden"
           >
             <div className="flex flex-col gap-6 font-orbitron text-2xl uppercase font-bold tracking-wider">
-              <Link to="/services" className="text-white hover:text-[var(--cyan)]">Services</Link>
-              <Link to="/academy" className="text-white hover:text-[var(--cyan)]">Academy</Link>
-              <Link to="/cyber-range/labs" className="text-white hover:text-[var(--cyan)]">IVVAB Labs</Link>
-              <Link to="/intelligence" className="text-white hover:text-[var(--cyan)]">Threat Intel</Link>
-              <Link to="/about" className="text-white hover:text-[var(--cyan)]">About</Link>
+              <Link to="/services" className="text-white hover:text-[#00D2FF]">Security Matrix</Link>
+              <Link to="/intelligence" className="text-white hover:text-[#00D2FF]">Strategy Center</Link>
+              <Link to="/cyber-range/labs" className="text-white hover:text-[#00D2FF]">Operations Hub</Link>
+              <Link to="/services" className="text-white hover:text-[#00D2FF]">Technology Stack</Link>
+              <Link to="/about" className="text-white hover:text-[#00D2FF]">About Team</Link>
+              <Link to="/academy" className="text-white hover:text-[#00D2FF]">Academy Programs</Link>
             </div>
             
-            <div className="h-px bg-[var(--line)] my-8" />
+            <div className="h-px bg-white/10 my-8" />
             
             <div className="flex flex-col gap-4 w-full mt-auto mb-24">
-              <CyberButton variant="tertiary" to="/reporting" className="w-full text-[var(--chrome)] justify-start">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F43F8F] shadow-[0_0_8px_#F43F8F]" />
-                Report Threat
-              </CyberButton>
-              {user ? (
-                <CyberButton variant="secondary" to="/dashboard" className="w-full">Go to Dashboard</CyberButton>
-              ) : (
-                <CyberButton variant="secondary" to="/login" className="w-full">Sign In</CyberButton>
-              )}
-              <CyberButton variant="primary" to="/contact" className="w-full">Book Demo</CyberButton>
+              <CyberButton variant="primary" to="/dashboard" className="w-full">Enter the NISQ VANGUARD</CyberButton>
             </div>
           </motion.div>
         )}

@@ -10,12 +10,12 @@ export interface CyberButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
 
 export const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
   ({ variant = 'primary', href, to, children, className = '', ...props }, ref) => {
-    const baseClasses = "group relative inline-flex items-center justify-center font-mono text-[12px] md:text-[13px] uppercase tracking-widest transition-all duration-300 h-[52px] md:h-[48px] px-8 min-w-[44px] rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--obsidian)] active:scale-98";
+    const baseClasses = "group relative inline-flex items-center justify-center font-mono text-[12px] md:text-[13px] font-bold uppercase tracking-widest transition-all duration-300 py-4 px-9 w-full sm:w-auto min-w-[180px] whitespace-nowrap border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF] focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95";
     
     const variants = {
-      primary: "bg-[var(--cyan)] text-black hover:bg-[#20D9F5]/90 hover:shadow-[0_0_20px_rgba(32,217,245,0.4)] hover:-translate-y-0.5",
-      secondary: "border border-[var(--line)] bg-[var(--obsidian)] text-[var(--chrome)] hover:border-[var(--cyan)] hover:text-[var(--cyan)] hover:bg-[var(--cyan)]/5 hover:shadow-[0_0_15px_rgba(32,217,245,0.2)] hover:-translate-y-0.5",
-      tertiary: "bg-transparent text-[var(--chrome)] hover:text-[var(--cyan)] px-0 h-auto hover:-translate-y-0.5"
+      primary: "bg-[#00D2FF] text-black border-[#00D2FF] hover:brightness-110",
+      secondary: "bg-transparent text-white border-[#00D2FF] hover:bg-[#00D2FF]/10 hover:brightness-110",
+      tertiary: "bg-transparent text-white border-transparent hover:text-[#00D2FF] px-0 py-0 min-w-0"
     };
 
     const content = (

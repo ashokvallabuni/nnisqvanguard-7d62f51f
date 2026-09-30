@@ -72,15 +72,25 @@ export function CyberIntelligenceHome() {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-6 min-w-0"
+            className="grid grid-cols-1 md:grid-cols-12 gap-6 min-w-0 items-center relative"
           >
-            <div className="col-span-4 md:col-span-8 lg:col-span-12 flex flex-col gap-6 min-w-0">
+            {/* Center Crest Background Image - dead center behind hero text */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 0.15, scale: 1 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
+            >
+              <img src="/assets/nisq-logo.jpeg" alt="NISQ VANGUARD Crest" className="w-full max-w-[420px] md:max-w-[520px] object-contain rounded-full border border-[#00D2FF]/20 shadow-[0_0_100px_rgba(0,210,255,0.15)]" />
+            </motion.div>
+
+            <div className="col-span-1 md:col-span-12 flex flex-col items-center text-center gap-6 min-w-0 z-10 relative">
               <motion.h1 
                 variants={itemVariants}
-                className="font-orbitron font-bold text-[clamp(56px,6vw,96px)] leading-[1.05] tracking-tight uppercase drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]"
+                className="font-orbitron font-bold text-[clamp(48px,6vw,96px)] leading-[1.05] tracking-tight uppercase drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]"
               >
-                Secure<br />
-                The Future.
+                SECURE<br />
+                THE FUTURE.
               </motion.h1>
               
               <motion.p 
@@ -90,9 +100,9 @@ export function CyberIntelligenceHome() {
                 Advanced cybersecurity intelligence, rigorous defense-in-depth methodologies, and active threat neutralization for critical infrastructure.
               </motion.p>
               
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-8">
-                <CyberButton variant="primary">Enter the Vanguard</CyberButton>
-                <CyberButton variant="secondary" href="/cyber-range">Explore IVVAB Labs</CyberButton>
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto">
+                <CyberButton variant="primary" to="/dashboard">Enter the NISQ VANGUARD</CyberButton>
+                <CyberButton variant="secondary" to="/services">Explore Capabilities</CyberButton>
               </motion.div>
             </div>
           </motion.div>
@@ -109,37 +119,37 @@ export function CyberIntelligenceHome() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-w-0">
             {[
-              { icon: Shield, title: "Protection", desc: "Enterprise-grade hardening and continuous attack surface reduction." },
+              { icon: Shield, title: "Protection", desc: "Enterprise grade hardening and continuous attack surface reduction." },
               { icon: Cpu, title: "Intelligence", desc: "Proactive threat hunting and zero-day vulnerability research." },
-              { icon: Radar, title: "Operations", desc: "24/7 security operations center and incident response protocols." },
-              { icon: Activity, title: "Academy", desc: "Immersive cyber range environments and practitioner education." }
+              { icon: Radar, title: "Operations", desc: "24/7 security operations center and rapid incident response protocols." },
+              { icon: Activity, title: "Academy", desc: "Immersive cyber range environments and professional education." }
             ].map((srv, i) => (
               <motion.div 
                 key={i}
                 variants={itemVariants}
-                className="group relative flex flex-col p-6 bg-[var(--obsidian)]/80 border border-[var(--line)] backdrop-blur-md min-w-0 h-full transition-colors duration-500 hover:border-[var(--cyan)]/50"
+                className="group relative flex flex-col p-6 bg-[var(--obsidian)]/80 border border-[var(--line)] backdrop-blur-md min-w-0 h-full transition-colors duration-500 hover:border-[#00D2FF]/50"
               >
                 {/* HUD Corner Ticks */}
-                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[var(--line)] group-hover:border-[var(--cyan)] transition-colors" />
-                <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-[var(--line)] group-hover:border-[var(--cyan)] transition-colors" />
-                <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[var(--line)] group-hover:border-[var(--cyan)] transition-colors" />
-                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[var(--line)] group-hover:border-[var(--cyan)] transition-colors" />
+                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[var(--line)] group-hover:border-[#00D2FF] transition-colors" />
+                <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-[var(--line)] group-hover:border-[#00D2FF] transition-colors" />
+                <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[var(--line)] group-hover:border-[#00D2FF] transition-colors" />
+                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[var(--line)] group-hover:border-[#00D2FF] transition-colors" />
                 
                 {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(32,217,245,0.05)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(0,210,255,0.05)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                <div className="w-[44px] h-[44px] mb-6 flex items-center justify-center border border-[var(--line)] bg-black/50 text-[var(--cyan)] group-hover:scale-110 transition-transform duration-500 shrink-0">
+                <div className="w-[44px] h-[44px] mb-6 flex items-center justify-center border border-[var(--line)] bg-black/50 text-[#00D2FF] group-hover:scale-110 transition-transform duration-500 shrink-0">
                   <srv.icon size={20} />
                 </div>
                 
-                <h3 className="font-orbitron text-[clamp(20px,3vw,24px)] font-semibold mb-3">{srv.title}</h3>
+                <h3 className="font-orbitron text-[clamp(20px,3vw,24px)] font-semibold mb-3 text-white">{srv.title}</h3>
                 <p className="text-[16px] md:text-[17px] text-[var(--chrome)] leading-[1.6] mb-8 grow">
                   {srv.desc}
                 </p>
                 
                 <div className="mt-auto pt-4 border-t border-[var(--line)]">
-                  <CyberButton variant="tertiary" className="text-[var(--cyan)]">
-                    Learn more <ArrowRight size={14} />
+                  <CyberButton variant="secondary" className="w-full flex items-center justify-center" to="/services">
+                    Learn More <ArrowRight className="ml-2" size={16} />
                   </CyberButton>
                 </div>
               </motion.div>
@@ -184,18 +194,18 @@ export function CyberIntelligenceHome() {
             </motion.div>
 
             <motion.div variants={itemVariants} className="col-span-4 md:col-span-4 lg:col-span-7 flex flex-col justify-center min-w-0">
-              <div className="font-mono text-[12px] md:text-[13px] text-[var(--cyan)] tracking-widest mb-4">FOUNDER</div>
-              <h2 className="font-orbitron text-[clamp(32px,4vw,48px)] leading-[1.1] font-bold mb-8">
+              <div className="font-mono text-[12px] md:text-[13px] text-[#00D2FF] tracking-widest mb-4">FOUNDER</div>
+              <h2 className="font-orbitron text-[clamp(32px,4vw,48px)] leading-[1.1] font-bold mb-8 text-white">
                 Building resilient security architectures for tomorrow.
               </h2>
               
               <div className="space-y-6 text-[16px] md:text-[17px] text-[var(--chrome)] leading-[1.6] max-w-[65ch]">
                 <p>
-                  "Cybersecurity is not a product you buy, but an architecture you build. At NISQ Vanguard, we engineer defensive systems designed to adapt and withstand adversarial operations in highly complex environments."
+                  "Cybersecurity is not a product you buy, but an architecture you build. At NISQ VANGUARD, we engineer defensive systems designed to adapt and outsmart adversarial operations in highly complex environments."
                 </p>
                 <div className="pt-6 border-t border-[var(--line)]">
-                  <div className="font-orbitron text-white text-xl font-medium tracking-wide">Ashok Vallabuni</div>
-                  <div className="font-mono text-[12px] md:text-[13px] text-[var(--cyan)] tracking-widest mt-1">Founder & Chief Architect</div>
+                  <div className="font-orbitron text-white text-xl font-medium tracking-wide">Ashok Vallabhuni</div>
+                  <div className="font-mono text-[12px] md:text-[13px] text-[#00D2FF] tracking-widest mt-1">Founder & Chief Architect</div>
                 </div>
               </div>
             </motion.div>
@@ -211,20 +221,20 @@ export function CyberIntelligenceHome() {
 
             <div className="flex flex-col gap-6 w-full text-left">
               {[
-                { name: "Varun Gajula", role: "Co-Founder", avatar: null },
-                { name: "Sannith Reddy", role: "Accountant", avatar: null }
+                { name: "Varun Gajjala", role: "Co-Founder", avatar: null },
+                { name: "Sannith Reddy", role: "Team Member", avatar: null }
               ].map((member, i) => (
                 <motion.div 
                   key={i}
                   variants={itemVariants}
-                  className="group flex flex-row items-center gap-6 p-6 border border-[var(--line)] bg-[var(--obsidian)]/50 hover:bg-[var(--cyan)]/5 hover:border-[var(--cyan)]/50 transition-colors duration-300 backdrop-blur-sm"
+                  className="group flex flex-row items-center gap-6 p-6 border border-[var(--line)] bg-[var(--obsidian)]/50 hover:bg-[#00D2FF]/5 hover:border-[#00D2FF]/50 transition-colors duration-300 backdrop-blur-sm"
                 >
-                  <div className="w-16 h-16 shrink-0 bg-black border border-[var(--line)] group-hover:border-[var(--cyan)] flex items-center justify-center text-[var(--chrome)] group-hover:text-[var(--cyan)] transition-colors">
+                  <div className="w-16 h-16 shrink-0 bg-black border border-[var(--line)] group-hover:border-[#00D2FF] flex items-center justify-center text-[var(--chrome)] group-hover:text-[#00D2FF] transition-colors">
                     <User size={24} />
                   </div>
                   <div>
                     <h3 className="font-orbitron text-[clamp(20px,3vw,24px)] font-semibold text-white">{member.name}</h3>
-                    <div className="font-mono text-[12px] md:text-[13px] text-[var(--cyan)] tracking-widest mt-1">{member.role}</div>
+                    <div className="font-mono text-[12px] md:text-[13px] text-[#00D2FF] tracking-widest mt-1">{member.role}</div>
                   </div>
                 </motion.div>
               ))}
@@ -232,10 +242,10 @@ export function CyberIntelligenceHome() {
 
             <motion.div variants={itemVariants} className="mt-16 pt-8 border-t border-[var(--line)] flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="text-left">
-                <h3 className="font-orbitron text-xl font-bold">Join the Vanguard</h3>
+                <h3 className="font-orbitron text-xl font-bold text-white">Join the NISQ VANGUARD</h3>
                 <p className="text-[16px] text-[var(--chrome)] mt-1">We are always looking for elite operators.</p>
               </div>
-              <CyberButton variant="secondary">View Openings</CyberButton>
+              <CyberButton variant="secondary" to="/about">View Positions</CyberButton>
             </motion.div>
           </motion.div>
         </SectionWrapper>
@@ -243,13 +253,13 @@ export function CyberIntelligenceHome() {
         {/* ==================== FRAME 5: CTA ==================== */}
         <SectionWrapper id="cta" className="lg:snap-center flex flex-col items-center justify-center text-center">
           <motion.div variants={itemVariants} className="max-w-[65ch] w-full min-w-0">
-            <h2 className="font-orbitron text-[clamp(32px,4vw,48px)] leading-[1.1] font-bold mb-6">
+            <h2 className="font-orbitron text-[clamp(32px,4vw,48px)] leading-[1.1] font-bold mb-6 text-white">
               Initiate Secure Operations
             </h2>
             <p className="text-[16px] md:text-[17px] text-[var(--chrome)] leading-[1.6] mb-10 mx-auto">
-              Deploy our advanced defensive architecture to protect your critical infrastructure.
+              Deploy our advanced defense architecture to protect your critical infrastructure.
             </p>
-            <CyberButton variant="primary">Engage Vanguard</CyberButton>
+            <CyberButton variant="primary" to="/dashboard">Enter the NISQ VANGUARD</CyberButton>
           </motion.div>
         </SectionWrapper>
 
