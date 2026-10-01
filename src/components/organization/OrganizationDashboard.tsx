@@ -50,6 +50,12 @@ export function OrganizationDashboard() {
               REQUEST CONSULTATION
             </Link>
             <Link
+              to="/appointments"
+              className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
+            >
+              REQUEST SECURITY ASSESSMENT
+            </Link>
+            <Link
               to="/reporting"
               className="px-3.5 py-2 rounded-lg text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
             >
@@ -115,9 +121,9 @@ export function OrganizationDashboard() {
               <Activity className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-display font-bold text-lg">Enterprise Services</h3>
+              <h3 className="font-display font-bold text-lg">Request Security Assessment</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Explore compliance frameworks, vCISO integration, and advanced security solutions.
+                Schedule a vulnerability assessment or penetration test.
               </p>
             </div>
           </Link>

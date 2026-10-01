@@ -8,12 +8,13 @@ export const Route = createFileRoute("/about")({
       { title: "About — NISQ Vanguard" },
     ],
   }),
+  component: AboutPage,
 });
 
 function AboutPage() {
   const team = [
-    { name: "Varun Gajula", role: "Co-Founder" },
-    { name: "Sannith Reddy", role: "Accountant" }
+    { name: "Varun Gajula", role: "Co-Founder", bio: "" },
+    { name: "Sannith Reddy", role: "CPO · Product Marketer", bio: "" }
   ];
 
   return (

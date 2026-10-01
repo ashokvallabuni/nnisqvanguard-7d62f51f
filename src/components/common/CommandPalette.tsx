@@ -37,7 +37,6 @@ export function CommandPalette() {
     { label: "Home", to: "/", icon: Home },
     { label: "Academy", to: "/academy", icon: BookOpen },
     { label: "Services", to: "/services", icon: Shield },
-    { label: "Threat Intelligence", to: "/intelligence", icon: Radar },
     { label: "Reporting", to: "/reporting", icon: Shield },
   ];
 
@@ -52,7 +51,6 @@ export function CommandPalette() {
     { label: "Dashboard", to: "/", icon: Home },
     { label: "Defense Services", to: "/services", icon: Shield },
     { label: "Appointments", to: "/appointments", icon: Calendar },
-    { label: "Threat Intelligence", to: "/intelligence", icon: Radar },
     { label: "Reporting", to: "/reporting", icon: Shield },
   ];
 

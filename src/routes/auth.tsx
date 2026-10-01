@@ -14,7 +14,7 @@ export function AuthPage() {
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [next, setNext] = useState("/dashboard");
-  const [intent, setIntent] = useState<"STUDENT" | "ORGANIZATION" | null>(null);
+  const [intent, setIntent] = useState<"STUDENT" | "ORGANIZATION" | "COLLEGE" | null>(null);
 
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("next");
@@ -58,7 +58,7 @@ export function AuthPage() {
         {!intent ? (
           <div className="space-y-4 fade-in">
             <p className="text-center text-sm font-semibold mb-4">
-              HOW WILL YOU USE NISQ VANGUARD?
+              What type of account are you using?
             </p>
             <button
               onClick={() => setIntent("STUDENT")}
@@ -68,9 +68,9 @@ export function AuthPage() {
                 <User className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <div className="font-bold">PERSONAL / LEARNER</div>
+                <div className="font-bold">PERSONAL / STUDENT</div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Learn cybersecurity, practice through Cyber Labs, earn badges and certificates.
+                  Learn cybersecurity, practice through IVVAB LABS, earn badges and certificates.
                 </div>
               </div>
             </button>
@@ -83,9 +83,24 @@ export function AuthPage() {
                 <Building className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <div className="font-bold">ORGANIZATION / BUSINESS</div>
+                <div className="font-bold">ORGANIZATION</div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Request consulting, access enterprise services, and manage incident reports.
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setIntent("COLLEGE")}
+              className="w-full flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-accent/40 transition-colors text-left"
+            >
+              <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                <Building className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <div className="font-bold">COLLEGE</div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Provide cybersecurity education and practical IVVAB LABS for your students.
                 </div>
               </div>
             </button>
@@ -95,7 +110,7 @@ export function AuthPage() {
             <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border/50 text-sm">
               <span className="text-muted-foreground">Selected:</span>
               <span className="font-bold">
-                {intent === "STUDENT" ? "Personal / Learner" : "Organization / Business"}
+                {intent === "STUDENT" ? "Personal / Student" : intent === "ORGANIZATION" ? "Organization" : "College"}
               </span>
               <button
                 onClick={() => setIntent(null)}

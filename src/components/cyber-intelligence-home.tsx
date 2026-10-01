@@ -91,24 +91,23 @@ export function CyberIntelligenceHome() {
                 variants={itemVariants}
                 className="font-orbitron font-bold text-[clamp(48px,6vw,96px)] leading-[1.05] tracking-tight uppercase drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]"
               >
-                SECURE<br />
-                THE FUTURE.
+                NISQ VANGUARD<br />
+                DEFENCE TECHNOLOGIES
               </motion.h1>
               
               <motion.p 
                 variants={itemVariants}
                 className="text-[16px] md:text-[17px] leading-[1.6] text-[var(--chrome)] max-w-[65ch]"
               >
-                Advanced cybersecurity intelligence, rigorous defense-in-depth methodologies, and active threat neutralization for critical infrastructure.
+                Protecting digital systems, building resilience against emerging AI threats, and providing rigorous cybersecurity consulting and practical education.
               </motion.p>
-              
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto">
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-4">
                 {user ? (
                   <CyberButton variant="primary" to="/dashboard">Access Dashboard</CyberButton>
                 ) : (
-                  <CyberButton variant="primary" to="/login">Enter the NISQ VANGUARD</CyberButton>
+                  <CyberButton variant="primary" to="/login">ENTER THE VANGUARD</CyberButton>
                 )}
-                <CyberButton variant="secondary" to="/services">Explore Capabilities</CyberButton>
+                <CyberButton variant="secondary" to="/cyber-range/labs">EXPLORE IVVAB LABS</CyberButton>
               </motion.div>
             </div>
           </motion.div>
@@ -125,10 +124,10 @@ export function CyberIntelligenceHome() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-w-0">
             {[
-              { icon: Shield, title: "Protection", desc: "Enterprise grade hardening and continuous attack surface reduction." },
-              { icon: Cpu, title: "Intelligence", desc: "Proactive threat hunting and zero-day vulnerability research." },
-              { icon: Radar, title: "Operations", desc: "24/7 security operations center and rapid incident response protocols." },
-              { icon: Activity, title: "Academy", desc: "Immersive cyber range environments and professional education." }
+              { icon: Shield, title: "Consulting", desc: "Enterprise-grade cybersecurity consulting, penetration testing, and web application security assessments." },
+              { icon: Cpu, title: "AI Security", desc: "Securing next-generation LLMs, AI agents, and defending against emerging adversarial AI threats." },
+              { icon: Activity, title: "Academy", desc: "Comprehensive cybersecurity education covering web security, networking, ethical hacking, and Linux." },
+              { icon: Radar, title: "IVVAB LABS", desc: "Immersive, practical cyber lab environments to test and develop real-world offensive and defensive skills." }
             ].map((srv, i) => (
               <motion.div 
                 key={i}
@@ -230,8 +229,8 @@ export function CyberIntelligenceHome() {
 
             <div className="flex flex-col gap-6 w-full text-left">
               {[
-                { name: "Varun Gajjala", role: "Co-Founder", avatar: null },
-                { name: "Sannith Reddy", role: "Team Member", avatar: null }
+                { name: "Varun Gajula", role: "Co-Founder", avatar: null },
+                { name: "Sannith Reddy", role: "CPO · Product Marketer", avatar: null }
               ].map((member, i) => (
                 <motion.div 
                   key={i}
@@ -271,7 +270,7 @@ export function CyberIntelligenceHome() {
             {user ? (
               <CyberButton variant="primary" to="/dashboard">Access Dashboard</CyberButton>
             ) : (
-              <CyberButton variant="primary" to="/login">Enter the NISQ VANGUARD</CyberButton>
+              <CyberButton variant="primary" to="/login">ENTER THE VANGUARD</CyberButton>
             )}
           </motion.div>
         </SectionWrapper>

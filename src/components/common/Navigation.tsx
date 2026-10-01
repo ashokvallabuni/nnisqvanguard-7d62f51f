@@ -100,12 +100,11 @@ export function TopNav() {
 
           {/* Center: Links */}
           <div className="hidden min-[1100px]:flex items-center gap-8 font-mono text-[13px] uppercase tracking-widest">
-            <Link to="/services" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Security Matrix</Link>
-            <Link to="/intelligence" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Strategy Center</Link>
-            <Link to="/cyber-range/labs" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Operations Hub</Link>
-            <Link to="/services" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Technology Stack</Link>
-            <Link to="/about" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">About Team</Link>
-            <Link to="/academy" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Academy Programs</Link>
+            <Link to="/services" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Security Consulting</Link>
+            <Link to="/academy" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Academy</Link>
+            <Link to="/cyber-range/labs" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">IVVAB LABS</Link>
+            <Link to="/learn" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Courses</Link>
+            <Link to="/team" className="text-white hover:text-[#00D2FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">Leadership</Link>
           </div>
 
           {/* Right: Actions */}
@@ -113,7 +112,7 @@ export function TopNav() {
             {user ? (
               <CyberButton variant="primary" to="/dashboard">Access Dashboard</CyberButton>
             ) : (
-              <CyberButton variant="primary" to="/login">Enter the NISQ VANGUARD</CyberButton>
+              <CyberButton variant="primary" to="/login">ENTER THE VANGUARD</CyberButton>
             )}
           </div>
 
@@ -138,12 +137,11 @@ export function TopNav() {
             className="fixed inset-0 z-40 bg-[var(--obsidian)]/95 backdrop-blur-xl flex flex-col pt-24 px-[clamp(16px,4vw,48px)] min-[1100px]:hidden"
           >
             <div className="flex flex-col gap-6 font-orbitron text-2xl uppercase font-bold tracking-wider">
-              <Link to="/services" className="text-white hover:text-[#00D2FF]">Security Matrix</Link>
-              <Link to="/intelligence" className="text-white hover:text-[#00D2FF]">Strategy Center</Link>
-              <Link to="/cyber-range/labs" className="text-white hover:text-[#00D2FF]">Operations Hub</Link>
-              <Link to="/services" className="text-white hover:text-[#00D2FF]">Technology Stack</Link>
-              <Link to="/about" className="text-white hover:text-[#00D2FF]">About Team</Link>
-              <Link to="/academy" className="text-white hover:text-[#00D2FF]">Academy Programs</Link>
+              <Link to="/services" className="text-white hover:text-[#00D2FF]">Security Consulting</Link>
+              <Link to="/academy" className="text-white hover:text-[#00D2FF]">Academy</Link>
+              <Link to="/cyber-range/labs" className="text-white hover:text-[#00D2FF]">IVVAB LABS</Link>
+              <Link to="/learn" className="text-white hover:text-[#00D2FF]">Courses</Link>
+              <Link to="/team" className="text-white hover:text-[#00D2FF]">Leadership</Link>
             </div>
             
             <div className="h-px bg-white/10 my-8" />
@@ -152,7 +150,7 @@ export function TopNav() {
               {user ? (
                 <CyberButton variant="primary" to="/dashboard" className="w-full">Access Dashboard</CyberButton>
               ) : (
-                <CyberButton variant="primary" to="/login" className="w-full">Enter the NISQ VANGUARD</CyberButton>
+                <CyberButton variant="primary" to="/login" className="w-full">ENTER THE VANGUARD</CyberButton>
               )}
             </div>
           </motion.div>

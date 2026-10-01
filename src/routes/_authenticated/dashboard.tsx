@@ -329,6 +329,30 @@ function StudentDashboard() {
             </div>
           </section>
 
+          {/* SECTION: PRIMARY ACTIONS */}
+          <section aria-label="Primary Actions" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link
+              to="/cyber-range/labs"
+              className="flex items-center justify-between p-6 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              <div>
+                <h3 className="font-display font-bold text-xl uppercase tracking-wider">Explore IVVAB LABS</h3>
+                <p className="text-sm opacity-90 mt-1 font-medium">Access immersive cyber environments</p>
+              </div>
+              <Terminal className="w-8 h-8 opacity-80" />
+            </Link>
+            <Link
+              to="/learn"
+              className="flex items-center justify-between p-6 rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
+            >
+              <div>
+                <h3 className="font-display font-bold text-xl uppercase tracking-wider">Continue Learning</h3>
+                <p className="text-sm opacity-90 mt-1 font-medium">Resume your cybersecurity courses</p>
+              </div>
+              <BookOpen className="w-8 h-8 opacity-80" />
+            </Link>
+          </section>
+
           {/* SECTION: ENROLLED TRACKS */}
           <section aria-label="Enrolled Tracks">
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">

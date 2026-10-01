@@ -27,7 +27,7 @@ type Member = {
 
 const APPROVED_PUBLIC_TEAM: ReadonlyArray<{ name: string; role: string }> = [
   { name: "Varun Gajula", role: "Co-Founder" },
-  { name: "Sannith Reddy", role: "Accountant" },
+  { name: "Sannith Reddy", role: "CPO · Product Marketer" },
 ] as const;
 
 const REMOVED_PUBLIC_NAMES = new Set(["Pulijala Bhavani", "Bhavani Pulijala", "Sai Tanaku"]);

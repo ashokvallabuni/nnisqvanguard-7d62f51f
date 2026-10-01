@@ -119,19 +119,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#1a6fb5" },
       {
         title:
-          "NISQ Vanguard Academy & Cyber Labs — Advanced Cybersecurity & Threat Intelligence Platform",
+          "NISQ Vanguard Academy & IVVAB LABS — Advanced Cybersecurity Platform",
       },
       {
         name: "description",
         content:
-          "NISQ Vanguard Academy & Cyber Labs: Enterprise-grade cybersecurity training, real data threat investigations, and hands-on IVVAB LABS labs.",
+          "NISQ Vanguard Academy & IVVAB LABS: Enterprise-grade cybersecurity training, hands-on labs, and advanced cyber defense.",
       },
       { name: "author", content: "NISQ Vanguard — Defence Technologies" },
       { name: "application-name", content: "NISQ Vanguard" },
       { name: "apple-mobile-web-app-title", content: "NISQ Vanguard" },
       {
         property: "og:title",
-        content: "NISQ Vanguard Academy & Cyber Labs — Hands-on Cyber Defense",
+        content: "NISQ Vanguard Academy & IVVAB LABS — Hands-on Cyber Defense",
       },
       {
         property: "og:description",
@@ -145,7 +145,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "NISQ Vanguard Academy & Cyber Labs",
+        content: "NISQ Vanguard Academy & IVVAB LABS",
       },
       {
         name: "twitter:description",
