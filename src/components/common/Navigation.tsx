@@ -234,7 +234,7 @@ export function TopNav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-[var(--obsidian)]/95 backdrop-blur-xl flex flex-col pt-24 px-[clamp(16px,4vw,48px)] min-[1100px]:hidden"
+            className="fixed inset-0 z-[99] bg-[#05070B] flex flex-col pt-24 px-[clamp(16px,4vw,48px)] min-[1100px]:hidden"
           >
             <div className="flex flex-col gap-6 font-orbitron text-2xl uppercase font-bold tracking-wider">
               {!user && (
