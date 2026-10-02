@@ -172,22 +172,19 @@ function FounderProfilePage() {
               <div className="border border-border bg-card p-6 space-y-3 font-mono text-xs leading-relaxed text-muted-foreground">
                 <p>
                   Ashok Vallabuni is the{" "}
-                  <strong className="text-foreground">Founder and Chief Architect</strong> of NISQ
-                  Vanguard Defence Technologies — an organisation dedicated to making cybersecurity
-                  education accessible, practical, and impactful across India and beyond.
+                  <strong className="text-foreground">Founder and Chief Architect</strong> of NISQ Vanguard, a cybersecurity and defence technology initiative focused on building practical security capabilities for the evolving digital world.
                 </p>
                 <p>
-                  He founded NISQ Vanguard with a singular conviction: that the gap between
-                  cybersecurity knowledge and the people who need it most is not a technical problem
-                  — it is an access problem. Through the{" "}
-                  <strong className="text-primary">IVVAB Labs engine</strong>, he architects
-                  real-world IVVAB LABSs, structured course curriculums, and threat intelligence
-                  frameworks designed for learners at every stage of their security journey.
+                  His work is driven by a strong interest in cybersecurity, artificial intelligence, security engineering, and the emerging security challenges created by increasingly intelligent and connected systems.
                 </p>
                 <p>
-                  His work spans strategic security architecture, college outreach programs,
-                  AI-assisted threat analysis integration, and the development of verifiable,
-                  career-ready certifications through the NISQ Academy.
+                  Through NISQ Vanguard, Ashok is working toward building an ecosystem that brings together cybersecurity consulting, practical security education, hands-on laboratories, research, and community-driven learning.
+                </p>
+                <p>
+                  His particular interest lies at the intersection of <strong className="text-foreground">cybersecurity and artificial intelligence</strong>, including the security of large language models, AI agents, AI-enabled infrastructure, applications, and the systems that connect intelligent models to real-world tools and data.
+                </p>
+                <p>
+                  He believes cybersecurity education should move beyond theoretical knowledge and give learners opportunities to investigate, experiment, fail safely, and develop the ability to think like both an attacker and a defender.
                 </p>
               </div>
             </div>
@@ -208,32 +205,15 @@ function FounderProfilePage() {
           </div>
 
           <div className="space-y-5 font-mono text-sm leading-relaxed text-muted-foreground">
-            <p>
-              NISQ Vanguard was born from a direct observation: cybersecurity as a discipline was
-              fragmented, inaccessible, and often disconnected from the realities of how attacks
-              actually happen. Theory without practice. Certifications without comprehension.
-              Awareness without action.
-            </p>
-            <p>
-              Ashok Vallabuni set out to build something different — a platform where every module
-              is grounded in real threat data, every lab simulates an authentic attack scenario, and
-              every learner walks away with skills that are immediately deployable. The name{" "}
-              <strong className="text-foreground">NISQ Vanguard</strong> reflects this forward
-              posture: always at the leading edge of the defence frontier.
-            </p>
-            <p>
-              The <strong className="text-primary">IVVAB Labs engine</strong> powers the technical
-              core — providing the containerised environments, real-data pipelines, and verification
-              systems that make NISQ Vanguard's IVVAB LABS and academy uniquely authentic. Every lab
-              scenario, every telemetry dataset, every curriculum module passes through the IVVAB
-              Labs architecture before it reaches a learner.
-            </p>
-            <p>
-              Today, NISQ Vanguard stands as a mission-driven cybersecurity organisation — bringing
-              college outreach, enterprise security education, community-building, and a world-class
-              academy together under one defence-first vision.
-            </p>
-          </div>
+              <div className="p-8 border border-primary/20 bg-primary/5 rounded-xl">
+                <p className="text-xl italic text-foreground text-center font-serif tracking-wide leading-relaxed">
+                  "The future will not be secured by technology alone. It will be secured by the people who understand how that technology can fail."
+                </p>
+                <p className="text-center font-mono text-[10px] tracking-[0.3em] text-primary uppercase mt-6">
+                  — Ashok Vallabuni
+                </p>
+              </div>
+            </div>
         </div>
       </section>
 

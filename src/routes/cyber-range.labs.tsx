@@ -275,7 +275,7 @@ function CyberLabsCatalogPage() {
             </div>
           </div>
         }
-        subtitle="Practical cybersecurity training through controlled laboratories and real-world security exercises."
+        subtitle="There is no substitute for doing the work. Reading about a vulnerability is different from exploiting it. Reviewing a network diagram is different from investigating a live incident."
         breadcrumbs={[{ label: "PLATFORM", to: "/" }, { label: "IVVAB LABS" }]}
       />
 

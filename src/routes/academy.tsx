@@ -29,7 +29,7 @@ export const Route = createFileRoute("/academy")({
       {
         name: "description",
         content:
-          "Enterprise cybersecurity education: foundational concepts, threat telemetry analysis, defensive engineering, and hands-on IVVAB LABS labs.",
+          "Cybersecurity cannot be mastered by memorizing definitions. Develop the ability to observe a system, understand its behaviour, identify abnormal activity, investigate evidence, and make informed security decisions.",
       },
     ],
   }),
@@ -153,8 +153,8 @@ function AcademyPage() {
       <PageHeader
         badge="NISQ Vanguard Academy"
         badgeVariant="primary"
-        title="Structured Cybersecurity Education"
-        subtitle="Learn theory, analyze real-world threat telemetry datasets, and seamlessly transition to hands-on Cyber Labs."
+        title="Learn Cybersecurity by Understanding How Systems Actually Work"
+        subtitle="Cybersecurity cannot be mastered by memorizing definitions. Develop the ability to observe a system, understand its behaviour, identify abnormal activity, investigate evidence, and make informed security decisions."
         breadcrumbs={[{ label: "Home", to: "/" }, { label: "Academy" }]}
       />
 
@@ -298,61 +298,18 @@ function AcademyPage() {
 
           <section aria-label="Methodology">
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-              <GraduationCap className="w-3.5 h-3.5" /> Methodology
+              <GraduationCap className="w-3.5 h-3.5" /> Making Education Accessible
             </h2>
-            <div className="flex flex-col gap-2 p-4 rounded-xl border border-border bg-card/80 backdrop-blur-xs shadow-sm">
-              <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 font-mono text-xs font-bold">
-                  01
-                </div>
-                <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
-                    Step 1
-                  </div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
-                    Learn Theory
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-accent/15 text-accent-foreground flex items-center justify-center shrink-0 font-mono text-xs font-bold">
-                  02
-                </div>
-                <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
-                    Step 2
-                  </div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
-                    Explore Data
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-warning/15 text-warning flex items-center justify-center shrink-0 font-mono text-xs font-bold">
-                  03
-                </div>
-                <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
-                    Step 3
-                  </div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
-                    Practice Labs
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-success/15 text-success flex items-center justify-center shrink-0 font-mono text-xs font-bold">
-                  04
-                </div>
-                <div>
-                  <div className="text-[0.6rem] font-mono text-muted-foreground uppercase">
-                    Step 4
-                  </div>
-                  <div className="font-semibold text-xs text-foreground uppercase tracking-wide">
-                    Assess & Defend
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-col gap-4 p-5 rounded-xl border border-border bg-card/80 backdrop-blur-xs shadow-sm text-sm text-muted-foreground leading-relaxed">
+              <p>
+                Cybersecurity education should not be limited to people who already have access to expensive laboratories or advanced infrastructure.
+              </p>
+              <p>
+                NISQ Vanguard Academy was created to make structured cybersecurity learning more accessible to students and aspiring security professionals.
+              </p>
+              <p>
+                Our approach combines structured education with practical environments so that learners can move from understanding a concept to applying it. The long-term vision is to build a learning ecosystem where students can develop technical knowledge, practice safely, demonstrate their abilities, and prepare for real-world security environments.
+              </p>
             </div>
           </section>
 
@@ -363,11 +320,13 @@ function AcademyPage() {
             <div className="rounded-xl border border-border bg-card p-5 flex flex-col gap-4 shadow-sm">
               <div className="space-y-1.5">
                 <h4 className="font-display font-bold text-sm text-foreground">
-                  Ready for live command-line execution?
+                  IVVAB LABS: Practice Beyond the Classroom
                 </h4>
                 <p className="text-[0.7rem] text-muted-foreground">
-                  Apply what you've learned inside real Docker-isolated virtual environments with
-                  live attack traffic and forensic telemetry.
+                  Instead of only reading about cybersecurity concepts, learners investigate simulated security environments using datasets, virtual filesystems, terminal-based investigations, security events, and structured challenges.
+                </p>
+                <p className="text-[0.7rem] font-mono text-primary italic mt-2">
+                  Learn the concept. Investigate the evidence. Find the indicator. Prove the answer.
                 </p>
               </div>
               <Link
