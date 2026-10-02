@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Shield, ShieldCheck, Globe, Users, ArrowRight } from "lucide-react";
+import founderImg from "@/assets/founder.jpeg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -88,17 +89,17 @@ function AboutPage() {
           <h2 className="text-2xl font-medium text-[#F4F3F1] mb-12">The Command Team</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-8 bg-[#0A0D14] border border-[#20283A] flex flex-col">
-              <div className="w-16 h-16 rounded-sm bg-[#0D1220] border border-[#20283A] flex items-center justify-center mb-6">
-                <span className="font-mono text-lg text-[#20D9F5]">AV</span>
+            <div className="p-8 bg-[#0A0D14] border border-[#20283A] flex flex-col hover:border-[#20D9F5]/50 transition-colors group">
+              <div className="w-20 h-20 rounded-sm bg-[#0D1220] border border-[#20283A] flex items-center justify-center mb-6 overflow-hidden">
+                <img src={founderImg} alt="Ashok Vallabuni" className="w-full h-full object-cover" />
               </div>
-              <h3 className="text-xl font-medium text-[#F4F3F1] mb-2">Ashok Vallabuni</h3>
+              <h3 className="text-xl font-medium text-[#F4F3F1] mb-2 group-hover:text-[#20D9F5] transition-colors">Ashok Vallabuni</h3>
               <p className="font-mono text-xs uppercase tracking-widest text-[#20D9F5] mb-4">Founder · Chief Architect</p>
               <p className="text-[#A8B0BF] font-light text-sm mb-6 flex-grow">
                 Founder of NISQ Vanguard, focused on cybersecurity, AI security, security engineering, and practical cybersecurity education. His work explores the intersection of modern cyber defence and emerging technologies including LLMs, AI agents, and intelligent infrastructure.
               </p>
-              <Link to="/about/founder" className="inline-flex items-center gap-2 font-mono text-xs text-[#20D9F5] hover:text-white transition-colors mt-auto">
-                READ FOUNDER PROFILE <ArrowRight className="w-3 h-3" />
+              <Link to="/about/founder" className="inline-flex items-center gap-2 font-mono text-xs text-[#20D9F5] hover:text-white transition-colors mt-auto group/btn">
+                READ FOUNDER PROFILE <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
               </Link>
             </div>
 
