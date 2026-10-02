@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { BookOpen, Edit, Trash2, CheckCircle, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Sparkles, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/courses")({
   component: AdminCoursesPage,
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/_authenticated/admin/courses")({
 
 function AdminCoursesPage() {
   const queryClient = useQueryClient();
+  const [isGenerating, setIsGenerating] = useState<string | null>(null);
 
   const { data: courses, isLoading } = useQuery({
     queryKey: ["admin-courses"],
@@ -42,6 +44,48 @@ function AdminCoursesPage() {
       toast.error(error.message || "Failed to update course status");
     },
   });
+
+  const handleGenerateContent = async (courseId: string, courseSlug: string) => {
+    try {
+      setIsGenerating(courseId);
+      toast.info(`Generating upgraded content for ${courseSlug}... This may take a minute.`);
+      
+      // Fetch all modules for this course
+      const { data: modules, error: modErr } = await supabase
+        .from("modules")
+        .select("*")
+        .eq("course_id", courseId);
+        
+      if (modErr || !modules || modules.length === 0) {
+        toast.error("No modules found for this course.");
+        return;
+      }
+
+      // Generate content for each module
+      let successCount = 0;
+      for (const mod of modules) {
+        const res = await fetch("/api/generate-lesson", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            courseSlug: courseSlug,
+            moduleSlug: mod.slug,
+            courseTitle: courseSlug, 
+            moduleTitle: mod.title,
+            currentContent: mod.notes_md
+          })
+        });
+        
+        if (res.ok) successCount++;
+      }
+      
+      toast.success(`Successfully upgraded ${successCount}/${modules.length} lessons!`);
+    } catch (e: any) {
+      toast.error(`Error: ${e.message}`);
+    } finally {
+      setIsGenerating(null);
+    }
+  };
 
   if (isLoading) {
     return <div className="text-muted-foreground p-8">Loading curriculum...</div>;
@@ -107,6 +151,14 @@ function AdminCoursesPage() {
                 </select>
               </div>
 
+              <button 
+                onClick={() => handleGenerateContent(course.id, course.slug)}
+                disabled={isGenerating === course.id}
+                title="Upgrade Content via Gemini"
+                className="p-2 border border-border rounded-md text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
+              >
+                {isGenerating === course.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              </button>
               <button className="p-2 border border-border rounded-md text-muted-foreground hover:bg-muted transition-colors">
                 <Edit className="w-4 h-4" />
               </button>
