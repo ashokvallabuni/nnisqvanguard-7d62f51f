@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -169,13 +169,14 @@ function AcademyPage() {
           <div className="academy-hero-content">
             <span className="academy-eyebrow">NISQ Vanguard Academy</span>
             <h1 id="academy-heading">
-              Learn how systems work.
+              Learn Cybersecurity by Understanding
               <br />
-              Then learn how to defend them.
+              How Systems Actually Work
             </h1>
             <p>
-              Build practical cybersecurity judgment through structured lessons, real evidence, and
-              safe hands-on practice.
+              Cybersecurity cannot be mastered by memorizing definitions. Develop the ability to
+              observe a system, understand its behaviour, identify abnormal activity, investigate
+              evidence, and make informed security decisions.
             </p>
             <div className="academy-hero-actions">
               <Link
@@ -190,12 +191,9 @@ function AcademyPage() {
               </a>
             </div>
           </div>
-          <div className="academy-hero-stat" aria-label="Academy course statistics">
+          <div className="academy-hero-stat" aria-label="Academy course count">
             <span>
               <strong>{coursesWithDetails.length || 6}</strong> courses
-            </span>
-            <span>
-              <strong>100%</strong> practical focus
             </span>
           </div>
         </section>
