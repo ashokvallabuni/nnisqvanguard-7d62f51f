@@ -1,14 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import {
-  BookOpen,
-  Clock,
-  Award,
-  ArrowRight,
-  ShieldCheck,
-  Database,
-  Lock,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, Award, BookOpen, Clock3, Database, Lock, Sparkles } from "lucide-react";
 
 export interface CourseData {
   id: string;
@@ -16,11 +7,12 @@ export interface CourseData {
   slug: string;
   summary: string;
   description?: string;
-  level: "beginner" | "intermediate" | "advanced" | string;
+  level: "beginner" | "intermediate" | "advanced" | "comprehensive" | string;
   category?: string;
   duration_hours?: number;
   tags?: string[];
   module_count?: number;
+  lessons_count?: number;
   has_real_dataset?: boolean;
   progress_percent?: number;
   isLocked?: boolean;
@@ -35,181 +27,95 @@ interface CourseCardProps {
 export function CourseCard({ course, progress }: CourseCardProps) {
   const currentProgress = progress ?? course.progress_percent ?? 0;
   const isCompleted = currentProgress >= 100;
-
-  const levelStyles: Record<string, string> = {
-    beginner: "bg-success/10 text-success border-success/30",
-    intermediate: "bg-primary/10 text-primary border-primary/30",
-    advanced: "bg-warning/10 text-warning border-warning/30",
-  };
-
   const isLocked = !!course.isLocked;
   const isComingSoon = !!course.comingSoon;
   const notAccessible = isLocked || isComingSoon;
+  const levelClass = `academy-level academy-level-${course.level.toLowerCase()}`;
 
   return (
-    <div
-      className={`group rounded-xl border bg-card flex flex-col justify-between overflow-hidden transition-all duration-200 ${
-        notAccessible
-          ? "border-border/70 opacity-80 grayscale-[0.4]"
-          : "border-border hover:border-primary/40 hover:shadow-md"
-      }`}
-      aria-label={`${course.title} ${notAccessible ? "locked course" : "course"}`}
-    >
-      <div className="p-5 sm:p-6 space-y-3.5">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 flex-wrap">
-          <span
-            className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${
-              levelStyles[course.level.toLowerCase()] ||
-              "bg-muted text-muted-foreground border-border"
-            }`}
-          >
-            {course.level}
-          </span>
-
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {course.category && !notAccessible && (
-              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-tight">
-                {course.category}
-              </span>
-            )}
-            {isComingSoon && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-border bg-muted/50 text-muted-foreground">
-                <Sparkles className="w-3 h-3" />
-                <span>Coming Soon</span>
-              </span>
-            )}
-            {isLocked && !isComingSoon && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border border-destructive/30 bg-destructive/10 text-destructive">
-                <Lock className="w-3 h-3" />
-                <span>Locked</span>
-              </span>
-            )}
-          </div>
+    <article className={`academy-course-card group ${notAccessible ? "is-locked" : ""}`}>
+      <div className="academy-card-body">
+        <div className="academy-card-topline">
+          <span className={levelClass}>{course.level}</span>
+          {course.category && !notAccessible && (
+            <span className="academy-card-category">{course.category}</span>
+          )}
+          {isComingSoon && (
+            <span className="academy-card-category">
+              <Sparkles size={13} /> Coming soon
+            </span>
+          )}
+          {isLocked && !isComingSoon && (
+            <span className="academy-card-category">
+              <Lock size={13} /> Locked
+            </span>
+          )}
         </div>
-
-        <div className="space-y-1.5 pt-1">
-          <h3
-            className={`font-display font-bold text-lg sm:text-xl group-hover:text-primary transition-colors line-clamp-2 ${
-              notAccessible ? "text-muted-foreground" : "text-foreground"
-            }`}
-          >
-            {course.title}
-          </h3>
-          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-            {course.summary}
-          </p>
+        <div>
+          <h3 className="academy-course-title">{course.title}</h3>
+          <p className="academy-course-summary">{course.summary}</p>
         </div>
-
-        {course.tags && course.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-2">
-            {course.tags.slice(0, 4).map((tag, i) => (
-              <span
-                key={i}
-                className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border truncate text-center"
-              >
-                {tag}
-              </span>
+        {course.tags?.length ? (
+          <div className="academy-tags" aria-label="Course topics">
+            {course.tags.slice(0, 3).map((tag) => (
+              <span key={tag}>{tag}</span>
             ))}
           </div>
-        )}
+        ) : null}
       </div>
 
-      <div
-        className={`px-5 sm:px-6 pb-5 pt-3 border-t border-border/60 bg-muted/20 space-y-3 ${
-          notAccessible ? "bg-muted/10" : ""
-        }`}
-      >
+      <div className="academy-card-footer">
         {currentProgress > 0 && !notAccessible && (
-          <div className="space-y-1">
-            <div className="flex justify-between text-[0.7rem] font-mono text-muted-foreground">
-              <span>Progress</span>
-              <span className="font-semibold text-foreground">{Math.round(currentProgress)}%</span>
+          <div className="academy-progress">
+            <div>
+              <span>Your progress</span>
+              <strong>{Math.round(currentProgress)}%</strong>
             </div>
-            <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all duration-300 ${
-                  isCompleted ? "bg-success" : "bg-primary"
-                }`}
-                style={{ width: `${Math.min(100, currentProgress)}%` }}
-              />
+            <div className="academy-progress-track">
+              <span style={{ width: `${Math.min(100, currentProgress)}%` }} />
             </div>
           </div>
         )}
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 text-xs font-mono text-muted-foreground">
+        <div className="academy-card-meta">
+          <div>
             {course.module_count !== undefined && (
-              <span className="flex items-center gap-1">
-                <BookOpen className="w-3.5 h-3.5" />
-                {course.module_count} modules
+              <span>
+                <BookOpen size={14} /> {course.module_count} modules
               </span>
             )}
-            {course.duration_hours && (
-              <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
-                {course.duration_hours}h
+            {course.duration_hours !== undefined && (
+              <span>
+                <Clock3 size={14} /> {course.duration_hours}h
               </span>
             )}
+            {course.lessons_count !== undefined && <span>{course.lessons_count} lessons</span>}
             {course.has_real_dataset && (
-              <span
-                className="flex items-center gap-1 text-accent"
-                title="Includes real telemetry dataset"
-              >
-                <Database className="w-3.5 h-3.5" />
+              <span title="Includes real telemetry dataset">
+                <Database size={14} />
               </span>
             )}
             {isCompleted && !notAccessible && (
-              <span className="flex items-center gap-1 text-success">
-                <Award className="w-3.5 h-3.5" />
-                Completed
+              <span className="academy-complete">
+                <Award size={14} /> Complete
               </span>
             )}
           </div>
-
           {notAccessible ? (
-            <button
-              type="button"
-              disabled
-              aria-disabled="true"
-              aria-label={`${course.title} is locked`}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground cursor-not-allowed bg-muted/60 border border-border/80 rounded-md px-2.5 py-1.5"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>{isComingSoon ? "COMING SOON" : "LOCKED"}</span>
+            <button type="button" disabled className="academy-card-action is-disabled">
+              <Lock size={14} /> {isComingSoon ? "Soon" : "Locked"}
             </button>
-          ) : currentProgress >= 100 ? (
-            <Link
-              to="/learn/$slug"
-              params={{ slug: course.slug }}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 group/btn transition-colors"
-              aria-label={`View ${course.title} course`}
-            >
-              <span>VIEW COURSE</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
-            </Link>
-          ) : currentProgress > 0 ? (
-            <Link
-              to="/learn/$slug"
-              params={{ slug: course.slug }}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 group/btn transition-colors"
-              aria-label={`Continue ${course.title}`}
-            >
-              <span>CONTINUE LEARNING</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
-            </Link>
           ) : (
             <Link
               to="/learn/$slug"
               params={{ slug: course.slug }}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 group/btn transition-colors"
-              aria-label={`Start ${course.title} course`}
+              className="academy-card-action"
+              aria-label={`${currentProgress > 0 ? "Continue" : "Start"} ${course.title}`}
             >
-              <span>START COURSE</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+              {currentProgress > 0 ? "Continue" : "Start"} <ArrowRight size={15} />
             </Link>
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }

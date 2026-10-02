@@ -83,9 +83,9 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
     console.error("Root Error Boundary caught an error:", error);
     reportLovableError(error as Error, { boundary: "tanstack_root_error_component" });
   }, [error]);
-  
+
   const errorMessage = error instanceof Error ? error.message : String(error);
-  
+
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center glass rounded-xl p-8">
@@ -121,8 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#1a6fb5" },
       {
-        title:
-          "NISQ Vanguard Academy & IVVAB LABS — Advanced Cybersecurity Platform",
+        title: "NISQ Vanguard Academy & IVVAB LABS — Advanced Cybersecurity Platform",
       },
       {
         name: "description",
@@ -165,7 +164,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
       },
     ],
   }),
@@ -275,7 +274,7 @@ function RootComponent() {
 function AdminTacticalPreviewBarWrapper() {
   const { isAdmin } = useAuth();
   const location = useRouterState({ select: (s) => s.location });
-  
+
   return (
     <div className="min-h-screen relative pb-20 md:pb-0 overflow-x-hidden">
       <header className="sticky top-0 z-50 w-full flex flex-col bg-background/90 backdrop-blur-md shadow-md border-b border-border">
@@ -285,7 +284,7 @@ function AdminTacticalPreviewBarWrapper() {
       <div className="fixed inset-0 grid-bg opacity-[0.12] pointer-events-none" />
       <BottomNav />
       <CommandPalette />
-      
+
       <div className="relative z-10 pt-4">
         <AnimatePresence mode="wait">
           <motion.div
@@ -297,7 +296,7 @@ function AdminTacticalPreviewBarWrapper() {
             className="relative"
           >
             {/* Cyan scan line wipe effect on route enter */}
-            <motion.div 
+            <motion.div
               initial={{ top: "0%", opacity: 1 }}
               animate={{ top: "100%", opacity: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}

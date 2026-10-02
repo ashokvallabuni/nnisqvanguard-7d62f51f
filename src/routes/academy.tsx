@@ -1,23 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
-  GraduationCap,
-  Sparkles,
-  Shield,
-  Terminal,
-  Database,
-  Search,
-  Filter,
   ArrowRight,
   BookOpen,
-  Award,
-  Layers,
-  Zap,
+  CheckCircle2,
+  ChevronDown,
+  Clock3,
+  Database,
+  GraduationCap,
+  Layers3,
+  Search,
+  Shield,
+  Sparkles,
+  Terminal,
 } from "lucide-react";
+import wolfHero from "@/assets/cyber-wolf-hero.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { PageHeader } from "@/components/common/PageHeader";
 import { CourseCard, CourseData } from "@/components/academy/CourseCard";
 import { GridSkeleton } from "@/components/common/SkeletonLoaders";
 import { getLockedComingSoonCoursesStatic } from "@/lib/course-accessibility";
@@ -25,11 +25,11 @@ import { getLockedComingSoonCoursesStatic } from "@/lib/course-accessibility";
 export const Route = createFileRoute("/academy")({
   head: () => ({
     meta: [
-      { title: "NISQ Vanguard Academy — Structured Cybersecurity Learning Platform" },
+      { title: "Academy | NISQ Vanguard" },
       {
         name: "description",
         content:
-          "Cybersecurity cannot be mastered by memorizing definitions. Develop the ability to observe a system, understand its behaviour, identify abnormal activity, investigate evidence, and make informed security decisions.",
+          "Build practical cybersecurity skills through structured courses and hands-on labs.",
       },
     ],
   }),
@@ -39,8 +39,8 @@ export const Route = createFileRoute("/academy")({
 function AcademyPage() {
   const { user, isAdmin, adminView } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState<string>("all");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedLevel, setSelectedLevel] = useState("all");
+  const [sortBy, setSortBy] = useState("recommended");
 
   const {
     data: courses,
@@ -54,11 +54,7 @@ function AcademyPage() {
         .from("courses")
         .select("id,slug,title,description,level,tier,sort_order,status")
         .order("sort_order");
-
-      if (isAdmin && adminView === "LEARNER") {
-        query = query.eq("status", "PUBLISHED");
-      }
-
+      if (isAdmin && adminView === "LEARNER") query = query.eq("status", "PUBLISHED");
       const { data, error } = await query;
       if (error) throw error;
       return data ?? [];
@@ -89,257 +85,250 @@ function AcademyPage() {
     enabled: !!user,
   });
 
-  // Calculate course stats & progress
   const coursesWithDetails: CourseData[] = useMemo(() => {
     const completedSet = new Set(
       (userProgress ?? []).filter((p) => p.completed).map((p) => p.module_id),
     );
-
-    const dbCourses: CourseData[] = (courses ?? []).map((c) => {
-      const courseModules = (modules ?? []).filter((m) => m.course_id === c.id);
-      const completedCourseModules = courseModules.filter((m) => completedSet.has(m.id));
-      const progressPercent = courseModules.length
-        ? (completedCourseModules.length / courseModules.length) * 100
-        : 0;
-
-      const durationSum = courseModules.reduce((acc, m) => acc + (m.duration_minutes || 20), 0);
-      const allTags = Array.from(new Set(courseModules.flatMap((m) => m.tags || [])));
-
+    const mapped = (courses ?? []).map((course) => {
+      const courseModules = (modules ?? []).filter((module) => module.course_id === course.id);
+      const completed = courseModules.filter((module) => completedSet.has(module.id)).length;
+      const duration = courseModules.reduce(
+        (total, module) => total + (module.duration_minutes || 20),
+        0,
+      );
+      const tags = Array.from(new Set(courseModules.flatMap((module) => module.tags || [])));
       return {
-        id: c.id,
-        title: c.title,
-        slug: c.slug,
-        summary: c.description || "Master core defensive and threat analysis competencies.",
-        level: c.level || "beginner",
-        category: c.tier === "paid" ? "Specialization" : "Core Curriculum",
-        duration_hours: Math.max(1, Math.round(durationSum / 60)),
-        tags: allTags.length > 0 ? allTags : ["Security", "Defense", "Telemetry"],
+        id: course.id,
+        title: course.title,
+        slug: course.slug,
+        summary: course.description || "Build practical defensive and threat analysis skills.",
+        level: course.level || "beginner",
+        category: course.tier === "paid" ? "Specialization" : "Core curriculum",
+        duration_hours: Math.max(1, Math.round(duration / 60)),
+        tags: tags.length ? tags : ["Security", "Defense"],
         module_count: courseModules.length || 5,
-        progress_percent: progressPercent,
+        lessons_count: courseModules.length ? courseModules.length * 3 : 15,
+        progress_percent: courseModules.length ? (completed / courseModules.length) * 100 : 0,
       };
     });
-
-    const existingSlugs = new Set(dbCourses.map((c) => c.slug));
-    const lockedCourses = getLockedComingSoonCoursesStatic().filter(
-      (lc) => !existingSlugs.has(lc.slug),
-    );
-
-    return [...dbCourses, ...lockedCourses];
+    const seen = new Set<string>();
+    const unique = mapped.filter((course) => {
+      const key = course.slug || course.title.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    const existingSlugs = new Set(unique.map((course) => course.slug));
+    return [
+      ...unique,
+      ...getLockedComingSoonCoursesStatic().filter((course) => !existingSlugs.has(course.slug)),
+    ];
   }, [courses, modules, userProgress]);
 
-  // Filter courses
   const filteredCourses = useMemo(() => {
-    return coursesWithDetails.filter((c) => {
-      const matchesSearch =
-        c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    const query = searchQuery.trim().toLowerCase();
+    return coursesWithDetails
+      .filter((course) => {
+        const matchesSearch =
+          !query ||
+          course.title.toLowerCase().includes(query) ||
+          course.summary.toLowerCase().includes(query) ||
+          course.tags?.some((tag) => tag.toLowerCase().includes(query));
+        return (
+          matchesSearch && (selectedLevel === "all" || course.level.toLowerCase() === selectedLevel)
+        );
+      })
+      .sort((a, b) => {
+        if (sortBy === "title") return a.title.localeCompare(b.title);
+        if (sortBy === "duration") return (a.duration_hours || 0) - (b.duration_hours || 0);
+        return (b.progress_percent || 0) - (a.progress_percent || 0);
+      });
+  }, [coursesWithDetails, searchQuery, selectedLevel, sortBy]);
 
-      const matchesLevel =
-        selectedLevel === "all" || c.level.toLowerCase() === selectedLevel.toLowerCase();
-
-      const matchesCategory =
-        selectedCategory === "all" || c.category?.toLowerCase() === selectedCategory.toLowerCase();
-
-      return matchesSearch && matchesLevel && matchesCategory;
-    });
-  }, [coursesWithDetails, searchQuery, selectedLevel, selectedCategory]);
-
-  const beginnerCourse =
-    coursesWithDetails.find((c) => c.slug === "cybersecurity-foundations") || coursesWithDetails[0];
+  const featuredCourse =
+    coursesWithDetails.find((course) => course.slug === "cybersecurity-foundations") ||
+    coursesWithDetails[0];
 
   return (
-    <div className="min-h-screen pt-16 pb-24">
-      <PageHeader
-        badge="NISQ Vanguard Academy"
-        badgeVariant="primary"
-        title="Learn Cybersecurity by Understanding How Systems Actually Work"
-        subtitle="Cybersecurity cannot be mastered by memorizing definitions. Develop the ability to observe a system, understand its behaviour, identify abnormal activity, investigate evidence, and make informed security decisions."
-        breadcrumbs={[{ label: "Home", to: "/" }, { label: "Academy" }]}
-      />
+    <div className="academy-page min-h-screen pb-16">
+      <main className="academy-shell">
+        <nav className="academy-breadcrumb" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-cyan-300">
+            Home
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Academy</span>
+        </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 xl:grid-cols-4 gap-8 lg:gap-10">
-        {/* Main Content Column (Catalog) */}
-        <div className="xl:col-span-3 space-y-8">
-          <section aria-label="Course Catalog">
-            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-              <Layers className="w-3.5 h-3.5" /> Learning Tracks
-            </h2>
+        <section className="academy-hero" aria-labelledby="academy-heading">
+          <img src={wolfHero} alt="" className="academy-hero-art" aria-hidden="true" />
+          <div className="academy-hero-content">
+            <span className="academy-eyebrow">NISQ Vanguard Academy</span>
+            <h1 id="academy-heading">
+              Learn how systems work.
+              <br />
+              Then learn how to defend them.
+            </h1>
+            <p>
+              Build practical cybersecurity judgment through structured lessons, real evidence, and
+              safe hands-on practice.
+            </p>
+            <div className="academy-hero-actions">
+              <Link
+                to="/learn/$slug"
+                params={{ slug: featuredCourse?.slug || "cybersecurity-foundations" }}
+                className="academy-button academy-button-primary"
+              >
+                Start learning <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+              <a href="#learning-tracks" className="academy-button academy-button-secondary">
+                View roadmap
+              </a>
+            </div>
+          </div>
+          <div className="academy-hero-stat" aria-label="Academy course statistics">
+            <span>
+              <strong>{coursesWithDetails.length || 6}</strong> courses
+            </span>
+            <span>
+              <strong>100%</strong> practical focus
+            </span>
+          </div>
+        </section>
 
-            {/* Filter & Search Bar */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
-              <div className="relative flex-1 max-w-md">
-                <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+        <div className="academy-layout" id="learning-tracks">
+          <section className="academy-catalog" aria-labelledby="tracks-heading">
+            <div className="academy-section-heading">
+              <div>
+                <span className="academy-kicker">
+                  <Layers3 size={15} aria-hidden="true" /> Learning tracks
+                </span>
+                <h2 id="tracks-heading">Choose your next skill</h2>
+              </div>
+              <span className="academy-result-count" aria-live="polite">
+                {filteredCourses.length} results
+              </span>
+            </div>
+
+            <div className="academy-toolbar">
+              <label className="academy-search">
+                <Search size={17} aria-hidden="true" />
+                <span className="sr-only">Search courses</span>
                 <input
-                  type="text"
-                  placeholder="Search topics, modules, or tags (e.g. TCP, Ransomware)..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm"
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search courses, topics, or tags"
+                  type="search"
                 />
+              </label>
+              <div className="academy-filters" role="group" aria-label="Filter by level">
+                {["all", "beginner", "intermediate", "advanced"].map((level) => (
+                  <button
+                    key={level}
+                    type="button"
+                    aria-pressed={selectedLevel === level}
+                    className={selectedLevel === level ? "is-selected" : ""}
+                    onClick={() => setSelectedLevel(level)}
+                  >
+                    {level === "all" ? "All levels" : level}
+                  </button>
+                ))}
               </div>
-
-              <div className="flex items-center gap-2 flex-wrap">
-                <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 text-xs font-mono shadow-sm">
-                  <span className="px-2 text-muted-foreground font-semibold uppercase tracking-wider text-[0.65rem]">
-                    Level
-                  </span>
-                  {["all", "beginner", "intermediate", "advanced"].map((lvl) => (
-                    <button
-                      key={lvl}
-                      onClick={() => setSelectedLevel(lvl)}
-                      className={`px-2.5 py-1 rounded-md capitalize transition-colors ${
-                        selectedLevel === lvl
-                          ? "bg-primary text-primary-foreground font-semibold"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {lvl}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <label className="academy-sort">
+                <span>Sort</span>
+                <select
+                  value={sortBy}
+                  onChange={(event) => setSortBy(event.target.value)}
+                  aria-label="Sort courses"
+                >
+                  <option value="recommended">Recommended</option>
+                  <option value="title">Title</option>
+                  <option value="duration">Shortest</option>
+                </select>
+                <ChevronDown size={15} aria-hidden="true" />
+              </label>
             </div>
 
             {coursesLoading ? (
               <GridSkeleton count={6} />
             ) : coursesError ? (
-              <div className="rounded-xl border border-destructive/40 bg-destructive/5 p-12 text-center space-y-3">
-                <Shield className="w-10 h-10 text-destructive mx-auto" />
-                <h4 className="font-semibold text-foreground">Database Connection Error</h4>
-                <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  Unable to load curriculum courses from the production database. Please ensure
-                  migrations have been applied.
-                </p>
-                <div className="text-xs font-mono text-destructive/80">
-                  {courseError instanceof Error
-                    ? courseError.message
-                    : "Error connecting to Supabase"}
-                </div>
-              </div>
-            ) : !courses || courses.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-border p-12 text-center space-y-3">
-                <GraduationCap className="w-10 h-10 text-muted-foreground mx-auto" />
-                <h4 className="font-semibold text-foreground">No courses published yet</h4>
-                <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  The database curriculum tables are currently being prepared. Check back shortly.
+              <div className="academy-empty">
+                <Shield size={28} />
+                <h3>We couldn’t load the curriculum</h3>
+                <p>
+                  {courseError instanceof Error ? courseError.message : "Please try again shortly."}
                 </p>
               </div>
-            ) : filteredCourses.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-border p-12 text-center space-y-3">
-                <GraduationCap className="w-10 h-10 text-muted-foreground mx-auto" />
-                <h4 className="font-semibold text-foreground">No courses match your filter</h4>
-                <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  Try adjusting your search keywords or resetting the level filter.
-                </p>
-                <button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedLevel("all");
-                    setSelectedCategory("all");
-                  }}
-                  className="text-xs font-mono text-primary underline"
-                >
-                  Reset all filters
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ) : filteredCourses.length ? (
+              <div className="academy-course-grid">
                 {filteredCourses.map((course) => (
                   <CourseCard key={course.id} course={course} progress={course.progress_percent} />
                 ))}
               </div>
+            ) : (
+              <div className="academy-empty">
+                <GraduationCap size={28} />
+                <h3>No courses match that search</h3>
+                <p>Try a different keyword or choose all levels.</p>
+              </div>
             )}
           </section>
-        </div>
 
-        {/* Sidebar Column */}
-        <div className="space-y-8 xl:col-span-1">
-          {/* Recommended First Step / Start Here Card */}
-          {beginnerCourse && (
-            <section aria-label="Recommended Start">
-              <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5" /> Recommended Start
-              </h2>
-              <div className="relative overflow-hidden rounded-xl border border-primary/40 bg-gradient-to-br from-primary/5 via-card to-accent/5 p-5 shadow-sm flex flex-col gap-4">
-                <div className="space-y-2">
-                  <h3 className="font-display font-bold text-lg text-foreground leading-tight">
-                    {beginnerCourse.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Start your cybersecurity journey with the foundational architecture: threat
-                    modeling, network traffic protocols, access controls, and authentication
-                    hygiene.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 text-[0.65rem] font-mono text-muted-foreground pt-1 pb-2 border-b border-border/60">
-                  <span className="flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5 text-primary" /> {beginnerCourse.module_count}{" "}
-                    Modules
+          {featuredCourse && (
+            <aside className="academy-sidebar">
+              <section className="academy-featured" aria-labelledby="featured-heading">
+                <span className="academy-kicker">
+                  <Sparkles size={15} aria-hidden="true" /> Featured
+                </span>
+                <span className="academy-featured-label">Recommended start</span>
+                <h2 id="featured-heading">{featuredCourse.title}</h2>
+                <p>
+                  Start with the foundations: understand threats, network traffic, access controls,
+                  and authentication hygiene.
+                </p>
+                <div className="academy-featured-meta">
+                  <span>
+                    <BookOpen size={14} /> {featuredCourse.module_count} modules
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Database className="w-3.5 h-3.5 text-accent" /> Real Telemetry Included
+                  <span>
+                    <Clock3 size={14} /> {featuredCourse.duration_hours} hours
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Terminal className="w-3.5 h-3.5 text-success" /> Hands-on Labs Connected
+                  <span>
+                    <Terminal size={14} /> Labs connected
                   </span>
                 </div>
                 <Link
                   to="/learn/$slug"
-                  params={{ slug: beginnerCourse.slug }}
-                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 shadow-sm transition-all group uppercase tracking-wide"
+                  params={{ slug: featuredCourse.slug }}
+                  className="academy-button academy-button-primary"
                 >
-                  <span>Start Course</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  Start course <ArrowRight size={16} />
                 </Link>
-              </div>
-            </section>
+              </section>
+              <section className="academy-note" aria-label="Learning approach">
+                <span className="academy-kicker">
+                  <CheckCircle2 size={15} aria-hidden="true" /> Learn by doing
+                </span>
+                <p>Move from a clear concept to evidence, investigation, and a confident answer.</p>
+                <Link to="/cyber-range/labs">
+                  Explore IVVAB Labs <ArrowRight size={15} />
+                </Link>
+              </section>
+            </aside>
           )}
-
-          <section aria-label="Methodology">
-            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-              <GraduationCap className="w-3.5 h-3.5" /> Making Education Accessible
-            </h2>
-            <div className="flex flex-col gap-4 p-5 rounded-xl border border-border bg-card/80 backdrop-blur-xs shadow-sm text-sm text-muted-foreground leading-relaxed">
-              <p>
-                Cybersecurity education should not be limited to people who already have access to expensive laboratories or advanced infrastructure.
-              </p>
-              <p>
-                NISQ Vanguard Academy was created to make structured cybersecurity learning more accessible to students and aspiring security professionals.
-              </p>
-              <p>
-                Our approach combines structured education with practical environments so that learners can move from understanding a concept to applying it. The long-term vision is to build a learning ecosystem where students can develop technical knowledge, practice safely, demonstrate their abilities, and prepare for real-world security environments.
-              </p>
-            </div>
-          </section>
-
-          <section aria-label="Practice Area">
-            <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-              <Terminal className="w-3.5 h-3.5" /> Practice
-            </h2>
-            <div className="rounded-xl border border-border bg-card p-5 flex flex-col gap-4 shadow-sm">
-              <div className="space-y-1.5">
-                <h4 className="font-display font-bold text-sm text-foreground">
-                  IVVAB LABS: Practice Beyond the Classroom
-                </h4>
-                <p className="text-[0.7rem] text-muted-foreground">
-                  Instead of only reading about cybersecurity concepts, learners investigate simulated security environments using datasets, virtual filesystems, terminal-based investigations, security events, and structured challenges.
-                </p>
-                <p className="text-[0.7rem] font-mono text-primary italic mt-2">
-                  Learn the concept. Investigate the evidence. Find the indicator. Prove the answer.
-                </p>
-              </div>
-              <Link
-                to="/cyber-range/labs"
-                className="inline-flex justify-center items-center gap-2 w-full py-2.5 rounded-lg border border-primary/40 bg-primary/10 text-primary font-semibold text-xs hover:bg-primary/20 transition-colors uppercase tracking-wide"
-              >
-                <span>OPEN IVVAB LABS</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </section>
         </div>
-      </div>
+      </main>
+      <footer className="academy-footer">
+        <span>© {new Date().getFullYear()} NISQ Vanguard</span>
+        <div>
+          <Link to="/about">About</Link>
+          <Link to="/academy/glossary">Glossary</Link>
+          <Link to="/cyber-range/labs">IVVAB Labs</Link>
+        </div>
+        <span className="academy-footer-mono">
+          <Database size={13} /> Built for curious defenders
+        </span>
+      </footer>
     </div>
   );
 }
