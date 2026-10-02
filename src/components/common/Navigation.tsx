@@ -95,14 +95,14 @@ function AccountDropdown() {
           >
             <Link
               to={dashboardLink as any}
-              className="flex items-center gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-[var(--cyan)] transition-colors"
+              className="flex items-center gap-3 px-4 py-3 font-body text-[13px] text-white hover:bg-white/5 hover:text-[var(--cyan)] transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <LayoutDashboard className="w-4 h-4" /> Dashboard
             </Link>
             <Link
               to={"/profile" as any}
-              className="flex items-center gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-[var(--cyan)] transition-colors"
+              className="flex items-center gap-3 px-4 py-3 font-body text-[13px] text-white hover:bg-white/5 hover:text-[var(--cyan)] transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <UserIcon className="w-4 h-4" /> Profile
@@ -120,7 +120,7 @@ function AccountDropdown() {
                 signOut();
                 setIsOpen(false);
               }}
-              className="flex items-center gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-widest text-red-400 hover:bg-red-500/10 transition-colors w-full text-left"
+              className="flex items-center gap-3 px-4 py-3 font-body text-[13px] text-red-300 hover:bg-red-500/10 transition-colors w-full text-left"
             >
               <LogOut className="w-4 h-4" /> Sign Out
             </button>
@@ -162,10 +162,13 @@ export function TopNav() {
 
   const linkClass =
     "text-[var(--chrome)] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]";
-  const activeLinkClass = "text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]";
+  const activeLinkClass =
+    "text-white after:absolute after:-bottom-2 after:left-1/2 after:h-0.5 after:w-5 after:-translate-x-1/2 after:rounded-full after:bg-[var(--cyan)] after:shadow-[0_0_10px_var(--cyan)]";
 
   const getLinkClass = (path: string) => {
-    return `${linkClass} ${pathname === path || pathname.startsWith(path + "/") ? activeLinkClass : ""}`;
+    return `relative ${linkClass} ${
+      pathname === path || pathname.startsWith(path + "/") ? activeLinkClass : ""
+    }`;
   };
 
   return (
@@ -223,7 +226,7 @@ export function TopNav() {
                   Academy
                 </Link>
                 <Link to="/cyber-range/labs" className={getLinkClass("/cyber-range/labs")}>
-                  IVVAB LABS
+                  IVVAB Labs
                 </Link>
                 <Link to={"/internships" as any} className={getLinkClass("/internships")}>
                   Internships
