@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -21,6 +21,7 @@ import { useAuth } from "@/lib/auth-context";
 import { CourseCard, CourseData } from "@/components/academy/CourseCard";
 import { GridSkeleton } from "@/components/common/SkeletonLoaders";
 import { getLockedComingSoonCoursesStatic } from "@/lib/course-accessibility";
+import { useAnimeReveal } from "@/lib/anime-motion";
 
 export const Route = createFileRoute("/academy")({
   head: () => ({
@@ -148,6 +149,9 @@ function AcademyPage() {
   const featuredCourse =
     coursesWithDetails.find((course) => course.slug === "cybersecurity-foundations") ||
     coursesWithDetails[0];
+  const heroRef = useAnimeReveal<HTMLElement>({ duration: 760, distance: 24 });
+  const tracksRef = useAnimeReveal<HTMLElement>({ delay: 100, duration: 640, distance: 18 });
+  const featuredRef = useAnimeReveal<HTMLElement>({ delay: 140, duration: 640, distance: 18 });
 
   return (
     <div className="academy-page min-h-screen pb-16">
@@ -160,7 +164,7 @@ function AcademyPage() {
           <span aria-current="page">Academy</span>
         </nav>
 
-        <section className="academy-hero" aria-labelledby="academy-heading">
+        <section ref={heroRef} className="academy-hero" aria-labelledby="academy-heading">
           <img src={wolfHero} alt="" className="academy-hero-art" aria-hidden="true" />
           <div className="academy-hero-content">
             <span className="academy-eyebrow">NISQ Vanguard Academy</span>
@@ -197,7 +201,7 @@ function AcademyPage() {
         </section>
 
         <div className="academy-layout" id="learning-tracks">
-          <section className="academy-catalog" aria-labelledby="tracks-heading">
+          <section ref={tracksRef} className="academy-catalog" aria-labelledby="tracks-heading">
             <div className="academy-section-heading">
               <div>
                 <span className="academy-kicker">
@@ -276,7 +280,11 @@ function AcademyPage() {
 
           {featuredCourse && (
             <aside className="academy-sidebar">
-              <section className="academy-featured" aria-labelledby="featured-heading">
+              <section
+                ref={featuredRef}
+                className="academy-featured"
+                aria-labelledby="featured-heading"
+              >
                 <span className="academy-kicker">
                   <Sparkles size={15} aria-hidden="true" /> Featured
                 </span>

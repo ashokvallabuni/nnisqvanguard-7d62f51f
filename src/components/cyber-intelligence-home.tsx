@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { animate, stagger } from "animejs";
 import { BackgroundStage } from "./BackgroundStage";
 import { HUDOverlay } from "./HUDOverlay";
 import { useAuth } from "@/lib/auth-context";
@@ -36,20 +37,39 @@ export function CyberIntelligenceHome() {
       ? "/organization/dashboard"
       : "/dashboard";
 
+  const homeRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = homeRef.current;
+    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const targets = root.querySelectorAll<HTMLElement>("[data-anime-hero]");
+    animate(targets, {
+      opacity: [0, 1],
+      translateY: [24, 0],
+      duration: 650,
+      delay: stagger(90, { start: 160 }),
+      ease: "out(3)",
+    });
+  }, []);
+
   return (
-    <div className="relative bg-[var(--obsidian)] text-white font-sans selection:bg-[var(--cyan)] selection:text-black overflow-x-hidden h-[100svh]">
+    <div
+      ref={homeRef}
+      className="relative bg-[var(--obsidian)] text-white font-sans selection:bg-[var(--cyan)] selection:text-black overflow-x-hidden h-[100svh]"
+    >
       <BackgroundStage scrollYProgress={scrollYProgress} />
       <HUDOverlay scrollYProgress={scrollYProgress} />
 
       <main className="relative z-10 w-full h-full flex flex-col justify-center">
         <section className="flex flex-col justify-center w-full max-w-[1280px] mx-auto px-[clamp(16px,4vw,48px)] relative z-10">
           <motion.div
+            data-anime-hero
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="grid grid-cols-1 md:grid-cols-12 gap-6 min-w-0 items-center relative"
           >
             <motion.div
+              data-anime-hero
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 0.15, scale: 1 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
@@ -70,6 +90,7 @@ export function CyberIntelligenceHome() {
                 DEFENCE TECHNOLOGIES · CYBERSECURITY · AI SECURITY
               </motion.div>
               <motion.h1
+                data-anime-hero
                 variants={itemVariants}
                 className="font-display font-bold text-[clamp(40px,5vw,72px)] leading-[1.1] tracking-tight text-white drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]"
               >
@@ -81,6 +102,7 @@ export function CyberIntelligenceHome() {
               </motion.h1>
 
               <motion.p
+                data-anime-hero
                 variants={itemVariants}
                 className="text-[16px] md:text-[18px] leading-[1.6] text-[var(--chrome)] max-w-[70ch]"
               >
@@ -91,6 +113,7 @@ export function CyberIntelligenceHome() {
               </motion.p>
 
               <motion.p
+                data-anime-hero
                 variants={itemVariants}
                 className="text-[14px] md:text-[15px] font-mono leading-[1.6] text-[var(--cyan)] max-w-[65ch] opacity-80"
               >
@@ -98,7 +121,11 @@ export function CyberIntelligenceHome() {
                 intelligence, people, infrastructure, and decisions that depend on them.
               </motion.p>
 
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-8">
+              <motion.div
+                data-anime-hero
+                variants={itemVariants}
+                className="flex flex-col sm:flex-row gap-4 mt-8"
+              >
                 {user ? (
                   <CyberButton variant="primary" to={dashboardLink as any}>
                     Enter workspace

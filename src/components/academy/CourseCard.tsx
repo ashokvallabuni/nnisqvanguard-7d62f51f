@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Award, BookOpen, Clock3, Database, Lock, Sparkles } from "lucide-react";
+import { useAnimeReveal } from "@/lib/anime-motion";
 
 export interface CourseData {
   id: string;
@@ -25,6 +26,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course, progress }: CourseCardProps) {
+  const cardRef = useAnimeReveal<HTMLElement>({ distance: 14, duration: 540 });
   const currentProgress = progress ?? course.progress_percent ?? 0;
   const isCompleted = currentProgress >= 100;
   const isLocked = !!course.isLocked;
@@ -33,7 +35,10 @@ export function CourseCard({ course, progress }: CourseCardProps) {
   const levelClass = `academy-level academy-level-${course.level.toLowerCase()}`;
 
   return (
-    <article className={`academy-course-card group ${notAccessible ? "is-locked" : ""}`}>
+    <article
+      ref={cardRef}
+      className={`academy-course-card group ${notAccessible ? "is-locked" : ""}`}
+    >
       <div className="academy-card-body">
         <div className="academy-card-topline">
           <span className={levelClass}>{course.level}</span>
