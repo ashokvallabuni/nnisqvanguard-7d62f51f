@@ -125,7 +125,7 @@ export function TopNav() {
 
   if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
 
-  const isPersonal = profile?.account_type === "STUDENT" || profile?.account_type === "PERSONAL" || !profile?.account_type;
+  const isPersonal = profile?.account_type === "STUDENT" || !profile?.account_type;
   const isOrg = profile?.account_type === "ORGANIZATION" || profile?.account_type === "COLLEGE";
 
   const linkClass = "text-[var(--chrome)] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]";

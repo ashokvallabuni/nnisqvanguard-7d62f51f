@@ -5,7 +5,7 @@ import { HUDOverlay } from './HUDOverlay';
 import { useAuth } from '@/lib/auth-context';
 import { CyberButton } from './common/CyberButton';
 
-const EASE = [0.22, 1, 0.36, 1];
+const EASE = [0.22, 1, 0.36, 1] as const;
 const TRANSITION = { duration: 0.6, ease: EASE };
 
 const containerVariants = {

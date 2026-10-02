@@ -42,6 +42,7 @@ import { Route as AboutFounderRouteImport } from './routes/about.founder'
 import { Route as AcademyGlossaryRouteImport } from './routes/academy.glossary'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiCheckUrlRouteImport } from './routes/api/check-url'
+import { Route as ApiGenerateLessonRouteImport } from './routes/api/generate-lesson'
 import { Route as ApiLiveThreatsRouteImport } from './routes/api/live-threats'
 import { Route as ApiProgressRouteImport } from './routes/api/progress'
 import { Route as ApiScoreRouteImport } from './routes/api/score'
@@ -239,6 +240,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
 const ApiCheckUrlRoute = ApiCheckUrlRouteImport.update({
   id: '/api/check-url',
   path: '/api/check-url',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGenerateLessonRoute = ApiGenerateLessonRouteImport.update({
+  id: '/api/generate-lesson',
+  path: '/api/generate-lesson',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiLiveThreatsRoute = ApiLiveThreatsRouteImport.update({
@@ -453,6 +459,7 @@ export interface FileRoutesByFullPath {
   '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
+  '/api/generate-lesson': typeof ApiGenerateLessonRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
   '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
@@ -519,6 +526,7 @@ export interface FileRoutesByTo {
   '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
+  '/api/generate-lesson': typeof ApiGenerateLessonRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
   '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
@@ -588,6 +596,7 @@ export interface FileRoutesById {
   '/academy/glossary': typeof AcademyGlossaryRoute
   '/api/chat': typeof ApiChatRoute
   '/api/check-url': typeof ApiCheckUrlRoute
+  '/api/generate-lesson': typeof ApiGenerateLessonRoute
   '/api/live-threats': typeof ApiLiveThreatsRoute
   '/api/progress': typeof ApiProgressRoute
   '/api/score': typeof ApiScoreRoute
@@ -657,6 +666,7 @@ export interface FileRouteTypes {
     | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
+    | '/api/generate-lesson'
     | '/api/live-threats'
     | '/api/progress'
     | '/api/score'
@@ -723,6 +733,7 @@ export interface FileRouteTypes {
     | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
+    | '/api/generate-lesson'
     | '/api/live-threats'
     | '/api/progress'
     | '/api/score'
@@ -791,6 +802,7 @@ export interface FileRouteTypes {
     | '/academy/glossary'
     | '/api/chat'
     | '/api/check-url'
+    | '/api/generate-lesson'
     | '/api/live-threats'
     | '/api/progress'
     | '/api/score'
@@ -853,6 +865,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiCheckUrlRoute: typeof ApiCheckUrlRoute
+  ApiGenerateLessonRoute: typeof ApiGenerateLessonRoute
   ApiLiveThreatsRoute: typeof ApiLiveThreatsRoute
   ApiProgressRoute: typeof ApiProgressRoute
   ApiScoreRoute: typeof ApiScoreRoute
@@ -1097,6 +1110,13 @@ declare module '@tanstack/react-router' {
       path: '/api/check-url'
       fullPath: '/api/check-url'
       preLoaderRoute: typeof ApiCheckUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/generate-lesson': {
+      id: '/api/generate-lesson'
+      path: '/api/generate-lesson'
+      fullPath: '/api/generate-lesson'
+      preLoaderRoute: typeof ApiGenerateLessonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/live-threats': {
@@ -1494,6 +1514,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   ApiChatRoute: ApiChatRoute,
   ApiCheckUrlRoute: ApiCheckUrlRoute,
+  ApiGenerateLessonRoute: ApiGenerateLessonRoute,
   ApiLiveThreatsRoute: ApiLiveThreatsRoute,
   ApiProgressRoute: ApiProgressRoute,
   ApiScoreRoute: ApiScoreRoute,

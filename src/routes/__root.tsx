@@ -77,17 +77,20 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   const router = useRouter();
   useEffect(() => {
     console.error("Root Error Boundary caught an error:", error);
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportLovableError(error as Error, { boundary: "tanstack_root_error_component" });
   }, [error]);
+  
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center glass rounded-xl p-8">
         <h1 className="display text-2xl text-cyber">SYSTEM FAULT</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message.slice(0, 200)}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{errorMessage.slice(0, 200)}</p>
         <div className="mt-6 flex gap-2 justify-center">
           <button
             onClick={() => {

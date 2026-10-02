@@ -778,7 +778,7 @@ function CyberLabWorkbenchPage() {
               { id: "tasks", label: "Tasks", icon: ListChecks },
               { id: "files", label: "Files", icon: FolderOpen },
               { id: "progress", label: "Progress", icon: BarChart3 },
-            ] as { id: MobileTab; label: string; icon: React.ElementType }[]
+            ] as { id: MobileTab; label: string; icon: any }[]
           ).map(({ id, label, icon: Icon }) => (
             <button
               key={id}
