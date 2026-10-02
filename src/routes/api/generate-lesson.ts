@@ -19,38 +19,42 @@ export const Route = createFileRoute("/api/generate-lesson")({
             return json({ error: "Missing required fields" }, 400);
           }
 
-          const prompt = `
-You are a professional cybersecurity instructor. Upgrade the content quality of the following lesson.
-Do not generate short 2-3 paragraph lessons. The lesson should have enough depth that a student can actually understand the topic without needing another website.
+const prompt = `
+You are a professional cybersecurity instructor authoring a textbook-quality lesson. 
 
 Course: ${courseTitle}
 Module: ${moduleTitle}
 
-Required structure:
-- A clear introduction
-- Detailed explanation of the topic
-- Important concepts explained in simple language
-- Real-world cybersecurity examples
-- Practical examples where appropriate
-- Step-by-step explanation of how the concept works
-- Common mistakes
-- Security best practices
-- A short practical scenario
-- Key points / summary
-- Connection to the relevant IVVAB LAB when applicable
+Your task is to create a detailed, highly educational, professional lesson for a cybersecurity training platform.
 
-Content Quality Rules:
-- Write like a professional cybersecurity instructor, not an AI chatbot.
-- Do NOT use repetitive phrases like "In today's rapidly evolving world...", "Let's dive into...", "It's important to note...".
-- Avoid excessive emojis, decorative symbols, \`::\`, \`---\`, unnecessary bullet spam, fake quotes, and overly fragmented sentences.
-- Use plain professional language with natural headings and paragraphs.
-- Approximately 30% of the learning experience should use visual explanations (ASCII/Markdown diagrams, architecture diagrams, flow diagrams, tables), while 70% remains readable text.
-- If it is about networking, explain networking. If Linux, explain Linux commands. If web security, explain the attack flow.
+DO NOT write just short notes or definitions. Write proper, detailed paragraphs that explain the concept. 
+For example, instead of "Asset: anything valuable", write a full paragraph explaining what an asset is, providing examples like databases, employee laptops, cloud applications, and why security teams must identify them.
 
-Existing notes (if any, use as a baseline):
+REQUIRED SECTIONS (Use standard Markdown headings, but DO NOT use excessive #'s or hashtags like #Asset):
+1. Introduction: Explain what the topic is and why the learner needs to understand it.
+2. Core Concept: Detailed explanation using simple language suitable for a beginner while maintaining technical accuracy.
+3. How It Works: Explain the underlying process step by step.
+4. Real-World Example: Show how this concept appears in an actual organization, network, application, SOC, cloud environment or security incident.
+5. Security Perspective: Explain how attackers abuse the concept and how defenders detect, prevent or respond to it.
+6. Practical Example: Realistic technical example where appropriate.
+7. Common Mistakes: Mistakes beginners commonly make.
+8. Defensive Thinking: Teach the learner how a security professional thinks about the problem.
+9. Key Takeaways: Summarize the important concepts in natural language.
+10. Knowledge Check: Provide questions that test whether the learner actually understood the concept.
+11. PRACTICE IN IVVAB LABS: If a lab is relevant, explain what the learner will apply in IVVAB LABS (never call it Cyber Range). Explain WHY they are entering the lab.
+
+CRITICAL FORMATTING AND STYLE RULES:
+- WRITE REAL PARAGRAPHS. Expand and explain. Do not artificially make every paragraph the same length.
+- REMOVE AI-GENERATED LOOKING FORMATTING. Do NOT use excessive bullets, emojis, decorative symbols, \`::\`, arrows (\`->\`, \`=>\`), or hashtags.
+- CYBERSECURITY FOUNDATIONS: Explain concepts rather than one-line definitions. 
+- BASICS OF NETWORKING: Show packet movement, explain what happens at each stage.
+- LINUX COMMAND QUEST: Explain commands instead of simply displaying syntax. Give security investigation use-cases.
+- USE INFORMATION DIAGRAMS: ~30% of the lesson should use visual learning elements. Use Mermaid.js (\`\`\`mermaid) for flow diagrams, architectures, and topologies! Ensure diagrams teach the concept (e.g. Network topology, CIA Triad, TCP flow, DNS, Incident response lifecycle).
+
+Existing notes (if any, use as a baseline but heavily expand into the required format):
 ${currentContent || "No existing notes provided."}
 
-Return ONLY the Markdown content. Do not wrap in \`\`\`markdown or provide any other commentary.
+Return ONLY the Markdown content. Do not wrap the entire response in \`\`\`markdown, but YOU MUST use \`\`\`mermaid blocks for your diagrams.
 `;
 
           const generatedMarkdown = await callChatModel([

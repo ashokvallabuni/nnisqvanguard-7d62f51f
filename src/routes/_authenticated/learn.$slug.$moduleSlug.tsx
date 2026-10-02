@@ -24,6 +24,7 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { ModuleNavigation, ModuleItem } from "@/components/academy/ModuleNavigation";
 import { DatasetPreviewCard, DatasetSample } from "@/components/academy/DatasetPreviewCard";
 import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
+import { MarkdownRenderer } from "@/components/common/MarkdownRenderer";
 import { AuthoritativeSources, CitationSource } from "@/components/academy/AuthoritativeSources";
 import {
   ExplainThisAssistant,
@@ -763,11 +764,9 @@ function ModuleLearningPage() {
               {/* 5-Level "Explain This" Assistant */}
               <ExplainThisAssistant explanations={lessonExplanations} />
 
-              <div className="prose prose-slate max-w-none text-foreground leading-relaxed space-y-4">
+              <div className="text-foreground leading-relaxed">
                 {currentModule.notes_md ? (
-                  <div className="whitespace-pre-line text-sm sm:text-base text-foreground/90 font-normal">
-                    {currentModule.notes_md}
-                  </div>
+                  <MarkdownRenderer content={currentModule.notes_md} />
                 ) : (
                   <p className="text-sm text-muted-foreground">
                     In this lesson, you will master the foundational architecture and defensive
