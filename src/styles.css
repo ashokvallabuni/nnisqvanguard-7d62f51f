@@ -63,9 +63,43 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-:root,
-.dark {
+:root {
   --radius: 0.5rem;
+  --background: #FFFFFF;
+  --foreground: #050B14;
+  --card: #F8FAFC;
+  --card-foreground: #050B14;
+  --popover: #FFFFFF;
+  --popover-foreground: #050B14;
+  --primary: #0A7CFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #475569;
+  --muted: #F8FAFC;
+  --muted-foreground: #94A3B8;
+  --accent: #00B8FF;
+  --accent-foreground: #FFFFFF;
+  --destructive: #FF4D5E;
+  --destructive-foreground: #FFFFFF;
+  --success: #00D68F;
+  --warning: #FFB020;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #0A7CFF;
+  --cyber: #0A7CFF;
+  --cyber-2: #00B8FF;
+  --violet-accent: #8b5cf6;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #050B14;
+  --sidebar-primary: #0A7CFF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F1F5F9;
+  --sidebar-accent-foreground: #050B14;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #0A7CFF;
+}
+
+.dark {
   --background: #050B14;
   --foreground: #F8FAFC;
   --card: #081522;

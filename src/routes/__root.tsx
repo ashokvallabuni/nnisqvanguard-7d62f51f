@@ -19,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { TopNav, BottomNav } from "@/components/common/Navigation";
 import { CommandPalette } from "@/components/common/CommandPalette";
+import { ThemeProvider } from "@/components/theme-provider";
 import {
   Shield,
   LogOut,
@@ -261,12 +262,14 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <PWARegister />
-        <AuthListener />
-        <AdminTacticalPreviewBarWrapper />
-        <Toaster theme="dark" />
-      </AuthProvider>
+      <ThemeProvider defaultTheme="system" storageKey="nisq-theme">
+        <AuthProvider>
+          <PWARegister />
+          <AuthListener />
+          <AdminTacticalPreviewBarWrapper />
+          <Toaster theme="system" />
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

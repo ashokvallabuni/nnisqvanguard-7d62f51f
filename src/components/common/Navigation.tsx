@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, User as UserIcon, LayoutDashboard, Settings, LogOut, ShieldCheck } from "lucide-react";
+import { Menu, X, ChevronDown, User as UserIcon, LayoutDashboard, Settings, LogOut, ShieldCheck, Sun, Moon } from "lucide-react";
+import { useTheme } from "../theme-provider";
 import { CyberButton } from "./CyberButton";
 
 const nisqLogoUrl = "/assets/nisq-logo.jpeg";
@@ -100,6 +101,23 @@ function AccountDropdown() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+/* ─── Theme Toggle ─────────────────────────────────────────────────── */
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="h-12 w-12 relative flex items-center justify-center rounded-sm bg-white/5 border border-border hover:border-primary/50 transition-colors"
+      aria-label="Toggle theme"
+    >
+      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-yellow-500" />
+      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-blue-400" />
+      <span className="sr-only">Toggle theme</span>
+    </button>
   );
 }
 
@@ -202,6 +220,7 @@ export function TopNav() {
 
           {/* Right: Actions */}
           <div className="hidden min-[1100px]:flex items-center justify-end gap-4 min-w-[280px]">
+            <ThemeToggle />
             {user ? (
               <>
                 <AccountDropdown />
@@ -221,12 +240,15 @@ export function TopNav() {
           </div>
 
           {/* Mobile toggle */}
-          <button
-            className="min-[1100px]:hidden h-12 w-12 flex items-center justify-center text-muted-foreground hover:text-white"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="min-[1100px]:hidden flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              className="h-12 w-12 flex items-center justify-center text-muted-foreground hover:text-white"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </motion.nav>
 
