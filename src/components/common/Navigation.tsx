@@ -151,10 +151,15 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="flex items-center justify-center w-10 h-10 rounded-full bg-nisq-offwhite border border-nisq-border text-nisq-ink hover:text-nisq-blue transition-colors"
+      className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all backdrop-blur-sm"
       aria-label="Toggle theme"
     >
-      {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+      <div className={`transition-all duration-300 absolute ${theme === "light" ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"}`}>
+        <Sun className="w-4 h-4" />
+      </div>
+      <div className={`transition-all duration-300 absolute ${theme === "dark" ? "rotate-0 opacity-100" : "rotate-90 opacity-0"}`}>
+        <Moon className="w-4 h-4" />
+      </div>
     </button>
   );
 }
@@ -191,8 +196,8 @@ export function TopNav() {
   return (
     <>
       <nav
-        className={`w-full bg-nisq-white border-b border-nisq-border transition-shadow duration-200 ${
-          scrolled ? "shadow-nav" : ""
+        className={`w-full bg-gradient-to-r from-[#0A7CFF] to-[#00B8FF] border-b border-white/10 transition-all duration-300 sticky top-0 z-50 ${
+          scrolled ? "shadow-glow backdrop-blur-md bg-opacity-90" : ""
         }`}
         aria-label="Main navigation"
       >
@@ -202,9 +207,9 @@ export function TopNav() {
             <img
               src={nisqLogoUrl}
               alt="NISQ Vanguard logo"
-              className="w-10 h-10 rounded-lg object-cover border border-nisq-border"
+              className="w-10 h-10 rounded-lg object-cover border border-white/30"
             />
-            <span className="text-base font-bold tracking-tight text-nisq-ink hidden sm:block">
+            <span className="text-base font-bold tracking-tight text-white hidden sm:block">
               NISQ Vanguard
             </span>
           </Link>
@@ -226,10 +231,10 @@ export function TopNav() {
                 <Link
                   to={l.to as any}
                   aria-current={isActive(l.to) ? "page" : undefined}
-                  className={`relative h-[72px] flex items-center px-3 text-sm font-medium transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:transition-colors ${
+                  className={`relative h-[72px] flex items-center px-3 text-sm font-medium transition-all duration-300 after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:transition-all ${
                     isActive(l.to)
-                      ? "text-nisq-blue after:bg-nisq-blue"
-                      : "text-nisq-ink hover:text-nisq-blue after:bg-transparent"
+                      ? "text-white after:bg-white"
+                      : "text-white/80 hover:text-white hover:shadow-[0_0_12px_rgba(255,255,255,0.2)] after:bg-transparent"
                   }`}
                 >
                   {l.label}
@@ -244,16 +249,16 @@ export function TopNav() {
             {user ? (
               <>
                 <AccountDropdown />
-                <Button variant="outline" onClick={() => signOut()}>
+                <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-nisq-blue" onClick={() => signOut()}>
                   Sign Out
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="ghost" asChild>
+                <Button variant="ghost" className="text-white hover:bg-white/10 hover:text-white" asChild>
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button asChild>
+                <Button className="bg-white text-nisq-blue hover:bg-white/90" asChild>
                   <Link to="/login">Get Started</Link>
                 </Button>
               </>

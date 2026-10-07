@@ -35,6 +35,20 @@
   --radius: 0.75rem;
 }
 
+[data-theme="dark"] {
+  color-scheme: dark;
+  --nisq-white: #081522; /* Cards */
+  --nisq-offwhite: #050b14; /* Navy background */
+  --nisq-ink: #ffffff; /* White text */
+  --nisq-text: #94a3b8; /* Ash text */
+  --nisq-muted: #94a3b8;
+  --nisq-border: #16283a;
+  --nisq-blue-tint: #071a33; /* Darker blue tint for hover */
+  --elev-card: 0 1px 3px rgb(0 0 0 / 0.5);
+  --elev-nav: 0 2px 12px rgb(0 0 0 / 0.5);
+  --elev-pop: 0 12px 32px rgb(0 0 0 / 0.5);
+}
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -106,6 +120,7 @@
 @layer base {
   * {
     border-color: var(--nisq-border);
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
   }
   html {
     -webkit-text-size-adjust: 100%;
