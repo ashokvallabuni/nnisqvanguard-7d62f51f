@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
+import { sendWelcomeEmail } from "@/server/email";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({ meta: [{ title: "Sign Up — NISQ Vanguard" }] }),
@@ -62,11 +63,7 @@ function SignupPage() {
     }
 
     // Call server function for welcome email
-    fetch("/_server/sendWelcomeEmail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: { email, name: fullName } }),
-    }).catch(console.error);
+    sendWelcomeEmail({ data: { email, name: fullName } }).catch(console.error);
 
     setSuccess(true);
     setBusy(false);

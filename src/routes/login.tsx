@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
+import { sendNewLoginEmail } from "@/server/email";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({ next: z.string().optional() }),
@@ -43,13 +44,7 @@ function LoginPage() {
     }
     
     // We send a new login email (fire and forget)
-    // We can call server function here, but we need to import it
-    // To avoid build errors if server function is not fully wired, we just fetch it
-    fetch("/_server/sendNewLoginEmail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: { email, time } }),
-    }).catch(console.error);
+    sendNewLoginEmail({ data: { email, time } }).catch(console.error);
 
     toast.success("Successfully logged in");
     
