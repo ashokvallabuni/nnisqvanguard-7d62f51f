@@ -38,10 +38,10 @@ type DataAccuracy = "LIVE" | "RESEARCH" | "STATIC" | "COMING SOON";
 
 function AccuracyBadge({ accuracy }: { accuracy: DataAccuracy }) {
  const styles: Record<DataAccuracy, string> = {
- LIVE: "bg-nisq-soft text-success border-nisq-soft animate-pulse",
- RESEARCH: "bg-nisq-blue text-primary border-nisq-blue",
- STATIC: "bg-nisq-blue text-nisq-blue border-nisq-blue",
- "COMING SOON": "bg-nisq-ash text-warning border-nisq-ash",
+ LIVE: "bg-nisq-blue-tint text-success border-nisq-blue-soft animate-pulse",
+ RESEARCH: "bg-nisq-blue-tint text-primary border-nisq-blue",
+ STATIC: "bg-nisq-blue-tint text-nisq-blue border-nisq-blue",
+ "COMING SOON": "bg-nisq-offwhite text-warning border-nisq-border",
  };
  const icon: Record<DataAccuracy, typeof Radio> = {
  LIVE: Radio,
@@ -253,13 +253,13 @@ function severityBadgeClass(severity: string) {
  case "critical":
  return "bg-destructive/15 text-destructive border-destructive/40 border";
  case "high":
- return "bg-nisq-ash text-nisq-ash border-nisq-ash border";
+ return "bg-nisq-offwhite text-nisq-muted border-nisq-border border";
  case "medium":
- return "bg-nisq-ash text-warning border-nisq-ash border";
+ return "bg-nisq-offwhite text-warning border-nisq-border border";
  case "low":
- return "bg-nisq-soft text-success border-nisq-soft border";
+ return "bg-nisq-blue-tint text-success border-nisq-blue-soft border";
  case "info":
- return "bg-nisq-blue text-nisq-blue border-nisq-blue border";
+ return "bg-nisq-blue-tint text-nisq-blue border-nisq-blue border";
  default:
  return "bg-muted text-muted-foreground border-border border";
  }
@@ -293,7 +293,7 @@ function ThreatIntelligenceDashboard() {
  label: "ACTIVE ALERTS",
  value: "24",
  icon: AlertTriangle,
- tone: "text-nisq-ash",
+ tone: "text-nisq-muted",
  sub: "+3 in last 1h",
  },
  {
@@ -367,7 +367,7 @@ function ThreatIntelligenceDashboard() {
  {cat.count}
  </span>
  {isSoon && (
- <span className="text-[0.6rem] font-mono px-1.5 py-0.5 rounded border border-nisq-ash bg-warning/10 text-warning">
+ <span className="text-[0.6rem] font-mono px-1.5 py-0.5 rounded border border-nisq-border bg-warning/10 text-warning">
  COMING SOON
  </span>
  )}
@@ -506,7 +506,7 @@ function ThreatIntelligenceDashboard() {
  { label: "CRITICAL", pct: 6, color: "bg-destructive", count: 19 },
  { label: "HIGH", pct: 22, color: "bg-nisq-ash", count: 69 },
  { label: "MEDIUM", pct: 41, color: "bg-nisq-ash", count: 128 },
- { label: "LOW", pct: 26, color: "bg-nisq-soft", count: 82 },
+ { label: "LOW", pct: 26, color: "bg-nisq-blue-soft", count: 82 },
  { label: "INFO", pct: 5, color: "bg-nisq-blue", count: 15 },
  ].map((s) => (
  <div key={s.label} className="space-y-2">

@@ -1,336 +1,326 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, User as UserIcon, LayoutDashboard, Settings, LogOut, ShieldCheck, Sun, Moon } from "lucide-react";
-import { useTheme } from "../theme-provider";
-import { CyberButton } from "./CyberButton";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  User as UserIcon,
+  LayoutDashboard,
+  LogOut,
+  ShieldCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 
-/* ─── Telemetry Ticker ─────────────────────────────────────────────── */
-export function TelemetryTicker() {
- return (
- <div className="w-full bg-background border-b border-border text-[0.6rem] font-mono flex items-center justify-center px-4 py-1 overflow-hidden select-none">
- <div className="flex items-center gap-3 whitespace-nowrap text-muted-foreground">
- <span className="text-primary text-[0.5rem] drop-shadow-[0_0_8px_var(--primary)]">●</span>
- <span className="text-primary tracking-[0.15em]">NISQ DEFENSE ENGINE: ONLINE</span>
- <span className="text-border">—</span>
- <span className="text-success text-[0.5rem] drop-shadow-[0_0_8px_var(--success)]">●</span>
- <span className="text-success tracking-[0.15em]">DEFENSE GRID: ACTIVE</span>
- <span className="text-warning text-[0.5rem] drop-shadow-[0_0_8px_var(--warning)]">●</span>
- <span className="text-warning tracking-[0.15em]">THREAT TELEMETRY: REAL-TIME</span>
- <span className="text-border">—</span>
- <span className="text-muted-foreground tracking-[0.15em]">CITIZEN INTAKE: OPEN 24/7</span>
- </div>
- </div>
- );
-}
+type NavItem = { to: string; label: string };
+
+const PUBLIC_LINKS: NavItem[] = [
+  { to: "/", label: "Home" },
+  { to: "/academy", label: "Academy" },
+  { to: "/cyber-range/labs", label: "IVVAB LABS" },
+  { to: "/services", label: "Services" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+];
+
+const LEARNER_LINKS: NavItem[] = [
+  { to: "/dashboard", label: "Dashboard" },
+  { to: "/academy", label: "Academy" },
+  { to: "/cyber-range/labs", label: "IVVAB LABS" },
+  { to: "/programs", label: "Programs" },
+  { to: "/cyber-range/my-progress", label: "Progress" },
+];
+
+const ORG_LINKS: NavItem[] = [
+  { to: "/organization/dashboard", label: "Dashboard" },
+  { to: "/services", label: "Consulting" },
+  { to: "/academy", label: "Academy" },
+  { to: "/programs", label: "Programs" },
+  { to: "/campus", label: "Campus" },
+];
 
 /* ─── Account Dropdown ─────────────────────────────────────────────── */
 function AccountDropdown() {
- const { user, profile, signOut, isAdmin } = useAuth();
- const [isOpen, setIsOpen] = useState(false);
- const dropdownRef = useRef<HTMLDivElement>(null);
+  const { user, profile, isAdmin } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
- const accountType = profile?.account_type || "STUDENT";
- const displayName = profile?.full_name || user?.email?.split('@')[0] || "User";
- const dashboardLink = (accountType === "ORGANIZATION" || accountType === "COLLEGE") ? "/organization/dashboard" : "/dashboard";
+  const accountType = profile?.account_type || "STUDENT";
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const dashboardLink =
+    accountType === "ORGANIZATION" || accountType === "COLLEGE"
+      ? "/organization/dashboard"
+      : "/dashboard";
 
- useEffect(() => {
- const handleClickOutside = (event: MouseEvent) => {
- if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
- setIsOpen(false);
- }
- };
- document.addEventListener("mousedown", handleClickOutside);
- return () => document.removeEventListener("mousedown", handleClickOutside);
- }, []);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
- return (
- <div className="relative" ref={dropdownRef}>
- <button 
- onClick={() => setIsOpen(!isOpen)}
- className="flex items-center gap-3 bg-nisq-white border border-border hover:border-primary/50 transition-colors px-3 h-12 rounded-sm"
- >
- <div className="w-8 h-8 rounded-sm overflow-hidden bg-background border border-border flex items-center justify-center">
- {profile?.avatar_url ? (
- <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
- ) : (
- <UserIcon className="w-4 h-4 text-muted-foreground" />
- )}
- </div>
- <div className="flex flex-col items-start text-left">
- <span className="font-mono text-[12px] text-nisq-white font-bold tracking-wider leading-none truncate max-w-[120px]">{displayName}</span>
- <span className="font-mono text-[10px] text-primary tracking-widest leading-none mt-1">{accountType}</span>
- </div>
- <ChevronDown className="w-4 h-4 text-muted-foreground ml-2" />
- </button>
+  const itemClass =
+    "flex items-center gap-3 px-4 h-11 text-sm font-medium text-nisq-text hover:bg-nisq-blue-tint hover:text-nisq-blue transition-colors";
 
- <AnimatePresence>
- {isOpen && (
- <motion.div
- initial={{ opacity: 0, y: 10 }}
- animate={{ opacity: 1, y: 0 }}
- exit={{ opacity: 0, y: 10 }}
- transition={{ duration: 0.15 }}
- className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-sm shadow-xl shadow-black/50 z-50 flex flex-col py-1"
- >
- {isAdmin && (
- <Link to={"/admin" as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-nisq-white hover:bg-nisq-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
- <ShieldCheck className="w-4 h-4" /> Admin Console
- </Link>
- )}
- <Link to={dashboardLink as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-nisq-white hover:bg-nisq-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
- <LayoutDashboard className="w-4 h-4" /> Dashboard
- </Link>
- <Link to={"/profile" as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-nisq-white hover:bg-nisq-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
- <UserIcon className="w-4 h-4" /> Profile
- </Link>
- <Link to={"/settings" as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-nisq-white hover:bg-nisq-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
- <Settings className="w-4 h-4" /> Settings
- </Link>
- <div className="h-px bg-nisq-white my-1" />
- <button 
- onClick={() => { signOut(); setIsOpen(false); }}
- className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-nisq-danger hover:bg-nisq-danger transition-colors w-full text-left"
- >
- <LogOut className="w-4 h-4" /> Sign Out
- </button>
- </motion.div>
- )}
- </AnimatePresence>
- </div>
- );
-}
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        className="flex items-center gap-3 bg-nisq-white border border-nisq-border hover:border-nisq-blue transition-colors px-3 h-11 rounded-lg"
+      >
+        <div className="w-7 h-7 rounded-full overflow-hidden bg-nisq-blue-tint flex items-center justify-center">
+          {profile?.avatar_url ? (
+            <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <UserIcon className="w-4 h-4 text-nisq-blue" />
+          )}
+        </div>
+        <div className="flex flex-col items-start text-left leading-tight">
+          <span className="text-sm text-nisq-ink font-semibold truncate max-w-[120px]">
+            {displayName}
+          </span>
+          <span className="text-[10px] text-nisq-muted tracking-wider uppercase">
+            {accountType}
+          </span>
+        </div>
+        <ChevronDown className="w-4 h-4 text-nisq-muted" />
+      </button>
 
-/* ─── Theme Toggle ─────────────────────────────────────────────────── */
-export function ThemeToggle() {
- const { theme, setTheme } = useTheme();
-
- return (
- <button
- onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
- className="h-12 w-12 relative flex items-center justify-center rounded-sm bg-nisq-white border border-border hover:border-primary/50 transition-colors"
- aria-label="Toggle theme"
- >
- <Sun className="h-5 w-5 rotate-0 scale-100 transition-all -rotate-90 scale-0 text-nisq-ash" />
- <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all rotate-0 scale-100 text-nisq-blue" />
- <span className="sr-only">Toggle theme</span>
- </button>
- );
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.15 }}
+            role="menu"
+            className="absolute right-0 mt-2 w-56 bg-nisq-white border border-nisq-border rounded-xl shadow-pop z-50 flex flex-col py-1 overflow-hidden"
+          >
+            {isAdmin && (
+              <Link
+                to={"/admin" as any}
+                className={itemClass}
+                onClick={() => setIsOpen(false)}
+              >
+                <ShieldCheck className="w-4 h-4" /> Admin Console
+              </Link>
+            )}
+            <Link to={dashboardLink as any} className={itemClass} onClick={() => setIsOpen(false)}>
+              <LayoutDashboard className="w-4 h-4" /> Dashboard
+            </Link>
+            <Link to={"/profile" as any} className={itemClass} onClick={() => setIsOpen(false)}>
+              <UserIcon className="w-4 h-4" /> Profile
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
 
 /* ─── Top Nav ──────────────────────────────────────────────────────── */
 export function TopNav() {
- const { user, profile, signOut, isAdmin } = useAuth();
- const pathname = useRouterState({ select: (s) => s.location.pathname });
- const [open, setOpen] = useState(false);
- const { scrollY } = useScroll();
- const [hidden, setHidden] = useState(false);
- const [scrolled, setScrolled] = useState(false);
+  const { user, profile, signOut, isAdmin } = useAuth();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
- useMotionValueEvent(scrollY, "change", (latest) => {
- const previous = scrollY.getPrevious() || 0;
- if (latest > previous && latest > 150) {
- setHidden(true);
- } else {
- setHidden(false);
- }
- setScrolled(latest > 40);
- });
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
- // Close mobile menu on route change
- useEffect(() => {
- setOpen(false);
- }, [pathname]);
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
- if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/_authenticated/admin") || pathname.startsWith("/admin")) return null;
 
- const isPersonal = profile?.account_type === "STUDENT" || !profile?.account_type;
- const isOrg = profile?.account_type === "ORGANIZATION" || profile?.account_type === "COLLEGE";
+  const isPersonal = profile?.account_type === "STUDENT" || !profile?.account_type;
+  const isOrg = profile?.account_type === "ORGANIZATION" || profile?.account_type === "COLLEGE";
 
- const linkClass = "h-12 flex items-center px-2 text-muted-foreground hover:text-nisq-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
- const activeLinkClass = "text-nisq-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] border-b-2 border-primary";
+  const links = !user ? PUBLIC_LINKS : isOrg ? ORG_LINKS : isPersonal ? LEARNER_LINKS : [];
 
- const getLinkClass = (path: string) => {
- return `${linkClass} ${pathname === path || pathname.startsWith(path + '/') ? activeLinkClass : 'border-b-2 border-transparent'}`;
- };
+  const isActive = (path: string) =>
+    path === "/" ? pathname === "/" : pathname === path || pathname.startsWith(path + "/");
 
- return (
- <>
- <motion.nav
- variants={{
- visible: { y: 0 },
- hidden: { y: "-100%" },
- }}
- animate={hidden ? "hidden" : "visible"}
- transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
- className={`fixed top-0 inset-x-0 z-[100] transition-colors duration-300 h-[72px] flex items-center ${
- scrolled
- ? "bg-background/80 backdrop-blur-md border-b border-border"
- : "bg-transparent border-b border-transparent"
- }`}
- aria-label="Main navigation"
- >
- <div className="w-full max-w-[1440px] mx-auto px-[clamp(16px,4vw,48px)] flex items-center justify-between">
- 
- {/* Left: Logo */}
- <Link to="/" className="flex items-center gap-4 group mr-8 h-12">
- <div className="w-10 h-10 rounded-sm overflow-hidden bg-nisq-white border border-border flex items-center justify-center group-hover:border-primary/50 transition-colors">
- <img src={nisqLogoUrl} alt="Logo" className="w-full h-full object-cover" />
- </div>
- <span className="font-mono text-[14px] font-bold tracking-[0.2em] text-nisq-white uppercase hidden sm:block">
- NISQ Vanguard
- </span>
- </Link>
+  return (
+    <>
+      <nav
+        className={`w-full bg-nisq-white border-b border-nisq-border transition-shadow duration-200 ${
+          scrolled ? "shadow-nav" : ""
+        }`}
+        aria-label="Main navigation"
+      >
+        <div className="container-nv flex h-[72px] items-center justify-between gap-6">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3 shrink-0" aria-label="NISQ Vanguard home">
+            <img
+              src={nisqLogoUrl}
+              alt="NISQ Vanguard logo"
+              className="w-10 h-10 rounded-lg object-cover border border-nisq-border"
+            />
+            <span className="text-base font-bold tracking-tight text-nisq-ink hidden sm:block">
+              NISQ Vanguard
+            </span>
+          </Link>
 
- {/* Center: Links */}
- <div className="hidden min-[1100px]:flex items-center justify-center gap-8 font-medium text-sm flex-1">
- {!user && (
- <>
- <Link to="/" className={getLinkClass('/')}>Home</Link>
- <Link to="/about" className={getLinkClass('/about')}>About</Link>
- <Link to="/academy" className={getLinkClass('/academy')}>Academy</Link>
- <Link to="/services" className={getLinkClass('/services')}>Services</Link>
- </>
- )}
- 
- {user && isPersonal && (
- <>
- <Link to="/dashboard" className={getLinkClass('/dashboard')}>Dashboard</Link>
- <Link to="/academy" className={getLinkClass('/academy')}>Academy</Link>
- <Link to="/cyber-range/labs" className={getLinkClass('/cyber-range/labs')}>IVVAB LABS</Link>
- <Link to={"/internships" as any} className={getLinkClass('/internships')}>Internships</Link>
- <Link to="/cyber-range/my-progress" className={getLinkClass('/cyber-range/my-progress')}>Progress</Link>
- </>
- )}
+          {/* Links */}
+          <ul className="hidden min-[1100px]:flex items-center gap-1 flex-1 justify-center">
+            {isAdmin && (
+              <li>
+                <Link
+                  to={"/admin" as any}
+                  className="relative h-[72px] flex items-center px-3 text-sm font-semibold text-nisq-blue hover:text-nisq-blue-bright"
+                >
+                  Admin Console
+                </Link>
+              </li>
+            )}
+            {links.map((l) => (
+              <li key={l.to + l.label}>
+                <Link
+                  to={l.to as any}
+                  aria-current={isActive(l.to) ? "page" : undefined}
+                  className={`relative h-[72px] flex items-center px-3 text-sm font-medium transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:transition-colors ${
+                    isActive(l.to)
+                      ? "text-nisq-blue after:bg-nisq-blue"
+                      : "text-nisq-ink hover:text-nisq-blue after:bg-transparent"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
- {user && isOrg && (
- <>
- <Link to={"/organization/dashboard" as any} className={getLinkClass('/organization/dashboard')}>Dashboard</Link>
- <Link to="/services" className={getLinkClass('/services')}>Consulting</Link>
- <Link to={"/services/security" as any} className={getLinkClass('/services/security')}>Security Services</Link>
- <Link to={"/assessments" as any} className={getLinkClass('/assessments')}>Assessments</Link>
- <Link to={"/incidents" as any} className={getLinkClass('/incidents')}>Incidents</Link>
- <Link to={"/organization" as any} className={getLinkClass('/organization')}>Organization Profile</Link>
- </>
- )}
- </div>
+          {/* Actions */}
+          <div className="hidden min-[1100px]:flex items-center justify-end gap-3 shrink-0">
+            {user ? (
+              <>
+                <AccountDropdown />
+                <Button variant="outline" onClick={() => signOut()}>
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/login">Get Started</Link>
+                </Button>
+              </>
+            )}
+          </div>
 
- {/* Right: Actions */}
- <div className="hidden min-[1100px]:flex items-center justify-end gap-4 min-w-[280px]">
- <ThemeToggle />
- {user ? (
- <>
- <AccountDropdown />
- <button
- onClick={() => signOut()}
- className="px-4 h-12 flex items-center justify-center border border-nisq-danger text-nisq-danger text-xs font-mono font-bold tracking-wider hover:bg-nisq-danger transition-colors uppercase"
- >
- Sign Out
- </button>
- </>
- ) : (
- <>
- <CyberButton variant="tertiary" to="/login">Sign In</CyberButton>
- <CyberButton variant="primary" to="/login">Get Started</CyberButton>
- </>
- )}
- </div>
+          {/* Mobile toggle */}
+          <button
+            className="min-[1100px]:hidden h-11 w-11 flex items-center justify-center rounded-lg border border-nisq-border text-nisq-ink hover:bg-nisq-blue-tint"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+          >
+            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </nav>
 
- {/* Mobile toggle */}
- <div className="min-[1100px]:hidden flex items-center gap-2">
- <ThemeToggle />
- <button
- className="h-12 w-12 flex items-center justify-center text-muted-foreground hover:text-nisq-white"
- onClick={() => setOpen(!open)}
- >
- {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
- </button>
- </div>
- </div>
- </motion.nav>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.18 }}
+            className="min-[1100px]:hidden absolute inset-x-0 top-full z-[90] bg-nisq-white border-b border-nisq-border shadow-pop max-h-[calc(100svh-72px)] overflow-y-auto"
+          >
+            <div className="container-nv py-4 flex flex-col">
+              {isAdmin && (
+                <Link
+                  to={"/admin" as any}
+                  onClick={() => setOpen(false)}
+                  className="h-12 flex items-center text-base font-semibold text-nisq-blue"
+                >
+                  Admin Console
+                </Link>
+              )}
+              {links.map((l) => (
+                <Link
+                  key={l.to + l.label}
+                  to={l.to as any}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive(l.to) ? "page" : undefined}
+                  className={`h-12 flex items-center text-base font-medium border-b border-nisq-border last:border-b-0 ${
+                    isActive(l.to) ? "text-nisq-blue" : "text-nisq-ink"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              ))}
 
- {/* Mobile Menu */}
- <AnimatePresence>
- {open && (
- <motion.div 
- initial={{ opacity: 0, y: -20 }}
- animate={{ opacity: 1, y: 0 }}
- exit={{ opacity: 0, y: -20 }}
- transition={{ duration: 0.2 }}
- className="fixed inset-0 z-[90] bg-nisq-navy2 flex flex-col pt-24 px-[clamp(16px,4vw,48px)] min-[1100px]:hidden overflow-y-auto"
- >
- <div className="flex flex-col gap-6 font-display text-2xl font-bold tracking-wide">
- {isAdmin && (
- <Link to={"/admin" as any} onClick={() => setOpen(false)} className="text-primary hover:text-nisq-white h-12 flex items-center">Admin Console</Link>
- )}
- {!user && (
- <>
- <Link to="/" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Home</Link>
- <Link to="/about" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">About</Link>
- <Link to="/academy" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Academy</Link>
- <Link to="/services" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Services</Link>
- </>
- )}
- 
- {user && isPersonal && (
- <>
- <Link to="/dashboard" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Dashboard</Link>
- <Link to="/academy" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Academy</Link>
- <Link to="/cyber-range/labs" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">IVVAB LABS</Link>
- <Link to={"/internships" as any} onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Internships</Link>
- <Link to="/cyber-range/my-progress" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Progress</Link>
- </>
- )}
-
- {user && isOrg && (
- <>
- <Link to={"/organization/dashboard" as any} onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Dashboard</Link>
- <Link to="/services" onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Consulting</Link>
- <Link to={"/services/security" as any} onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Security Services</Link>
- <Link to={"/assessments" as any} onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Assessments</Link>
- <Link to={"/incidents" as any} onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Incidents</Link>
- <Link to={"/organization" as any} onClick={() => setOpen(false)} className="text-nisq-white hover:text-primary h-12 flex items-center">Organization Profile</Link>
- </>
- )}
- </div>
- 
- <div className="h-px bg-nisq-white my-8" />
- 
- <div className="flex flex-col gap-4 w-full mt-8 pb-12">
- {user ? (
- <>
- <Link to={"/profile" as any} className="w-full flex items-center gap-3 p-4 border border-border rounded-sm bg-nisq-white h-16">
- <div className="w-8 h-8 rounded-sm overflow-hidden bg-background border border-border flex items-center justify-center">
- {profile?.avatar_url ? (
- <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
- ) : (
- <UserIcon className="w-4 h-4 text-muted-foreground" />
- )}
- </div>
- <div className="flex flex-col text-left">
- <span className="font-mono text-[12px] text-nisq-white font-bold tracking-wider">{profile?.full_name || user?.email?.split('@')[0] || "User"}</span>
- <span className="font-mono text-[10px] text-primary tracking-widest">{isOrg ? "ORGANIZATION" : "STUDENT"}</span>
- </div>
- </Link>
- <CyberButton variant="tertiary" onClick={() => signOut()} className="w-full text-nisq-danger border-nisq-danger hover:bg-nisq-danger">Sign Out</CyberButton>
- </>
- ) : (
- <>
- <CyberButton variant="tertiary" to="/login" className="w-full">Sign In</CyberButton>
- <CyberButton variant="primary" to="/login" className="w-full mt-2">Get Started</CyberButton>
- </>
- )}
- </div>
- </motion.div>
- )}
- </AnimatePresence>
- </>
- );
+              <div className="flex flex-col gap-3 pt-4 pb-2">
+                {user ? (
+                  <>
+                    <Link
+                      to={"/profile" as any}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 p-3 border border-nisq-border rounded-xl bg-nisq-offwhite"
+                    >
+                      <div className="w-9 h-9 rounded-full overflow-hidden bg-nisq-blue-tint flex items-center justify-center">
+                        {profile?.avatar_url ? (
+                          <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <UserIcon className="w-4 h-4 text-nisq-blue" />
+                        )}
+                      </div>
+                      <div className="flex flex-col text-left leading-tight">
+                        <span className="text-sm text-nisq-ink font-semibold">
+                          {profile?.full_name || user?.email?.split("@")[0] || "User"}
+                        </span>
+                        <span className="text-[11px] text-nisq-muted uppercase tracking-wider">
+                          {isOrg ? "Organization" : "Student"}
+                        </span>
+                      </div>
+                    </Link>
+                    <Button variant="outline" className="w-full" onClick={() => signOut()}>
+                      <LogOut className="w-4 h-4" /> Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link to="/login">Login</Link>
+                    </Button>
+                    <Button className="w-full" asChild>
+                      <Link to="/login">Get Started</Link>
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 }
 
 export function BottomNav() {
- return null;
+  return null;
 }

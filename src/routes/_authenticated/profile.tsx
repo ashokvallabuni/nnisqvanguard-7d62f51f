@@ -65,10 +65,10 @@ function ProfilePage() {
  <span
  className={`inline-flex items-center gap-1.5 text-[0.65rem] font-mono font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-md border ${
  accountType === "ORGANIZATION"
- ? "border-nisq-ash bg-nisq-ash text-nisq-ash"
+ ? "border-nisq-border bg-nisq-offwhite text-nisq-muted"
  : accountType === "COLLEGE"
- ? "border-nisq-soft bg-nisq-soft text-nisq-soft"
- : "border-nisq-blue bg-nisq-blue text-nisq-blue"
+ ? "border-nisq-blue-soft bg-nisq-blue-tint text-nisq-blue-soft"
+ : "border-nisq-blue bg-nisq-blue-tint text-nisq-blue"
  }`}
  >
  {accountType === "ORGANIZATION" ? (

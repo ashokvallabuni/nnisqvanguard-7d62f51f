@@ -178,7 +178,7 @@ function AchievementsPage() {
  isEarned
  ? "border-primary/40 bg-card hover:border-primary shadow-xs"
  : isInProgress
- ? "border-nisq-ash bg-card/90 hover:border-nisq-ash"
+ ? "border-nisq-border bg-card/90 hover:border-nisq-border"
  : "border-border/60 bg-muted/10 opacity-75 hover:opacity-100"
  }`}
  >
@@ -189,7 +189,7 @@ function AchievementsPage() {
  isEarned
  ? "bg-primary/15 border-primary/40 text-primary animate-in zoom-in-95"
  : isInProgress
- ? "bg-nisq-ash border-nisq-ash text-nisq-ash"
+ ? "bg-nisq-offwhite border-nisq-border text-nisq-muted"
  : "bg-muted border-border text-muted-foreground"
  }`}
  >
@@ -247,7 +247,7 @@ function AchievementsPage() {
 
  {/* Badge Details Modal */}
  {selectedBadge && (
- <div className="fixed inset-0 z-50 bg-nisq-navy backdrop-blur-xs flex items-center justify-center p-4">
+ <div className="fixed inset-0 z-50 bg-nisq-ink/40 backdrop-blur-xs flex items-center justify-center p-4">
  <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 sm:p-8 space-y-5 shadow-2xl animate-in zoom-in-95">
  <div className="flex items-start justify-between">
  <div className="flex items-center gap-3">

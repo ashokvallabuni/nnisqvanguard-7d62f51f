@@ -19,6 +19,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { TopNav, BottomNav } from "@/components/common/Navigation";
 import { CommandPalette } from "@/components/common/CommandPalette";
+import { PALETTE } from "@/lib/palette";
+import { Footer } from "@/components/common/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import {
  Shield,
@@ -120,7 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  meta: [
  { charSet: "utf-8" },
  { name: "viewport", content: "width=device-width, initial-scale=1" },
- { name: "theme-color", content: "#050B14" },
+ { name: "theme-color", content: PALETTE.blue },
  {
  title: "NISQ Vanguard Academy & IVVAB LABS — Advanced Cybersecurity Platform",
  },
@@ -165,7 +167,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
  {
  rel: "stylesheet",
- href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+ href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap",
  },
  ],
  }),
@@ -210,7 +212,7 @@ function AdminTacticalPreviewBar() {
  if (!isAdmin) return null;
 
  return (
- <div className="w-full bg-nisq-navy2 text-nisq-white border-b border-nisq-border text-[0.65rem] font-mono flex items-center justify-between px-4 py-1.5">
+ <div className="w-full bg-nisq-blue-tint text-nisq-ink border-b border-nisq-border text-xs flex items-center justify-between px-4 py-1.5">
  <div className="flex items-center gap-2 text-accent">
  <Shield className="w-3.5 h-3.5" />
  <span className="font-bold tracking-wider text-nisq-blue">ADMIN CONSOLE ACTIVE</span>
@@ -224,7 +226,7 @@ function AdminTacticalPreviewBar() {
  className={`flex items-center gap-1.5 cursor-pointer transition-colors ${
  adminView === view
  ? "text-nisq-blue font-semibold"
- : "text-nisq-blue hover:text-nisq-white"
+ : "text-nisq-blue hover:text-nisq-ink"
  }`}
  >
  <input
@@ -233,7 +235,7 @@ function AdminTacticalPreviewBar() {
  value={view}
  checked={adminView === view}
  onChange={() => setAdminView(view)}
- className="w-3 h-3 accent-sky-300"
+ className="w-3 h-3 accent-nisq-blue"
  />
  <span>
  {view === "ADMIN" ? "Admin" : view === "LEARNER" ? "Learner" : "Organization"}
@@ -262,12 +264,12 @@ function RootComponent() {
  const { queryClient } = Route.useRouteContext();
  return (
  <QueryClientProvider client={queryClient}>
- <ThemeProvider defaultTheme="system" storageKey="nisq-theme">
+ <ThemeProvider defaultTheme="light" storageKey="nisq-theme">
  <AuthProvider>
  <PWARegister />
  <AuthListener />
  <AdminTacticalPreviewBarWrapper />
- <Toaster theme="system" />
+ <Toaster theme="light" />
  </AuthProvider>
  </ThemeProvider>
  </QueryClientProvider>
@@ -279,16 +281,15 @@ function AdminTacticalPreviewBarWrapper() {
  const location = useRouterState({ select: (s) => s.location });
 
  return (
- <div className="min-h-screen relative pb-20 md:pb-0 overflow-x-hidden">
- <header className="sticky top-0 z-50 w-full flex flex-col bg-background/90 backdrop-blur-md shadow-md border-b border-border">
+ <div className="min-h-screen relative flex flex-col overflow-x-clip bg-nisq-white">
+ <header className="sticky top-0 z-50 w-full flex flex-col bg-nisq-white">
  {isAdmin && <AdminTacticalPreviewBar />}
  <TopNav />
  </header>
- <div className="fixed inset-0 grid-bg opacity-[0.12] pointer-events-none" />
  <BottomNav />
  <CommandPalette />
 
- <div className="relative z-10 pt-4">
+ <div className="relative z-10 flex-1">
  <AnimatePresence mode="wait">
  <motion.div
  key={location.pathname}
@@ -298,17 +299,11 @@ function AdminTacticalPreviewBarWrapper() {
  transition={{ duration: 0.3 }}
  className="relative"
  >
- {/* Cyan scan line wipe effect on route enter */}
- <motion.div
- initial={{ top: "0%", opacity: 1 }}
- animate={{ top: "100%", opacity: 0 }}
- transition={{ duration: 0.6, ease: "easeOut" }}
- className="absolute left-0 right-0 h-[2px] bg-[var(--cyan)] shadow-[0_0_10px_var(--cyan)] pointer-events-none z-50"
- />
- <Outlet />
+                <Outlet />
  </motion.div>
  </AnimatePresence>
  </div>
+      <Footer />
  </div>
  );
 }

@@ -445,7 +445,7 @@ function CyberLabWorkbenchPage() {
  </div>
  </div>
  {task.command_hint && (
- <div className="font-mono text-[0.65rem] bg-nisq-navy2 text-nisq-offwhite p-2 rounded-md overflow-x-auto">
+ <div className="font-mono text-[0.65rem] bg-nisq-white text-nisq-text p-2 rounded-md overflow-x-auto">
  $ {task.command_hint}
  </div>
  )}
@@ -578,7 +578,7 @@ function CyberLabWorkbenchPage() {
  Start sandbox to load dataset.
  </div>
  ) : (
- <div className="p-4 border rounded-lg bg-nisq-navy2 text-nisq-offwhite text-xs font-mono overflow-auto max-h-[300px]">
+ <div className="p-4 border rounded-lg bg-nisq-white text-nisq-text text-xs font-mono overflow-auto max-h-[300px]">
  {/* Simple recursive tree renderer */}
  {vfs && (
  <pre>
@@ -599,20 +599,20 @@ function CyberLabWorkbenchPage() {
 
  // ── Terminal Panel ─────────────────────────────────────────────────────────
  const TerminalPanel = () => (
- <div className="flex flex-col h-full rounded-xl border border-nisq-border bg-nisq-navy2 overflow-hidden shadow-[0_0_20px_rgba(0,217,255,0.08)]">
+ <div className="flex flex-col h-full rounded-xl border border-nisq-border bg-nisq-white overflow-hidden shadow-card">
  {/* Terminal top bar */}
- <div className="bg-nisq-navy2 border-b border-nisq-border px-4 py-2.5 flex items-center justify-between shrink-0">
+ <div className="bg-nisq-white border-b border-nisq-border px-4 py-2.5 flex items-center justify-between shrink-0">
  <div className="flex items-center gap-2">
  <div className="flex gap-1.5">
  <div className="w-3 h-3 rounded-full bg-nisq-danger" />
  <div className="w-3 h-3 rounded-full bg-nisq-ash" />
- <div className="w-3 h-3 rounded-full bg-nisq-soft" />
+ <div className="w-3 h-3 rounded-full bg-nisq-blue-soft" />
  </div>
- <span className="font-mono text-xs text-nisq-offwhite ml-2">IVVAB LABS Workbench</span>
+ <span className="font-mono text-xs text-nisq-text ml-2">IVVAB LABS Workbench</span>
  </div>
  <div className="flex items-center gap-3 text-[0.65rem] font-mono text-muted-foreground">
  {isOffline && (
- <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-nisq-blue text-nisq-offwhite font-bold border border-nisq-blue">
+ <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-nisq-blue-tint text-nisq-text font-bold border border-nisq-blue">
  OFFLINE READY
  </span>
  )}
@@ -620,11 +620,11 @@ function CyberLabWorkbenchPage() {
  <span
  className={`inline-block w-2 h-2 rounded-full ${
  sessionActive
- ? "bg-nisq-navy2 animate-pulse shadow-[0_0_8px_#00D68F]"
- : "bg-nisq-navy2"
+ ? "bg-nisq-white animate-pulse shadow-card"
+ : "bg-nisq-white"
  }`}
  />
- <span className="text-nisq-offwhite">
+ <span className="text-nisq-text">
  {sessionActive ? "DATASET LOADED | VFS READY" : "OFFLINE READY"}
  </span>
  </span>
@@ -633,18 +633,18 @@ function CyberLabWorkbenchPage() {
 
  {/* Terminal body */}
  {!sessionActive ? (
- <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-nisq-offwhite">
- <Terminal className="w-8 h-8 text-nisq-offwhite" />
+ <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-3 font-mono text-nisq-text">
+ <Terminal className="w-8 h-8 text-nisq-text" />
  <p className="text-xs max-w-md">
  Click{" "}
- <span className="text-nisq-offwhite font-semibold">&quot;Start Lab Sandbox&quot;</span>{" "}
+ <span className="text-nisq-text font-semibold">&quot;Start Lab Sandbox&quot;</span>{" "}
  above to provision your client-side isolated environment. No server required.
  </p>
  </div>
  ) : (
  <div
  ref={terminalScrollRef}
- className="flex-1 p-4 overflow-y-auto overflow-x-auto font-mono text-xs text-nisq-offwhite space-y-1 selection:bg-nisq-navy2 selection:text-nisq-offwhite"
+ className="flex-1 p-4 overflow-y-auto overflow-x-auto font-mono text-xs text-nisq-text space-y-1 selection:bg-nisq-blue-tint selection:text-nisq-text"
  >
  {history.map((line, idx) => (
  <div key={idx} className="whitespace-pre leading-relaxed min-w-0 break-all">
@@ -657,9 +657,9 @@ function CyberLabWorkbenchPage() {
  {/* Command input */}
  <form
  onSubmit={handleExecuteCommand}
- className="border-t border-nisq-border bg-nisq-navy2/80 p-2.5 flex items-center gap-2 shrink-0"
+ className="border-t border-nisq-border bg-nisq-offwhite p-2.5 flex items-center gap-2 shrink-0"
  >
- <span className="font-mono text-xs text-nisq-offwhite pl-2 shrink-0">
+ <span className="font-mono text-xs text-nisq-text pl-2 shrink-0">
  analyst@ivvab-labs:{cwd}$
  </span>
  <input
@@ -673,13 +673,13 @@ function CyberLabWorkbenchPage() {
  value={commandInput}
  onChange={(e) => setCommandInput(e.target.value)}
  onKeyDown={handleKeyDown}
- className="flex-1 bg-transparent font-mono text-xs text-nisq-offwhite placeholder:text-nisq-offwhite focus:outline-none disabled:opacity-50 min-w-0"
+ className="flex-1 bg-transparent font-mono text-xs text-nisq-text placeholder:text-nisq-text focus:outline-none disabled:opacity-50 min-w-0"
  autoFocus
  />
  <button
  type="submit"
  disabled={!sessionActive || !commandInput.trim()}
- className="px-3 py-1 rounded bg-nisq-navy2 border border-nisq-border text-nisq-offwhite font-mono text-xs hover:bg-nisq-navy2/10 disabled:opacity-40 transition-colors shrink-0"
+ className="px-3 py-1 rounded bg-nisq-white border border-nisq-border text-nisq-text font-mono text-xs hover:bg-nisq-blue-tint disabled:opacity-40 transition-colors shrink-0"
  >
  Send ↵
  </button>
@@ -811,7 +811,7 @@ function CyberLabWorkbenchPage() {
  <div className="col-span-3 space-y-4">
  <div className="space-y-4 overflow-y-auto max-h-[680px]">
  {/* Incident Briefing & Scenario */}
- <div className="rounded-xl border border-border bg-card p-5 space-y-3 shadow-[0_0_15px_rgba(0,217,255,0.03)] hover:border-primary/50 transition-colors">
+ <div className="rounded-xl border border-border bg-card p-5 space-y-3 shadow-card hover:border-primary/50 transition-colors">
  <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2">
  <ShieldCheck className="w-4 h-4 text-primary" />
  <span>Incident Briefing</span>
@@ -822,7 +822,7 @@ function CyberLabWorkbenchPage() {
  </div>
 
  {/* Interactive Tasks */}
- <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-[0_0_15px_rgba(0,217,255,0.03)] hover:border-primary/50 transition-colors">
+ <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-card hover:border-primary/50 transition-colors">
  <div className="flex items-center justify-between">
  <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2">
  <CheckCircle2 className="w-4 h-4 text-success" />
@@ -881,7 +881,7 @@ function CyberLabWorkbenchPage() {
  {ProgressPanel()}
 
  {/* Flag Submission */}
- <div className="rounded-xl border border-primary/40 bg-card p-5 space-y-3 shadow-[0_0_15px_rgba(0,217,255,0.08)]">
+ <div className="rounded-xl border border-primary/40 bg-card p-5 space-y-3 shadow-card">
  <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2">
  <Flag className="w-4 h-4 text-primary" />
  <span>Submit Security Flag</span>

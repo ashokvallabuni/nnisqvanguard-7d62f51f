@@ -1,53 +1,54 @@
-import React from 'react';
-import { Link } from '@tanstack/react-router';
+import React from "react";
+import { Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 
 export interface CyberButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
- variant?: 'primary' | 'secondary' | 'tertiary';
- href?: string;
- to?: string;
- children: React.ReactNode;
+  variant?: "primary" | "secondary" | "tertiary";
+  href?: string;
+  to?: string;
+  children: React.ReactNode;
 }
 
+/**
+ * Legacy-named button kept for existing call sites. Renders the NISQ design-system
+ * buttons: primary (solid blue), secondary (white + blue outline), tertiary (text link).
+ */
 export const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
- ({ variant = 'primary', href, to, children, className = '', ...props }, ref) => {
- const baseClasses = "group relative inline-flex items-center justify-center font-mono text-[12px] md:text-[13px] font-bold uppercase tracking-widest transition-all duration-300 py-4 px-9 w-full sm:w-auto min-w-[180px] min-h-[48px] whitespace-nowrap border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-95";
- 
- const variants = {
- primary: "bg-primary text-primary-foreground border-primary hover:brightness-110",
- secondary: "bg-transparent text-foreground border-primary hover:bg-primary/10 hover:brightness-110",
- tertiary: "bg-transparent text-foreground border-transparent hover:text-primary px-0 py-0 min-w-0"
- };
+  ({ variant = "primary", href, to, children, className = "", ...props }, ref) => {
+    const base =
+      "inline-flex items-center justify-center gap-2 rounded-lg text-sm font-semibold transition-all duration-200 min-h-[44px] w-full sm:w-auto whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nisq-blue-soft focus-visible:ring-offset-2 disabled:bg-nisq-border disabled:text-nisq-ash disabled:pointer-events-none";
 
- const content = (
- <>
- <span className="relative z-10 flex items-center gap-2">{children}</span>
- {variant === 'tertiary' && (
- <span className="absolute left-0 bottom-[-4px] h-[1px] w-0 bg-primary transition-all duration-300 group-hover:w-full" />
- )}
- </>
- );
+    const variants = {
+      primary:
+        "bg-nisq-blue text-nisq-white px-6 py-3 shadow-card hover:bg-nisq-blue-bright hover:shadow-glow",
+      secondary:
+        "bg-nisq-white text-nisq-blue border border-nisq-blue px-6 py-3 hover:bg-nisq-blue-tint",
+      tertiary: "text-nisq-blue px-2 hover:underline underline-offset-4",
+    };
 
- if (to) {
- return (
- <Link to={to} className={`${baseClasses} ${variants[variant]} ${className}`}>
- {content}
- </Link>
- );
- }
+    const cls = cn(base, variants[variant], className);
 
- if (href) {
- return (
- <a href={href} className={`${baseClasses} ${variants[variant]} ${className}`}>
- {content}
- </a>
- );
- }
+    if (to) {
+      return (
+        <Link to={to} className={cls}>
+          {children}
+        </Link>
+      );
+    }
 
- return (
- <button ref={ref} className={`${baseClasses} ${variants[variant]} ${className}`} {...props}>
- {content}
- </button>
- );
- }
+    if (href) {
+      return (
+        <a href={href} className={cls}>
+          {children}
+        </a>
+      );
+    }
+
+    return (
+      <button ref={ref} className={cls} {...props}>
+        {children}
+      </button>
+    );
+  },
 );
-CyberButton.displayName = 'CyberButton';
+CyberButton.displayName = "CyberButton";

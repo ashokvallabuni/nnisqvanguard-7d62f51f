@@ -157,27 +157,27 @@ export function IpSubnetVisualizer() {
  </div>
 
  {/* Usable Host Range Visualizer */}
- <div className="p-4 rounded-xl border border-border bg-nisq-navy2 text-nisq-offwhite font-mono text-xs space-y-3">
+ <div className="p-4 rounded-xl border border-border bg-nisq-white text-nisq-text font-mono text-xs space-y-3">
  <div className="text-muted-foreground text-[0.7rem] uppercase border-b border-border pb-1">
  Network Topology Segment Range:
  </div>
  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left py-1">
- <div className="p-2 rounded bg-nisq-navy2 border border-border">
+ <div className="p-2 rounded bg-nisq-white border border-border">
  <div className="text-[0.65rem] text-muted-foreground">NETWORK (ID)</div>
  <div className="text-primary font-bold">{calculation.networkAddress}</div>
  </div>
- <div className="text-nisq-ash font-bold">$\longrightarrow$</div>
- <div className="p-2 rounded bg-nisq-navy2 border border-border">
+ <div className="text-nisq-muted font-bold">$\longrightarrow$</div>
+ <div className="p-2 rounded bg-nisq-white border border-border">
  <div className="text-[0.65rem] text-muted-foreground">FIRST HOST</div>
- <div className="text-nisq-soft font-bold">{calculation.firstHost}</div>
+ <div className="text-nisq-blue-soft font-bold">{calculation.firstHost}</div>
  </div>
- <div className="text-nisq-ash font-bold">...</div>
- <div className="p-2 rounded bg-nisq-navy2 border border-border">
+ <div className="text-nisq-muted font-bold">...</div>
+ <div className="p-2 rounded bg-nisq-white border border-border">
  <div className="text-[0.65rem] text-muted-foreground">LAST HOST</div>
- <div className="text-nisq-soft font-bold">{calculation.lastHost}</div>
+ <div className="text-nisq-blue-soft font-bold">{calculation.lastHost}</div>
  </div>
- <div className="text-nisq-ash font-bold">$\longrightarrow$</div>
- <div className="p-2 rounded bg-nisq-navy2 border border-border">
+ <div className="text-nisq-muted font-bold">$\longrightarrow$</div>
+ <div className="p-2 rounded bg-nisq-white border border-border">
  <div className="text-[0.65rem] text-muted-foreground">BROADCAST</div>
  <div className="text-accent font-bold">{calculation.broadcastAddress}</div>
  </div>

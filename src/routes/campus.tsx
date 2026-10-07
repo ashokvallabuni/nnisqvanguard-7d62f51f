@@ -279,7 +279,7 @@ function CampusPrograms() {
 
  {selected && (
  <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/85 p-4 backdrop-blur-sm">
- <div className="w-full max-w-lg border border-nisq-blue bg-card p-6 shadow-[0_0_30px_rgba(0,210,255,0.18)]">
+ <div className="w-full max-w-lg border border-nisq-blue bg-card p-6 shadow-card">
  <div className="mb-6 flex items-start justify-between">
  <div>
  <div className="mono text-[10px] tracking-widest text-primary">
@@ -420,7 +420,7 @@ function ProgramCard({ program, onApply }: { program: Program; onApply: () => vo
  { day: "numeric", month: "short", year: "numeric" },
  );
  return (
- <article className="border border-border bg-card p-5 transition hover:border-primary/60 hover:shadow-[0_0_24px_rgba(0,210,255,0.12)]">
+ <article className="border border-border bg-card p-5 transition hover:border-primary/60 hover:shadow-glow">
  <div className="flex items-start justify-between gap-3">
  <span className="mono border border-primary/30 bg-primary/10 px-2 py-1 text-[9px] tracking-widest text-primary">
  {program.dynamic_tier}

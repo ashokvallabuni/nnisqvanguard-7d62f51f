@@ -29,7 +29,7 @@ function AppointmentsPage() {
  const requestedService = searchParams.get("service");
 
  return (
- <main className="min-h-screen bg-background text-nisq-offwhite">
+ <main className="min-h-screen bg-background text-nisq-text">
  <PageHeader
  badge="TACTICAL ADVISORY"
  badgeVariant="primary"
@@ -119,7 +119,7 @@ function AppointmentsPage() {
 
  <button
  type="submit"
- className="w-full py-4 rounded-xl bg-primary text-nisq-navy font-semibold hover:bg-primary hover:text-primary-foreground transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] font-mono tracking-wide text-sm flex items-center justify-center gap-2"
+ className="w-full py-4 rounded-xl bg-primary text-nisq-white font-semibold hover:bg-primary hover:text-primary-foreground transition-all shadow-card font-mono tracking-wide text-sm flex items-center justify-center gap-2"
  >
  SUBMIT BRIEFING REQUEST <ArrowRight className="w-4 h-4" />
  </button>
@@ -134,19 +134,19 @@ function AppointmentsPage() {
  </h3>
  <ul className="space-y-4 text-muted-foreground text-sm">
  <li className="flex gap-3 items-start">
- <CheckCircle2 className="w-5 h-5 text-nisq-soft shrink-0 mt-0.5" />
+ <CheckCircle2 className="w-5 h-5 text-nisq-blue-soft shrink-0 mt-0.5" />
  <span>Zero-Trust Architecture design and implementation planning.</span>
  </li>
  <li className="flex gap-3 items-start">
- <CheckCircle2 className="w-5 h-5 text-nisq-soft shrink-0 mt-0.5" />
+ <CheckCircle2 className="w-5 h-5 text-nisq-blue-soft shrink-0 mt-0.5" />
  <span>Custom IVVAB LABS deployment for internal red/blue teams.</span>
  </li>
  <li className="flex gap-3 items-start">
- <CheckCircle2 className="w-5 h-5 text-nisq-soft shrink-0 mt-0.5" />
+ <CheckCircle2 className="w-5 h-5 text-nisq-blue-soft shrink-0 mt-0.5" />
  <span>Executive briefings on emerging threat vectors.</span>
  </li>
  <li className="flex gap-3 items-start">
- <Building2 className="w-5 h-5 text-nisq-soft shrink-0 mt-0.5" />
+ <Building2 className="w-5 h-5 text-nisq-blue-soft shrink-0 mt-0.5" />
  <span>On-site or virtual delivery of tactical operations.</span>
  </li>
  </ul>
@@ -158,15 +158,15 @@ function AppointmentsPage() {
  </h3>
  <div className="space-y-4 text-sm text-muted-foreground">
  <div className="flex items-center gap-3">
- <Clock className="w-4 h-4 text-nisq-ash" />
+ <Clock className="w-4 h-4 text-nisq-muted" />
  <span>Typically 45-60 minute briefing</span>
  </div>
  <div className="flex items-center gap-3">
- <MapPin className="w-4 h-4 text-nisq-ash" />
+ <MapPin className="w-4 h-4 text-nisq-muted" />
  <span>Secure Video Conference (or In-Person)</span>
  </div>
  <div className="flex items-center gap-3">
- <Calendar className="w-4 h-4 text-nisq-ash" />
+ <Calendar className="w-4 h-4 text-nisq-muted" />
  <span>Response within 24 operational hours</span>
  </div>
  </div>

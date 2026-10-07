@@ -4,40 +4,40 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
- "inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
- {
- variants: {
- variant: {
- default: "border-nisq-border bg-primary/10 text-primary",
- secondary: "border-border bg-muted text-muted-foreground",
- destructive: "border-destructive/30 bg-destructive/10 text-destructive",
- outline: "border-border bg-muted text-foreground",
- success: "border-success/30 bg-success/10 text-success",
- warning: "border-warning/30 bg-warning/10 text-warning",
- info: "border-nisq-border bg-primary/10 text-primary",
- accent: "border-nisq-border bg-primary/10 text-primary",
- active: "border-success/30 bg-success/10 text-success",
- locked: "border-destructive/30 bg-destructive/10 text-destructive",
- "coming-soon": "border-border bg-muted text-muted-foreground",
- "in-progress": "border-nisq-border bg-primary/10 text-primary",
- completed: "border-success/30 bg-success/10 text-success",
- admin: "border-nisq-border bg-primary/10 text-primary",
- learner: "border-primary/30 bg-primary/10 text-primary",
- organization: "border-warning/30 bg-warning/10 text-warning",
- college: "border-success/30 bg-success/10 text-success",
- },
- },
- defaultVariants: {
- variant: "default",
- },
- },
+  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-nisq-blue-soft focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default: "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        secondary: "border-nisq-border bg-nisq-offwhite text-nisq-text",
+        destructive: "border-nisq-danger/30 bg-nisq-danger-tint text-nisq-danger",
+        outline: "border-nisq-border bg-nisq-white text-nisq-text",
+        success: "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        warning: "border-nisq-border bg-nisq-offwhite text-nisq-text",
+        info: "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        accent: "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        active: "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        locked: "border-nisq-border bg-nisq-offwhite text-nisq-muted",
+        "coming-soon": "border-nisq-border bg-nisq-offwhite text-nisq-muted",
+        "in-progress": "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        completed: "border-transparent bg-nisq-blue text-nisq-white",
+        admin: "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        learner: "border-transparent bg-nisq-blue-tint text-nisq-blue",
+        organization: "border-nisq-border bg-nisq-offwhite text-nisq-text",
+        college: "border-nisq-border bg-nisq-offwhite text-nisq-text",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
 );
 
 export interface BadgeProps
- extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
- return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
+  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
 }
 
 export { Badge, badgeVariants };

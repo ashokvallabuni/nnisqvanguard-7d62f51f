@@ -80,11 +80,11 @@ export function CommandPalette() {
 
  return (
  <div
- className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-nisq-navy2/20 backdrop-blur-sm"
+ className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-nisq-offwhite backdrop-blur-sm"
  onClick={() => setIsOpen(false)}
  >
  <div
- className="w-full max-w-lg bg-nisq-navy2 border border-border rounded-2xl shadow-2xl overflow-hidden"
+ className="w-full max-w-lg bg-nisq-white border border-border rounded-2xl shadow-2xl overflow-hidden"
  onClick={(e) => e.stopPropagation()}
  >
  <div className="p-4 border-b border-border flex items-center gap-3 focus-within:bg-background transition-colors">
@@ -97,7 +97,7 @@ export function CommandPalette() {
  value={query}
  onChange={(e) => setQuery(e.target.value)}
  />
- <kbd className="hidden sm:inline-block px-2 py-1 text-[0.6rem] font-mono font-semibold text-muted-foreground bg-nisq-navy2 rounded border border-border">
+ <kbd className="hidden sm:inline-block px-2 py-1 text-[0.6rem] font-mono font-semibold text-muted-foreground bg-nisq-white rounded border border-border">
  ESC
  </kbd>
  </div>
@@ -123,7 +123,7 @@ export function CommandPalette() {
  <>
  <div className="h-px bg-muted my-2" />
  <button
- className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-nisq-navy2 hover:text-destructive focus:bg-nisq-navy2 focus:text-destructive focus:outline-none focus:ring-2 focus:ring-[#DC2626] transition-all text-left text-sm font-semibold text-muted-foreground"
+ className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-nisq-blue-tint hover:text-destructive focus:bg-nisq-blue-tint focus:text-destructive focus:outline-none focus:ring-2 focus:ring-[#DC2626] transition-all text-left text-sm font-semibold text-muted-foreground"
  onClick={handleLogout}
  >
  <LogOut className="w-4 h-4" />

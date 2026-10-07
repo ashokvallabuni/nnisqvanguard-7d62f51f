@@ -183,24 +183,24 @@ export function CiaTriadSecurityDiagram() {
  )}
 
  {/* Threat Modeling Flow Diagram */}
- <div className="p-4 rounded-xl border border-border bg-nisq-navy2 text-nisq-offwhite font-mono text-xs space-y-3">
+ <div className="p-4 rounded-xl border border-border bg-nisq-white text-nisq-text font-mono text-xs space-y-3">
  <div className="text-muted-foreground text-[0.7rem] uppercase border-b border-border pb-1">
  The Universal Threat Model Lifecycle:
  </div>
  <div className="flex flex-wrap items-center justify-center gap-2 text-center py-2 text-[0.7rem]">
  <span className="px-2.5 py-1 rounded bg-primary/20 text-primary font-bold">ASSET</span>
- <span className="text-nisq-ash">$\longrightarrow$</span>
- <span className="px-2.5 py-1 rounded bg-nisq-danger text-nisq-danger font-bold">THREAT</span>
- <span className="text-nisq-ash">$\longrightarrow$</span>
- <span className="px-2.5 py-1 rounded bg-nisq-ash text-nisq-ash font-bold">
+ <span className="text-nisq-muted">$\longrightarrow$</span>
+ <span className="px-2.5 py-1 rounded bg-nisq-danger-tint text-nisq-danger font-bold">THREAT</span>
+ <span className="text-nisq-muted">$\longrightarrow$</span>
+ <span className="px-2.5 py-1 rounded bg-nisq-offwhite text-nisq-muted font-bold">
  VULNERABILITY
  </span>
- <span className="text-nisq-ash">$\longrightarrow$</span>
- <span className="px-2.5 py-1 rounded bg-nisq-blue text-nisq-blue font-bold">
+ <span className="text-nisq-muted">$\longrightarrow$</span>
+ <span className="px-2.5 py-1 rounded bg-nisq-blue-tint text-nisq-blue font-bold">
  RISK
  </span>
- <span className="text-nisq-ash">$\longrightarrow$</span>
- <span className="px-2.5 py-1 rounded bg-nisq-soft text-nisq-soft font-bold">
+ <span className="text-nisq-muted">$\longrightarrow$</span>
+ <span className="px-2.5 py-1 rounded bg-nisq-blue-tint text-nisq-blue-soft font-bold">
  CONTROL
  </span>
  </div>

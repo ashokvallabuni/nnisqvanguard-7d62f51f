@@ -113,10 +113,10 @@ export function TcpHandshakeDiagram() {
  </div>
 
  {/* Visual Sequence Animation Diagram */}
- <div className="p-6 rounded-xl border border-border bg-nisq-navy2 text-nisq-offwhite font-mono text-xs space-y-4">
+ <div className="p-6 rounded-xl border border-border bg-nisq-white text-nisq-text font-mono text-xs space-y-4">
  <div className="flex justify-between items-center text-muted-foreground border-b border-border pb-2">
  <span className="text-primary font-bold">CLIENT (192.168.1.10:54102)</span>
- <span className="text-xs text-nisq-ash">PACKET TRANSMISSION</span>
+ <span className="text-xs text-nisq-muted">PACKET TRANSMISSION</span>
  <span className="text-accent font-bold">SERVER (203.0.113.50:443)</span>
  </div>
 
@@ -126,8 +126,8 @@ export function TcpHandshakeDiagram() {
  onClick={() => setActiveStep(1)}
  className={`cursor-pointer p-3 rounded-lg border transition-all ${
  activeStep === 1
- ? "border-primary bg-primary/20 ring-1 ring-primary text-nisq-white"
- : "border-border bg-nisq-navy2 text-muted-foreground opacity-60 hover:opacity-100"
+ ? "border-primary bg-primary/20 ring-1 ring-primary text-nisq-ink"
+ : "border-border bg-nisq-white text-muted-foreground opacity-60 hover:opacity-100"
  }`}
  >
  <div className="flex items-center justify-between">
@@ -135,7 +135,7 @@ export function TcpHandshakeDiagram() {
  <div className="flex items-center gap-2 text-[0.7rem]">
  <span>------------------- [ SYN=1, ACK=0, Seq=1000 ] ------------------&gt;</span>
  </div>
- <span className="text-nisq-offwhite">LISTEN $\to$ SYN-RCVD</span>
+ <span className="text-nisq-text">LISTEN $\to$ SYN-RCVD</span>
  </div>
  </div>
 
@@ -144,12 +144,12 @@ export function TcpHandshakeDiagram() {
  onClick={() => setActiveStep(2)}
  className={`cursor-pointer p-3 rounded-lg border transition-all ${
  activeStep === 2
- ? "border-accent bg-accent/20 ring-1 ring-accent text-nisq-white"
- : "border-border bg-nisq-navy2 text-muted-foreground opacity-60 hover:opacity-100"
+ ? "border-accent bg-accent/20 ring-1 ring-accent text-nisq-ink"
+ : "border-border bg-nisq-white text-muted-foreground opacity-60 hover:opacity-100"
  }`}
  >
  <div className="flex items-center justify-between">
- <span className="text-nisq-offwhite">SYN-SENT</span>
+ <span className="text-nisq-text">SYN-SENT</span>
  <div className="flex items-center gap-2 text-[0.7rem]">
  <span>
  &lt;------------------ [ SYN=1, ACK=1, Seq=5000, Ack=1001 ] ----------------
@@ -164,8 +164,8 @@ export function TcpHandshakeDiagram() {
  onClick={() => setActiveStep(3)}
  className={`cursor-pointer p-3 rounded-lg border transition-all ${
  activeStep === 3
- ? "border-success bg-success/20 ring-1 ring-success text-nisq-white"
- : "border-border bg-nisq-navy2 text-muted-foreground opacity-60 hover:opacity-100"
+ ? "border-success bg-success/20 ring-1 ring-success text-nisq-ink"
+ : "border-border bg-nisq-white text-muted-foreground opacity-60 hover:opacity-100"
  }`}
  >
  <div className="flex items-center justify-between">

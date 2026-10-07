@@ -112,7 +112,7 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
  {dataset.description}
  </div>
 
- <div className="max-h-72 overflow-auto bg-nisq-navy2 text-nisq-offwhite font-mono text-xs p-3">
+ <div className="max-h-72 overflow-auto bg-nisq-white text-nisq-text font-mono text-xs p-3">
  {viewMode === "table" && isArrayData ? (
  <table className="w-full text-left border-collapse">
  <thead>
@@ -127,9 +127,9 @@ export function DatasetPreviewCard({ dataset }: DatasetPreviewCardProps) {
  <tbody className="divide-y divide-nisq-border">
  {Array.isArray(dataset.data) &&
  dataset.data.map((row: Record<string, any>, rIdx: number) => (
- <tr key={rIdx} className="hover:bg-nisq-navy2 transition-colors">
+ <tr key={rIdx} className="hover:bg-nisq-blue-tint transition-colors">
  {headers.map((h) => (
- <td key={h} className="p-2 whitespace-nowrap text-nisq-offwhite">
+ <td key={h} className="p-2 whitespace-nowrap text-nisq-text">
  {typeof row[h] === "object" ? JSON.stringify(row[h]) : String(row[h] ?? "")}
  </td>
  ))}

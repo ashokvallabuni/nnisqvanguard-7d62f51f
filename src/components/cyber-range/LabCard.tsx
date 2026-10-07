@@ -136,7 +136,7 @@ export function LabCard({ lab }: LabCardProps) {
  {lab.skills.slice(0, 4).map((skill, i) => (
  <span
  key={i}
- className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-nisq-navy2 text-muted-foreground border border-border truncate text-center"
+ className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-nisq-white text-muted-foreground border border-border truncate text-center"
  >
  {skill}
  </span>

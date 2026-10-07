@@ -115,7 +115,7 @@ export function LinuxFilesystemTree() {
 
  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
  {/* Left Side: Interactive Tree */}
- <div className="lg:col-span-5 p-4 rounded-xl border border-border bg-nisq-navy2 text-nisq-offwhite font-mono text-xs space-y-1.5">
+ <div className="lg:col-span-5 p-4 rounded-xl border border-border bg-nisq-white text-nisq-text font-mono text-xs space-y-1.5">
  <div className="text-muted-foreground text-[0.7rem] uppercase border-b border-border pb-2 mb-2 flex items-center gap-2">
  <FolderOpen className="w-4 h-4 text-primary" />
  <span>Root Filesystem ( / )</span>
@@ -131,17 +131,17 @@ export function LinuxFilesystemTree() {
  className={`w-full text-left px-2.5 py-1.5 rounded-md flex items-center justify-between transition-colors ${
  isSelected
  ? "bg-primary text-primary-foreground font-bold shadow-xs"
- : "text-nisq-offwhite hover:bg-nisq-navy2 hover:text-nisq-white"
+ : "text-nisq-text hover:bg-nisq-blue-tint hover:text-nisq-white"
  }`}
  >
  <span className="flex items-center gap-2">
  <Folder
- className={`w-3.5 h-3.5 ${isSelected ? "text-primary-foreground" : "text-nisq-ash"}`}
+ className={`w-3.5 h-3.5 ${isSelected ? "text-primary-foreground" : "text-nisq-muted"}`}
  />
  <span>/{dir.name}</span>
  </span>
  <span
- className={`text-[0.6rem] uppercase ${isSelected ? "text-primary-foreground/80" : "text-nisq-ash"}`}
+ className={`text-[0.6rem] uppercase ${isSelected ? "text-primary-foreground/80" : "text-nisq-muted"}`}
  >
  Inspect →
  </span>
@@ -181,7 +181,7 @@ export function LinuxFilesystemTree() {
  {selectedDir.criticalFiles.map((file, i) => (
  <li
  key={i}
- className="flex items-center gap-1.5 text-nisq-ash text-nisq-offwhite"
+ className="flex items-center gap-1.5 text-nisq-muted text-nisq-text"
  >
  <span className="text-primary">•</span>
  <span>{file}</span>

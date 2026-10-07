@@ -87,7 +87,7 @@ function FounderProfilePage() {
  <div className="min-h-screen bg-background text-foreground">
  {/* ── Header bar ────────────────────────────────────────────────────── */}
  <div className="border-b border-border bg-background/90 px-5 py-4 sm:px-8">
- <div className="mx-auto flex max-w-7xl items-center gap-3 font-mono text-[10px] tracking-widest text-nisq-ash">
+ <div className="mx-auto flex max-w-7xl items-center gap-3 font-mono text-[10px] tracking-widest text-nisq-muted">
  <Link to="/" className="hover:text-primary transition-colors">
  HOME
  </Link>
@@ -118,11 +118,11 @@ function FounderProfilePage() {
  <img
  src={founderImg}
  alt="Ashok Vallabuni — Founder & Chief Architect, NISQ Vanguard Defence Technologies"
- className="relative z-10 h-80 w-80 rounded-lg object-cover shadow-[0_0_48px_rgba(0,210,255,0.25)]"
+ className="relative z-10 h-80 w-80 rounded-lg object-cover shadow-card"
  />
 
  {/* NISQ badge */}
- <div className="absolute -bottom-5 -right-5 z-20 flex h-16 w-16 items-center justify-center rounded-full border-2 border-nisq-blue bg-background shadow-[0_0_20px_rgba(0,210,255,0.4)]">
+ <div className="absolute -bottom-5 -right-5 z-20 flex h-16 w-16 items-center justify-center rounded-full border-2 border-nisq-blue bg-background shadow-card">
  <img
  src={nisqLogo}
  alt="NISQ Vanguard"
@@ -146,7 +146,7 @@ function FounderProfilePage() {
  <h1 className="font-display text-4xl font-bold tracking-wide text-foreground sm:text-5xl">
  ASHOK Vallabuni
  </h1>
- <p className="mt-2 font-mono text-xs text-nisq-ash tracking-wider">
+ <p className="mt-2 font-mono text-xs text-nisq-muted tracking-wider">
  NISQ VANGUARD DEFENCE TECHNOLOGIES · IVVAB LABS ENGINE
  </p>
  </div>
@@ -162,7 +162,7 @@ function FounderProfilePage() {
  ].map((tag) => (
  <span
  key={tag}
- className="border border-primary/30 bg-nisq-blue px-3 py-1 font-mono text-[10px] tracking-wider text-primary"
+ className="border border-primary/30 bg-nisq-blue-tint px-3 py-1 font-mono text-[10px] tracking-wider text-primary"
  >
  {tag}
  </span>

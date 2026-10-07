@@ -132,11 +132,11 @@ export function SocPipelineDiagram() {
  <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed">{current.role}</p>
 
  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-xs font-mono">
- <div className="p-3 rounded-lg bg-nisq-navy2 text-nisq-offwhite border border-border space-y-1">
+ <div className="p-3 rounded-lg bg-nisq-white text-nisq-text border border-border space-y-1">
  <span className="text-[0.65rem] text-muted-foreground uppercase font-semibold">
  Telemetry Payload / Data Representation
  </span>
- <div className="text-[0.7rem] break-all leading-relaxed text-nisq-soft">
+ <div className="text-[0.7rem] break-all leading-relaxed text-nisq-blue-soft">
  {current.exampleData}
  </div>
  </div>

@@ -320,7 +320,7 @@ function StudentDashboard() {
  <div className="shrink-0 flex items-center gap-3">
  <Link
  to={nextStepAction.linkTo as any}
- className="inline-flex items-center gap-2 px-6 min-h-[48px] rounded-xl bg-background text-nisq-white font-semibold text-sm hover:bg-primary shadow-sm transition-all uppercase"
+ className="inline-flex items-center gap-2 px-6 min-h-[48px] rounded-xl bg-background text-nisq-ink font-semibold text-sm hover:bg-primary shadow-sm transition-all uppercase"
  >
  <Play className="w-4 h-4 fill-white" />
  <span>{nextStepAction.ctaText}</span>
@@ -530,7 +530,7 @@ function StudentDashboard() {
  </div>
 
  <div className="grid grid-cols-2 gap-4">
- <div className="p-4 nv-card space-y-1 shadow-sm hover:border-nisq-ash transition-colors">
+ <div className="p-4 nv-card space-y-1 shadow-sm hover:border-nisq-border transition-colors">
  <div className="text-[0.65rem] font-mono uppercase text-warning font-bold">
  Streak
  </div>

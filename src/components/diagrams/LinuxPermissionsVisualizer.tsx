@@ -177,26 +177,26 @@ export function LinuxPermissionsVisualizer() {
  </div>
 
  {/* Visual Symbolic & Command Result */}
- <div className="p-5 rounded-xl border border-border bg-nisq-navy2 text-nisq-offwhite font-mono text-xs space-y-3">
+ <div className="p-5 rounded-xl border border-border bg-nisq-white text-nisq-text font-mono text-xs space-y-3">
  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-border pb-3">
  <div>
  <div className="text-muted-foreground text-[0.65rem] uppercase">
  Symbolic Representation:
  </div>
- <div className="text-2xl font-bold tracking-wider text-nisq-soft mt-0.5">
+ <div className="text-2xl font-bold tracking-wider text-nisq-blue-soft mt-0.5">
  {symbolic}
  </div>
  </div>
 
  <div className="text-right">
  <div className="text-muted-foreground text-[0.65rem] uppercase">Linux Command:</div>
- <div className="text-base font-bold text-primary bg-nisq-navy2 px-3 py-1.5 rounded-md border border-border">
+ <div className="text-base font-bold text-primary bg-nisq-white px-3 py-1.5 rounded-md border border-border">
  chmod {octal} filename
  </div>
  </div>
  </div>
 
- <div className="text-nisq-offwhite text-xs leading-relaxed space-y-1">
+ <div className="text-nisq-text text-xs leading-relaxed space-y-1">
  <div>
  <span className="text-primary font-bold">User ({userVal}): </span>
  {userPerms.r ? "4(r) " : ""}

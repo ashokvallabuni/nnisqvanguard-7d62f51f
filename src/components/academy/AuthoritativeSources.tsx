@@ -16,14 +16,14 @@ export function AuthoritativeSources({ sources }: AuthoritativeSourcesProps) {
  if (!sources || sources.length === 0) return null;
 
  const typeBadges: Record<string, string> = {
- RFC: "bg-nisq-blue text-nisq-blue text-nisq-blue border-nisq-blue",
- NIST: "bg-nisq-blue text-nisq-blue text-nisq-blue border-nisq-blue",
- MITRE: "bg-nisq-ash text-nisq-ash text-nisq-ash border-nisq-ash",
- OWASP: "bg-nisq-soft text-nisq-soft text-nisq-soft border-nisq-soft",
- CISA: "bg-nisq-danger text-nisq-danger text-nisq-danger border-nisq-danger",
- LINUX_DOC: "bg-nisq-navy2 text-nisq-ash text-nisq-offwhite border-nisq-border",
- KAGGLE: "bg-nisq-blue text-nisq-blue text-nisq-blue border-nisq-blue",
- ACADEMIC: "bg-nisq-blue text-nisq-blue text-nisq-blue border-nisq-blue",
+ RFC: "bg-nisq-blue-tint text-nisq-blue text-nisq-blue border-nisq-blue",
+ NIST: "bg-nisq-blue-tint text-nisq-blue text-nisq-blue border-nisq-blue",
+ MITRE: "bg-nisq-offwhite text-nisq-muted text-nisq-muted border-nisq-border",
+ OWASP: "bg-nisq-blue-tint text-nisq-blue-soft text-nisq-blue-soft border-nisq-blue-soft",
+ CISA: "bg-nisq-danger-tint text-nisq-danger text-nisq-danger border-nisq-danger",
+ LINUX_DOC: "bg-nisq-white text-nisq-muted text-nisq-text border-nisq-border",
+ KAGGLE: "bg-nisq-blue-tint text-nisq-blue text-nisq-blue border-nisq-blue",
+ ACADEMIC: "bg-nisq-blue-tint text-nisq-blue text-nisq-blue border-nisq-blue",
  };
 
  return (
