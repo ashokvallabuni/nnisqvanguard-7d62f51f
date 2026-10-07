@@ -166,8 +166,7 @@ function ServicesPage() {
               </ul>
 
               <Link
-                to="/appointments"
-                search={{ service: service.id }}
+                to={`/appointments?service=${service.id}` as any}
                 className="mt-auto inline-flex items-center justify-between w-full px-5 py-3 rounded-xl bg-background border border-border text-xs font-semibold text-primary hover:bg-primary/10 hover:border-primary/50 transition-all group/btn"
               >
                 REQUEST CONSULTATION

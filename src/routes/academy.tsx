@@ -300,7 +300,7 @@ function AcademyPage() {
             <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
               <GraduationCap className="w-3.5 h-3.5" /> Making Education Accessible
             </h2>
-            <div className="flex flex-col gap-4 p-5 rounded-xl border border-border bg-card/80 backdrop-blur-xs shadow-sm text-sm text-muted-foreground leading-relaxed">
+            <div className="flex flex-col gap-4 p-5 rounded-xl border border-border bg-card shadow-sm text-sm text-muted-foreground leading-relaxed">
               <p>
                 Cybersecurity education should not be limited to people who already have access to expensive laboratories or advanced infrastructure.
               </p>

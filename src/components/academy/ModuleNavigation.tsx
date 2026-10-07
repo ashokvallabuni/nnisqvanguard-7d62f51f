@@ -31,12 +31,12 @@ export function ModuleNavigation({
   const progressPercent = Math.round((completedCount / (sortedModules.length || 1)) * 100);
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden sticky top-20">
+    <div className="nv-card overflow-hidden sticky top-20 p-0">
       <div className="p-4 border-b border-border bg-muted/30">
         <Link
           to="/learn/$slug"
           params={{ slug: courseSlug }}
-          className="text-xs font-mono text-muted-foreground hover:text-primary transition-colors line-clamp-1 mb-1"
+          className="text-xs font-mono text-muted-foreground hover:text-primary transition-colors mb-1 min-h-[48px] flex items-center"
         >
           ← {courseTitle}
         </Link>
@@ -62,7 +62,7 @@ export function ModuleNavigation({
               key={m.id}
               to="/learn/$slug/$moduleSlug"
               params={{ slug: courseSlug, moduleSlug: m.slug }}
-              className={`flex items-start gap-3 p-3 rounded-lg transition-all text-left ${
+              className={`flex items-start gap-3 p-3 min-h-[48px] rounded-lg transition-all text-left ${
                 isActive
                   ? "bg-primary/10 border border-primary/30 text-foreground"
                   : "hover:bg-muted/60 text-muted-foreground hover:text-foreground"

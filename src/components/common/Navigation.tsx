@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, User as UserIcon, LayoutDashboard, Settings, LogOut } from "lucide-react";
+import { Menu, X, ChevronDown, User as UserIcon, LayoutDashboard, Settings, LogOut, ShieldCheck } from "lucide-react";
 import { CyberButton } from "./CyberButton";
 
 const nisqLogoUrl = "/assets/nisq-logo.jpeg";
@@ -10,18 +10,17 @@ const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 /* ─── Telemetry Ticker ─────────────────────────────────────────────── */
 export function TelemetryTicker() {
   return (
-    <div className="w-full bg-[#050B14] border-b border-[var(--line)] text-[0.6rem] font-mono flex items-center justify-center px-4 py-1 overflow-hidden select-none">
-      <div className="flex items-center gap-3 whitespace-nowrap text-[var(--chrome)]">
-        <span className="text-[var(--cyan)] text-[0.5rem] drop-shadow-[0_0_8px_var(--cyan)]">●</span>
-        <span className="text-[var(--cyan)] tracking-[0.15em]">NISQ DEFENSE ENGINE: ONLINE</span>
-        <span className="text-[var(--line)]">—</span>
-        <span className="text-[#00D68F] text-[0.5rem] drop-shadow-[0_0_8px_#00D68F]">●</span>
-        <span className="text-[#00D68F] tracking-[0.15em]">DEFENSE GRID: ACTIVE</span>
-        <span className="text-[var(--line)]">—</span>
-        <span className="text-[#FFB020] text-[0.5rem] drop-shadow-[0_0_8px_#FFB020]">●</span>
-        <span className="text-[#FFB020] tracking-[0.15em]">THREAT TELEMETRY: REAL-TIME</span>
-        <span className="text-[var(--line)]">—</span>
-        <span className="text-[var(--chrome)] tracking-[0.15em]">CITIZEN INTAKE: OPEN 24/7</span>
+    <div className="w-full bg-background border-b border-border text-[0.6rem] font-mono flex items-center justify-center px-4 py-1 overflow-hidden select-none">
+      <div className="flex items-center gap-3 whitespace-nowrap text-muted-foreground">
+        <span className="text-primary text-[0.5rem] drop-shadow-[0_0_8px_var(--primary)]">●</span>
+        <span className="text-primary tracking-[0.15em]">NISQ DEFENSE ENGINE: ONLINE</span>
+        <span className="text-border">—</span>
+        <span className="text-success text-[0.5rem] drop-shadow-[0_0_8px_var(--success)]">●</span>
+        <span className="text-success tracking-[0.15em]">DEFENSE GRID: ACTIVE</span>
+        <span className="text-warning text-[0.5rem] drop-shadow-[0_0_8px_var(--warning)]">●</span>
+        <span className="text-warning tracking-[0.15em]">THREAT TELEMETRY: REAL-TIME</span>
+        <span className="text-border">—</span>
+        <span className="text-muted-foreground tracking-[0.15em]">CITIZEN INTAKE: OPEN 24/7</span>
       </div>
     </div>
   );
@@ -29,7 +28,7 @@ export function TelemetryTicker() {
 
 /* ─── Account Dropdown ─────────────────────────────────────────────── */
 function AccountDropdown() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, isAdmin } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -51,20 +50,20 @@ function AccountDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 bg-white/5 border border-[var(--line)] hover:border-[var(--cyan)]/50 transition-colors px-3 py-2 rounded-sm"
+        className="flex items-center gap-3 bg-white/5 border border-border hover:border-primary/50 transition-colors px-3 h-12 rounded-sm"
       >
-        <div className="w-8 h-8 rounded-sm overflow-hidden bg-[var(--obsidian)] border border-[var(--line)] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-sm overflow-hidden bg-background border border-border flex items-center justify-center">
           {profile?.avatar_url ? (
             <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
           ) : (
-            <UserIcon className="w-4 h-4 text-[var(--chrome)]" />
+            <UserIcon className="w-4 h-4 text-muted-foreground" />
           )}
         </div>
         <div className="flex flex-col items-start text-left">
           <span className="font-mono text-[12px] text-white font-bold tracking-wider leading-none truncate max-w-[120px]">{displayName}</span>
-          <span className="font-mono text-[10px] text-[var(--cyan)] tracking-widest leading-none mt-1">{accountType}</span>
+          <span className="font-mono text-[10px] text-primary tracking-widest leading-none mt-1">{accountType}</span>
         </div>
-        <ChevronDown className="w-4 h-4 text-[var(--chrome)] ml-2" />
+        <ChevronDown className="w-4 h-4 text-muted-foreground ml-2" />
       </button>
 
       <AnimatePresence>
@@ -74,21 +73,26 @@ function AccountDropdown() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-2 w-56 bg-[var(--obsidian)] border border-[var(--line)] rounded-sm shadow-xl shadow-black/50 z-50 flex flex-col py-1"
+            className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-sm shadow-xl shadow-black/50 z-50 flex flex-col py-1"
           >
-            <Link to={dashboardLink as any} className="flex items-center gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-[var(--cyan)] transition-colors" onClick={() => setIsOpen(false)}>
+            {isAdmin && (
+              <Link to={"/admin" as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+                <ShieldCheck className="w-4 h-4" /> Admin Console
+              </Link>
+            )}
+            <Link to={dashboardLink as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
               <LayoutDashboard className="w-4 h-4" /> Dashboard
             </Link>
-            <Link to={"/profile" as any} className="flex items-center gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-[var(--cyan)] transition-colors" onClick={() => setIsOpen(false)}>
+            <Link to={"/profile" as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
               <UserIcon className="w-4 h-4" /> Profile
             </Link>
-            <Link to={"/settings" as any} className="flex items-center gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-[var(--cyan)] transition-colors" onClick={() => setIsOpen(false)}>
+            <Link to={"/settings" as any} className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/5 hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
               <Settings className="w-4 h-4" /> Settings
             </Link>
             <div className="h-px bg-white/10 my-1" />
             <button 
               onClick={() => { signOut(); setIsOpen(false); }}
-              className="flex items-center gap-3 px-4 py-3 font-mono text-[11px] uppercase tracking-widest text-red-400 hover:bg-red-500/10 transition-colors w-full text-left"
+              className="flex items-center gap-3 px-4 h-12 font-mono text-[11px] uppercase tracking-widest text-red-400 hover:bg-red-500/10 transition-colors w-full text-left"
             >
               <LogOut className="w-4 h-4" /> Sign Out
             </button>
@@ -101,7 +105,7 @@ function AccountDropdown() {
 
 /* ─── Top Nav ──────────────────────────────────────────────────────── */
 export function TopNav() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, isAdmin } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const { scrollY } = useScroll();
@@ -128,11 +132,11 @@ export function TopNav() {
   const isPersonal = profile?.account_type === "STUDENT" || !profile?.account_type;
   const isOrg = profile?.account_type === "ORGANIZATION" || profile?.account_type === "COLLEGE";
 
-  const linkClass = "text-[var(--chrome)] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]";
-  const activeLinkClass = "text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]";
+  const linkClass = "h-12 flex items-center px-2 text-muted-foreground hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+  const activeLinkClass = "text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] border-b-2 border-primary";
 
   const getLinkClass = (path: string) => {
-    return `${linkClass} ${pathname === path || pathname.startsWith(path + '/') ? activeLinkClass : ''}`;
+    return `${linkClass} ${pathname === path || pathname.startsWith(path + '/') ? activeLinkClass : 'border-b-2 border-transparent'}`;
   };
 
   return (
@@ -146,7 +150,7 @@ export function TopNav() {
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 inset-x-0 z-[100] transition-colors duration-300 h-[72px] flex items-center ${
           scrolled
-            ? "bg-[var(--obsidian)]/80 backdrop-blur-md border-b border-[var(--line)]"
+            ? "bg-background/80 backdrop-blur-md border-b border-border"
             : "bg-transparent border-b border-transparent"
         }`}
         aria-label="Main navigation"
@@ -154,8 +158,8 @@ export function TopNav() {
         <div className="w-full max-w-[1440px] mx-auto px-[clamp(16px,4vw,48px)] flex items-center justify-between">
           
           {/* Left: Logo */}
-          <Link to="/" className="flex items-center gap-4 group mr-8">
-            <div className="w-10 h-10 rounded-sm overflow-hidden bg-white/5 border border-[var(--line)] flex items-center justify-center group-hover:border-[var(--cyan)]/50 transition-colors">
+          <Link to="/" className="flex items-center gap-4 group mr-8 h-12">
+            <div className="w-10 h-10 rounded-sm overflow-hidden bg-white/5 border border-border flex items-center justify-center group-hover:border-primary/50 transition-colors">
               <img src={nisqLogoUrl} alt="Logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-mono text-[14px] font-bold tracking-[0.2em] text-white/90 uppercase hidden sm:block">
@@ -164,7 +168,7 @@ export function TopNav() {
           </Link>
 
           {/* Center: Links */}
-          <div className="hidden min-[1100px]:flex items-center justify-center gap-8 font-mono text-[12px] uppercase tracking-widest flex-1">
+          <div className="hidden min-[1100px]:flex items-center justify-center gap-8 font-medium text-sm flex-1">
             {!user && (
               <>
                 <Link to="/" className={getLinkClass('/')}>Home</Link>
@@ -203,7 +207,7 @@ export function TopNav() {
                 <AccountDropdown />
                 <button
                   onClick={() => signOut()}
-                  className="px-4 py-2 border border-red-500/30 text-red-400 text-xs font-mono font-bold tracking-wider hover:bg-red-500/10 transition-colors uppercase"
+                  className="px-4 h-12 flex items-center justify-center border border-red-500/30 text-red-400 text-xs font-mono font-bold tracking-wider hover:bg-red-500/10 transition-colors uppercase"
                 >
                   Sign Out
                 </button>
@@ -218,7 +222,7 @@ export function TopNav() {
 
           {/* Mobile toggle */}
           <button
-            className="min-[1100px]:hidden text-[var(--chrome)] hover:text-white"
+            className="min-[1100px]:hidden h-12 w-12 flex items-center justify-center text-muted-foreground hover:text-white"
             onClick={() => setOpen(!open)}
           >
             {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -236,54 +240,57 @@ export function TopNav() {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[90] bg-[#05070B] flex flex-col pt-24 px-[clamp(16px,4vw,48px)] min-[1100px]:hidden overflow-y-auto"
           >
-            <div className="flex flex-col gap-6 font-orbitron text-2xl uppercase font-bold tracking-wider">
+            <div className="flex flex-col gap-6 font-display text-2xl font-bold tracking-wide">
+              {isAdmin && (
+                <Link to={"/admin" as any} onClick={() => setOpen(false)} className="text-primary hover:text-white h-12 flex items-center">Admin Console</Link>
+              )}
               {!user && (
                 <>
-                  <Link to="/" className="text-white hover:text-[var(--cyan)]">Home</Link>
-                  <Link to="/about" className="text-white hover:text-[var(--cyan)]">About</Link>
-                  <Link to="/academy" className="text-white hover:text-[var(--cyan)]">Academy</Link>
-                  <Link to="/services" className="text-white hover:text-[var(--cyan)]">Services</Link>
+                  <Link to="/" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Home</Link>
+                  <Link to="/about" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">About</Link>
+                  <Link to="/academy" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Academy</Link>
+                  <Link to="/services" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Services</Link>
                 </>
               )}
               
               {user && isPersonal && (
                 <>
-                  <Link to="/dashboard" className="text-white hover:text-[var(--cyan)]">Dashboard</Link>
-                  <Link to="/academy" className="text-white hover:text-[var(--cyan)]">Academy</Link>
-                  <Link to="/cyber-range/labs" className="text-white hover:text-[var(--cyan)]">IVVAB LABS</Link>
-                  <Link to={"/internships" as any} className="text-white hover:text-[var(--cyan)]">Internships</Link>
-                  <Link to="/cyber-range/my-progress" className="text-white hover:text-[var(--cyan)]">Progress</Link>
+                  <Link to="/dashboard" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Dashboard</Link>
+                  <Link to="/academy" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Academy</Link>
+                  <Link to="/cyber-range/labs" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">IVVAB LABS</Link>
+                  <Link to={"/internships" as any} onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Internships</Link>
+                  <Link to="/cyber-range/my-progress" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Progress</Link>
                 </>
               )}
 
               {user && isOrg && (
                 <>
-                  <Link to={"/organization/dashboard" as any} className="text-white hover:text-[var(--cyan)]">Dashboard</Link>
-                  <Link to="/services" className="text-white hover:text-[var(--cyan)]">Consulting</Link>
-                  <Link to={"/services/security" as any} className="text-white hover:text-[var(--cyan)]">Security Services</Link>
-                  <Link to={"/assessments" as any} className="text-white hover:text-[var(--cyan)]">Assessments</Link>
-                  <Link to={"/incidents" as any} className="text-white hover:text-[var(--cyan)]">Incidents</Link>
-                  <Link to={"/organization" as any} className="text-white hover:text-[var(--cyan)]">Organization Profile</Link>
+                  <Link to={"/organization/dashboard" as any} onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Dashboard</Link>
+                  <Link to="/services" onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Consulting</Link>
+                  <Link to={"/services/security" as any} onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Security Services</Link>
+                  <Link to={"/assessments" as any} onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Assessments</Link>
+                  <Link to={"/incidents" as any} onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Incidents</Link>
+                  <Link to={"/organization" as any} onClick={() => setOpen(false)} className="text-white hover:text-primary h-12 flex items-center">Organization Profile</Link>
                 </>
               )}
             </div>
             
             <div className="h-px bg-white/10 my-8" />
             
-            <div className="flex flex-col gap-4 w-full mt-auto mb-24">
+            <div className="flex flex-col gap-4 w-full mt-8 pb-12">
               {user ? (
                 <>
-                  <Link to={"/profile" as any} className="w-full flex items-center gap-3 p-4 border border-[var(--line)] rounded-sm bg-white/5">
-                    <div className="w-8 h-8 rounded-sm overflow-hidden bg-[var(--obsidian)] border border-[var(--line)] flex items-center justify-center">
+                  <Link to={"/profile" as any} className="w-full flex items-center gap-3 p-4 border border-border rounded-sm bg-white/5 h-16">
+                    <div className="w-8 h-8 rounded-sm overflow-hidden bg-background border border-border flex items-center justify-center">
                       {profile?.avatar_url ? (
                         <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                       ) : (
-                        <UserIcon className="w-4 h-4 text-[var(--chrome)]" />
+                        <UserIcon className="w-4 h-4 text-muted-foreground" />
                       )}
                     </div>
                     <div className="flex flex-col text-left">
                       <span className="font-mono text-[12px] text-white font-bold tracking-wider">{profile?.full_name || user?.email?.split('@')[0] || "User"}</span>
-                      <span className="font-mono text-[10px] text-[var(--cyan)] tracking-widest">{isOrg ? "ORGANIZATION" : "STUDENT"}</span>
+                      <span className="font-mono text-[10px] text-primary tracking-widest">{isOrg ? "ORGANIZATION" : "STUDENT"}</span>
                     </div>
                   </Link>
                   <CyberButton variant="tertiary" onClick={() => signOut()} className="w-full text-red-400 border-red-500/30 hover:bg-red-500/10">Sign Out</CyberButton>

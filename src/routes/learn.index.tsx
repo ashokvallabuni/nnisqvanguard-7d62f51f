@@ -45,7 +45,7 @@ function LearnIndex() {
               key={c.id}
               to="/learn/$slug"
               params={{ slug: c.slug }}
-              className="glass rounded-xl p-6 hover:glow-cyber transition group"
+              className="nv-card-interactive group"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded bg-primary/10 border border-primary/40 flex items-center justify-center text-cyber">
@@ -71,7 +71,7 @@ function LearnIndex() {
           ))}
         </div>
 
-        <section className="mt-16 glass rounded-2xl p-8">
+        <section className="mt-16 nv-card sm:p-8">
           <h2 className="display text-2xl mb-4">Free vs Premium</h2>
           <div className="grid md:grid-cols-2 gap-6 text-sm">
             <div>

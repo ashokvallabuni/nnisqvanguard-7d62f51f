@@ -39,7 +39,7 @@ function AppointmentsPage() {
 
       <section className="px-4 md:px-8 py-16">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start">
-          <div className="glass backdrop-blur-xl bg-card text-card-foreground border border-border rounded-2xl p-6 md:p-10 shadow-2xl">
+          <div className="glass text-card-foreground border border-border rounded-2xl p-6 md:p-10 shadow-2xl">
             <h2 className="text-2xl font-display font-bold text-foreground mb-8 border-b border-border pb-4">
               Request a Briefing
             </h2>
@@ -127,7 +127,7 @@ function AppointmentsPage() {
           </div>
 
           <div className="space-y-6">
-            <div className="glass backdrop-blur-xl bg-card text-card-foreground border border-border rounded-2xl p-8 shadow-2xl">
+            <div className="glass text-card-foreground border border-border rounded-2xl p-8 shadow-2xl">
               <ShieldCheck className="w-12 h-12 text-primary mb-6" />
               <h3 className="text-xl font-display font-bold text-foreground mb-4">
                 Advisory Capabilities
@@ -152,7 +152,7 @@ function AppointmentsPage() {
               </ul>
             </div>
 
-            <div className="glass backdrop-blur-xl bg-card text-card-foreground border border-border rounded-2xl p-8 shadow-2xl">
+            <div className="glass text-card-foreground border border-border rounded-2xl p-8 shadow-2xl">
               <h3 className="text-sm font-mono text-primary font-bold mb-4 uppercase tracking-wider">
                 Logistics
               </h3>

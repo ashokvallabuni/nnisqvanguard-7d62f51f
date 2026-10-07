@@ -58,7 +58,7 @@ export function AuthPage() {
         {!intent ? (
           <div className="space-y-4 fade-in">
             <p className="text-center text-sm font-semibold mb-4">
-              What type of account are you using?
+              What are you here for?
             </p>
             <button
               onClick={() => setIntent("STUDENT")}
@@ -68,7 +68,7 @@ export function AuthPage() {
                 <User className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <div className="font-bold">PERSONAL / STUDENT</div>
+                <div className="font-bold">PERSONAL LEARNING</div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Learn cybersecurity, practice through IVVAB LABS, earn badges and certificates.
                 </div>
@@ -83,24 +83,9 @@ export function AuthPage() {
                 <Building className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <div className="font-bold">ORGANIZATION</div>
+                <div className="font-bold">ORGANIZATION / COLLEGE</div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Request consulting, access enterprise services, and manage incident reports.
-                </div>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setIntent("COLLEGE")}
-              className="w-full flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-accent/40 transition-colors text-left"
-            >
-              <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                <Building className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <div className="font-bold">COLLEGE</div>
-                <div className="text-xs text-muted-foreground mt-1">
-                  Provide cybersecurity education and practical IVVAB LABS for your students.
+                  Request consulting, access enterprise services, manage incident reports, or provide cybersecurity education.
                 </div>
               </div>
             </button>

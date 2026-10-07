@@ -168,7 +168,7 @@ function ReportingFlow() {
             )}
           </div>
 
-          <div className="glass backdrop-blur-xl bg-muted border border-border shadow-sm rounded-2xl overflow-hidden transition-all duration-300">
+          <div className="glass border border-border shadow-sm rounded-2xl overflow-hidden transition-all duration-300">
             {step === 1 && (
               <div className="p-6 md:p-8 animate-in fade-in slide-in-from-right-4">
                 <h2 className="text-xl font-bold mb-6 text-foreground font-display">

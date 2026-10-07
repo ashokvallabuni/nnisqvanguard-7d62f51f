@@ -83,12 +83,14 @@ export function CyberIntelligenceHome() {
               </motion.p>
               
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-8">
-                {user ? (
-                  <CyberButton variant="primary" to={dashboardLink as any}>ENTER WORKSPACE</CyberButton>
-                ) : (
-                  <CyberButton variant="primary" to="/login">ENTER THE VANGUARD</CyberButton>
+                <CyberButton variant="primary" to={(user ? dashboardLink : "/about") as any}>
+                  EXPLORE NISQ VANGUARD
+                </CyberButton>
+                {!user && (
+                  <CyberButton variant="secondary" to="/login">
+                    SIGN IN
+                  </CyberButton>
                 )}
-                <CyberButton variant="secondary" to="/about">EXPLORE NISQ VANGUARD</CyberButton>
               </motion.div>
             </div>
           </motion.div>

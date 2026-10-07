@@ -690,12 +690,12 @@ function CyberLabWorkbenchPage() {
   return (
     <div className="min-h-screen pt-16 pb-20 bg-background">
       {/* Workbench Header */}
-      <div className="border-b border-border bg-card/80 backdrop-blur-xs py-4 px-4 sm:px-6 lg:px-8">
+      <div className="border-b border-border bg-card py-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
               to="/cyber-range/labs"
-              className="p-2 rounded-lg border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              className="w-12 h-12 flex items-center justify-center rounded-lg border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
               title="Back to Labs"
             >
               <ArrowLeft className="w-4 h-4" />

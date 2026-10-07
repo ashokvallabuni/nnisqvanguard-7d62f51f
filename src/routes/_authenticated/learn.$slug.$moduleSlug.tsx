@@ -748,7 +748,7 @@ function ModuleLearningPage() {
           {/* Core Module Learning Workbench */}
           <div className="lg:col-span-3 order-1 lg:order-2 space-y-8">
             {/* Step 1: Core Theory & Concept */}
-            <section className="rounded-xl border border-border bg-card p-6 sm:p-8 space-y-5 shadow-xs">
+            <section className="nv-card p-6 sm:p-8 space-y-5 shadow-xs">
               <div className="flex items-center justify-between pb-3 border-b border-border/80">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
@@ -780,7 +780,7 @@ function ModuleLearningPage() {
             </section>
 
             {/* Step 2: Real Dataset Telemetry Viewer */}
-            <section className="rounded-xl border border-border bg-card p-6 sm:p-8 space-y-4 shadow-xs">
+            <section className="nv-card p-6 sm:p-8 space-y-4 shadow-xs">
               <div className="flex items-center justify-between pb-3 border-b border-border/80">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-accent/15 text-accent font-semibold">
@@ -803,7 +803,7 @@ function ModuleLearningPage() {
 
             {/* Step 3: Interactive Knowledge Checks & Quizzes */}
             {quizzes && quizzes.length > 0 && (
-              <section className="rounded-xl border border-border bg-card p-6 sm:p-8 space-y-6 shadow-xs">
+              <section className="nv-card p-6 sm:p-8 space-y-6 shadow-xs">
                 <div className="flex items-center gap-2 pb-3 border-b border-border/80">
                   <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-warning/15 text-warning font-semibold">
                     STEP 3
@@ -858,7 +858,7 @@ function ModuleLearningPage() {
                                   setSelectedAnswers((prev) => ({ ...prev, [q.id]: oIndex }));
                                   setCheckedQuizzes((prev) => ({ ...prev, [q.id]: false }));
                                 }}
-                                className={`w-full text-left p-3 rounded-lg border text-xs sm:text-sm flex items-center justify-between transition-all ${optionStyle}`}
+                                className={`w-full text-left p-3 min-h-[48px] rounded-lg border text-xs sm:text-sm flex items-center justify-between transition-all ${optionStyle}`}
                               >
                                 <span>{String(opt)}</span>
                                 {isChecked && oIndex === q.correct_option && (
@@ -876,7 +876,7 @@ function ModuleLearningPage() {
                           <button
                             disabled={selected === undefined || verifyingQuizId === q.id}
                             onClick={() => handleCheckQuiz(q.id, currentModule.id)}
-                            className="px-3.5 py-1.5 rounded-md text-xs font-mono bg-primary text-primary-foreground font-semibold disabled:opacity-40"
+                            className="px-4 min-h-[48px] rounded-md text-xs font-mono bg-primary text-primary-foreground font-semibold disabled:opacity-40"
                           >
                             {verifyingQuizId === q.id ? "VERIFYING ANSWER…" : "Check Answer"}
                           </button>
@@ -916,7 +916,7 @@ function ModuleLearningPage() {
             )}
 
             {/* Step 4: Practical Cyber Lab Integration */}
-            <section className="rounded-xl border border-primary/40 bg-gradient-to-br from-primary/5 via-card to-accent/5 p-6 sm:p-8 space-y-4 shadow-xs">
+            <section className="nv-card bg-gradient-to-br from-primary/5 via-card to-accent/5 p-6 sm:p-8 space-y-4 shadow-xs border-primary/40">
               <div className="flex items-center gap-2 pb-2">
                 <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary text-primary-foreground font-semibold">
                   STEP 4
@@ -940,7 +940,7 @@ function ModuleLearningPage() {
                       (currentModule?.practice_labs && currentModule.practice_labs[0]) ||
                       "linux-ssh-brute-force-investigation",
                   }}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shadow-xs"
+                  className="inline-flex items-center gap-2 px-5 min-h-[48px] rounded-lg bg-primary text-primary-foreground font-semibold text-xs hover:bg-primary/90 transition-colors shadow-xs"
                 >
                   <Terminal className="w-4 h-4" />
                   <span>
@@ -956,7 +956,7 @@ function ModuleLearningPage() {
                 </Link>
                 <Link
                   to="/cyber-range/labs"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-card text-foreground font-semibold text-xs hover:bg-muted transition-colors shadow-xs"
+                  className="inline-flex items-center gap-2 px-4 min-h-[48px] rounded-lg border border-border bg-card text-foreground font-semibold text-xs hover:bg-muted transition-colors shadow-xs"
                 >
                   <span>Browse All Cyber Labs</span>
                 </Link>
@@ -973,7 +973,7 @@ function ModuleLearningPage() {
                   <Link
                     to="/learn/$slug/$moduleSlug"
                     params={{ slug: course.slug, moduleSlug: prevModule.slug }}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors min-h-[48px]"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" />
                     <span>Previous: {prevModule.title}</span>
@@ -985,7 +985,7 @@ function ModuleLearningPage() {
                 <button
                   onClick={handleMarkComplete}
                   disabled={completing}
-                  className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-xs ${
+                  className={`inline-flex items-center gap-2 px-6 min-h-[48px] rounded-xl font-semibold text-sm transition-all shadow-xs ${
                     isCurrentModuleCompleted
                       ? "bg-success text-success-foreground hover:bg-success/90"
                       : "bg-primary text-primary-foreground hover:bg-primary/90"

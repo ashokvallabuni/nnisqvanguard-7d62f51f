@@ -25,6 +25,8 @@ export interface CourseData {
   progress_percent?: number;
   isLocked?: boolean;
   comingSoon?: boolean;
+  lesson_count?: number;
+  assessment_status?: string;
 }
 
 interface CourseCardProps {
@@ -136,18 +138,26 @@ export function CourseCard({ course, progress }: CourseCardProps) {
           </div>
         )}
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 text-xs font-mono text-muted-foreground">
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.65rem] font-mono text-muted-foreground uppercase">
             {course.module_count !== undefined && (
               <span className="flex items-center gap-1">
                 <BookOpen className="w-3.5 h-3.5" />
-                {course.module_count} modules
+                {course.module_count} Modules
               </span>
             )}
+            <span className="flex items-center gap-1">
+              <BookOpen className="w-3.5 h-3.5" />
+              {course.lesson_count || (course.module_count || 5) * 3} Lessons
+            </span>
+            <span className="flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              {course.assessment_status || "Assessment Required"}
+            </span>
             {course.duration_hours && (
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
-                {course.duration_hours}h
+                {course.duration_hours}H
               </span>
             )}
             {course.has_real_dataset && (
@@ -155,16 +165,18 @@ export function CourseCard({ course, progress }: CourseCardProps) {
                 className="flex items-center gap-1 text-accent"
                 title="Includes real telemetry dataset"
               >
-                <Database className="w-3.5 h-3.5" />
+                <Database className="w-3.5 h-3.5" /> DATASET
               </span>
             )}
             {isCompleted && !notAccessible && (
               <span className="flex items-center gap-1 text-success">
                 <Award className="w-3.5 h-3.5" />
-                Completed
+                COMPLETED
               </span>
             )}
           </div>
+          <div className="flex items-center justify-between">
+            <div />
 
           {notAccessible ? (
             <button
@@ -209,6 +221,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
             </Link>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

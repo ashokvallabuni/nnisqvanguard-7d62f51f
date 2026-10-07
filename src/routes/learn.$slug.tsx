@@ -228,7 +228,7 @@ function CourseDetailPage() {
           {/* Main Course Syllabus & Overview */}
           <div className="xl:col-span-3 space-y-8">
             {/* Overview Card */}
-            <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+            <div className="nv-card space-y-4">
               <h2 className="font-display font-bold text-xl text-foreground">
                 Course Curriculum Overview
               </h2>
@@ -287,10 +287,10 @@ function CourseDetailPage() {
                   return (
                     <div
                       key={m.id}
-                      className={`rounded-xl border transition-all p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                      className={`nv-card-interactive flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                         isCompleted
-                          ? "border-success/30 bg-card/60"
-                          : "border-border bg-card hover:border-primary/40 hover:shadow-xs"
+                          ? "border-success/30 bg-success/5"
+                          : "border-border bg-card"
                       }`}
                     >
                       <div className="flex items-start gap-3.5 min-w-0">
@@ -337,7 +337,7 @@ function CourseDetailPage() {
                         <Link
                           to="/learn/$slug/$moduleSlug"
                           params={{ slug: course.slug, moduleSlug: m.slug }}
-                          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+                          className={`inline-flex justify-center items-center gap-1.5 px-4 min-h-[48px] rounded-lg text-xs font-semibold transition-all ${
                             isCompleted
                               ? "border border-border hover:bg-muted text-foreground"
                               : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
@@ -372,7 +372,7 @@ function CourseDetailPage() {
 
           {/* Sidebar Action / Progress Widget */}
           <div className="space-y-6 xl:col-span-1">
-            <div className="rounded-xl border border-border bg-card p-6 space-y-5 sticky top-20 shadow-xs">
+            <div className="nv-card space-y-5 sticky top-20 shadow-xs">
               <div className="space-y-2">
                 <span className="text-[0.65rem] font-mono uppercase px-2.5 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/20 font-medium">
                   {course.tier === "paid" ? "SPECIALIZATION" : "INCLUDED TRACK"}
@@ -398,7 +398,7 @@ function CourseDetailPage() {
                   <Link
                     to="/learn/$slug/$moduleSlug"
                     params={{ slug: course.slug, moduleSlug: nextModule.slug }}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 shadow-sm transition-all"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 min-h-[48px] rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 shadow-sm transition-all"
                   >
                     <Play className="w-4 h-4 fill-primary-foreground" />
                     <span>{progressPercent > 0 ? "Resume Learning" : "Start First Module"}</span>
