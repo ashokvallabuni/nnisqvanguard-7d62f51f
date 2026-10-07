@@ -10,6 +10,8 @@ import {
   LayoutDashboard,
   LogOut,
   ShieldCheck,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -126,6 +128,37 @@ function AccountDropdown() {
   );
 }
 
+function ThemeToggle() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("course-theme") as "light" | "dark" | null;
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.setAttribute("data-theme", saved);
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  }, []);
+
+  const toggle = () => {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    localStorage.setItem("course-theme", next);
+    document.documentElement.setAttribute("data-theme", next);
+  };
+
+  return (
+    <button
+      onClick={toggle}
+      className="flex items-center justify-center w-10 h-10 rounded-full bg-nisq-offwhite border border-nisq-border text-nisq-ink hover:text-nisq-blue transition-colors"
+      aria-label="Toggle theme"
+    >
+      {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+    </button>
+  );
+}
+
 /* ─── Top Nav ──────────────────────────────────────────────────────── */
 export function TopNav() {
   const { user, profile, signOut, isAdmin } = useAuth();
@@ -207,6 +240,7 @@ export function TopNav() {
 
           {/* Actions */}
           <div className="hidden min-[1100px]:flex items-center justify-end gap-3 shrink-0">
+            <ThemeToggle />
             {user ? (
               <>
                 <AccountDropdown />
@@ -227,16 +261,18 @@ export function TopNav() {
           </div>
 
           {/* Mobile toggle */}
-          <button
-            className="min-[1100px]:hidden h-11 w-11 flex items-center justify-center rounded-lg border border-nisq-border text-nisq-ink hover:bg-nisq-blue-tint"
-            onClick={() => setOpen(!open)}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-          >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+          <div className="min-[1100px]:hidden flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              className="h-11 w-11 flex items-center justify-center rounded-lg border border-nisq-border text-nisq-ink hover:bg-nisq-blue-tint"
+              onClick={() => setOpen(!open)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+            >
+              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
       </nav>
 
       {/* Mobile Menu */}
