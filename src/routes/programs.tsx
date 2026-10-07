@@ -6,343 +6,343 @@ import { toast } from "sonner";
 import { Search, Calendar, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/programs")({
-  head: () => ({
-    meta: [
-      { title: "Book a Cyber Awareness Program — CyberShield India" },
-      {
-        name: "description",
-        content:
-          "Colleges across India can book webinars, seminars and workshops on cybersecurity.",
-      },
-    ],
-  }),
-  component: Programs,
+ head: () => ({
+ meta: [
+ { title: "Book a Cyber Awareness Program — CyberShield India" },
+ {
+ name: "description",
+ content:
+ "Colleges across India can book webinars, seminars and workshops on cybersecurity.",
+ },
+ ],
+ }),
+ component: Programs,
 });
 
 type College = {
-  id: string;
-  name: string;
-  city: string | null;
-  state: string | null;
-  type: string | null;
+ id: string;
+ name: string;
+ city: string | null;
+ state: string | null;
+ type: string | null;
 };
 
 function Programs() {
-  const { user } = useAuth();
-  const nav = useNavigate();
-  const [q, setQ] = useState("");
-  const [results, setResults] = useState<College[]>([]);
-  const [selected, setSelected] = useState<College | null>(null);
-  const [open, setOpen] = useState(false);
-  const [activeIdx, setActiveIdx] = useState<number>(-1);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [form, setForm] = useState({
-    contact_person: "",
-    email: "",
-    phone: "",
-    program_type: "Webinar",
-    topic: "",
-    preferred_date: "",
-  });
-  const [busy, setBusy] = useState(false);
+ const { user } = useAuth();
+ const nav = useNavigate();
+ const [q, setQ] = useState("");
+ const [results, setResults] = useState<College[]>([]);
+ const [selected, setSelected] = useState<College | null>(null);
+ const [open, setOpen] = useState(false);
+ const [activeIdx, setActiveIdx] = useState<number>(-1);
+ const dropdownRef = useRef<HTMLDivElement | null>(null);
+ const [form, setForm] = useState({
+ contact_person: "",
+ email: "",
+ phone: "",
+ program_type: "Webinar",
+ topic: "",
+ preferred_date: "",
+ });
+ const [busy, setBusy] = useState(false);
 
-  useEffect(() => {
-    function onDocClick(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", onDocClick);
-    return () => document.removeEventListener("mousedown", onDocClick);
-  }, []);
+ useEffect(() => {
+ function onDocClick(e: MouseEvent) {
+ if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+ setOpen(false);
+ }
+ }
+ document.addEventListener("mousedown", onDocClick);
+ return () => document.removeEventListener("mousedown", onDocClick);
+ }, []);
 
-  const fetchColleges = async (query: string) => {
-    let b = supabase.from("colleges").select("id,name,city,state,type");
-    if (query.trim().length > 0) {
-      b = b.ilike("name", `%${query.trim()}%`);
-    }
-    const { data } = await b.order("name").limit(query.trim() ? 20 : 50);
-    setResults((data ?? []) as College[]);
-  };
+ const fetchColleges = async (query: string) => {
+ let b = supabase.from("colleges").select("id,name,city,state,type");
+ if (query.trim().length > 0) {
+ b = b.ilike("name", `%${query.trim()}%`);
+ }
+ const { data } = await b.order("name").limit(query.trim() ? 20 : 50);
+ setResults((data ?? []) as College[]);
+ };
 
-  useEffect(() => {
-    const t = setTimeout(
-      async () => {
-        if (!open) return;
-        await fetchColleges(q);
-      },
-      q.length === 0 ? 0 : 200,
-    );
-    return () => clearTimeout(t);
-  }, [q, open]);
+ useEffect(() => {
+ const t = setTimeout(
+ async () => {
+ if (!open) return;
+ await fetchColleges(q);
+ },
+ q.length === 0 ? 0 : 200,
+ );
+ return () => clearTimeout(t);
+ }, [q, open]);
 
-  const toggleDropdown = async (force?: boolean) => {
-    const next = force !== undefined ? force : !open;
-    setOpen(next);
-    setActiveIdx(-1);
-    if (next && results.length === 0) {
-      await fetchColleges(q);
-    }
-  };
+ const toggleDropdown = async (force?: boolean) => {
+ const next = force !== undefined ? force : !open;
+ setOpen(next);
+ setActiveIdx(-1);
+ if (next && results.length === 0) {
+ await fetchColleges(q);
+ }
+ };
 
-  const submit = async () => {
-    if (!user) {
-      nav({ to: "/login", search: { next: "/programs" } });
-      return;
-    }
-    if (!selected) {
-      toast.error("Select a college");
-      return;
-    }
-    if (!form.contact_person || !form.email || !form.phone || !form.topic) {
-      toast.error("Fill all required fields");
-      return;
-    }
-    setBusy(true);
-    const { error } = await supabase.from("bookings").insert({
-      user_id: user.id,
-      college_id: selected.id,
-      contact_person: form.contact_person,
-      email: form.email,
-      phone: form.phone,
-      program_type: form.program_type,
-      topic: form.topic,
-      preferred_date: form.preferred_date || null,
-    });
-    setBusy(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Booking submitted! Admin will review shortly.");
-    setSelected(null);
-    setQ("");
-    setForm({
-      contact_person: "",
-      email: "",
-      phone: "",
-      program_type: "Webinar",
-      topic: "",
-      preferred_date: "",
-    });
-  };
+ const submit = async () => {
+ if (!user) {
+ nav({ to: "/login", search: { next: "/programs" } });
+ return;
+ }
+ if (!selected) {
+ toast.error("Select a college");
+ return;
+ }
+ if (!form.contact_person || !form.email || !form.phone || !form.topic) {
+ toast.error("Fill all required fields");
+ return;
+ }
+ setBusy(true);
+ const { error } = await supabase.from("bookings").insert({
+ user_id: user.id,
+ college_id: selected.id,
+ contact_person: form.contact_person,
+ email: form.email,
+ phone: form.phone,
+ program_type: form.program_type,
+ topic: form.topic,
+ preferred_date: form.preferred_date || null,
+ });
+ setBusy(false);
+ if (error) {
+ toast.error(error.message);
+ return;
+ }
+ toast.success("Booking submitted! Admin will review shortly.");
+ setSelected(null);
+ setQ("");
+ setForm({
+ contact_person: "",
+ email: "",
+ phone: "",
+ program_type: "Webinar",
+ topic: "",
+ preferred_date: "",
+ });
+ };
 
-  return (
-    <main className="pt-24 pb-20 px-4 md:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="mono text-xs text-cyber mb-2">// COLLEGE OUTREACH</div>
-        <h1 className="display text-4xl md:text-5xl mb-2">Book a Cyber Awareness Program</h1>
-        <p className="text-muted-foreground mb-10">
-          Search your college and request a webinar, seminar or workshop.
-        </p>
+ return (
+ <main className="pt-24 pb-20 px-4 md:px-8">
+ <div className="max-w-3xl mx-auto">
+ <div className="mono text-xs text-cyber mb-2">// COLLEGE OUTREACH</div>
+ <h1 className="display text-4xl md:text-5xl mb-2">Book a Cyber Awareness Program</h1>
+ <p className="text-muted-foreground mb-10">
+ Search your college and request a webinar, seminar or workshop.
+ </p>
 
-        <div className="glass rounded-2xl p-6 md:p-8 space-y-6">
-          <div>
-            <label className="mono text-[0.6rem] text-muted-foreground flex items-center gap-1 mb-2">
-              <Search className="w-3 h-3" /> COLLEGE
-            </label>
-            {selected ? (
-              <div className="flex items-center justify-between p-3 rounded-md bg-primary/10 border border-primary/40">
-                <div>
-                  <div className="font-semibold">{selected.name}</div>
-                  <div className="mono text-[0.6rem] text-muted-foreground">
-                    {selected.city}, {selected.state} · {selected.type}
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setSelected(null);
-                    toggleDropdown(true);
-                  }}
-                  className="mono text-[0.6rem] text-cyber"
-                >
-                  CHANGE
-                </button>
-              </div>
-            ) : (
-              <div className="relative" ref={dropdownRef}>
-                <div className="relative">
-                  <input
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                    onFocus={() => toggleDropdown(true)}
-                    onKeyDown={(e) => {
-                      if (e.key === "ArrowDown") {
-                        e.preventDefault();
-                        setOpen(true);
-                        setActiveIdx((i) => Math.min(results.length - 1, i + 1));
-                      } else if (e.key === "ArrowUp") {
-                        e.preventDefault();
-                        setActiveIdx((i) => Math.max(0, i - 1));
-                      } else if (
-                        e.key === "Enter" &&
-                        activeIdx >= 0 &&
-                        activeIdx < results.length
-                      ) {
-                        e.preventDefault();
-                        const c = results[activeIdx];
-                        setSelected(c);
-                        setResults([]);
-                        setQ("");
-                        setOpen(false);
-                      } else if (e.key === "Escape") {
-                        setOpen(false);
-                        setActiveIdx(-1);
-                      }
-                    }}
-                    placeholder="Search Indian colleges..."
-                    aria-autocomplete="list"
-                    aria-expanded={open}
-                    className="w-full bg-input/40 border border-border rounded-md pl-3 pr-10 py-3 focus:outline-none focus:border-primary"
-                  />
-                  <button
-                    type="button"
-                    aria-label={open ? "Close college list" : "Open college list"}
-                    onClick={() => toggleDropdown()}
-                    className="absolute right-0 top-0 h-full px-3 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <ChevronDown
-                      className={`w-5 h-5 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                </div>
-                {open && (
-                  <div
-                    role="listbox"
-                    className="absolute z-10 inset-x-0 mt-1 glass rounded-md max-h-72 overflow-auto shadow-lg border border-border/60"
-                  >
-                    {results.length === 0 ? (
-                      <div className="px-3 py-6 text-center text-sm text-muted-foreground mono">
-                        {q.length === 0 ? "Loading colleges..." : "No colleges match your search"}
-                      </div>
-                    ) : (
-                      results.map((c, idx) => (
-                        <button
-                          key={c.id}
-                          role="option"
-                          aria-selected={idx === activeIdx}
-                          onMouseEnter={() => setActiveIdx(idx)}
-                          onClick={() => {
-                            setSelected(c);
-                            setResults([]);
-                            setQ("");
-                            setOpen(false);
-                            setActiveIdx(-1);
-                          }}
-                          className={`w-full text-left px-3 py-2 border-b border-border/30 ${
-                            idx === activeIdx ? "bg-primary/20" : "hover:bg-primary/10"
-                          }`}
-                        >
-                          <div className="text-sm">{c.name}</div>
-                          <div className="mono text-[0.55rem] text-muted-foreground">
-                            {c.city}, {c.state}
-                          </div>
-                        </button>
-                      ))
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+ <div className="glass rounded-2xl p-6 md:p-8 space-y-6">
+ <div>
+ <label className="mono text-[0.6rem] text-muted-foreground flex items-center gap-1 mb-2">
+ <Search className="w-3 h-3" /> COLLEGE
+ </label>
+ {selected ? (
+ <div className="flex items-center justify-between p-3 rounded-md bg-primary/10 border border-primary/40">
+ <div>
+ <div className="font-semibold">{selected.name}</div>
+ <div className="mono text-[0.6rem] text-muted-foreground">
+ {selected.city}, {selected.state} · {selected.type}
+ </div>
+ </div>
+ <button
+ onClick={() => {
+ setSelected(null);
+ toggleDropdown(true);
+ }}
+ className="mono text-[0.6rem] text-cyber"
+ >
+ CHANGE
+ </button>
+ </div>
+ ) : (
+ <div className="relative" ref={dropdownRef}>
+ <div className="relative">
+ <input
+ value={q}
+ onChange={(e) => setQ(e.target.value)}
+ onFocus={() => toggleDropdown(true)}
+ onKeyDown={(e) => {
+ if (e.key === "ArrowDown") {
+ e.preventDefault();
+ setOpen(true);
+ setActiveIdx((i) => Math.min(results.length - 1, i + 1));
+ } else if (e.key === "ArrowUp") {
+ e.preventDefault();
+ setActiveIdx((i) => Math.max(0, i - 1));
+ } else if (
+ e.key === "Enter" &&
+ activeIdx >= 0 &&
+ activeIdx < results.length
+ ) {
+ e.preventDefault();
+ const c = results[activeIdx];
+ setSelected(c);
+ setResults([]);
+ setQ("");
+ setOpen(false);
+ } else if (e.key === "Escape") {
+ setOpen(false);
+ setActiveIdx(-1);
+ }
+ }}
+ placeholder="Search Indian colleges..."
+ aria-autocomplete="list"
+ aria-expanded={open}
+ className="w-full bg-input/40 border border-border rounded-md pl-3 pr-10 py-3 focus:outline-none focus:border-primary"
+ />
+ <button
+ type="button"
+ aria-label={open ? "Close college list" : "Open college list"}
+ onClick={() => toggleDropdown()}
+ className="absolute right-0 top-0 h-full px-3 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+ >
+ <ChevronDown
+ className={`w-5 h-5 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+ />
+ </button>
+ </div>
+ {open && (
+ <div
+ role="listbox"
+ className="absolute z-10 inset-x-0 mt-1 glass rounded-md max-h-72 overflow-auto shadow-lg border border-border/60"
+ >
+ {results.length === 0 ? (
+ <div className="px-3 py-6 text-center text-sm text-muted-foreground mono">
+ {q.length === 0 ? "Loading colleges..." : "No colleges match your search"}
+ </div>
+ ) : (
+ results.map((c, idx) => (
+ <button
+ key={c.id}
+ role="option"
+ aria-selected={idx === activeIdx}
+ onMouseEnter={() => setActiveIdx(idx)}
+ onClick={() => {
+ setSelected(c);
+ setResults([]);
+ setQ("");
+ setOpen(false);
+ setActiveIdx(-1);
+ }}
+ className={`w-full text-left px-3 py-2 border-b border-border/30 ${
+ idx === activeIdx ? "bg-primary/20" : "hover:bg-primary/10"
+ }`}
+ >
+ <div className="text-sm">{c.name}</div>
+ <div className="mono text-[0.55rem] text-muted-foreground">
+ {c.city}, {c.state}
+ </div>
+ </button>
+ ))
+ )}
+ </div>
+ )}
+ </div>
+ )}
+ </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <Field
-              label="CONTACT PERSON"
-              value={form.contact_person}
-              onChange={(v) => setForm({ ...form, contact_person: v })}
-            />
-            <Field
-              label="EMAIL"
-              type="email"
-              value={form.email}
-              onChange={(v) => setForm({ ...form, email: v })}
-            />
-            <Field
-              label="PHONE"
-              value={form.phone}
-              onChange={(v) => setForm({ ...form, phone: v })}
-            />
-            <div>
-              <label className="mono text-[0.6rem] text-muted-foreground mb-2 block">
-                PROGRAM TYPE
-              </label>
-              <select
-                value={form.program_type}
-                onChange={(e) => setForm({ ...form, program_type: e.target.value })}
-                className="w-full bg-input/40 border border-border rounded-md px-3 py-3 focus:outline-none focus:border-primary"
-              >
-                <option>Webinar</option>
-                <option>Seminar</option>
-                <option>Workshop</option>
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <Field
-                label="TOPIC"
-                value={form.topic}
-                onChange={(v) => setForm({ ...form, topic: v })}
-                placeholder="e.g. UPI Fraud Prevention, Phishing Awareness..."
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="mono text-[0.6rem] text-muted-foreground mb-2 flex items-center gap-1">
-                <Calendar className="w-3 h-3" /> PREFERRED DATE
-              </label>
-              <input
-                type="date"
-                value={form.preferred_date}
-                onChange={(e) => setForm({ ...form, preferred_date: e.target.value })}
-                className="w-full bg-input/40 border border-border rounded-md px-3 py-3 focus:outline-none focus:border-primary"
-              />
-            </div>
-          </div>
+ <div className="grid md:grid-cols-2 gap-4">
+ <Field
+ label="CONTACT PERSON"
+ value={form.contact_person}
+ onChange={(v) => setForm({ ...form, contact_person: v })}
+ />
+ <Field
+ label="EMAIL"
+ type="email"
+ value={form.email}
+ onChange={(v) => setForm({ ...form, email: v })}
+ />
+ <Field
+ label="PHONE"
+ value={form.phone}
+ onChange={(v) => setForm({ ...form, phone: v })}
+ />
+ <div>
+ <label className="mono text-[0.6rem] text-muted-foreground mb-2 block">
+ PROGRAM TYPE
+ </label>
+ <select
+ value={form.program_type}
+ onChange={(e) => setForm({ ...form, program_type: e.target.value })}
+ className="w-full bg-input/40 border border-border rounded-md px-3 py-3 focus:outline-none focus:border-primary"
+ >
+ <option>Webinar</option>
+ <option>Seminar</option>
+ <option>Workshop</option>
+ </select>
+ </div>
+ <div className="md:col-span-2">
+ <Field
+ label="TOPIC"
+ value={form.topic}
+ onChange={(v) => setForm({ ...form, topic: v })}
+ placeholder="e.g. UPI Fraud Prevention, Phishing Awareness..."
+ />
+ </div>
+ <div className="md:col-span-2">
+ <label className="mono text-[0.6rem] text-muted-foreground mb-2 flex items-center gap-1">
+ <Calendar className="w-3 h-3" /> PREFERRED DATE
+ </label>
+ <input
+ type="date"
+ value={form.preferred_date}
+ onChange={(e) => setForm({ ...form, preferred_date: e.target.value })}
+ className="w-full bg-input/40 border border-border rounded-md px-3 py-3 focus:outline-none focus:border-primary"
+ />
+ </div>
+ </div>
 
-          <button
-            onClick={submit}
-            disabled={busy || !selected}
-            className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-md glow-cyber disabled:opacity-50"
-          >
-            {busy ? "SUBMITTING..." : "SUBMIT BOOKING"}
-          </button>
-          {!user && (
-            <p className="text-center text-xs text-muted-foreground">
-              You'll need to{" "}
-              <Link to="/login" search={{ next: "/programs" }} className="text-cyber">
-                sign in
-              </Link>{" "}
-              to submit.
-            </p>
-          )}
-        </div>
-      </div>
-    </main>
-  );
+ <button
+ onClick={submit}
+ disabled={busy || !selected}
+ className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-md glow-cyber disabled:opacity-50"
+ >
+ {busy ? "SUBMITTING..." : "SUBMIT BOOKING"}
+ </button>
+ {!user && (
+ <p className="text-center text-xs text-muted-foreground">
+ You'll need to{" "}
+ <Link to="/login" search={{ next: "/programs" }} className="text-cyber">
+ sign in
+ </Link>{" "}
+ to submit.
+ </p>
+ )}
+ </div>
+ </div>
+ </main>
+ );
 }
 
 function Field({
-  label,
-  value,
-  onChange,
-  type = "text",
-  placeholder,
+ label,
+ value,
+ onChange,
+ type = "text",
+ placeholder,
 }: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  type?: string;
-  placeholder?: string;
+ label: string;
+ value: string;
+ onChange: (v: string) => void;
+ type?: string;
+ placeholder?: string;
 }) {
-  return (
-    <div>
-      <label className="mono text-[0.6rem] text-muted-foreground mb-2 block">{label}</label>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full bg-input/40 border border-border rounded-md px-3 py-3 focus:outline-none focus:border-primary"
-      />
-    </div>
-  );
+ return (
+ <div>
+ <label className="mono text-[0.6rem] text-muted-foreground mb-2 block">{label}</label>
+ <input
+ type={type}
+ value={value}
+ onChange={(e) => onChange(e.target.value)}
+ placeholder={placeholder}
+ className="w-full bg-input/40 border border-border rounded-md px-3 py-3 focus:outline-none focus:border-primary"
+ />
+ </div>
+ );
 }

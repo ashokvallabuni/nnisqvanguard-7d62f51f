@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BackendPage } from "@/components/backend-page";
 export const Route = createFileRoute("/_authenticated/cyber-range/my-progress")({
-  component: () => (
-    <BackendPage
-      eyebrow="MY PROGRESS"
-      title="My IVVAB LABS progress"
-      description="Your progress is read from authenticated lab_progress and lab_attempts records."
-    />
-  ),
+ component: () => (
+ <BackendPage
+ eyebrow="MY PROGRESS"
+ title="My IVVAB LABS progress"
+ description="Your progress is read from authenticated lab_progress and lab_attempts records."
+ />
+ ),
 });

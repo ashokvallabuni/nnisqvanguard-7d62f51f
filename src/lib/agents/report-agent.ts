@@ -4,13 +4,13 @@
 // ============================================================
 
 import type {
-  ReportResult,
-  TimelineEvent,
-  DetectionResult,
-  AnalysisResult,
-  RiskResult,
-  ResponseResult,
-  AgentContext,
+ ReportResult,
+ TimelineEvent,
+ DetectionResult,
+ AnalysisResult,
+ RiskResult,
+ ResponseResult,
+ AgentContext,
 } from "./types";
 import { callChatModel } from "../api-helpers.server";
 
@@ -36,101 +36,101 @@ Return STRICT JSON with:
 - reportMarkdown: full report in markdown format`;
 
 export async function generateReport(
-  detection: DetectionResult | null,
-  analysis: AnalysisResult | null,
-  risk: RiskResult | null,
-  response: ResponseResult | null,
-  context?: Partial<AgentContext>,
+ detection: DetectionResult | null,
+ analysis: AnalysisResult | null,
+ risk: RiskResult | null,
+ response: ResponseResult | null,
+ context?: Partial<AgentContext>,
 ): Promise<ReportResult> {
-  const inputData = JSON.stringify(
-    {
-      detection: detection ? { findings: detection.findings, summary: detection.summary } : null,
-      analysis: analysis
-        ? {
-            attackPattern: analysis.attackPattern,
-            killChainPhase: analysis.killChainPhase,
-            mitreTechniques: analysis.mitreTechniques,
-            summary: analysis.summary,
-          }
-        : null,
-      risk: risk
-        ? {
-            riskScore: risk.riskScore,
-            severity: risk.severity,
-            factors: risk.factors,
-          }
-        : null,
-      response: response
-        ? {
-            immediateActions: response.immediateActions,
-            containmentSteps: response.containmentSteps,
-            remediationSteps: response.remediationSteps,
-          }
-        : null,
-    },
-    null,
-    2,
-  );
+ const inputData = JSON.stringify(
+ {
+ detection: detection ? { findings: detection.findings, summary: detection.summary } : null,
+ analysis: analysis
+ ? {
+ attackPattern: analysis.attackPattern,
+ killChainPhase: analysis.killChainPhase,
+ mitreTechniques: analysis.mitreTechniques,
+ summary: analysis.summary,
+ }
+ : null,
+ risk: risk
+ ? {
+ riskScore: risk.riskScore,
+ severity: risk.severity,
+ factors: risk.factors,
+ }
+ : null,
+ response: response
+ ? {
+ immediateActions: response.immediateActions,
+ containmentSteps: response.containmentSteps,
+ remediationSteps: response.remediationSteps,
+ }
+ : null,
+ },
+ null,
+ 2,
+ );
 
-  const messages = [
-    { role: "system" as const, content: REPORT_SYSTEM_PROMPT },
-    {
-      role: "user" as const,
-      content: `Generate a security report from this data:\n\n${inputData}\n\nReturn JSON with title, executiveSummary, timeline array, technicalDetails, riskAnalysis, recommendations array, and reportMarkdown.`,
-    },
-  ];
+ const messages = [
+ { role: "system" as const, content: REPORT_SYSTEM_PROMPT },
+ {
+ role: "user" as const,
+ content: `Generate a security report from this data:\n\n${inputData}\n\nReturn JSON with title, executiveSummary, timeline array, technicalDetails, riskAnalysis, recommendations array, and reportMarkdown.`,
+ },
+ ];
 
-  try {
-    const raw = await callChatModel(messages, { json: true });
-    const parsed = JSON.parse(raw);
+ try {
+ const raw = await callChatModel(messages, { json: true });
+ const parsed = JSON.parse(raw);
 
-    const timeline: TimelineEvent[] = (parsed.timeline || []).map((t: Record<string, unknown>) => ({
-      time: String(t.time || new Date().toISOString()),
-      event: String(t.event || ""),
-      detail: String(t.detail || ""),
-    }));
+ const timeline: TimelineEvent[] = (parsed.timeline || []).map((t: Record<string, unknown>) => ({
+ time: String(t.time || new Date().toISOString()),
+ event: String(t.event || ""),
+ detail: String(t.detail || ""),
+ }));
 
-    return {
-      agent: "report",
-      title: String(parsed.title || "Security Incident Report"),
-      executiveSummary: String(parsed.executiveSummary || ""),
-      timeline,
-      technicalDetails: String(parsed.technicalDetails || ""),
-      recommendations: Array.isArray(parsed.recommendations)
-        ? parsed.recommendations.map(String)
-        : [],
-      riskAnalysis: String(parsed.riskAnalysis || ""),
-      reportMarkdown: String(parsed.reportMarkdown || ""),
-    };
-  } catch (e) {
-    console.error("[ReportAgent] Error:", e);
-    return {
-      agent: "report",
-      title: "Incident Report (Error)",
-      executiveSummary: "Report generation encountered an error",
-      timeline: [],
-      technicalDetails: "Error during report generation",
-      recommendations: ["Re-run analysis"],
-      riskAnalysis: "Unable to assess",
-      reportMarkdown: "# Security Report\n\n*Error generating report*",
-    };
-  }
+ return {
+ agent: "report",
+ title: String(parsed.title || "Security Incident Report"),
+ executiveSummary: String(parsed.executiveSummary || ""),
+ timeline,
+ technicalDetails: String(parsed.technicalDetails || ""),
+ recommendations: Array.isArray(parsed.recommendations)
+ ? parsed.recommendations.map(String)
+ : [],
+ riskAnalysis: String(parsed.riskAnalysis || ""),
+ reportMarkdown: String(parsed.reportMarkdown || ""),
+ };
+ } catch (e) {
+ console.error("[ReportAgent] Error:", e);
+ return {
+ agent: "report",
+ title: "Incident Report (Error)",
+ executiveSummary: "Report generation encountered an error",
+ timeline: [],
+ technicalDetails: "Error during report generation",
+ recommendations: ["Re-run analysis"],
+ riskAnalysis: "Unable to assess",
+ reportMarkdown: "# Security Report\n\n*Error generating report*",
+ };
+ }
 }
 
 export function generateBriefReport(
-  threatType: string,
-  riskScore: number,
-  explanation: string,
+ threatType: string,
+ riskScore: number,
+ explanation: string,
 ): string {
-  const severity =
-    riskScore >= 81 ? "CRITICAL" : riskScore >= 51 ? "HIGH" : riskScore >= 21 ? "MEDIUM" : "LOW";
+ const severity =
+ riskScore >= 81 ? "CRITICAL" : riskScore >= 51 ? "HIGH" : riskScore >= 21 ? "MEDIUM" : "LOW";
 
-  return (
-    `## NISQ Vanguard Security Alert\n\n` +
-    `**Threat:** ${threatType}\n` +
-    `**Severity:** ${severity}\n` +
-    `**Risk Score:** ${riskScore}/100\n\n` +
-    `**Analysis:**\n${explanation}\n\n` +
-    `_Generated by NISQ Vanguard AI Agent System_`
-  );
+ return (
+ `## NISQ Vanguard Security Alert\n\n` +
+ `**Threat:** ${threatType}\n` +
+ `**Severity:** ${severity}\n` +
+ `**Risk Score:** ${riskScore}/100\n\n` +
+ `**Analysis:**\n${explanation}\n\n` +
+ `_Generated by NISQ Vanguard AI Agent System_`
+ );
 }

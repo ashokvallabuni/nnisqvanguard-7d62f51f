@@ -2,7 +2,9 @@
 @source "../src";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+:root {
+  color-scheme: dark;
+}
 
 @theme inline {
   --font-display: "Space Grotesk", sans-serif;
@@ -10,128 +12,80 @@
   --font-mono: "JetBrains Mono", monospace;
 
   /* Brand Tokens - NISQ Vanguard Palette */
-  --obsidian: #050B14;
-  --panel: #081522;
-  --cyan: #00B8FF;
-  --nano-blue: #0A7CFF;
-  --electric-blue: #00B8FF;
-  --soft-blue: #38BDF8;
-  --ash: #94A3B8;
-  --dark-border: #16283A;
-  --white: #F8FAFC;
-  
-  /* Additional Tokens from remote */
-  --violet: #8b5cf6;
-  --chrome: #e5e7eb;
-  --line: rgba(255, 255, 255, 0.08);
+  --color-nisq-blue: #0A7CFF;
+  --color-nisq-bright: #00B8FF;
+  --color-nisq-soft: #38BDF8;
+  --color-nisq-navy: #050B14;
+  --color-nisq-navy2: #081522;
+  --color-nisq-border: #16283A;
+  --color-nisq-ash: #94A3B8;
+  --color-nisq-danger: #EF4444;
+  --color-nisq-offwhite: #F8FAFC;
+  --color-nisq-white: #FFFFFF;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-cyber: var(--cyber);
-  --color-cyber-2: var(--cyber-2);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-background: var(--color-nisq-navy);
+  --color-foreground: var(--color-nisq-offwhite);
+  --color-card: var(--color-nisq-navy2);
+  --color-card-foreground: var(--color-nisq-offwhite);
+  --color-popover: var(--color-nisq-navy2);
+  --color-popover-foreground: var(--color-nisq-offwhite);
+  --color-primary: var(--color-nisq-blue);
+  --color-primary-foreground: var(--color-nisq-white);
+  --color-secondary: var(--color-nisq-navy2);
+  --color-secondary-foreground: var(--color-nisq-offwhite);
+  --color-muted: var(--color-nisq-navy2);
+  --color-muted-foreground: var(--color-nisq-ash);
+  --color-accent: var(--color-nisq-blue);
+  --color-accent-foreground: var(--color-nisq-white);
+  --color-destructive: var(--color-nisq-danger);
+  --color-destructive-foreground: var(--color-nisq-white);
+  --color-border: var(--color-nisq-border);
+  --color-input: var(--color-nisq-border);
+  --color-ring: var(--color-nisq-soft);
+  --color-sidebar: var(--color-nisq-navy);
+  --color-sidebar-foreground: var(--color-nisq-offwhite);
+  --color-sidebar-primary: var(--color-nisq-blue);
+  --color-sidebar-primary-foreground: var(--color-nisq-white);
+  --color-sidebar-accent: var(--color-nisq-navy2);
+  --color-sidebar-accent-foreground: var(--color-nisq-offwhite);
+  --color-sidebar-border: var(--color-nisq-border);
+  --color-sidebar-ring: var(--color-nisq-blue);
 }
 
-:root {
-  --radius: 0.5rem;
-  --background: #FFFFFF;
-  --foreground: #050B14;
-  --card: #F8FAFC;
-  --card-foreground: #050B14;
-  --popover: #FFFFFF;
-  --popover-foreground: #050B14;
-  --primary: #0A7CFF;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F1F5F9;
-  --secondary-foreground: #475569;
-  --muted: #F8FAFC;
-  --muted-foreground: #94A3B8;
-  --accent: #00B8FF;
-  --accent-foreground: #FFFFFF;
-  --destructive: #FF4D5E;
-  --destructive-foreground: #FFFFFF;
-  --success: #00D68F;
-  --warning: #FFB020;
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #0A7CFF;
-  --cyber: #0A7CFF;
-  --cyber-2: #00B8FF;
-  --violet-accent: #8b5cf6;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #050B14;
-  --sidebar-primary: #0A7CFF;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F1F5F9;
-  --sidebar-accent-foreground: #050B14;
-  --sidebar-border: #E2E8F0;
-  --sidebar-ring: #0A7CFF;
-}
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+  
+  body {
+    background-color: var(--color-nisq-navy);
+    color: var(--color-nisq-offwhite);
+  }
 
-.dark {
-  --background: #050B14;
-  --foreground: #F8FAFC;
-  --card: #081522;
-  --card-foreground: #F8FAFC;
-  --popover: #050B14;
-  --popover-foreground: #F8FAFC;
-  --primary: #0A7CFF;
-  --primary-foreground: #F8FAFC;
-  --secondary: #081522;
-  --secondary-foreground: #94A3B8;
-  --muted: #081522;
-  --muted-foreground: #94A3B8;
-  --accent: #00B8FF;
-  --accent-foreground: #050B14;
-  --destructive: #FF4D5E;
-  --destructive-foreground: #F8FAFC;
-  --success: #00D68F;
-  --warning: #FFB020;
-  --border: #16283A;
-  --input: #16283A;
-  --ring: #0A7CFF;
-  --cyber: #0A7CFF;
-  --cyber-2: #00B8FF;
-  --violet-accent: #1a6f91;
-  --sidebar: #050B14;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #0A7CFF;
-  --sidebar-primary-foreground: #F8FAFC;
-  --sidebar-accent: #081522;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #16283A;
-  --sidebar-ring: #0A7CFF;
+  ::selection {
+    background-color: var(--color-nisq-blue);
+    color: var(--color-nisq-white);
+  }
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-nisq-navy);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-nisq-border);
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-nisq-blue);
+  }
 }
 
 /* Academy visual system */

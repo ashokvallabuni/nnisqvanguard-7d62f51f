@@ -3,21 +3,21 @@ import { json, callChatModel, getAuth, clientKey, rateLimit } from "@/lib/api-he
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/api/generate-lesson")({
-  server: {
-    handlers: {
-      POST: async ({ request }) => {
-        try {
-          const ctx = await getAuth(request);
-          if (!rateLimit(`generate:${clientKey(request, ctx.userId)}`, 20, 60_000)) {
-            return json({ error: "Rate limit exceeded." }, 429);
-          }
+ server: {
+ handlers: {
+ POST: async ({ request }) => {
+ try {
+ const ctx = await getAuth(request);
+ if (!rateLimit(`generate:${clientKey(request, ctx.userId)}`, 20, 60_000)) {
+ return json({ error: "Rate limit exceeded." }, 429);
+ }
 
-          const body = await request.json();
-          const { courseSlug, moduleSlug, courseTitle, moduleTitle, currentContent } = body;
+ const body = await request.json();
+ const { courseSlug, moduleSlug, courseTitle, moduleTitle, currentContent } = body;
 
-          if (!courseSlug || !moduleSlug) {
-            return json({ error: "Missing required fields" }, 400);
-          }
+ if (!courseSlug || !moduleSlug) {
+ return json({ error: "Missing required fields" }, 400);
+ }
 
 const prompt = `
 You are a professional cybersecurity instructor authoring a textbook-quality lesson. 
@@ -57,39 +57,39 @@ ${currentContent || "No existing notes provided."}
 Return ONLY the Markdown content. Do not wrap the entire response in \`\`\`markdown, but YOU MUST use \`\`\`mermaid blocks for your diagrams.
 `;
 
-          const generatedMarkdown = await callChatModel([
-            { role: "system", content: "You are an expert cybersecurity instructor." },
-            { role: "user", content: prompt }
-          ]);
-          
-          const cleanContent = generatedMarkdown.replace(/^```markdown\n/, "").replace(/\n```$/, "").trim();
+ const generatedMarkdown = await callChatModel([
+ { role: "system", content: "You are an expert cybersecurity instructor." },
+ { role: "user", content: prompt }
+ ]);
+ 
+ const cleanContent = generatedMarkdown.replace(/^```markdown\n/, "").replace(/\n```$/, "").trim();
 
-          const { data: courseData, error: courseError } = await supabase
-            .from("courses")
-            .select("id")
-            .eq("slug", courseSlug)
-            .single();
-            
-          if (courseError || !courseData) {
-              return json({ error: "Course not found in database. Ensure it is seeded first." }, 404);
-          }
+ const { data: courseData, error: courseError } = await supabase
+ .from("courses")
+ .select("id")
+ .eq("slug", courseSlug)
+ .single();
+ 
+ if (courseError || !courseData) {
+ return json({ error: "Course not found in database. Ensure it is seeded first." }, 404);
+ }
 
-          const { error: updateError } = await supabase
-            .from("modules")
-            .update({ notes_md: cleanContent })
-            .eq("course_id", courseData.id)
-            .eq("slug", moduleSlug);
+ const { error: updateError } = await supabase
+ .from("modules")
+ .update({ notes_md: cleanContent })
+ .eq("course_id", courseData.id)
+ .eq("slug", moduleSlug);
 
-          if (updateError) {
-            return json({ error: "Failed to save to database", details: updateError.message }, 500);
-          }
+ if (updateError) {
+ return json({ error: "Failed to save to database", details: updateError.message }, 500);
+ }
 
-          return json({ success: true, content: cleanContent });
-        } catch (error: any) {
-          console.error("Error generating lesson:", error);
-          return json({ error: error.message }, 500);
-        }
-      }
-    }
-  }
+ return json({ success: true, content: cleanContent });
+ } catch (error: any) {
+ console.error("Error generating lesson:", error);
+ return json({ error: error.message }, 500);
+ }
+ }
+ }
+ }
 });

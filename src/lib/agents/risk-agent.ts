@@ -39,93 +39,93 @@ Return STRICT JSON with:
 - overallAssessment: text assessment`;
 
 export async function calculateRisk(
-  findings: Finding[],
-  attackPattern: string | null,
-  context?: Partial<{ userId: string; organizationId: string }>,
+ findings: Finding[],
+ attackPattern: string | null,
+ context?: Partial<{ userId: string; organizationId: string }>,
 ): Promise<RiskResult> {
-  const findingsSummary = findings
-    .map(
-      (f) => `- ${f.type}: ${f.description} (severity: ${f.severity}, confidence: ${f.severity})`,
-    )
-    .join("\n");
+ const findingsSummary = findings
+ .map(
+ (f) => `- ${f.type}: ${f.description} (severity: ${f.severity}, confidence: ${f.severity})`,
+ )
+ .join("\n");
 
-  const messages = [
-    { role: "system" as const, content: RISK_SYSTEM_PROMPT },
-    {
-      role: "user" as const,
-      content: `Calculate risk for:\nAttack Pattern: ${attackPattern || "Unknown"}\nFindings:\n${findingsSummary}\n\nReturn JSON with riskScore, severity, factors array (each with name, score, weight, description), and overallAssessment.`,
-    },
-  ];
+ const messages = [
+ { role: "system" as const, content: RISK_SYSTEM_PROMPT },
+ {
+ role: "user" as const,
+ content: `Calculate risk for:\nAttack Pattern: ${attackPattern || "Unknown"}\nFindings:\n${findingsSummary}\n\nReturn JSON with riskScore, severity, factors array (each with name, score, weight, description), and overallAssessment.`,
+ },
+ ];
 
-  try {
-    const raw = await callChatModel(messages, { json: true });
-    const parsed = JSON.parse(raw);
+ try {
+ const raw = await callChatModel(messages, { json: true });
+ const parsed = JSON.parse(raw);
 
-    const factors: RiskFactor[] = (parsed.factors || []).map((f: Record<string, unknown>) => ({
-      name: String(f.name || "unknown"),
-      score: clampScore(f.score),
-      weight: clampWeight(f.weight),
-      description: String(f.description || ""),
-    }));
+ const factors: RiskFactor[] = (parsed.factors || []).map((f: Record<string, unknown>) => ({
+ name: String(f.name || "unknown"),
+ score: clampScore(f.score),
+ weight: clampWeight(f.weight),
+ description: String(f.description || ""),
+ }));
 
-    const riskScore = clampScore(parsed.riskScore);
+ const riskScore = clampScore(parsed.riskScore);
 
-    return {
-      agent: "risk",
-      riskScore,
-      severity: scoreToSeverity(riskScore),
-      factors,
-      overallAssessment: String(parsed.overallAssessment || "Risk assessment completed"),
-    };
-  } catch (e) {
-    console.error("[RiskAgent] Error:", e);
-    return {
-      agent: "risk",
-      riskScore: 0,
-      severity: "Low",
-      factors: [],
-      overallAssessment: "Risk assessment encountered an error",
-    };
-  }
+ return {
+ agent: "risk",
+ riskScore,
+ severity: scoreToSeverity(riskScore),
+ factors,
+ overallAssessment: String(parsed.overallAssessment || "Risk assessment completed"),
+ };
+ } catch (e) {
+ console.error("[RiskAgent] Error:", e);
+ return {
+ agent: "risk",
+ riskScore: 0,
+ severity: "Low",
+ factors: [],
+ overallAssessment: "Risk assessment encountered an error",
+ };
+ }
 }
 
 export function calculateRiskScoreFromFindings(findings: Finding[]): number {
-  if (findings.length === 0) return 0;
+ if (findings.length === 0) return 0;
 
-  const severityWeights: Record<RiskLevel, number> = {
-    Low: 0.2,
-    Medium: 0.5,
-    High: 0.8,
-    Critical: 1.0,
-  };
+ const severityWeights: Record<RiskLevel, number> = {
+ Low: 0.2,
+ Medium: 0.5,
+ High: 0.8,
+ Critical: 1.0,
+ };
 
-  let totalScore = 0;
-  let maxPossible = 0;
+ let totalScore = 0;
+ let maxPossible = 0;
 
-  for (const finding of findings) {
-    const weight = severityWeights[finding.severity] || 0.2;
-    totalScore += weight * 100;
-    maxPossible += 100;
-  }
+ for (const finding of findings) {
+ const weight = severityWeights[finding.severity] || 0.2;
+ totalScore += weight * 100;
+ maxPossible += 100;
+ }
 
-  return Math.round((totalScore / maxPossible) * 100);
+ return Math.round((totalScore / maxPossible) * 100);
 }
 
 export function scoreToSeverity(score: number): RiskLevel {
-  if (score >= 81) return "Critical";
-  if (score >= 51) return "High";
-  if (score >= 21) return "Medium";
-  return "Low";
+ if (score >= 81) return "Critical";
+ if (score >= 51) return "High";
+ if (score >= 21) return "Medium";
+ return "Low";
 }
 
 function clampScore(n: unknown): number {
-  const v = Number(n);
-  if (isNaN(v)) return 0;
-  return Math.max(0, Math.min(100, Math.round(v)));
+ const v = Number(n);
+ if (isNaN(v)) return 0;
+ return Math.max(0, Math.min(100, Math.round(v)));
 }
 
 function clampWeight(n: unknown): number {
-  const v = Number(n);
-  if (isNaN(v)) return 0;
-  return Math.max(0, Math.min(1, v));
+ const v = Number(n);
+ if (isNaN(v)) return 0;
+ return Math.max(0, Math.min(1, v));
 }
