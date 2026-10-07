@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
-import { sendWelcomeEmail } from "@/server/email";
+import { sendWelcomeEmail } from "@/lib/email.functions";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({ meta: [{ title: "Sign Up — NISQ Vanguard" }] }),

@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
-import { sendNewLoginEmail } from "@/server/email";
+import { sendNewLoginEmail } from "@/lib/email.functions";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({ next: z.string().optional() }),
