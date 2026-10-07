@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useAuth } from '@/lib/auth-context';
 import { CyberButton } from './common/CyberButton';
 import { Section } from './common/Section';
+import { teamData } from '@/data/team';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const TRANSITION = { duration: 0.6, ease: EASE };
@@ -80,6 +81,35 @@ export function CyberIntelligenceHome() {
               </motion.div>
             </div>
           </motion.div>
+        </Section>
+        
+        {/* Team Section */}
+        <Section className="w-full max-w-[1280px] mx-auto relative z-10 py-24 border-t border-nisq-border">
+          <div className="flex flex-col items-center mb-16">
+            <h2 className="font-orbitron font-bold text-[32px] md:text-[40px] text-nisq-navy mb-4">Command Team</h2>
+            <p className="text-nisq-ash max-w-[60ch] text-center">
+              The leadership driving NISQ Vanguard's mission to secure emerging digital infrastructure.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {teamData.map((member, i) => (
+              <div key={i} className="p-8 bg-nisq-offwhite border border-nisq-border hover:border-nisq-blue/30 transition-colors flex flex-col items-center text-center">
+                <div className="w-24 h-24 rounded-full border border-nisq-border flex items-center justify-center mb-6 overflow-hidden bg-nisq-white">
+                  {member.imageUrl ? (
+                    <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover object-top" />
+                  ) : (
+                    <span className="font-mono text-2xl text-nisq-blue font-bold">
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-xl font-bold text-nisq-navy mb-1">{member.name}</h3>
+                <p className="font-mono text-[11px] uppercase tracking-widest text-nisq-blue mb-4">{member.role}</p>
+                <p className="text-nisq-ash text-sm line-clamp-3">{member.bio}</p>
+              </div>
+            ))}
+          </div>
         </Section>
       </main>
     </div>
