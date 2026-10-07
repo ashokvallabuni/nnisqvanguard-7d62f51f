@@ -14,9 +14,9 @@ const buttonVariants = cva(
         destructive:
           "bg-nisq-blue text-white shadow-card hover:bg-nisq-blue-bright hover:shadow-glow hover:-translate-y-[2px]",
         outline:
-          "bg-transparent text-nisq-blue border border-nisq-blue hover:bg-nisq-blue-tint hover:-translate-y-[2px]",
+          "bg-transparent text-nisq-btn-secondary-text border border-nisq-blue hover:bg-nisq-blue-tint hover:-translate-y-[2px]",
         secondary:
-          "bg-transparent text-nisq-blue border border-nisq-blue hover:bg-nisq-blue-tint hover:-translate-y-[2px]",
+          "bg-transparent text-nisq-btn-secondary-text border border-nisq-blue hover:bg-nisq-blue-tint hover:-translate-y-[2px]",
         ghost: "text-nisq-text hover:bg-nisq-blue-tint hover:text-nisq-blue hover:-translate-y-[2px]",
         link: "text-nisq-blue underline-offset-4 hover:underline hover:-translate-y-[2px]",
       },

@@ -12,7 +12,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.07, delayChildren: 0.1 }
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 }
   }
 };
 
@@ -23,6 +23,14 @@ const itemVariants = {
     y: 0, 
     filter: 'blur(0px)',
     transition: TRANSITION
+  }
+};
+
+const teamContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
   }
 };
 
@@ -48,7 +56,7 @@ export function CyberIntelligenceHome() {
               </motion.div>
               <motion.h1 
                 variants={itemVariants}
-                className="font-orbitron font-bold text-[clamp(40px,5vw,72px)] leading-[1.1] tracking-tight text-nisq-navy"
+                className="font-orbitron font-bold text-[clamp(2.2rem,6vw,4.5rem)] leading-[1.1] tracking-tight text-nisq-ink"
               >
                 Secure Today.<br />
                 <span className="text-nisq-blue">Defend Tomorrow.</span><br />
@@ -57,14 +65,14 @@ export function CyberIntelligenceHome() {
               
               <motion.p 
                 variants={itemVariants}
-                className="text-[16px] md:text-[18px] leading-[1.6] text-nisq-ash max-w-[70ch]"
+                className="text-[16px] md:text-[18px] leading-[1.6] text-nisq-text max-w-[70ch]"
               >
                 NISQ Vanguard is a cybersecurity and defence technology company focused on protecting people, organizations, and emerging digital infrastructure from evolving cyber threats. We combine cybersecurity consulting, practical security education, hands-on laboratories, and research into emerging technologies.
               </motion.p>
               
               <motion.p 
                 variants={itemVariants}
-                className="text-[14px] md:text-[15px] font-mono leading-[1.6] text-nisq-blue-soft max-w-[65ch]"
+                className="text-[14px] md:text-[15px] font-mono leading-[1.6] text-nisq-blue max-w-[65ch]"
               >
                 Security is no longer only about protecting systems. It is about protecting the intelligence, people, infrastructure, and decisions that depend on them.
               </motion.p>
@@ -85,16 +93,28 @@ export function CyberIntelligenceHome() {
         
         {/* Team Section */}
         <Section className="w-full max-w-[1280px] mx-auto relative z-10 py-24 border-t border-nisq-border">
-          <div className="flex flex-col items-center mb-16">
-            <h2 className="font-orbitron font-bold text-[32px] md:text-[40px] text-nisq-navy mb-4">Command Team</h2>
-            <p className="text-nisq-ash max-w-[60ch] text-center">
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={containerVariants}
+            className="flex flex-col items-center mb-16"
+          >
+            <motion.h2 variants={itemVariants} className="font-orbitron font-bold text-[32px] md:text-[40px] text-nisq-ink mb-4">Command Team</motion.h2>
+            <motion.p variants={itemVariants} className="text-nisq-text max-w-[60ch] text-center">
               The leadership driving NISQ Vanguard's mission to secure emerging digital infrastructure.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={teamContainerVariants}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {teamData.map((member, i) => (
-              <div key={i} className="p-8 bg-nisq-offwhite border border-nisq-border hover:border-nisq-blue/30 transition-colors flex flex-col items-center text-center">
+              <motion.div variants={itemVariants} key={i} className="p-8 bg-nisq-offwhite border border-nisq-border hover:border-nisq-blue/30 transition-colors flex flex-col items-center text-center rounded-[16px]">
                 <div className="w-24 h-24 rounded-full border border-nisq-border flex items-center justify-center mb-6 overflow-hidden bg-nisq-white">
                   {member.imageUrl ? (
                     <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover object-top" />
@@ -104,12 +124,12 @@ export function CyberIntelligenceHome() {
                     </span>
                   )}
                 </div>
-                <h3 className="text-xl font-bold text-nisq-navy mb-1">{member.name}</h3>
+                <h3 className="text-xl font-bold text-nisq-ink mb-1">{member.name}</h3>
                 <p className="font-mono text-[11px] uppercase tracking-widest text-nisq-blue mb-4">{member.role}</p>
-                <p className="text-nisq-ash text-sm line-clamp-3">{member.bio}</p>
-              </div>
+                <p className="text-nisq-text text-sm line-clamp-3">{member.bio}</p>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </Section>
       </main>
     </div>

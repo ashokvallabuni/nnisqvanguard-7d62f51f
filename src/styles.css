@@ -16,14 +16,15 @@
   --nisq-blue-tint: #eaf4ff;
   --nisq-white: #ffffff;
   --nisq-offwhite: #f8fafc;
-  --nisq-ink: #0f172a;
-  --nisq-text: #334155;
-  --nisq-muted: #64748b; /* AA-safe ash for essential secondary text */
+  --nisq-ink: #050b14;
+  --nisq-text: #64748b;
+  --nisq-muted: #94a3b8;
   --nisq-ash: #94a3b8; /* decorative / disabled / placeholder only */
   --nisq-border: #e2e8f0;
   --nisq-navy: #050b14; /* lab terminal panel only */
   --nisq-danger: #dc2626;
   --nisq-danger-tint: #fef2f2;
+  --nisq-btn-secondary-text: var(--nisq-blue);
 
   /* Elevation (shadow colours are tokens too) */
   --elev-card: 0 1px 3px rgb(15 23 42 / 0.08);
@@ -39,11 +40,12 @@
   color-scheme: dark;
   --nisq-white: #081522; /* Cards */
   --nisq-offwhite: #050b14; /* Navy background */
-  --nisq-ink: #ffffff; /* White text */
-  --nisq-text: #94a3b8; /* Ash text */
+  --nisq-ink: #f8fafc; /* White text */
+  --nisq-text: #cbd5e1; /* Ash text */
   --nisq-muted: #94a3b8;
   --nisq-border: #16283a;
   --nisq-blue-tint: #071a33; /* Darker blue tint for hover */
+  --nisq-btn-secondary-text: #38bdf8;
   --elev-card: 0 1px 3px rgb(0 0 0 / 0.5);
   --elev-nav: 0 2px 12px rgb(0 0 0 / 0.5);
   --elev-pop: 0 12px 32px rgb(0 0 0 / 0.5);
@@ -69,6 +71,7 @@
   --color-nisq-navy: var(--nisq-navy);
   --color-nisq-danger: var(--nisq-danger);
   --color-nisq-danger-tint: var(--nisq-danger-tint);
+  --color-nisq-btn-secondary-text: var(--nisq-btn-secondary-text);
 
   --shadow-card: var(--elev-card);
   --shadow-nav: var(--elev-nav);
@@ -120,7 +123,7 @@
 @layer base {
   * {
     border-color: var(--nisq-border);
-    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   }
   html {
     -webkit-text-size-adjust: 100%;
@@ -163,6 +166,9 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
+  [data-theme="dark"] .mono {
+    color: var(--nisq-blue-soft);
+  }
   ::selection {
     background: var(--nisq-blue);
     color: var(--nisq-white);
@@ -195,7 +201,7 @@
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: 1rem;
   @media (min-width: 768px) {
     padding-inline: 2rem;
   }
@@ -262,7 +268,7 @@
 @utility nv-section {
   max-width: 75rem;
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: 1rem;
   @media (min-width: 768px) {
     padding-inline: 2rem;
   }
@@ -646,8 +652,18 @@
 }
 .academy-course-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
+}
+@media (min-width: 768px) {
+  .academy-course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1280px) {
+  .academy-course-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 .academy-course-card {
   display: flex;

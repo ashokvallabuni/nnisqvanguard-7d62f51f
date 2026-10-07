@@ -141,11 +141,19 @@ function ThemeToggle() {
     }
   }, []);
 
-  const toggle = () => {
-    const next = theme === "light" ? "dark" : "light";
+  const applyTheme = (next: "light" | "dark") => {
     setTheme(next);
     localStorage.setItem("course-theme", next);
     document.documentElement.setAttribute("data-theme", next);
+  };
+
+  const toggle = () => {
+    const next = theme === "light" ? "dark" : "light";
+    if (document.startViewTransition) {
+      document.startViewTransition(() => applyTheme(next));
+    } else {
+      applyTheme(next);
+    }
   };
 
   return (
@@ -269,7 +277,7 @@ export function TopNav() {
           <div className="min-[1100px]:hidden flex items-center gap-3">
             <ThemeToggle />
             <button
-              className="h-11 w-11 flex items-center justify-center rounded-lg border border-nisq-border text-nisq-ink hover:bg-nisq-blue-tint"
+              className="h-11 w-11 flex items-center justify-center rounded-lg border border-white/30 text-white hover:bg-white/10"
               onClick={() => setOpen(!open)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
