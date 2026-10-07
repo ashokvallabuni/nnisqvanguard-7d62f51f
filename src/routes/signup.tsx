@@ -65,8 +65,13 @@ function SignupPage() {
     // Call server function for welcome email
     sendWelcomeEmail({ data: { email, name: fullName } }).catch(console.error);
 
-    setSuccess(true);
-    setBusy(false);
+    if (data.session) {
+      toast.success("Account created successfully!");
+      window.location.href = "/dashboard";
+    } else {
+      setSuccess(true);
+      setBusy(false);
+    }
   };
 
   if (success) {
