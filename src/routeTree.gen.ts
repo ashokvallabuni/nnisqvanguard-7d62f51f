@@ -21,6 +21,7 @@ import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CyberRangeRouteImport } from './routes/cyber-range'
 import { Route as EventsRouteImport } from './routes/events'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FraudCheckRouteImport } from './routes/fraud-check'
 import { Route as InnovationRouteImport } from './routes/innovation'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
@@ -28,9 +29,11 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as ReportingRouteImport } from './routes/reporting'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResponsibleDisclosureRouteImport } from './routes/responsible-disclosure'
 import { Route as SecurityRouteImport } from './routes/security'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -136,6 +139,11 @@ const EventsRoute = EventsRouteImport.update({
   path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FraudCheckRoute = FraudCheckRouteImport.update({
   id: '/fraud-check',
   path: '/fraud-check',
@@ -171,6 +179,11 @@ const ReportingRoute = ReportingRouteImport.update({
   path: '/reporting',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResponsibleDisclosureRoute = ResponsibleDisclosureRouteImport.update({
   id: '/responsible-disclosure',
   path: '/responsible-disclosure',
@@ -184,6 +197,11 @@ const SecurityRoute = SecurityRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TeamRoute = TeamRouteImport.update({
@@ -438,6 +456,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/cyber-range': typeof CyberRangeRouteWithChildren
   '/events': typeof EventsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/fraud-check': typeof FraudCheckRoute
   '/innovation': typeof InnovationRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
@@ -445,9 +464,11 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
   '/reporting': typeof ReportingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/responsible-disclosure': typeof ResponsibleDisclosureRoute
   '/security': typeof SecurityRoute
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -506,6 +527,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/cyber-range': typeof CyberRangeRouteWithChildren
   '/events': typeof EventsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/fraud-check': typeof FraudCheckRoute
   '/innovation': typeof InnovationRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
@@ -513,9 +535,11 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
   '/reporting': typeof ReportingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/responsible-disclosure': typeof ResponsibleDisclosureRoute
   '/security': typeof SecurityRoute
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
@@ -575,6 +599,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/cyber-range': typeof CyberRangeRouteWithChildren
   '/events': typeof EventsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/fraud-check': typeof FraudCheckRoute
   '/innovation': typeof InnovationRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
@@ -582,9 +607,11 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/programs': typeof ProgramsRoute
   '/reporting': typeof ReportingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/responsible-disclosure': typeof ResponsibleDisclosureRoute
   '/security': typeof SecurityRoute
   '/services': typeof ServicesRoute
+  '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -645,6 +672,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cyber-range'
     | '/events'
+    | '/forgot-password'
     | '/fraud-check'
     | '/innovation'
     | '/intelligence'
@@ -652,9 +680,11 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/programs'
     | '/reporting'
+    | '/reset-password'
     | '/responsible-disclosure'
     | '/security'
     | '/services'
+    | '/signup'
     | '/team'
     | '/terms'
     | '/admin'
@@ -713,6 +743,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cyber-range'
     | '/events'
+    | '/forgot-password'
     | '/fraud-check'
     | '/innovation'
     | '/intelligence'
@@ -720,9 +751,11 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/programs'
     | '/reporting'
+    | '/reset-password'
     | '/responsible-disclosure'
     | '/security'
     | '/services'
+    | '/signup'
     | '/team'
     | '/terms'
     | '/certificates'
@@ -781,6 +814,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cyber-range'
     | '/events'
+    | '/forgot-password'
     | '/fraud-check'
     | '/innovation'
     | '/intelligence'
@@ -788,9 +822,11 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/programs'
     | '/reporting'
+    | '/reset-password'
     | '/responsible-disclosure'
     | '/security'
     | '/services'
+    | '/signup'
     | '/team'
     | '/terms'
     | '/_authenticated/admin'
@@ -851,6 +887,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CyberRangeRoute: typeof CyberRangeRouteWithChildren
   EventsRoute: typeof EventsRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   FraudCheckRoute: typeof FraudCheckRoute
   InnovationRoute: typeof InnovationRouteWithChildren
   IntelligenceRoute: typeof IntelligenceRoute
@@ -858,9 +895,11 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProgramsRoute: typeof ProgramsRoute
   ReportingRoute: typeof ReportingRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ResponsibleDisclosureRoute: typeof ResponsibleDisclosureRoute
   SecurityRoute: typeof SecurityRoute
   ServicesRoute: typeof ServicesRoute
+  SignupRoute: typeof SignupRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -965,6 +1004,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fraud-check': {
       id: '/fraud-check'
       path: '/fraud-check'
@@ -1014,6 +1060,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/responsible-disclosure': {
       id: '/responsible-disclosure'
       path: '/responsible-disclosure'
@@ -1033,6 +1086,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/team': {
@@ -1500,6 +1560,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CyberRangeRoute: CyberRangeRouteWithChildren,
   EventsRoute: EventsRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   FraudCheckRoute: FraudCheckRoute,
   InnovationRoute: InnovationRouteWithChildren,
   IntelligenceRoute: IntelligenceRoute,
@@ -1507,9 +1568,11 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProgramsRoute: ProgramsRoute,
   ReportingRoute: ReportingRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ResponsibleDisclosureRoute: ResponsibleDisclosureRoute,
   SecurityRoute: SecurityRoute,
   ServicesRoute: ServicesRoute,
+  SignupRoute: SignupRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   ApiChatRoute: ApiChatRoute,

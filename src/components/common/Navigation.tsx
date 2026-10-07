@@ -267,7 +267,7 @@ export function TopNav() {
                   <Link to="/login">Login</Link>
                 </Button>
                 <Button className="bg-white text-nisq-blue hover:bg-white/90" asChild>
-                  <Link to="/login">Get Started</Link>
+                  <Link to="/signup">Get Started</Link>
                 </Button>
               </>
             )}
@@ -358,7 +358,7 @@ export function TopNav() {
                       <Link to="/login">Login</Link>
                     </Button>
                     <Button className="w-full" asChild>
-                      <Link to="/login">Get Started</Link>
+                      <Link to="/signup">Get Started</Link>
                     </Button>
                   </>
                 )}
