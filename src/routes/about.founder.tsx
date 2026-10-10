@@ -184,11 +184,19 @@ function FounderProfilePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 [perspective:1000px]">
             {founderPhilosophy.map(({ heading, body }) => (
-              <div key={heading} className="border border-border bg-card p-7">
-                <h3 className="font-display text-lg font-bold text-foreground mb-3">{heading}</h3>
-                <p className="font-mono text-xs leading-relaxed text-muted-foreground">{body}</p>
+              <div key={heading} className="group relative h-64 w-full cursor-pointer" tabIndex={0}>
+                <div className="absolute inset-0 w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] group-focus:[transform:rotateY(180deg)]">
+                  {/* Front of Card */}
+                  <div className="absolute inset-0 w-full h-full p-7 bg-muted/20 border border-primary/20 flex flex-col items-center justify-center text-center [backface-visibility:hidden] rounded-xl">
+                    <h3 className="font-display text-xl font-bold text-primary">{heading}</h3>
+                  </div>
+                  {/* Back of Card */}
+                  <div className="absolute inset-0 w-full h-full p-7 bg-primary/10 border border-primary/40 flex flex-col items-center justify-center text-center [transform:rotateY(180deg)] [backface-visibility:hidden] rounded-xl">
+                    <p className="font-mono text-sm leading-relaxed text-foreground">{body}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -207,21 +215,26 @@ function FounderProfilePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 [perspective:1000px]">
             {founderArchitecturalContributions.map(({ icon, title, body }) => {
               const Icon = ICON_MAP[icon] || Shield;
               return (
-                <div
-                  key={title}
-                  className="border border-border bg-card p-7 hover:border-nisq-blue transition-colors"
-                >
-                  <div className="mb-5 flex h-10 w-10 items-center justify-center border border-primary/30 bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
+                <div key={title} className="group relative h-72 w-full cursor-pointer" tabIndex={0}>
+                  <div className="absolute inset-0 w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] group-focus:[transform:rotateY(180deg)]">
+                    {/* Front of Card */}
+                    <div className="absolute inset-0 w-full h-full p-7 bg-muted/20 border border-primary/20 flex flex-col items-center justify-center text-center [backface-visibility:hidden] rounded-xl">
+                      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-primary/40 bg-primary/10 text-primary shadow-sm">
+                        <Icon className="h-8 w-8" />
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-foreground">{title}</h3>
+                    </div>
+                    {/* Back of Card */}
+                    <div className="absolute inset-0 w-full h-full p-7 bg-primary border border-primary text-primary-foreground flex flex-col items-center justify-center text-center [transform:rotateY(180deg)] [backface-visibility:hidden] rounded-xl">
+                      <p className="font-mono text-xs leading-relaxed text-primary-foreground/90">
+                        {body}
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="font-display text-base font-bold text-foreground">{title}</h3>
-                  <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
-                    {body}
-                  </p>
                 </div>
               )
             })}

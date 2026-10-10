@@ -94,8 +94,8 @@ function AboutPage() {
                 <div className="absolute inset-0 w-full h-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] group-focus:[transform:rotateY(180deg)]">
                   
                   {/* Front of Card */}
-                  <div className="absolute inset-0 w-full h-full p-8 bg-nisq-white border border-nisq-border flex flex-col items-center justify-center text-center [backface-visibility:hidden]">
-                    <div className="w-32 h-32 rounded-full bg-nisq-white border border-nisq-border flex items-center justify-center mb-6 overflow-hidden shadow-sm">
+                  <div className="absolute inset-0 w-full h-full p-8 bg-nisq-navy text-nisq-white border border-nisq-border flex flex-col items-center justify-center text-center [backface-visibility:hidden]">
+                    <div className="w-32 h-32 rounded-full bg-nisq-navy-2 border border-nisq-border flex items-center justify-center mb-6 overflow-hidden shadow-sm">
                       {member.imageUrl ? (
                         <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover object-top" />
                       ) : (
@@ -104,7 +104,7 @@ function AboutPage() {
                         </span>
                       )}
                     </div>
-                    <h3 className="text-2xl font-medium text-nisq-text mb-2">{member.name}</h3>
+                    <h3 className="text-2xl font-medium text-nisq-white mb-2">{member.name}</h3>
                     <p className="font-mono text-xs uppercase tracking-widest text-nisq-blue">{member.role}</p>
                   </div>
                   
