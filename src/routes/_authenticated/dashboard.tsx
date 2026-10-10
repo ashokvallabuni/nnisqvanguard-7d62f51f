@@ -294,43 +294,8 @@ function StudentDashboard() {
  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 xl:grid-cols-3 gap-8 lg:gap-10">
  {/* Main Content Column */}
  <div className="xl:col-span-2 space-y-8">
- {/* SECTION: NEXT UP */}
- <section aria-label="Next Action">
- <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
- <Play className="w-3.5 h-3.5" /> Next Up
- </h2>
- <div className="nv-card bg-muted p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
- <div className="space-y-2 max-w-2xl">
- <div className="flex items-center gap-2">
- <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary text-nisq-white font-semibold">
- {nextStepAction.stage}
- </span>
- <span className="text-xs font-mono text-muted-foreground">
- Automated Recommendation
- </span>
- </div>
- <h3 className="font-display font-bold text-2xl text-foreground">
- {nextStepAction.title}
- </h3>
- <p className="text-sm text-muted-foreground leading-relaxed font-medium">
- {nextStepAction.description}
- </p>
- </div>
-
- <div className="shrink-0 flex items-center gap-3">
- <Link
- to={nextStepAction.linkTo as any}
- className="inline-flex items-center gap-2 px-6 min-h-[48px] rounded-xl bg-background text-nisq-ink font-semibold text-sm hover:bg-primary shadow-sm transition-all uppercase"
- >
- <Play className="w-4 h-4 fill-white" />
- <span>{nextStepAction.ctaText}</span>
- </Link>
- </div>
- </div>
- </section>
-
  {/* SECTION: PRIMARY ACTIONS */}
- <section aria-label="Primary Actions" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <section aria-label="Primary Actions" className="grid grid-cols-1 gap-4">
  <Link
  to="/cyber-range/labs"
  className="flex items-center justify-between p-6 min-h-[80px] rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
@@ -341,75 +306,7 @@ function StudentDashboard() {
  </div>
  <Terminal className="w-8 h-8 opacity-80" />
  </Link>
- <Link
- to="/learn"
- className="flex items-center justify-between p-6 min-h-[80px] rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
- >
- <div>
- <h3 className="font-display font-bold text-xl tracking-wider">Continue Learning</h3>
- <p className="text-sm opacity-90 mt-1 font-medium">Resume your cybersecurity courses</p>
- </div>
- <BookOpen className="w-8 h-8 opacity-80" />
- </Link>
- </section>
-
- {/* SECTION: ENROLLED TRACKS */}
- <section aria-label="Enrolled Tracks">
- <h2 className="text-[0.65rem] font-mono font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
- <BookOpen className="w-3.5 h-3.5" /> Enrolled Tracks
- </h2>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
- {(courses ?? []).map((c) => {
- const cModules = (allModules ?? []).filter((m) => m.course_id === c.id);
- const cDone = cModules.filter((m) => completedModuleIds.has(m.id)).length;
- const pct = cModules.length ? Math.round((cDone / cModules.length) * 100) : 0;
-
- return (
- <div
- key={c.id}
- className="nv-card-interactive p-5 flex flex-col justify-between space-y-4 shadow-xs"
- >
- <div className="space-y-2">
- <div className="flex items-center justify-between">
- <span className="text-[0.65rem] font-mono uppercase px-2 py-0.5 rounded-full border bg-muted text-muted-foreground">
- {c.level}
- </span>
- <span className="text-xs font-mono text-muted-foreground font-semibold">
- {pct}% Complete
- </span>
- </div>
- <h4 className="font-display font-bold text-lg text-foreground line-clamp-1">
- {c.title}
- </h4>
- <p className="text-xs text-muted-foreground line-clamp-2">{c.description}</p>
- </div>
-
- <div className="space-y-3 pt-2 border-t border-border/60">
- <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
- <div
- className="h-full bg-primary transition-all duration-300"
- style={{ width: `${pct}%` }}
- />
- </div>
-
- <div className="flex items-center justify-between">
- <span className="text-xs font-mono text-muted-foreground">
- {cDone} / {cModules.length || 5} Modules
- </span>
- <Link
- to="/learn/$slug"
- params={{ slug: c.slug }}
- className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1 min-h-[48px]"
- >
- <span>{pct > 0 ? "Resume" : "Start"}</span>
- <ArrowRight className="w-3.5 h-3.5" />
- </Link>
- </div>
- </div>
- </div>
- );
- })}
- </div>
+ 
  </section>
 
  {/* SECTION: SKILL MATRIX */}
@@ -465,12 +362,7 @@ function StudentDashboard() {
  <div className="flex flex-wrap gap-2 items-center">
  {activeRole === "STUDENT" && (
  <>
- <Link
- to="/learn"
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
- >
- CONTINUE LEARNING
- </Link>
+ 
  <Link
  to="/cyber-range/labs"
  className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
@@ -544,12 +436,7 @@ function StudentDashboard() {
  </div>
  <div className="font-display font-bold text-2xl text-foreground">{totalXp}</div>
  </div>
- <div className="p-4 nv-card space-y-1 shadow-sm">
- <div className="text-[0.65rem] font-mono uppercase text-primary">Lessons</div>
- <div className="font-display font-bold text-2xl text-foreground">
- {completedModulesCount}
- </div>
- </div>
+ 
  <div className="p-4 nv-card space-y-1 shadow-sm">
  <div className="text-[0.65rem] font-mono uppercase text-success">Labs</div>
  <div className="font-display font-bold text-2xl text-foreground">

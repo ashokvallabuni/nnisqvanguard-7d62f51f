@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Database, Network, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import wolfHero from "@/assets/cyber-wolf-hero.jpg";
 import logoAsset from "@/assets/nisq-logo.asset.json";
 import { buttonVariants } from "@/components/ui/button";
 import { getCyberLabsCounts, type CyberLabsCounts } from "@/lib/cyber-labs";
@@ -43,13 +42,7 @@ function CyberRangePage() {
  return (
  <main className="pt-16 min-h-screen">
  <section className="range-hero px-4 md:px-8 py-20">
- <img
- src={wolfHero}
- width={1920}
- height={1080}
- alt="Cyber wolf guarding the NISQ training range"
- className="range-wolf"
- />
+ 
  <div className="range-overlay" />
  <div className="relative max-w-6xl mx-auto min-h-[68vh] flex items-center justify-end">
  <div className="max-w-xl text-center lg:text-left">
