@@ -201,7 +201,7 @@ function CampusPrograms() {
  </header>
  <Link
  to="/"
- className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-primary/30 bg-muted/5 hover:bg-muted/10 text-nisq-blue font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+ className="inline-flex items-center gap-2 px-3.5 min-h-[40px] rounded-[8px] border border-primary/30 bg-muted/5 hover:bg-muted/10 text-nisq-blue font-mono text-xs font-semibold tracking-wide transition-all duration-200 active:scale-[0.98]"
  >
  <Home className="w-4 h-4" />
  <span>HOME</span>
@@ -265,7 +265,7 @@ function CampusPrograms() {
  No active programs match these filters.
  </div>
  ) : (
- <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+ <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 items-stretch">
  {filteredPrograms.map((program) => (
  <ProgramCard
  key={program.id}
@@ -342,7 +342,7 @@ function CampusPrograms() {
  <button
  onClick={submitConsultation}
  disabled={busy}
- className="mt-5 w-full bg-primary hover:bg-primary/90 py-3 font-display text-xs font-bold tracking-wider text-primary-foreground disabled:opacity-60"
+ className="mt-5 w-full min-h-[44px] rounded-[8px] bg-primary hover:bg-primary/90 py-3 font-display text-xs font-bold tracking-wider text-primary-foreground transition-all duration-200 active:scale-[0.98] disabled:opacity-60"
  >
  {busy ? "SUBMITTING..." : "SUBMIT CONSULTATION"}
  </button>
@@ -420,23 +420,26 @@ function ProgramCard({ program, onApply }: { program: Program; onApply: () => vo
  { day: "numeric", month: "short", year: "numeric" },
  );
  return (
- <article className="border border-border bg-card p-5 transition hover:border-primary/60 hover:shadow-glow">
+ <article className="border border-border bg-card p-5 rounded-[12px] h-full flex flex-col justify-between transition-all duration-200 hover:border-primary/60 hover:shadow-glow">
+ <div className="space-y-4">
  <div className="flex items-start justify-between gap-3">
- <span className="mono border border-primary/30 bg-primary/10 px-2 py-1 text-[9px] tracking-widest text-primary">
+ <span className="mono border border-primary/30 bg-primary/10 px-2 py-1 text-[9px] tracking-widest text-primary rounded-[4px]">
  {program.dynamic_tier}
  </span>
  <span className="mono text-[10px] text-muted-foreground">{program.security_level}</span>
  </div>
- <h2 className="mt-5 font-display text-xl font-semibold text-foreground">
+ <h2 className="mt-3 font-display text-xl font-semibold text-foreground">
  {program.college_name}
  </h2>
- <p className="mt-2 flex items-center gap-1 font-mono text-xs text-muted-foreground">
+ <p className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
  <MapPin className="h-3.5 w-3.5 text-primary" />
  {program.city}, {program.state} · {program.country}
  </p>
- <p className="mt-4 min-h-12 font-mono text-xs leading-relaxed text-muted-foreground">
+ <p className="min-h-12 font-mono text-xs leading-relaxed text-muted-foreground">
  {program.description}
  </p>
+ </div>
+ <div>
  <div className="mt-5 grid grid-cols-2 gap-3 border-y border-border py-4 font-mono text-[10px] text-muted-foreground">
  <span>
  <ShieldCheck className="mr-1 inline h-3.5 w-3.5 text-primary" />
@@ -453,10 +456,11 @@ function ProgramCard({ program, onApply }: { program: Program; onApply: () => vo
  </div>
  <button
  onClick={onApply}
- className="mt-5 w-full border border-primary/60 py-2.5 font-display text-xs font-bold tracking-wider text-primary transition hover:bg-primary hover:text-primary-foreground hover:text-primary-foreground"
+ className="mt-5 w-full min-h-[40px] rounded-[8px] border border-primary/60 py-2.5 font-display text-xs font-bold tracking-wider text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground active:scale-[0.98]"
  >
  APPLY / CONNECT CAMPUS
  </button>
+ </div>
  </article>
  );
 }

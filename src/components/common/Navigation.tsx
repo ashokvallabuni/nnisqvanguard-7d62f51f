@@ -68,7 +68,7 @@ function AccountDropdown() {
   }, []);
 
   const itemClass =
-    "flex items-center gap-3 px-4 h-11 text-sm font-medium text-nisq-text hover:bg-nisq-blue-tint hover:text-nisq-blue transition-colors";
+    "flex items-center gap-3 px-3.5 h-10 mx-1 rounded-lg text-sm font-medium text-nisq-text hover:bg-nisq-blue-tint hover:text-nisq-blue transition-colors select-none";
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -76,7 +76,7 @@ function AccountDropdown() {
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="menu"
         aria-expanded={isOpen}
-        className="flex items-center gap-3 bg-nisq-white border border-nisq-border hover:border-nisq-blue transition-colors px-3 h-11 rounded-lg"
+        className="flex items-center gap-2.5 bg-nisq-white border border-nisq-border hover:border-nisq-blue transition-all px-3 h-10 rounded-[10px] shadow-xs active:scale-[0.98] cursor-pointer select-none"
       >
         <div className="w-7 h-7 rounded-full overflow-hidden bg-nisq-blue-tint flex items-center justify-center">
           {profile?.avatar_url ? (
@@ -159,7 +159,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all backdrop-blur-sm"
+      className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 border border-white/25 text-white hover:bg-white/20 active:scale-95 transition-all backdrop-blur-sm cursor-pointer select-none"
       aria-label="Toggle theme"
     >
       <div className={`transition-all duration-300 absolute ${theme === "light" ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"}`}>
@@ -257,16 +257,30 @@ export function TopNav() {
             {user ? (
               <>
                 <AccountDropdown />
-                <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-nisq-blue" onClick={() => signOut()}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/10 border-white/40 text-white hover:bg-white hover:text-nisq-blue active:scale-[0.98] transition-all shadow-none"
+                  onClick={() => signOut()}
+                >
                   Sign Out
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="ghost" className="text-white hover:bg-white/10 hover:text-white" asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-white hover:bg-white/15 hover:text-white active:scale-[0.98] transition-all"
+                  asChild
+                >
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button className="bg-white text-nisq-blue hover:bg-white/90" asChild>
+                <Button
+                  size="sm"
+                  className="bg-white text-nisq-blue hover:bg-white/95 shadow-sm active:scale-[0.98] transition-all"
+                  asChild
+                >
                   <Link to="/signup">Get Started</Link>
                 </Button>
               </>

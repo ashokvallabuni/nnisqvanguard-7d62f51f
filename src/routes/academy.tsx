@@ -185,27 +185,27 @@ function AcademyPage() {
           </div>
 
           {/* Filter & Search Row */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <div className="relative w-full sm:w-96">
-              <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 max-w-3xl mx-auto w-full">
+            <div className="relative w-full sm:flex-1">
+              <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search topics, modules, or tags..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 text-sm rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm"
+                className="w-full pl-9 pr-4 min-h-[44px] text-sm rounded-[10px] border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all shadow-xs"
               />
             </div>
             
-            <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 shadow-sm w-full sm:w-auto overflow-x-auto">
+            <div className="flex items-center gap-1 rounded-[10px] border border-border bg-card p-1 shadow-xs w-full sm:w-auto overflow-x-auto justify-start sm:justify-center">
               {["all", "beginner", "intermediate", "advanced"].map((lvl) => (
                 <button
                   key={lvl}
                   onClick={() => setSelectedLevel(lvl)}
-                  className={`px-4 py-1.5 rounded-md text-sm capitalize transition-colors whitespace-nowrap ${
+                  className={`px-3.5 py-1.5 min-h-[36px] rounded-lg text-xs font-semibold capitalize transition-all whitespace-nowrap cursor-pointer select-none active:scale-95 ${
                     selectedLevel === lvl
-                      ? "bg-primary text-primary-foreground font-semibold"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-primary-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                   }`}
                 >
                   {lvl}
@@ -251,7 +251,7 @@ function AcademyPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
               {filteredCourses.map((course) => (
                 <CourseCard key={course.id} course={course} progress={course.progress_percent} />
               ))}

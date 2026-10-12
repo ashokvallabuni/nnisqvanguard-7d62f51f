@@ -320,18 +320,18 @@ function CyberLabsCatalogPage() {
  {/* Search & Filters */}
  <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
  <div className="relative flex-1 max-w-lg">
- <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+ <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
  <input
  type="text"
  placeholder="Search by title, technique, or ATT&CK ID (e.g. Volatility, T1110, SQLi)…"
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full pl-10 pr-4 py-2 text-sm rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm"
+ className="w-full pl-10 pr-4 min-h-[44px] text-sm rounded-[10px] border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all shadow-xs"
  />
  </div>
 
  <div className="flex items-center gap-2 flex-wrap">
- <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1 text-xs font-mono shadow-sm">
+ <div className="flex items-center gap-1 rounded-[10px] border border-border bg-card p-1 text-xs font-mono shadow-xs">
  <span className="px-2 text-muted-foreground font-semibold uppercase tracking-wider text-[0.65rem]">
  Difficulty
  </span>
@@ -339,10 +339,10 @@ function CyberLabsCatalogPage() {
  <button
  key={diff}
  onClick={() => setSelectedDifficulty(diff)}
- className={`px-2.5 py-1 rounded-md capitalize transition-colors text-[0.7rem] font-semibold tracking-wide ${
+ className={`px-2.5 py-1.5 min-h-[32px] rounded-md capitalize transition-all duration-150 text-[0.7rem] font-semibold tracking-wide cursor-pointer select-none active:scale-95 ${
  selectedDifficulty === diff
- ? "bg-primary text-primary-foreground"
- : "text-muted-foreground hover:text-foreground"
+ ? "bg-primary text-primary-foreground shadow-xs"
+ : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
  }`}
  >
  {diff}
@@ -389,7 +389,7 @@ function CyberLabsCatalogPage() {
  <Layers className="w-4 h-4 text-primary" />
  {course ? course.title : mapping.courseId} IVVAB LABS
  </h4>
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+ <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 items-stretch">
  {courseLabs.map((lab) => (
  <LabCard key={lab.id} lab={lab} />
  ))}
@@ -409,7 +409,7 @@ function CyberLabsCatalogPage() {
  <Terminal className="w-4 h-4 text-muted-foreground" />
  OTHER IVVAB LABS
  </h4>
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+ <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 items-stretch">
  {unmappedLabs.map((lab) => (
  <LabCard key={lab.id} lab={lab} />
  ))}

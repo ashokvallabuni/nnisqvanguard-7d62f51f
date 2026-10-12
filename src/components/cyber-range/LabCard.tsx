@@ -47,7 +47,7 @@ export function LabCard({ lab }: LabCardProps) {
  let statusVariant = "bg-muted text-muted-foreground border-border";
  let ctaLabel = "OPEN LAB";
  let ctaIcon: typeof Play = Play;
- let ctaVariant = "border border-border bg-foreground text-background hover:bg-foreground/90";
+ let ctaVariant = "bg-primary text-primary-foreground hover:bg-primary/90 shadow-card";
 
  if (lab.is_active_session) {
  statusLabel = "IN PROGRESS";
@@ -66,7 +66,7 @@ export function LabCard({ lab }: LabCardProps) {
  return (
  <article
  aria-label={`Lab: ${lab.title}`}
- className={`group rounded-xl border bg-card hover:shadow-md transition-all duration-200 flex flex-col justify-between overflow-hidden ${
+ className={`group h-full rounded-xl border bg-card hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between overflow-hidden ${
  lab.is_active_session
  ? "border-primary ring-1 ring-primary/40 shadow-xs"
  : "border-border hover:border-primary/40"
@@ -170,11 +170,11 @@ export function LabCard({ lab }: LabCardProps) {
  <Link
  to="/cyber-range/lab/$slug"
  params={{ slug: lab.slug }}
- className={`inline-flex items-center gap-1.5 text-xs font-mono px-3.5 py-2 rounded-md font-semibold transition-all ${ctaVariant}`}
+ className={`inline-flex items-center gap-2 text-xs font-mono min-h-[40px] px-4 py-2 rounded-[8px] font-semibold transition-all duration-200 active:scale-[0.98] select-none ${ctaVariant}`}
  >
- <Terminal className="w-3.5 h-3.5" />
+ <Terminal className="w-3.5 h-3.5 shrink-0" />
  <span>{ctaLabel}</span>
- <ArrowRight className="w-3 h-3 opacity-70 group-hover:translate-x-0.5 transition-transform" />
+ <ArrowRight className="w-3 h-3 opacity-70 group-hover:translate-x-0.5 transition-transform shrink-0" />
  </Link>
  </div>
  </article>

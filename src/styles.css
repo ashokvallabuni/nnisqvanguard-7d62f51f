@@ -507,12 +507,16 @@
   font-weight: 600;
   font-size: 14px;
   transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease;
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .academy-button:hover {
   transform: translateY(-1px);
+}
+.academy-button:active {
+  transform: scale(0.98);
 }
 .academy-button-primary {
   color: var(--nisq-white);
@@ -998,6 +1002,7 @@
     transition: none;
   }
   .academy-button:hover,
+  .academy-button:active,
   .academy-course-card:hover {
     transform: none;
   }

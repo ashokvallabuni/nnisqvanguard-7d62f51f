@@ -45,7 +45,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
 
   return (
     <div
-      className={`group flex flex-col justify-between overflow-hidden transition-all duration-200 transform hover:-translate-y-1 ${
+      className={`group h-full flex flex-col justify-between overflow-hidden transition-all duration-200 hover:-translate-y-1 ${
         notAccessible ? "opacity-70 grayscale-[0.3]" : ""
       }`}
       style={{
@@ -84,7 +84,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
         </div>
       </div>
 
-      <div className="p-6 flex flex-col flex-1">
+      <div className="p-6 flex flex-col flex-1 justify-between">
         <div className="space-y-2 flex-1">
           <h3
             className="font-bold text-lg leading-snug line-clamp-2"
@@ -136,73 +136,25 @@ export function CourseCard({ course, progress }: CourseCardProps) {
           </div>
         )}
 
-        <div className="mt-6">
+        <div className="mt-6 pt-2">
           {notAccessible ? (
             <button
               type="button"
               disabled
               aria-disabled="true"
-              className="w-full inline-flex items-center justify-center gap-2 font-semibold text-sm transition-all duration-200 cursor-not-allowed opacity-50"
-              style={{
-                backgroundColor: "var(--course-card-border)",
-                color: "var(--course-title)",
-                padding: "0.6rem 1rem",
-                borderRadius: "10px",
-              }}
+              className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-[10px] bg-[var(--course-card-border)]/60 text-[var(--course-title)]/60 cursor-not-allowed opacity-60 select-none transition-all duration-200"
             >
               <Lock className="w-4 h-4" />
               <span>{isComingSoon ? "COMING SOON" : "LOCKED"}</span>
             </button>
-          ) : currentProgress >= 100 ? (
-            <Link
-              to="/learn/$slug"
-              params={{ slug: course.slug }}
-              className="w-full inline-flex items-center justify-center gap-2 font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5"
-              style={{
-                backgroundColor: "var(--course-btn-bg)",
-                color: "var(--course-btn-text)",
-                padding: "0.6rem 1rem",
-                borderRadius: "10px",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--course-btn-hover)")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "var(--course-btn-bg)")}
-            >
-              <span>View Course</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          ) : currentProgress > 0 ? (
-            <Link
-              to="/learn/$slug"
-              params={{ slug: course.slug }}
-              className="w-full inline-flex items-center justify-center gap-2 font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5"
-              style={{
-                backgroundColor: "var(--course-btn-bg)",
-                color: "var(--course-btn-text)",
-                padding: "0.6rem 1rem",
-                borderRadius: "10px",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--course-btn-hover)")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "var(--course-btn-bg)")}
-            >
-              <span>Continue Learning</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
           ) : (
             <Link
               to="/learn/$slug"
               params={{ slug: course.slug }}
-              className="w-full inline-flex items-center justify-center gap-2 font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5"
-              style={{
-                backgroundColor: "var(--course-btn-bg)",
-                color: "var(--course-btn-text)",
-                padding: "0.6rem 1rem",
-                borderRadius: "10px",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--course-btn-hover)")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "var(--course-btn-bg)")}
+              className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-[10px] bg-[var(--course-btn-bg)] text-[var(--course-btn-text)] shadow-card hover:bg-[var(--course-btn-hover)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer select-none"
             >
-              <span>Enroll</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>{currentProgress >= 100 ? "View Course" : currentProgress > 0 ? "Continue Learning" : "Enroll"}</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           )}
         </div>

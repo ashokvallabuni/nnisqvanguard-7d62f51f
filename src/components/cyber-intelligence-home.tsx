@@ -77,7 +77,7 @@ export function CyberIntelligenceHome() {
                 Security is no longer only about protecting systems. It is about protecting the intelligence, people, infrastructure, and decisions that depend on them.
               </motion.p>
               
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mt-8">
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full sm:w-auto">
                 <CyberButton variant="primary" to={(user ? dashboardLink : "/about") as any}>
                   EXPLORE NISQ VANGUARD
                 </CyberButton>
@@ -92,16 +92,16 @@ export function CyberIntelligenceHome() {
         </Section>
         
         {/* Team Section */}
-        <Section className="w-full max-w-[1280px] mx-auto relative z-10 py-24 border-t border-nisq-border">
+        <Section className="w-full max-w-[1280px] mx-auto relative z-10 py-20 md:py-24 border-t border-nisq-border">
           <motion.div 
             initial="hidden" 
             whileInView="visible" 
             viewport={{ once: true, margin: "-100px" }}
             variants={containerVariants}
-            className="flex flex-col items-center mb-16"
+            className="flex flex-col items-center mb-14"
           >
-            <motion.h2 variants={itemVariants} className="font-orbitron font-bold text-[32px] md:text-[40px] text-nisq-ink mb-4">Command Team</motion.h2>
-            <motion.p variants={itemVariants} className="text-nisq-text max-w-[60ch] text-center">
+            <motion.h2 variants={itemVariants} className="font-orbitron font-bold text-[30px] md:text-[38px] text-nisq-ink mb-3 text-center">Command Team</motion.h2>
+            <motion.p variants={itemVariants} className="text-nisq-text max-w-[60ch] text-center text-sm md:text-base leading-relaxed">
               The leadership driving NISQ Vanguard's mission to secure emerging digital infrastructure.
             </motion.p>
           </motion.div>
@@ -111,11 +111,15 @@ export function CyberIntelligenceHome() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={teamContainerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
           >
             {teamData.map((member, i) => (
-              <motion.div variants={itemVariants} key={i} className="p-8 bg-nisq-offwhite border border-nisq-border hover:border-nisq-blue/30 transition-colors flex flex-col items-center text-center rounded-[16px]">
-                <div className="w-24 h-24 rounded-full border border-nisq-border flex items-center justify-center mb-6 overflow-hidden bg-nisq-white">
+              <motion.div
+                variants={itemVariants}
+                key={i}
+                className="p-8 bg-nisq-offwhite border border-nisq-border hover:border-nisq-blue/40 hover:shadow-card transition-all duration-200 flex flex-col items-center text-center rounded-[16px] h-full"
+              >
+                <div className="w-24 h-24 rounded-full border border-nisq-border flex items-center justify-center mb-6 overflow-hidden bg-nisq-white shrink-0">
                   {member.imageUrl ? (
                     <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover object-top" />
                   ) : (
@@ -126,7 +130,7 @@ export function CyberIntelligenceHome() {
                 </div>
                 <h3 className="text-xl font-bold text-nisq-ink mb-1">{member.name}</h3>
                 <p className="font-mono text-[11px] uppercase tracking-widest text-nisq-blue mb-4">{member.role}</p>
-                <p className="text-nisq-text text-sm line-clamp-3">{member.bio}</p>
+                <p className="text-nisq-text text-sm leading-relaxed line-clamp-3 mt-auto">{member.bio}</p>
               </motion.div>
             ))}
           </motion.div>

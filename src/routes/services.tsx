@@ -138,11 +138,11 @@ function ServicesPage() {
  <p className="text-muted-foreground">NISQ Vanguard works with organizations and institutions to identify weaknesses across their digital environments and develop security strategies aligned with their operational requirements.</p>
  </div>
  
- <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+ <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
  {services.map((service) => (
  <div
  key={service.id}
- className="nv-card p-8 group flex flex-col hover:border-primary/40 transition-all duration-300"
+ className="nv-card p-8 group flex flex-col justify-between hover:border-primary/40 transition-all duration-300"
  >
  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
  <service.icon className="w-6 h-6 text-primary" />
@@ -167,10 +167,10 @@ function ServicesPage() {
 
  <Link
  to={`/appointments?service=${service.id}` as any}
- className="mt-auto inline-flex items-center justify-between w-full px-5 py-3 rounded-xl bg-background border border-border text-xs font-semibold text-primary hover:bg-primary/10 hover:border-primary/50 transition-all group/btn"
+ className="mt-auto inline-flex items-center justify-between w-full min-h-[44px] px-5 py-2.5 rounded-[10px] bg-background border border-border text-xs font-semibold text-primary hover:bg-primary/10 hover:border-primary/50 active:scale-[0.98] transition-all duration-200 group/btn"
  >
- REQUEST CONSULTATION
- <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+ <span>REQUEST CONSULTATION</span>
+ <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
  </Link>
  </div>
  ))}

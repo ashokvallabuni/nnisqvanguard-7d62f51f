@@ -47,7 +47,7 @@ export function PageHeader({
  const homeButton = !hideHomeButton ? (
  <Link
  to="/"
- className="inline-flex items-center justify-center gap-1.5 px-4 min-h-[48px] rounded-md border border-border bg-background hover:bg-muted text-foreground font-mono text-[0.7rem] font-semibold tracking-wide transition-colors"
+ className="inline-flex items-center justify-center gap-1.5 px-3.5 min-h-[40px] rounded-[8px] border border-border bg-background hover:bg-muted/80 text-foreground font-mono text-xs font-semibold tracking-wide transition-all duration-200 active:scale-[0.98] shadow-sm"
  aria-label="Navigate to home"
  >
  <Home className="w-3.5 h-3.5" />
@@ -79,7 +79,7 @@ export function PageHeader({
  {item.to && !isLast ? (
  <Link
  to={item.to}
- className="hover:text-primary transition-colors truncate max-w-[160px] sm:max-w-none font-semibold min-h-[48px] inline-flex items-center"
+ className="hover:text-primary transition-colors truncate max-w-[160px] sm:max-w-none font-semibold inline-flex items-center py-1"
  >
  {item.label}
  </Link>

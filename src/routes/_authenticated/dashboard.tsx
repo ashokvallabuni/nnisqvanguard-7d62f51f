@@ -298,15 +298,14 @@ function StudentDashboard() {
  <section aria-label="Primary Actions" className="grid grid-cols-1 gap-4">
  <Link
  to="/cyber-range/labs"
- className="flex items-center justify-between p-6 min-h-[80px] rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+ className="flex items-center justify-between p-6 min-h-[80px] rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-200 shadow-card hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]"
  >
  <div>
  <h3 className="font-display font-bold text-xl tracking-wider">Explore IVVAB LABS</h3>
  <p className="text-sm opacity-90 mt-1 font-medium">Access immersive cyber environments</p>
  </div>
- <Terminal className="w-8 h-8 opacity-80" />
+ <Terminal className="w-8 h-8 opacity-80 shrink-0" />
  </Link>
- 
  </section>
 
  {/* SECTION: SKILL MATRIX */}
@@ -362,40 +361,39 @@ function StudentDashboard() {
  <div className="flex flex-wrap gap-2 items-center">
  {activeRole === "STUDENT" && (
  <>
- 
  <Link
  to="/cyber-range/labs"
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-all active:scale-95 cursor-pointer select-none"
  >
  EXPLORE IVVAB LABS
  </Link>
  <Link
  to="/cyber-range/my-progress"
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-all active:scale-95 cursor-pointer select-none"
  >
  MY PROGRESS
  </Link>
  <Link
  to="/certificates"
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-all active:scale-95 cursor-pointer select-none"
  >
  CERTIFICATES
  </Link>
  <Link
  to={"/internships" as any}
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-all active:scale-95 cursor-pointer select-none"
  >
  INTERNSHIPS
  </Link>
  <Link
  to={"/programs" as any}
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-all active:scale-95 cursor-pointer select-none"
  >
  PROGRAMS
  </Link>
  <Link
  to="/reporting"
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 transition-all active:scale-95 cursor-pointer select-none"
  >
  REPORT INCIDENT
  </Link>
@@ -406,13 +404,13 @@ function StudentDashboard() {
  <>
  <Link
  to="/profile"
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-all active:scale-95 cursor-pointer select-none"
  >
  PROFILE
  </Link>
  <button
  onClick={() => void signOut()}
- className="px-4 min-h-[48px] inline-flex items-center justify-center rounded-lg text-[0.65rem] font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-colors"
+ className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold text-muted-foreground hover:text-destructive border border-border transition-all active:scale-95 cursor-pointer select-none"
  >
  LOGOUT
  </button>
@@ -421,8 +419,8 @@ function StudentDashboard() {
  </div>
  </div>
 
- <div className="grid grid-cols-2 gap-4">
- <div className="p-4 nv-card space-y-1 shadow-sm hover:border-nisq-border transition-colors">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+ <div className="p-4 nv-card space-y-1 shadow-xs hover:border-primary/40 transition-colors">
  <div className="text-[0.65rem] font-mono uppercase text-warning font-bold">
  Streak
  </div>
@@ -430,14 +428,14 @@ function StudentDashboard() {
  {userStreak} <span className="text-xs text-muted-foreground">{userStreak === 1 ? 'Day' : 'Days'}</span>
  </div>
  </div>
- <div className="p-4 nv-card space-y-1 shadow-sm">
+ <div className="p-4 nv-card space-y-1 shadow-xs hover:border-primary/40 transition-colors">
  <div className="text-[0.65rem] font-mono uppercase text-muted-foreground">
  Skill XP
  </div>
  <div className="font-display font-bold text-2xl text-foreground">{totalXp}</div>
  </div>
  
- <div className="p-4 nv-card space-y-1 shadow-sm">
+ <div className="p-4 nv-card space-y-1 shadow-xs hover:border-primary/40 transition-colors">
  <div className="text-[0.65rem] font-mono uppercase text-success">Labs</div>
  <div className="font-display font-bold text-2xl text-foreground">
  {completedLabsCount}
