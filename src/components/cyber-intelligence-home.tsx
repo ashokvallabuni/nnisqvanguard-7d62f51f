@@ -43,12 +43,27 @@ export function CyberIntelligenceHome() {
   return (
     <div className="relative bg-nisq-white text-nisq-navy font-sans selection:bg-nisq-blue-soft selection:text-nisq-white overflow-x-hidden min-h-[100svh]">
       <main className="relative z-10 w-full h-full flex flex-col justify-center min-h-[90vh]">
-        <Section className="flex flex-col justify-center w-full max-w-[1280px] mx-auto relative z-10 py-20">
+        <Section className="flex flex-col justify-center w-full max-w-[1280px] mx-auto relative z-10 py-20 overflow-hidden">
+          {/* Subtle Background Watermark: NISQ Vanguard Wolf Logo */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden z-0"
+          >
+            <motion.img
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 0.07, scale: 1 }}
+              transition={{ duration: 1.2, ease: EASE }}
+              src="/assets/nisq-logo.jpeg"
+              alt=""
+              className="w-[280px] sm:w-[420px] md:w-[620px] lg:w-[720px] aspect-square object-contain opacity-[0.07] mix-blend-multiply dark:invert dark:mix-blend-screen pointer-events-none select-none"
+            />
+          </div>
+
           <motion.div 
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 md:grid-cols-12 gap-6 min-w-0 items-center relative"
+            className="grid grid-cols-1 md:grid-cols-12 gap-6 min-w-0 items-center relative z-10"
           >
             <div className="col-span-1 md:col-span-12 flex flex-col items-center text-center gap-6 min-w-0 z-10 relative">
               <motion.div variants={itemVariants} className="font-mono text-sm font-semibold tracking-[0.2em] text-nisq-blue uppercase bg-nisq-offwhite px-4 py-1 rounded-full border border-nisq-border">
