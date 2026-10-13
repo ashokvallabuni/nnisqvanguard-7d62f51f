@@ -14,6 +14,8 @@ import {
   Shield,
   Loader2,
   Terminal,
+  BookOpen,
+  ExternalLink,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -174,6 +176,25 @@ function MessageBubble({
         </div>
       </div>
 
+      {/* Verified Course Citations */}
+      {!isUser && message.citations && message.citations.length > 0 && (
+        <div className="mt-2 ml-9 flex flex-wrap gap-1.5 items-center">
+          <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-mono">
+            <BookOpen className="w-3 h-3 text-primary" /> Verified Curriculum:
+          </span>
+          {message.citations.slice(0, 3).map((cit, cIdx) => (
+            <a
+              key={cIdx}
+              href={cit.route}
+              className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors font-medium"
+            >
+              <span>{cit.courseTitle || cit.title}</span>
+              <ExternalLink className="w-2.5 h-2.5" />
+            </a>
+          ))}
+        </div>
+      )}
+
       {/* Suggested Follow-Ups */}
       {!isUser && message.followUps && message.followUps.length > 0 && (
         <div className="mt-2.5 ml-9 flex flex-wrap gap-1.5">
@@ -200,6 +221,8 @@ export function IvvabAssistant() {
     messages,
     isLoading,
     suggestedPrompts,
+    activeLearningContext,
+    setLearningContext,
     openIvvab,
     closeIvvab,
     toggleIvvab,
@@ -343,15 +366,36 @@ export function IvvabAssistant() {
             {!isMinimized && (
               <>
                 {/* Active Context Banner */}
-                <div className="px-4 py-1.5 bg-muted/30 border-b border-border/50 flex items-center justify-between text-[11px] font-mono text-muted-foreground shrink-0">
-                  <div className="flex items-center gap-1.5 truncate">
-                    <Compass className="w-3 h-3 text-primary shrink-0" />
-                    <span className="truncate">Context: {window.location.pathname}</span>
+                {activeLearningContext ? (
+                  <div className="px-4 py-1.5 bg-primary/10 border-b border-primary/20 flex items-center justify-between text-[11px] font-mono text-primary shrink-0">
+                    <div className="flex items-center gap-1.5 truncate">
+                      <Terminal className="w-3 h-3 text-primary shrink-0" />
+                      <span className="truncate font-medium">
+                        {activeLearningContext.taskTitle
+                          ? `Task: ${activeLearningContext.taskTitle}`
+                          : activeLearningContext.labSlug
+                          ? `Lab: ${activeLearningContext.labSlug}`
+                          : activeLearningContext.lessonTitle || "Learning Mode"}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setLearningContext(null)}
+                      className="text-[10px] text-primary/80 hover:text-primary underline ml-2 shrink-0 cursor-pointer"
+                    >
+                      Reset
+                    </button>
                   </div>
-                  <span className="text-[10px] text-muted-foreground/80 shrink-0 font-sans">
-                    Press Ctrl+J
-                  </span>
-                </div>
+                ) : (
+                  <div className="px-4 py-1.5 bg-muted/30 border-b border-border/50 flex items-center justify-between text-[11px] font-mono text-muted-foreground shrink-0">
+                    <div className="flex items-center gap-1.5 truncate">
+                      <Compass className="w-3 h-3 text-primary shrink-0" />
+                      <span className="truncate">Context: {window.location.pathname}</span>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground/80 shrink-0 font-sans">
+                      Press Ctrl+J
+                    </span>
+                  </div>
+                )}
 
                 {/* Messages Container */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">

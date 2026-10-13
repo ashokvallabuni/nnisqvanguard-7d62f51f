@@ -1,12 +1,31 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
+export interface IvvabCitation {
+  title: string;
+  courseTitle: string;
+  route: string;
+  score: number;
+}
+
+export interface IvvabLearningContext {
+  courseSlug?: string;
+  moduleSlug?: string;
+  lessonTitle?: string;
+  labSlug?: string;
+  taskId?: string;
+  taskTitle?: string;
+  datasetInfo?: string;
+  learningMode?: "general" | "lesson" | "lab" | "assessment";
+}
+
 export interface IvvabMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
   timestamp: number;
   followUps?: string[];
+  citations?: IvvabCitation[];
 }
 
 export interface IvvabChatContextType {
@@ -15,11 +34,13 @@ export interface IvvabChatContextType {
   messages: IvvabMessage[];
   isLoading: boolean;
   suggestedPrompts: string[];
-  openIvvab: (initialPrompt?: string) => void;
+  activeLearningContext: IvvabLearningContext | null;
+  setLearningContext: (ctx: IvvabLearningContext | null) => void;
+  openIvvab: (initialPrompt?: string, context?: IvvabLearningContext) => void;
   closeIvvab: () => void;
   toggleIvvab: () => void;
   toggleMinimize: () => void;
-  sendMessage: (text: string) => Promise<void>;
+  sendMessage: (text: string, context?: IvvabLearningContext) => Promise<void>;
   clearMessages: () => void;
 }
 
@@ -27,7 +48,7 @@ const INITIAL_MESSAGE: IvvabMessage = {
   id: "ivvab-welcome",
   role: "assistant",
   content:
-    "Hello! I'm IVVAB, your AI assistant. I can help you navigate NISQ Vanguard, learn cybersecurity, explore IVVAB LABS, understand lessons, and find the right services.",
+    "Hello! I'm IVVAB, your AI assistant and cybersecurity tutor. I can help you navigate NISQ Vanguard, understand lessons from our verified curriculum, explore IVVAB LABS, inspect forensic datasets, and prepare for certifications.",
   timestamp: Date.now(),
 };
 
@@ -38,12 +59,22 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<IvvabMessage[]>([INITIAL_MESSAGE]);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeLearningContext, setActiveLearningContext] = useState<IvvabLearningContext | null>(null);
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  // Dynamically adapt suggested prompts to the current website page
+  // Dynamically adapt suggested prompts to the current website page and active lab context
   const suggestedPrompts = useMemo(() => {
     const p = pathname.toLowerCase();
+
+    if (activeLearningContext?.labSlug || p.includes("/lab/")) {
+      return [
+        "Give me a hint for this investigation task",
+        "Explain what this dataset telemetry represents",
+        "What terminal command should I use to filter this log?",
+        "Explain why this vulnerability happened",
+      ];
+    }
 
     if (p === "/" || p === "") {
       return [
@@ -74,10 +105,10 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
 
     if (p.startsWith("/cyber-range")) {
       return [
-        "How do I spin up a lab container?",
-        "How do flag submissions work in IVVAB LABS?",
-        "Walk me through how to approach SQL Injection defense",
-        "What tools are installed in the lab container?",
+        "How do I investigate Linux auth.log brute force attacks?",
+        "How does DNS tunneling work in Suricata labs?",
+        "Walk me through SQL injection forensics in Apache logs",
+        "How do I analyze Windows processes with Volatility 3?",
       ];
     }
 
@@ -98,54 +129,25 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
       ];
     }
 
-    if (p.startsWith("/reporting")) {
-      return [
-        "What is responsible disclosure?",
-        "What details are required in a vulnerability report?",
-        "How are reported vulnerabilities triaged?",
-      ];
-    }
-
-    if (p.startsWith("/campus")) {
-      return [
-        "How can our college partner with NISQ Vanguard?",
-        "What workshops and cyber education tiers are available?",
-        "How do student cohort enrollments work?",
-      ];
-    }
-
-    if (p.startsWith("/about")) {
-      return [
-        "Who founded NISQ Vanguard?",
-        "What is the NISQ Vanguard security philosophy?",
-        "Tell me about the command team",
-      ];
-    }
-
-    if (p.startsWith("/dashboard")) {
-      return [
-        "How do I track my active course progress?",
-        "Where do I see my completed lab flags?",
-        "What should I study next to increase my Skill XP?",
-      ];
-    }
-
     return [
       "What is NISQ Vanguard?",
       "Explain the CIA Triad",
       "Tell me about IVVAB LABS",
       "How do I get started with cybersecurity?",
     ];
-  }, [pathname]);
+  }, [pathname, activeLearningContext]);
 
-  const openIvvab = useCallback((initialPrompt?: string) => {
+  const openIvvab = useCallback((initialPrompt?: string, context?: IvvabLearningContext) => {
     setIsOpen(true);
     setIsMinimized(false);
+    if (context) {
+      setActiveLearningContext(context);
+    }
     if (initialPrompt && initialPrompt.trim()) {
       void (async () => {
         // Small delay to ensure panel opened
         await new Promise((r) => setTimeout(r, 80));
-        void executeSendMessage(initialPrompt.trim());
+        void executeSendMessage(initialPrompt.trim(), context);
       })();
     }
   }, []);
@@ -167,8 +169,10 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
     setMessages([INITIAL_MESSAGE]);
   }, []);
 
-  const executeSendMessage = async (text: string) => {
+  const executeSendMessage = async (text: string, context?: IvvabLearningContext) => {
     if (!text.trim() || isLoading) return;
+
+    const effectiveContext = context || activeLearningContext;
 
     const userMsgId = "u-" + Date.now();
     const userMessage: IvvabMessage = {
@@ -210,6 +214,7 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
             path: window.location.pathname,
             title: document.title,
           },
+          learningContext: effectiveContext || undefined,
           stream: true,
         }),
       });
@@ -226,6 +231,7 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
         const decoder = new TextDecoder();
         let accumulated = "";
         let finalFollowUps: string[] | undefined;
+        let finalCitations: IvvabCitation[] | undefined;
 
         while (true) {
           const { done, value } = await reader.read();
@@ -248,6 +254,7 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
                 }
                 if (data.done) {
                   finalFollowUps = data.followUps;
+                  finalCitations = data.citations;
                 }
               } catch {
                 // Ignore parse errors on partial chunks
@@ -256,18 +263,29 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
           }
         }
 
-        if (finalFollowUps && finalFollowUps.length > 0) {
+        if (finalFollowUps || finalCitations) {
           setMessages((prev) =>
             prev.map((msg) =>
-              msg.id === assistantMsgId ? { ...msg, followUps: finalFollowUps } : msg,
+              msg.id === assistantMsgId
+                ? {
+                    ...msg,
+                    followUps: finalFollowUps,
+                    citations: finalCitations,
+                  }
+                : msg,
             ),
           );
         }
       } else {
         // Fallback to JSON response
-        const data = (await response.json()) as { reply?: string; followUps?: string[] };
+        const data = (await response.json()) as {
+          reply?: string;
+          followUps?: string[];
+          citations?: IvvabCitation[];
+        };
         const reply =
-          data.reply || "I've analyzed your question and am ready to assist. Please let me know what specific aspect you'd like to explore next.";
+          data.reply ||
+          "I've analyzed your question and am ready to assist. Please let me know what specific aspect you'd like to explore next.";
 
         setMessages((prev) =>
           prev.map((msg) =>
@@ -276,6 +294,7 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
                   ...msg,
                   content: reply,
                   followUps: data.followUps,
+                  citations: data.citations,
                 }
               : msg,
           ),
@@ -300,10 +319,10 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
   };
 
   const sendMessage = useCallback(
-    async (text: string) => {
-      await executeSendMessage(text);
+    async (text: string, context?: IvvabLearningContext) => {
+      await executeSendMessage(text, context);
     },
-    [messages, isLoading],
+    [messages, isLoading, activeLearningContext],
   );
 
   return (
@@ -314,6 +333,8 @@ export function IvvabChatProvider({ children }: { children: React.ReactNode }) {
         messages,
         isLoading,
         suggestedPrompts,
+        activeLearningContext,
+        setLearningContext: setActiveLearningContext,
         openIvvab,
         closeIvvab,
         toggleIvvab,

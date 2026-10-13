@@ -5,6 +5,9 @@ export interface LabTask {
  title: string;
  description: string;
  command_hint?: string;
+ explanation?: string;
+ failure_guidance?: string;
+ progressive_hints?: Array<{ level: 1 | 2 | 3; text: string }>;
  validate: (ctx: CommandContext, lastCmd: string) => boolean;
 }
 

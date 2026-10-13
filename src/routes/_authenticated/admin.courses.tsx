@@ -2,10 +2,30 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/common/PageHeader";
-import { BookOpen, Edit, Trash2, CheckCircle, Clock } from "lucide-react";
+import {
+  BookOpen,
+  Edit,
+  Trash2,
+  CheckCircle,
+  Clock,
+  Sparkles,
+  Loader2,
+  Database,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Sparkles, Loader2 } from "lucide-react";
+import {
+  getIndexingStats,
+  refreshKnowledgeIndex,
+  searchCourseKnowledge,
+  type CourseIndexingStats,
+  type KnowledgeSearchResult,
+} from "@/lib/rag/course-knowledge";
 
 export const Route = createFileRoute("/_authenticated/admin/courses")({
  component: AdminCoursesPage,
@@ -14,6 +34,35 @@ export const Route = createFileRoute("/_authenticated/admin/courses")({
 function AdminCoursesPage() {
  const queryClient = useQueryClient();
  const [isGenerating, setIsGenerating] = useState<string | null>(null);
+ const [indexingStats, setIndexingStats] = useState<CourseIndexingStats>(() => getIndexingStats());
+ const [isRefreshingIndex, setIsRefreshingIndex] = useState(false);
+ const [testQuery, setTestQuery] = useState("");
+ const [testResults, setTestResults] = useState<KnowledgeSearchResult[]>([]);
+ const [hasSearched, setHasSearched] = useState(false);
+ const [showTester, setShowTester] = useState(false);
+
+ const handleRefreshIndex = () => {
+ setIsRefreshingIndex(true);
+ try {
+ const stats = refreshKnowledgeIndex();
+ setIndexingStats(stats);
+ toast.success(
+ `IVVAB Knowledge Index synchronized! (${stats.totalChunks} chunks indexed across ${stats.totalCourses} courses)`,
+ );
+ } catch (err: any) {
+ toast.error(`Failed to refresh knowledge index: ${err.message}`);
+ } finally {
+ setIsRefreshingIndex(false);
+ }
+ };
+
+ const handleRunTestQuery = (e: React.FormEvent) => {
+ e.preventDefault();
+ if (!testQuery.trim()) return;
+ const results = searchCourseKnowledge(testQuery.trim(), { limit: 4 });
+ setTestResults(results);
+ setHasSearched(true);
+ };
 
  const { data: courses, isLoading } = useQuery({
  queryKey: ["admin-courses"],
@@ -102,6 +151,151 @@ function AdminCoursesPage() {
  <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md font-semibold text-sm">
  + New Course
  </button>
+ </div>
+
+ {/* IVVAB AI Course Knowledge & RAG Index Panel */}
+ <div className="glass rounded-xl p-5 border border-primary/20 space-y-4 bg-primary/5">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+ <div className="flex items-center gap-3">
+ <div className="p-2.5 rounded-lg bg-primary/15 text-cyber border border-primary/30">
+ <Database className="w-5 h-5 text-cyber" />
+ </div>
+ <div>
+ <div className="flex items-center gap-2">
+ <h3 className="font-semibold text-base text-foreground">IVVAB AI Knowledge Index & RAG Engine</h3>
+ <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[0.65rem] font-mono font-medium bg-success/15 text-success border border-success/30">
+ <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+ RAG ENGINE READY
+ </span>
+ </div>
+ <p className="text-xs text-muted-foreground mt-0.5">
+ Indexes all actual Academy courses, lessons, lab virtual filesystem datasets, and glossaries for grounded tutoring.
+ </p>
+ </div>
+ </div>
+ 
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => setShowTester(!showTester)}
+ className="px-3 py-1.5 rounded-md border border-border bg-card/60 hover:bg-card text-foreground font-mono text-xs flex items-center gap-1.5 transition-colors"
+ >
+ <Search className="w-3.5 h-3.5 text-cyber" />
+ {showTester ? "Hide Query Tester" : "Test Retrieval"}
+ {showTester ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+ </button>
+ <button
+ type="button"
+ onClick={handleRefreshIndex}
+ disabled={isRefreshingIndex}
+ className="px-3 py-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-mono text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-50"
+ >
+ <RefreshCw className={`w-3.5 h-3.5 ${isRefreshingIndex ? "animate-spin" : ""}`} />
+ Refresh Index
+ </button>
+ </div>
+ </div>
+
+ {/* Telemetry Metrics Grid */}
+ <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2 border-t border-border/60">
+ <div className="p-3 rounded-lg bg-card/60 border border-border/60">
+ <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Total Courses</div>
+ <div className="text-lg font-bold font-mono text-cyber mt-0.5">{indexingStats.totalCourses}</div>
+ <div className="text-[0.6rem] text-muted-foreground">Available & roadmap</div>
+ </div>
+ <div className="p-3 rounded-lg bg-card/60 border border-border/60">
+ <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Modules & Lessons</div>
+ <div className="text-lg font-bold font-mono text-foreground mt-0.5">{indexingStats.totalModules}</div>
+ <div className="text-[0.6rem] text-muted-foreground">Syllabus units</div>
+ </div>
+ <div className="p-3 rounded-lg bg-card/60 border border-border/60">
+ <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Practical Labs</div>
+ <div className="text-lg font-bold font-mono text-cyber mt-0.5">{indexingStats.totalLabs}</div>
+ <div className="text-[0.6rem] text-muted-foreground">Virtual environments</div>
+ </div>
+ <div className="p-3 rounded-lg bg-card/60 border border-border/60">
+ <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Searchable Chunks</div>
+ <div className="text-lg font-bold font-mono text-foreground mt-0.5">{indexingStats.totalChunks}</div>
+ <div className="text-[0.6rem] text-muted-foreground">BM25 / vector nodes</div>
+ </div>
+ <div className="p-3 rounded-lg bg-card/60 border border-border/60">
+ <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Glossary Terms</div>
+ <div className="text-lg font-bold font-mono text-cyber mt-0.5">{indexingStats.totalGlossaryTerms}</div>
+ <div className="text-[0.6rem] text-muted-foreground">Cyber definitions</div>
+ </div>
+ <div className="p-3 rounded-lg bg-card/60 border border-border/60">
+ <div className="text-[0.65rem] font-mono text-muted-foreground uppercase">Career Paths</div>
+ <div className="text-lg font-bold font-mono text-foreground mt-0.5">{indexingStats.totalPaths}</div>
+ <div className="text-[0.6rem] text-muted-foreground">Mapped sequences</div>
+ </div>
+ </div>
+
+ {/* Index Security & Sync Info */}
+ <div className="flex flex-wrap items-center justify-between text-[0.7rem] font-mono text-muted-foreground pt-1 px-1">
+ <div className="flex items-center gap-3">
+ <span className="flex items-center gap-1 text-success">
+ <ShieldCheck className="w-3.5 h-3.5" /> Zero Flag Leakage Enforced
+ </span>
+ <span>•</span>
+ <span>BM25 + TF-IDF Weighted Ranking</span>
+ </div>
+ <div>
+ Last Synchronized: <span className="text-foreground">{new Date(indexingStats.indexedAt).toLocaleTimeString()}</span>
+ </div>
+ </div>
+
+ {/* Optional Retrieval Tester */}
+ {showTester && (
+ <div className="pt-3 border-t border-border/60 space-y-3">
+ <form onSubmit={handleRunTestQuery} className="flex gap-2">
+ <div className="relative flex-1">
+ <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+ <input
+ type="text"
+ value={testQuery}
+ onChange={(e) => setTestQuery(e.target.value)}
+ placeholder="Enter a test query (e.g., 'SSH brute force auth.log', 'DNS tunneling', 'Volatility pslist')..."
+ className="w-full bg-input/40 border border-border rounded-md pl-9 pr-3 py-2 text-xs font-mono focus:outline-none focus:border-primary text-foreground"
+ />
+ </div>
+ <button
+ type="submit"
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-xs font-mono font-semibold hover:bg-primary/90"
+ >
+ Test Query
+ </button>
+ </form>
+
+ {hasSearched && (
+ <div className="space-y-2 mt-2">
+ <div className="text-[0.7rem] font-mono text-muted-foreground flex items-center justify-between">
+ <span>Found {testResults.length} matching knowledge chunk(s):</span>
+ <span>Min BM25 score: 2.0</span>
+ </div>
+ {testResults.length === 0 ? (
+ <div className="p-3 rounded-lg bg-card/40 border border-border text-center text-xs text-muted-foreground font-mono">
+ No matching course chunks found. IVVAB AI will honestly indicate no direct curriculum match.
+ </div>
+ ) : (
+ <div className="space-y-2">
+ {testResults.map((res, i) => (
+ <div key={res.chunk.id || i} className="p-3 rounded-lg bg-card/50 border border-border text-xs space-y-1.5">
+ <div className="flex items-center justify-between">
+ <span className="font-semibold text-cyber">{res.chunk.courseTitle} {res.chunk.moduleTitle ? `› ${res.chunk.moduleTitle}` : ""}</span>
+ <span className="font-mono text-[0.65rem] px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+ Relevance: {res.score.toFixed(1)}
+ </span>
+ </div>
+ <div className="text-[0.7rem] text-muted-foreground font-mono">{res.chunk.sectionTitle} • Route: {res.chunk.verifiedRoute}</div>
+ <p className="text-muted-foreground text-[0.75rem] line-clamp-2">{res.chunk.content}</p>
+ </div>
+ ))}
+ </div>
+ )}
+ </div>
+ )}
+ </div>
+ )}
  </div>
 
  <div className="grid gap-4">
