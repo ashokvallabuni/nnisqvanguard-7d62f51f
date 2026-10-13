@@ -1,0 +1,36 @@
+{
+  "name": "NISQ Vanguard — Cyber Intelligence Platform",
+  "short_name": "NISQ Vanguard",
+  "description": "Enterprise-grade cybersecurity education, defense telemetry intelligence, and hands-on IVVAB LABS.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#050B14",
+  "theme_color": "#0A7CFF",
+  "categories": ["education", "security", "productivity"],
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.jpeg",
+      "sizes": "180x180",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

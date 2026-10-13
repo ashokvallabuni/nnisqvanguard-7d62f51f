@@ -160,8 +160,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  "Master defensive operations, network forensics, and threat hunting with real data and live IVVAB LABSs.",
  },
  { name: "twitter:image", content: "/assets/nisq-logo.jpeg" },
+ { name: "mobile-web-app-capable", content: "yes" },
+ { name: "apple-mobile-web-app-capable", content: "yes" },
+ { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
  ],
  links: [
+ { rel: "manifest", href: "/manifest.json" },
  { rel: "stylesheet", href: appCss },
  { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
  { rel: "apple-touch-icon", href: "/apple-touch-icon.jpeg", sizes: "180x180" },

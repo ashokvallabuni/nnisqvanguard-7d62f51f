@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIvvabChat } from "@/lib/ivvab-chat";
+import { InstallAppButton } from "./InstallAppButton";
 
 const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 
@@ -260,6 +261,7 @@ export function TopNav() {
 
           {/* Actions */}
           <div className="hidden min-[1100px]:flex items-center justify-end gap-3 shrink-0">
+            <InstallAppButton variant="header" />
             <button
               onClick={() => toggleIvvab()}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/25 text-white text-xs font-semibold tracking-wide active:scale-[0.98] transition-all cursor-pointer select-none shadow-xs"
@@ -304,6 +306,7 @@ export function TopNav() {
 
           {/* Mobile actions */}
           <div className="min-[1100px]:hidden flex items-center gap-2">
+            <InstallAppButton variant="mobile-header" />
             <button
               onClick={() => toggleIvvab()}
               className="flex items-center gap-1 px-2.5 h-10 rounded-lg bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-bold tracking-wide active:scale-95 transition-all cursor-pointer shadow-xs"
@@ -373,6 +376,7 @@ export function TopNav() {
               </button>
 
               <div className="flex flex-col gap-3 pt-4 pb-2">
+                <InstallAppButton variant="drawer" />
                 {user ? (
                   <>
                     <Link

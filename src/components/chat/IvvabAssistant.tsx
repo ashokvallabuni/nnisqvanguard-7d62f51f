@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -16,6 +16,10 @@ import {
   Terminal,
   BookOpen,
   ExternalLink,
+  Maximize2,
+  Minimize2,
+  ChevronsUpDown,
+  GripHorizontal,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -231,16 +235,119 @@ export function IvvabAssistant() {
     clearMessages,
   } = useIvvabChat();
 
+  type HeightMode = "compact" | "standard" | "expanded";
+
   const [input, setInput] = useState("");
+  const [heightMode, setHeightMode] = useState<HeightMode>("standard");
+  const [customHeight, setCustomHeight] = useState<number | null>(null);
+
+  const [viewportHeight, setViewportHeight] = useState<number>(
+    typeof window !== "undefined" ? window.innerHeight : 800
+  );
+  const [isMobile, setIsMobile] = useState<boolean>(
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const dragStartRef = useRef<{ startY: number; startH: number; moved: boolean } | null>(null);
+
+  // Track window resizing and mobile viewport
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportHeight(window.innerHeight);
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Safe vertical bounds on mobile:
+  // TopNav is 72px tall -> top buffer of 78px
+  // BottomNav is ~64px tall -> bottom buffer of 72px (4.5rem + safe-area)
+  // Max available height between top nav and bottom nav:
+  const maxAvailableHeight = Math.max(260, viewportHeight - 156);
+
+  // Height presets for mobile vs desktop
+  const presetHeights = useMemo(() => {
+    if (isMobile) {
+      return {
+        compact: Math.max(260, Math.min(340, Math.round(maxAvailableHeight * 0.46))),
+        standard: Math.max(340, Math.min(520, Math.round(maxAvailableHeight * 0.72))),
+        expanded: maxAvailableHeight,
+      };
+    }
+    return {
+      compact: 460,
+      standard: 620,
+      expanded: Math.min(820, Math.max(500, viewportHeight - 120)),
+    };
+  }, [isMobile, maxAvailableHeight, viewportHeight]);
+
+  const activeHeight = useMemo(() => {
+    if (isMinimized) return 56;
+    if (customHeight !== null) {
+      return Math.max(240, Math.min(maxAvailableHeight, customHeight));
+    }
+    return presetHeights[heightMode];
+  }, [isMinimized, customHeight, presetHeights, heightMode, maxAvailableHeight]);
+
+  const cycleHeightMode = useCallback(() => {
+    setCustomHeight(null);
+    setHeightMode((prev) => {
+      if (prev === "compact") return "standard";
+      if (prev === "standard") return "expanded";
+      return "compact";
+    });
+  }, []);
+
+  const setPresetMode = useCallback((mode: HeightMode) => {
+    setCustomHeight(null);
+    setHeightMode(mode);
+  }, []);
+
+  // Pointer drag to adjust height smoothly from top grab bar
+  const handlePointerDownResize = (e: React.PointerEvent) => {
+    if (e.button !== 0 && e.pointerType === "mouse") return;
+    e.preventDefault();
+    const startY = e.clientY;
+    const startH = activeHeight;
+    dragStartRef.current = { startY, startH, moved: false };
+
+    const handlePointerMove = (moveEvent: PointerEvent) => {
+      if (!dragStartRef.current) return;
+      // In bottom-anchored modal, dragging UP (smaller clientY) increases height
+      const deltaY = dragStartRef.current.startY - moveEvent.clientY;
+      if (Math.abs(deltaY) > 5) {
+        dragStartRef.current.moved = true;
+      }
+      const nextH = Math.max(240, Math.min(maxAvailableHeight, dragStartRef.current.startH + deltaY));
+      setCustomHeight(nextH);
+    };
+
+    const handlePointerUp = () => {
+      if (dragStartRef.current && !dragStartRef.current.moved) {
+        // Tapped without dragging: cycle preset
+        cycleHeightMode();
+      }
+      dragStartRef.current = null;
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
+  };
 
   // Auto-scroll on new message
   useEffect(() => {
     if (isOpen && !isMinimized) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isOpen, isMinimized, isLoading]);
+  }, [messages, isOpen, isMinimized, isLoading, activeHeight]);
 
   // Focus textarea when opened
   useEffect(() => {
@@ -282,78 +389,137 @@ export function IvvabAssistant() {
 
   return (
     <>
-      {/* Floating Chat Launcher Button (Label: IVVAB) */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button
-          onClick={toggleIvvab}
-          aria-label="Open IVVAB AI Assistant (Ctrl+J)"
-          className={`group flex items-center gap-2.5 px-4.5 py-3 rounded-full bg-primary hover:bg-primary/95 text-primary-foreground font-display text-sm font-bold tracking-wide shadow-xl shadow-primary/25 border border-white/20 active:scale-[0.96] transition-all duration-200 cursor-pointer select-none ${
-            isOpen ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
-          }`}
-        >
-          <div className="relative flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-white group-hover:rotate-12 transition-transform duration-300" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-primary animate-pulse" />
-          </div>
-          <span className="font-bold tracking-wider">IVVAB</span>
-        </button>
-      </div>
+      {/* Floating Chat Launcher Button (Label: IVVAB)
+          Positioned safely above BottomNav (bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] on mobile)
+          Draggable vertically so user can move it out of the way when reading/scrolling content */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 12 }}
+            transition={{ duration: 0.18 }}
+            drag="y"
+            dragMomentum={false}
+            dragConstraints={{
+              top: -Math.max(220, viewportHeight - 240),
+              bottom: 12,
+            }}
+            whileDrag={{ scale: 1.06, cursor: "grabbing" }}
+            className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-3 sm:right-6 z-40 md:z-50 touch-none select-none"
+          >
+            <button
+              onClick={toggleIvvab}
+              aria-label="Open IVVAB AI Assistant (Ctrl+J) · Drag to reposition"
+              title="Open IVVAB AI Assistant · Drag up or down to reposition"
+              className="group flex items-center gap-2 px-3.5 py-2.5 sm:px-4.5 sm:py-3 rounded-full bg-primary hover:bg-primary/95 text-primary-foreground font-display text-xs sm:text-sm font-bold tracking-wide shadow-xl shadow-primary/30 border border-white/20 active:scale-[0.96] transition-transform duration-150 cursor-grab active:cursor-grabbing select-none"
+            >
+              <div className="relative flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white group-hover:rotate-12 transition-transform duration-300" />
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-primary animate-pulse" />
+              </div>
+              <span className="font-bold tracking-wider">IVVAB</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Conversational Chat Panel */}
+      {/* Conversational Chat Panel
+          Bounded safely between TopNav (top-[78px]) and BottomNav (bottom-[calc(4.25rem+safe-area)])
+          Adjustable via top drag handle or 1-tap size pills (Compact 45% | Standard 72% | Full) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.95 }}
+            initial={{ opacity: 0, y: 20, scale: 0.96 }}
             animate={{
               opacity: 1,
               y: 0,
               scale: 1,
-              height: isMinimized ? "64px" : "620px",
+              height: `${activeHeight}px`,
             }}
-            exit={{ opacity: 0, y: 24, scale: 0.95 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className={`fixed bottom-22 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[440px] z-50 bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-all duration-200 backdrop-blur-md`}
+            exit={{ opacity: 0, y: 20, scale: 0.96 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:bottom-6 left-2 right-2 sm:left-auto sm:right-6 sm:w-[440px] z-50 bg-card/95 border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col backdrop-blur-xl overscroll-contain transition-[height] duration-150 ease-out"
             style={{
-              maxHeight: "calc(100vh - 110px)",
+              maxHeight: `calc(100dvh - 78px - 4.5rem - env(safe-area-inset-bottom, 0px))`,
             }}
           >
+            {/* Top Resize / Grab Handle Bar (Mobile-first adjustable control) */}
+            <div
+              onPointerDown={handlePointerDownResize}
+              className="w-full flex flex-col items-center justify-center pt-2 pb-1 bg-card/90 border-b border-border/30 cursor-grab active:cursor-grabbing select-none touch-none group hover:bg-muted/40 transition-colors"
+              title="Drag up or down to adjust height, or tap to cycle size"
+            >
+              <div className="w-12 h-1 rounded-full bg-border group-hover:bg-primary/60 transition-colors" />
+              <div className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground/70 mt-0.5 flex items-center gap-1">
+                <ChevronsUpDown className="w-2.5 h-2.5 text-primary" />
+                <span>
+                  {isMinimized
+                    ? "Minimized · Tap to expand"
+                    : `Adjustable (${customHeight ? `${customHeight}px` : heightMode}) · Tap or Drag`}
+                </span>
+              </div>
+            </div>
+
             {/* Header: IVVAB AI */}
-            <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary/10 via-background to-accent/10 border-b border-border shrink-0 select-none">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shadow-xs">
-                  <Shield className="w-4 h-4" />
+            <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 bg-gradient-to-r from-primary/10 via-background to-accent/10 border-b border-border shrink-0 select-none">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shadow-xs shrink-0">
+                  <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
-                <div>
-                  <h3 className="font-display font-bold text-sm tracking-tight text-foreground flex items-center gap-1.5">
+                <div className="min-w-0">
+                  <h3 className="font-display font-bold text-xs sm:text-sm tracking-tight text-foreground flex items-center gap-1.5 truncate">
                     IVVAB AI
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                   </h3>
-                  <p className="text-[10px] font-mono text-muted-foreground tracking-wider uppercase">
-                    IVVAB AI Assistant · Online
+                  <p className="text-[9px] sm:text-[10px] font-mono text-muted-foreground tracking-wider uppercase truncate">
+                    Security Assistant · Online
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1">
+              {/* Toolbar Controls */}
+              <div className="flex items-center gap-0.5 sm:gap-1">
+                {/* Size Cycle / Expand Button */}
+                <button
+                  onClick={cycleHeightMode}
+                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer"
+                  title={`Size: ${heightMode.toUpperCase()} (Tap to adjust)`}
+                  aria-label="Adjust panel size"
+                >
+                  {heightMode === "expanded" ? (
+                    <Minimize2 className="w-3.5 h-3.5 text-primary" />
+                  ) : heightMode === "compact" ? (
+                    <Maximize2 className="w-3.5 h-3.5 text-primary" />
+                  ) : (
+                    <ChevronsUpDown className="w-3.5 h-3.5" />
+                  )}
+                </button>
+
+                {/* Clear Conversation */}
                 <button
                   onClick={clearMessages}
-                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer"
                   title="Clear conversation"
                   aria-label="Clear conversation"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
+
+                {/* Minimize Toggle */}
                 <button
                   onClick={toggleMinimize}
-                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer"
                   title={isMinimized ? "Expand panel" : "Minimize panel"}
                   aria-label={isMinimized ? "Expand panel" : "Minimize panel"}
                 >
-                  <Minus className="w-3.5 h-3.5" />
+                  {isMinimized ? <Maximize2 className="w-3.5 h-3.5" /> : <Minus className="w-3.5 h-3.5" />}
                 </button>
+
+                {/* Close Button */}
                 <button
                   onClick={closeIvvab}
-                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer"
                   title="Close assistant"
                   aria-label="Close assistant"
                 >
@@ -365,40 +531,51 @@ export function IvvabAssistant() {
             {/* Main Chat Body (Hidden when minimized) */}
             {!isMinimized && (
               <>
-                {/* Active Context Banner */}
-                {activeLearningContext ? (
-                  <div className="px-4 py-1.5 bg-primary/10 border-b border-primary/20 flex items-center justify-between text-[11px] font-mono text-primary shrink-0">
-                    <div className="flex items-center gap-1.5 truncate">
-                      <Terminal className="w-3 h-3 text-primary shrink-0" />
-                      <span className="truncate font-medium">
-                        {activeLearningContext.taskTitle
-                          ? `Task: ${activeLearningContext.taskTitle}`
-                          : activeLearningContext.labSlug
-                          ? `Lab: ${activeLearningContext.labSlug}`
-                          : activeLearningContext.lessonTitle || "Learning Mode"}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => setLearningContext(null)}
-                      className="text-[10px] text-primary/80 hover:text-primary underline ml-2 shrink-0 cursor-pointer"
-                    >
-                      Reset
-                    </button>
+                {/* Sub-header with context and 1-tap size pills */}
+                <div className="px-3 py-1 bg-muted/40 border-b border-border/50 flex items-center justify-between text-[10px] font-mono text-muted-foreground shrink-0 select-none">
+                  <div className="flex items-center gap-1.5 truncate max-w-[55%]">
+                    {activeLearningContext ? (
+                      <>
+                        <Terminal className="w-3 h-3 text-primary shrink-0" />
+                        <span className="truncate text-primary font-medium">
+                          {activeLearningContext.taskTitle ||
+                            activeLearningContext.labSlug ||
+                            activeLearningContext.lessonTitle ||
+                            "Learning Mode"}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Compass className="w-3 h-3 text-primary shrink-0" />
+                        <span className="truncate">Context: {window.location.pathname}</span>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <div className="px-4 py-1.5 bg-muted/30 border-b border-border/50 flex items-center justify-between text-[11px] font-mono text-muted-foreground shrink-0">
-                    <div className="flex items-center gap-1.5 truncate">
-                      <Compass className="w-3 h-3 text-primary shrink-0" />
-                      <span className="truncate">Context: {window.location.pathname}</span>
-                    </div>
-                    <span className="text-[10px] text-muted-foreground/80 shrink-0 font-sans">
-                      Press Ctrl+J
+
+                  {/* 1-Tap Quick Size Selector Pills */}
+                  <div className="flex items-center gap-1 shrink-0">
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/70 hidden xs:inline">
+                      View:
                     </span>
+                    {(["compact", "standard", "expanded"] as HeightMode[]).map((mode) => (
+                      <button
+                        key={mode}
+                        onClick={() => setPresetMode(mode)}
+                        className={`px-1.5 py-0.5 rounded text-[9px] font-mono tracking-tight transition-all cursor-pointer ${
+                          heightMode === mode && customHeight === null
+                            ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                            : "bg-background/80 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/50"
+                        }`}
+                        title={`Switch to ${mode} height`}
+                      >
+                        {mode === "compact" ? "45%" : mode === "standard" ? "70%" : "Full"}
+                      </button>
+                    ))}
                   </div>
-                )}
+                </div>
 
                 {/* Messages Container */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 custom-scrollbar overscroll-contain">
                   {messages.map((message) => (
                     <MessageBubble
                       key={message.id}
@@ -407,7 +584,7 @@ export function IvvabAssistant() {
                     />
                   ))}
 
-                  {/* Adaptive Suggested Prompts (Shown below initial message or when few messages) */}
+                  {/* Adaptive Suggested Prompts */}
                   {messages.length <= 2 && (
                     <div className="pt-2 pb-1 space-y-1.5">
                       <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1">
@@ -445,7 +622,7 @@ export function IvvabAssistant() {
                 </div>
 
                 {/* Input Form */}
-                <div className="p-3 border-t border-border bg-card/50 shrink-0">
+                <div className="p-2.5 sm:p-3 border-t border-border bg-card/60 shrink-0">
                   <form onSubmit={handleSubmit} className="relative flex items-end gap-2">
                     <textarea
                       ref={textareaRef}
@@ -455,20 +632,23 @@ export function IvvabAssistant() {
                       placeholder="Ask IVVAB about cybersecurity, labs, courses..."
                       rows={1}
                       disabled={isLoading}
-                      className="w-full resize-none min-h-[42px] max-h-[100px] p-2.5 text-xs rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
+                      className="w-full resize-none min-h-[38px] sm:min-h-[42px] max-h-[80px] sm:max-h-[100px] p-2 sm:p-2.5 text-xs rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
                     />
                     <button
                       type="submit"
                       disabled={!input.trim() || isLoading}
                       aria-label="Send message"
-                      className="min-h-[42px] min-w-[42px] rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center active:scale-[0.95] disabled:opacity-40 disabled:pointer-events-none transition-all shadow-sm cursor-pointer shrink-0"
+                      className="min-h-[38px] min-w-[38px] sm:min-h-[42px] sm:min-w-[42px] rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center active:scale-[0.95] disabled:opacity-40 disabled:pointer-events-none transition-all shadow-sm cursor-pointer shrink-0"
                     >
                       <Send className="w-4 h-4" />
                     </button>
                   </form>
-                  <p className="text-[10px] text-muted-foreground text-center mt-2 leading-none">
-                    IVVAB provides AI security guidance. Always test inside IVVAB LABS.
-                  </p>
+                  <div className="flex items-center justify-between mt-1.5 px-0.5 text-[9px] sm:text-[10px] text-muted-foreground leading-none">
+                    <span className="truncate">IVVAB AI Security Assistant</span>
+                    <span className="font-mono text-primary/80 shrink-0 uppercase">
+                      {customHeight ? `${customHeight}px` : heightMode}
+                    </span>
+                  </div>
                 </div>
               </>
             )}
