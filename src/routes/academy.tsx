@@ -14,7 +14,9 @@ import {
   Award,
   Layers,
   Zap,
+  X,
 } from "lucide-react";
+import { getCourseImage } from "@/data/course-images";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
@@ -118,6 +120,7 @@ function AcademyPage() {
         tags: allTags.length > 0 ? allTags : ["Security", "Defense", "Telemetry"],
         module_count: courseModules.length || 5,
         progress_percent: progressPercent,
+        imageUrl: getCourseImage(c.slug),
       };
     });
 
@@ -198,7 +201,7 @@ function AcademyPage() {
           </div>
 
           {/* Filter & Search Row */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 max-w-3xl mx-auto w-full">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-8 max-w-3xl mx-auto w-full">
             <div className="relative w-full sm:flex-1">
               <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
@@ -206,18 +209,28 @@ function AcademyPage() {
                 placeholder="Search topics, modules, or tags..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 min-h-[44px] text-sm rounded-[10px] border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all shadow-xs"
+                className="w-full pl-9 pr-9 min-h-[44px] text-sm rounded-[10px] border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all shadow-xs"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors cursor-pointer"
+                  aria-label="Clear search query"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
             
-            <div className="flex items-center gap-1 rounded-[10px] border border-border bg-card p-1 shadow-xs w-full sm:w-auto overflow-x-auto justify-start sm:justify-center">
+            <div className="flex items-center gap-1.5 rounded-[10px] border border-border bg-card p-1 shadow-xs w-full sm:w-auto overflow-x-auto justify-start sm:justify-center no-scrollbar">
               {["all", "beginner", "intermediate", "advanced"].map((lvl) => (
                 <button
                   key={lvl}
                   onClick={() => setSelectedLevel(lvl)}
-                  className={`px-3.5 py-1.5 min-h-[36px] rounded-lg text-xs font-semibold capitalize transition-all whitespace-nowrap cursor-pointer select-none active:scale-95 ${
+                  className={`px-3.5 min-h-[40px] rounded-lg text-xs font-semibold capitalize transition-all whitespace-nowrap cursor-pointer select-none active:scale-95 flex items-center justify-center ${
                     selectedLevel === lvl
-                      ? "bg-primary text-primary-foreground shadow-xs"
+                      ? "bg-primary text-primary-foreground shadow-xs font-bold"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                   }`}
                 >
@@ -264,7 +277,7 @@ function AcademyPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 items-stretch">
               {filteredCourses.map((course) => (
                 <CourseCard key={course.id} course={course} progress={course.progress_percent} />
               ))}

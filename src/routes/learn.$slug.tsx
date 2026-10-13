@@ -19,6 +19,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
+import { CourseSticker } from "@/components/academy/CourseSticker";
 import { getLabsForCourse } from "@/data/lab-registry";
 import { LabCard } from "@/components/cyber-range/LabCard";
 import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
@@ -228,7 +229,43 @@ function CourseDetailPage() {
  {/* Main Course Syllabus & Overview */}
  <div className="xl:col-span-3 space-y-8">
  {/* Overview Card */}
- <div className="nv-card space-y-4">
+ <div className="nv-card space-y-5">
+ {/* Topic Sticker Artwork */}
+ <CourseSticker
+ courseSlug={course.slug}
+ courseId={course.id}
+ title={course.title}
+ className="w-full h-44 sm:h-64 rounded-xl border border-border shadow-xs"
+ priority
+ />
+
+ {/* Mobile-First Primary CTA & Progress Bar */}
+ {nextModule && (
+ <div className="p-4 rounded-xl bg-primary/5 border border-primary/20 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+ <div className="space-y-1">
+ <div className="flex items-center gap-2">
+ <span className="text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-primary/20 text-primary">
+ {progressPercent > 0 ? "In Progress" : "Ready to Start"}
+ </span>
+ <span className="text-xs font-mono text-muted-foreground">
+ {completedCount}/{totalModules} Modules ({progressPercent}%)
+ </span>
+ </div>
+ <p className="text-xs text-muted-foreground">
+ Next up: <span className="font-semibold text-foreground">{nextModule.title}</span>
+ </p>
+ </div>
+ <Link
+ to="/learn/$slug/$moduleSlug"
+ params={{ slug: course.slug, moduleSlug: nextModule.slug }}
+ className="inline-flex items-center justify-center gap-2 px-6 min-h-[48px] rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 active:scale-[0.98] shadow-sm transition-all"
+ >
+ <Play className="w-4 h-4 fill-primary-foreground" />
+ <span>{progressPercent > 0 ? "RESUME COURSE" : "START LEARNING"}</span>
+ </Link>
+ </div>
+ )}
+
  <h2 className="font-display font-bold text-xl text-foreground">
  Course Curriculum Overview
  </h2>
@@ -401,7 +438,7 @@ function CourseDetailPage() {
  className="w-full inline-flex items-center justify-center gap-2 px-5 min-h-[48px] rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 shadow-sm transition-all"
  >
  <Play className="w-4 h-4 fill-primary-foreground" />
- <span>{progressPercent > 0 ? "Resume Learning" : "Start First Module"}</span>
+ <span>{progressPercent > 0 ? "RESUME COURSE" : "START LEARNING"}</span>
  </Link>
  </div>
  )}

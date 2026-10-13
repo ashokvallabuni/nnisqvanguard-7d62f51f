@@ -123,7 +123,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  head: () => ({
  meta: [
  { charSet: "utf-8" },
- { name: "viewport", content: "width=device-width, initial-scale=1" },
+ { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
  { name: "theme-color", content: PALETTE.blue },
  {
  title: "NISQ Vanguard Academy & IVVAB LABS — Advanced Cybersecurity Platform",
@@ -299,9 +299,16 @@ function RootComponent() {
 function AdminTacticalPreviewBarWrapper() {
  const { isAdmin } = useAuth();
  const location = useRouterState({ select: (s) => s.location });
+ const isLabInteractive =
+ location.pathname.startsWith("/cyber-range/lab/") ||
+ location.pathname.startsWith("/cyber-range/interactive/");
 
  return (
- <div className="min-h-screen relative flex flex-col overflow-x-clip bg-nisq-white">
+ <div
+ className={`min-h-screen relative flex flex-col overflow-x-clip bg-nisq-white ${
+ isLabInteractive ? "" : "pb-16 md:pb-0"
+ }`}
+ >
  <header className="sticky top-0 z-50 w-full flex flex-col bg-nisq-white">
  {isAdmin && <AdminTacticalPreviewBar />}
  <TopNav />

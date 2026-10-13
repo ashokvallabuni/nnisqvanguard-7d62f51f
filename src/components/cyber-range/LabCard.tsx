@@ -45,7 +45,7 @@ export function LabCard({ lab }: LabCardProps) {
 
  let statusLabel = "AVAILABLE";
  let statusVariant = "bg-muted text-muted-foreground border-border";
- let ctaLabel = "OPEN LAB";
+ let ctaLabel = "START LAB";
  let ctaIcon: typeof Play = Play;
  let ctaVariant = "bg-primary text-primary-foreground hover:bg-primary/90 shadow-card";
 
@@ -170,7 +170,7 @@ export function LabCard({ lab }: LabCardProps) {
  <Link
  to="/cyber-range/lab/$slug"
  params={{ slug: lab.slug }}
- className={`inline-flex items-center gap-2 text-xs font-mono min-h-[40px] px-4 py-2 rounded-[8px] font-semibold transition-all duration-200 active:scale-[0.98] select-none ${ctaVariant}`}
+ className={`inline-flex items-center gap-2 text-xs font-mono min-h-[44px] px-4 py-2 rounded-[8px] font-semibold transition-all duration-200 active:scale-[0.98] select-none ${ctaVariant}`}
  >
  <Terminal className="w-3.5 h-3.5 shrink-0" />
  <span>{ctaLabel}</span>

@@ -615,7 +615,7 @@ function CyberLabWorkbenchPage() {
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         {/* Mobile Tab Bar (< 768px) */}
-        <div className="flex md:hidden border border-border rounded-xl overflow-hidden mb-4 text-xs font-mono">
+        <div className="flex md:hidden border border-border rounded-xl overflow-hidden mb-4 text-xs font-mono bg-card">
           {[
             { id: "terminal", label: "Terminal", icon: Terminal },
             { id: "tasks", label: "Tasks", icon: ListChecks },
@@ -625,15 +625,21 @@ function CyberLabWorkbenchPage() {
           ].map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              onClick={() => setMobileTab(id as MobileTab)}
-              className={`flex-1 flex items-center justify-center gap-1 py-2.5 transition-colors ${
+              onClick={() => {
+                setMobileTab(id as MobileTab);
+                if (id === "terminal") setActiveTab("terminal");
+                else if (id === "theory") setActiveTab("theory");
+                else if (id === "dataset") setActiveTab("dataset");
+                else if (id === "progress") setActiveTab("assessment");
+              }}
+              className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 py-1.5 min-h-[44px] transition-colors cursor-pointer select-none active:scale-95 ${
                 mobileTab === id
                   ? "bg-primary text-primary-foreground font-semibold"
                   : "bg-card text-muted-foreground hover:text-foreground"
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{label}</span>
+              <span className="text-[10px] sm:text-xs tracking-tight">{label}</span>
             </button>
           ))}
         </div>
@@ -641,7 +647,7 @@ function CyberLabWorkbenchPage() {
         {/* Desktop Split Grid (12 cols) */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Left Panel: Tasks & Progressive Guidance (4 cols on desktop) */}
-          <div className="md:col-span-4 space-y-4">
+          <div className={`md:col-span-4 space-y-4 ${mobileTab === "tasks" ? "block" : "hidden md:block"}`}>
             {/* Tasks Checklist */}
             <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-xs">
               <div className="flex items-center justify-between">
@@ -817,10 +823,10 @@ function CyberLabWorkbenchPage() {
           </div>
 
           {/* Right Panel: Active Workspace Tab (8 cols on desktop) */}
-          <div className="md:col-span-8">
+          <div className={`md:col-span-8 ${mobileTab !== "tasks" ? "block" : "hidden md:block"}`}>
             {/* Tab 1: Terminal Workbench */}
             {activeTab === "terminal" && (
-              <div className="flex flex-col h-[680px] rounded-xl border border-border bg-[#050b14] overflow-hidden shadow-2xl">
+              <div className="flex flex-col h-[520px] sm:h-[600px] md:h-[680px] rounded-xl border border-border bg-[#050b14] overflow-hidden shadow-2xl">
                 {/* Terminal top bar */}
                 <div className="bg-[#0a1220] border-b border-border/60 px-4 py-2.5 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
@@ -886,29 +892,32 @@ function CyberLabWorkbenchPage() {
                 {/* Command Input Bar */}
                 <form
                   onSubmit={handleExecuteCommand}
-                  className="border-t border-border/60 bg-[#070e1a] p-2.5 flex items-center gap-2 shrink-0"
+                  className="border-t border-border/60 bg-[#070e1a] p-2 flex items-center gap-2 shrink-0"
                 >
-                  <span className="font-mono text-xs text-emerald-400 pl-2 shrink-0">
+                  <span className="font-mono text-xs text-emerald-400 pl-2 shrink-0 hidden sm:inline">
                     analyst@ivvab-labs:{cwd}$
+                  </span>
+                  <span className="font-mono text-xs text-emerald-400 pl-1 shrink-0 sm:hidden">
+                    $&nbsp;
                   </span>
                   <input
                     type="text"
                     disabled={!sessionActive}
                     placeholder={
                       sessionActive
-                        ? "Enter command (e.g. ls, cat, grep, awk, sort, uniq)..."
+                        ? "Enter command (ls, cat, grep, etc)..."
                         : "Start sandbox container above to run commands"
                     }
                     value={commandInput}
                     onChange={(e) => setCommandInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    className="flex-1 bg-transparent font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none disabled:opacity-50 min-w-0"
+                    className="flex-1 bg-transparent font-mono text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none disabled:opacity-50 min-w-0 min-h-[40px] py-2"
                     autoFocus
                   />
                   <button
                     type="submit"
                     disabled={!sessionActive || !commandInput.trim()}
-                    className="px-3 py-1 rounded bg-primary/20 border border-primary/40 text-primary font-mono text-xs hover:bg-primary hover:text-primary-foreground disabled:opacity-30 transition-colors shrink-0"
+                    className="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-primary text-primary-foreground font-mono text-xs font-bold hover:bg-primary/90 disabled:opacity-30 transition-all shrink-0 active:scale-95 cursor-pointer shadow-xs"
                   >
                     Run ↵
                   </button>

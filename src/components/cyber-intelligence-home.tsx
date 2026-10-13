@@ -92,15 +92,13 @@ export function CyberIntelligenceHome() {
                 Security is no longer only about protecting systems. It is about protecting the intelligence, people, infrastructure, and decisions that depend on them.
               </motion.p>
               
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full sm:w-auto">
-                <CyberButton variant="primary" to={(user ? dashboardLink : "/about") as any}>
-                  EXPLORE NISQ VANGUARD
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 w-full sm:w-auto">
+                <CyberButton variant="primary" to="/academy">
+                  {user ? "CONTINUE LEARNING" : "EXPLORE COURSES"}
                 </CyberButton>
-                {!user && (
-                  <CyberButton variant="secondary" to="/login">
-                    SIGN IN
-                  </CyberButton>
-                )}
+                <CyberButton variant="secondary" to="/cyber-range/labs">
+                  OPEN IVVAB LABS
+                </CyberButton>
               </motion.div>
             </div>
           </motion.div>

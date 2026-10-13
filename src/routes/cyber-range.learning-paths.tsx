@@ -815,7 +815,7 @@ function LearningPathsPage() {
                       <button
                         onClick={() => enrollMutation.mutate(path.slug)}
                         disabled={enrollMutation.isPending}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs transition-colors shadow-xs"
+                        className="inline-flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs transition-colors shadow-xs active:scale-95 cursor-pointer"
                       >
                         <span>Enroll Path</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -824,7 +824,7 @@ function LearningPathsPage() {
 
                     <button
                       onClick={() => handleAskIvvab(path)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-border bg-muted/40 hover:bg-muted text-foreground text-xs font-medium transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[44px] rounded-lg border border-border bg-muted/40 hover:bg-muted text-foreground text-xs font-medium transition-colors active:scale-95 cursor-pointer"
                       title="Ask IVVAB AI about this learning path"
                     >
                       <Bot className="w-3.5 h-3.5 text-primary" />

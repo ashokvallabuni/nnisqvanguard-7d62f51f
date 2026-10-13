@@ -9,6 +9,7 @@ import {
   Lock,
   Sparkles,
 } from "lucide-react";
+import { CourseSticker } from "./CourseSticker";
 
 export interface CourseData {
   id: string;
@@ -57,27 +58,26 @@ export function CourseCard({ course, progress }: CourseCardProps) {
       }}
       aria-label={`${course.title} ${notAccessible ? "locked course" : "course"}`}
     >
-      {/* Thumbnail Area */}
-      <div className="h-40 w-full relative overflow-hidden bg-white/50 border-b border-[var(--course-card-border)] flex items-center justify-center">
-        {course.imageUrl ? (
-          <img src={course.imageUrl} alt={course.title} className="w-full h-full object-cover" />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--course-card-bg)] to-[var(--course-card-border)] opacity-50 flex items-center justify-center">
-            <ShieldCheck className="w-12 h-12 text-[var(--course-btn-bg)] opacity-30" />
-          </div>
-        )}
+      {/* Thumbnail Area with Topic Sticker */}
+      <div className="w-full relative overflow-hidden bg-[#050B14] border-b border-[var(--course-card-border)] flex items-center justify-center">
+        <CourseSticker
+          courseSlug={course.slug}
+          courseId={course.id}
+          title={course.title}
+          className="w-full h-44 sm:h-48"
+        />
         
         {/* Badges Overlay on Thumbnail */}
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute top-3 left-3 flex gap-2 z-10">
           {isComingSoon && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-1 rounded border bg-white/90 text-gray-700 shadow-sm backdrop-blur-sm">
-              <Sparkles className="w-3 h-3" />
+            <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-1 rounded border bg-[#081522]/90 text-white/90 border-[#16283A] shadow-sm backdrop-blur-sm">
+              <Sparkles className="w-3 h-3 text-[#00B8FF]" />
               <span>Coming Soon</span>
             </span>
           )}
           {isLocked && !isComingSoon && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-1 rounded border bg-red-50/90 text-red-600 border-red-200 shadow-sm backdrop-blur-sm">
-              <Lock className="w-3 h-3" />
+            <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase font-bold tracking-wider px-2 py-1 rounded border bg-red-950/80 text-red-300 border-red-800/80 shadow-sm backdrop-blur-sm">
+              <Lock className="w-3 h-3 text-red-400" />
               <span>Locked</span>
             </span>
           )}
@@ -153,7 +153,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
               params={{ slug: course.slug }}
               className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-[10px] bg-[var(--course-btn-bg)] text-[var(--course-btn-text)] shadow-card hover:bg-[var(--course-btn-hover)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer select-none"
             >
-              <span>{currentProgress >= 100 ? "View Course" : currentProgress > 0 ? "Continue Learning" : "Enroll"}</span>
+              <span className="font-bold tracking-wide">{currentProgress >= 100 ? "VIEW COURSE DETAILS" : currentProgress > 0 ? "CONTINUE LEARNING" : "START LEARNING"}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           )}

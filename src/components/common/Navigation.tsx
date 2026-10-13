@@ -13,6 +13,10 @@ import {
   Sun,
   Moon,
   Sparkles,
+  Home,
+  GraduationCap,
+  Terminal,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIvvabChat } from "@/lib/ivvab-chat";
@@ -298,11 +302,19 @@ export function TopNav() {
             )}
           </div>
 
-          {/* Mobile toggle */}
-          <div className="min-[1100px]:hidden flex items-center gap-3">
+          {/* Mobile actions */}
+          <div className="min-[1100px]:hidden flex items-center gap-2">
+            <button
+              onClick={() => toggleIvvab()}
+              className="flex items-center gap-1 px-2.5 h-10 rounded-lg bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-bold tracking-wide active:scale-95 transition-all cursor-pointer shadow-xs"
+              aria-label="Open IVVAB AI Assistant"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#00B8FF]" />
+              <span>IVVAB</span>
+            </button>
             <ThemeToggle />
             <button
-              className="h-11 w-11 flex items-center justify-center rounded-lg border border-white/30 text-white hover:bg-white/10"
+              className="h-10 w-10 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg border border-white/30 text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
               onClick={() => setOpen(!open)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
@@ -408,5 +420,97 @@ export function TopNav() {
 }
 
 export function BottomNav() {
-  return null;
+  const { user } = useAuth();
+  const location = useRouterState({ select: (s) => s.location });
+  const pathname = location.pathname;
+
+  // Do not display bottom bar on active interactive cyber range terminal labs
+  // to prevent covering command inputs, submission buttons, or software keyboard
+  if (
+    pathname.startsWith("/cyber-range/lab/") ||
+    pathname.startsWith("/cyber-range/interactive/")
+  ) {
+    return null;
+  }
+
+  const items = [
+    {
+      to: "/",
+      label: "Home",
+      icon: Home,
+      isActive: pathname === "/",
+    },
+    {
+      to: "/academy",
+      label: "Academy",
+      icon: GraduationCap,
+      isActive: pathname.startsWith("/academy") || pathname.startsWith("/learn"),
+    },
+    {
+      to: "/cyber-range/labs",
+      label: "IVVAB LABS",
+      icon: Terminal,
+      isActive: pathname.startsWith("/cyber-range/labs"),
+    },
+    {
+      to: user ? "/cyber-range/my-progress" : "/programs",
+      label: user ? "Progress" : "Programs",
+      icon: TrendingUp,
+      isActive: pathname.startsWith("/cyber-range/my-progress") || pathname.startsWith("/programs"),
+    },
+    {
+      to: user ? "/profile" : "/login",
+      label: user ? "Profile" : "Sign In",
+      icon: UserIcon,
+      isActive:
+        pathname.startsWith("/profile") ||
+        pathname.startsWith("/login") ||
+        pathname.startsWith("/dashboard"),
+    },
+  ];
+
+  return (
+    <nav
+      aria-label="Mobile Bottom Navigation"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#050B14]/95 backdrop-blur-xl border-t border-[#16283A] shadow-[0_-6px_25px_rgba(0,0,0,0.45)] px-2 pt-1 pb-[calc(env(safe-area-inset-bottom,0px)+0.25rem)]"
+    >
+      <div className="grid grid-cols-5 h-14 max-w-md mx-auto items-center">
+        {items.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.to + item.label}
+              to={item.to as any}
+              aria-current={item.isActive ? "page" : undefined}
+              className={`flex flex-col items-center justify-center h-full min-h-[44px] py-1 select-none transition-all duration-200 active:scale-95 ${
+                item.isActive
+                  ? "text-[#00B8FF]"
+                  : "text-[#94A3B8] hover:text-white"
+              }`}
+            >
+              <div className="relative flex items-center justify-center">
+                <Icon
+                  className={`w-5 h-5 transition-transform duration-200 ${
+                    item.isActive ? "scale-110 stroke-[2.25]" : "stroke-[1.75]"
+                  }`}
+                />
+                {item.isActive && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#00B8FF] shadow-[0_0_8px_#00B8FF]" />
+                )}
+              </div>
+              <span
+                className={`text-[10px] tracking-tight mt-1 font-mono transition-colors ${
+                  item.isActive
+                    ? "font-bold text-[#00B8FF]"
+                    : "text-[#94A3B8] font-normal"
+                }`}
+              >
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
 }

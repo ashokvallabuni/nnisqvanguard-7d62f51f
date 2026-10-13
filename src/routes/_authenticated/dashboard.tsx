@@ -295,16 +295,26 @@ function StudentDashboard() {
  {/* Main Content Column */}
  <div className="xl:col-span-2 space-y-8">
  {/* SECTION: PRIMARY ACTIONS */}
- <section aria-label="Primary Actions" className="grid grid-cols-1 gap-4">
+ <section aria-label="Primary Actions" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <Link
  to="/cyber-range/labs"
- className="flex items-center justify-between p-6 min-h-[80px] rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-200 shadow-card hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]"
+ className="flex items-center justify-between p-5 sm:p-6 min-h-[80px] rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-200 shadow-card hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]"
  >
  <div>
- <h3 className="font-display font-bold text-xl tracking-wider">Explore IVVAB LABS</h3>
- <p className="text-sm opacity-90 mt-1 font-medium">Access immersive cyber environments</p>
+ <h3 className="font-display font-bold text-lg sm:text-xl tracking-wider">OPEN IVVAB LABS</h3>
+ <p className="text-xs sm:text-sm opacity-90 mt-1 font-medium">Access immersive cyber environments</p>
  </div>
- <Terminal className="w-8 h-8 opacity-80 shrink-0" />
+ <Terminal className="w-7 h-7 sm:w-8 sm:h-8 opacity-80 shrink-0 ml-3" />
+ </Link>
+ <Link
+ to="/academy"
+ className="flex items-center justify-between p-5 sm:p-6 min-h-[80px] rounded-xl border border-primary/40 bg-primary/10 text-primary hover:bg-primary/15 transition-all duration-200 shadow-card hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]"
+ >
+ <div>
+ <h3 className="font-display font-bold text-lg sm:text-xl tracking-wider">CONTINUE LEARNING</h3>
+ <p className="text-xs sm:text-sm text-muted-foreground mt-1 font-medium">Resume your academy course syllabus</p>
+ </div>
+ <GraduationCap className="w-7 h-7 sm:w-8 sm:h-8 opacity-80 shrink-0 text-primary ml-3" />
  </Link>
  </section>
 
@@ -363,15 +373,15 @@ function StudentDashboard() {
  <>
  <Link
  to="/cyber-range/labs"
- className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-all active:scale-95 cursor-pointer select-none"
+ className="px-3.5 py-2 min-h-[44px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-all active:scale-95 cursor-pointer select-none"
  >
- EXPLORE IVVAB LABS
+ OPEN IVVAB LABS
  </Link>
  <Link
  to="/cyber-range/my-progress"
- className="px-3.5 py-2 min-h-[40px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-all active:scale-95 cursor-pointer select-none"
+ className="px-3.5 py-2 min-h-[44px] inline-flex items-center justify-center rounded-[8px] text-xs font-mono font-semibold bg-muted hover:bg-muted/80 text-foreground border border-border transition-all active:scale-95 cursor-pointer select-none"
  >
- MY PROGRESS
+ VIEW MY PROGRESS
  </Link>
  <Link
  to="/certificates"
