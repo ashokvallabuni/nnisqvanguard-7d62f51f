@@ -41,6 +41,7 @@ import { NETWORKING_MODULES, LINUX_MODULES } from "@/data/courses-curriculum";
 import { completeModule } from "@/lib/academy.functions";
 import { submitQuizAnswer } from "@/lib/quiz.functions";
 import { isCourseAccessible, describeAccessError } from "@/lib/course-accessibility";
+import { useIvvabChat } from "@/lib/ivvab-chat";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/$moduleSlug")({
  head: ({ params }) => ({
@@ -176,6 +177,7 @@ function ModuleLearningPage() {
  const { user, isAdmin } = useAuth();
  const navigate = useNavigate();
  const queryClient = useQueryClient();
+ const { openIvvab } = useIvvabChat();
 
  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
  const [checkedQuizzes, setCheckedQuizzes] = useState<Record<string, boolean>>({});
@@ -749,7 +751,7 @@ function ModuleLearningPage() {
  <div className="lg:col-span-3 order-1 lg:order-2 space-y-8">
  {/* Step 1: Core Theory & Concept */}
  <section className="nv-card p-6 sm:p-8 space-y-5 shadow-xs">
- <div className="flex items-center justify-between pb-3 border-b border-border/80">
+ <div className="flex items-center justify-between pb-3 border-b border-border/80 flex-wrap gap-2">
  <div className="flex items-center gap-2">
  <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
  STEP 1
@@ -759,6 +761,18 @@ function ModuleLearningPage() {
  <span>Theory & First-Principles Architecture</span>
  </h2>
  </div>
+ <button
+ onClick={() =>
+ openIvvab(
+ `Can you explain the lesson "${currentModule?.title || moduleSlug}" in detail with real-world examples and practical security takeaways?`,
+ )
+ }
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary text-xs font-mono font-semibold transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+ title="Ask IVVAB about this lesson"
+ >
+ <Sparkles className="w-3.5 h-3.5 text-primary" />
+ <span>Ask IVVAB AI</span>
+ </button>
  </div>
 
  {/* 5-Level "Explain This" Assistant */}

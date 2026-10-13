@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
+import { useIvvabChat } from "@/lib/ivvab-chat";
 import { LabCard, LabData } from "@/components/cyber-range/LabCard";
 import { GridSkeleton } from "@/components/common/SkeletonLoaders";
 import { COURSE_LAB_MAPPINGS } from "@/data/lab-registry";
@@ -121,6 +122,7 @@ const CANONICAL_LABS: LabData[] = [
 
 function CyberLabsCatalogPage() {
  const { user } = useAuth();
+ const { openIvvab } = useIvvabChat();
  const [searchQuery, setSearchQuery] = useState("");
  const [selectedCategory, setSelectedCategory] = useState<string>("all");
  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
@@ -277,6 +279,19 @@ function CyberLabsCatalogPage() {
  }
  subtitle="There is no substitute for doing the work. Reading about a vulnerability is different from exploiting it. Reviewing a network diagram is different from investigating a live incident."
  breadcrumbs={[{ label: "PLATFORM", to: "/" }, { label: "IVVAB LABS" }]}
+ action={
+ <button
+ onClick={() =>
+ openIvvab(
+ "What IVVAB LABS do you recommend for my skill level, and how does the container environment work?",
+ )
+ }
+ className="inline-flex items-center gap-1.5 px-3.5 min-h-[40px] rounded-[8px] border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all active:scale-[0.98] cursor-pointer shadow-xs"
+ >
+ <Sparkles className="w-3.5 h-3.5" />
+ <span>ASK IVVAB AI</span>
+ </button>
+ }
  />
 
  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 xl:grid-cols-4 gap-8 lg:gap-10 pb-24">

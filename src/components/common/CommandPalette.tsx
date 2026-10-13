@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Search, Home, Shield, BookOpen, Terminal, Radar, Calendar, LogOut } from "lucide-react";
+import { Search, Home, Shield, BookOpen, Terminal, Radar, Calendar, LogOut, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
+import { useIvvabChat } from "@/lib/ivvab-chat";
 
 export function CommandPalette() {
  const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,7 @@ export function CommandPalette() {
  const inputRef = useRef<HTMLInputElement>(null);
  const navigate = useNavigate();
  const { user, profile, isAdmin, adminView } = useAuth();
+ const { openIvvab } = useIvvabChat();
 
  useEffect(() => {
  const handleKeyDown = (e: KeyboardEvent) => {
@@ -103,6 +105,16 @@ export function CommandPalette() {
  </div>
 
  <div className="max-h-[300px] overflow-y-auto p-2">
+ <button
+ className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 hover:bg-primary/20 border border-primary/20 transition-all text-left text-sm font-semibold text-primary hover:text-primary mb-1 cursor-pointer"
+ onClick={() => {
+ setIsOpen(false);
+ openIvvab();
+ }}
+ >
+ <Sparkles className="w-4 h-4 text-primary" />
+ <span>Ask IVVAB AI Assistant (Ctrl+J)</span>
+ </button>
  {filteredRoutes.map((route) => (
  <button
  key={route.to}

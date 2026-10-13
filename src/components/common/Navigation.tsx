@@ -12,8 +12,10 @@ import {
   ShieldCheck,
   Sun,
   Moon,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useIvvabChat } from "@/lib/ivvab-chat";
 
 const nisqLogoUrl = "/assets/nisq-logo.jpeg";
 
@@ -175,6 +177,7 @@ function ThemeToggle() {
 /* ─── Top Nav ──────────────────────────────────────────────────────── */
 export function TopNav() {
   const { user, profile, signOut, isAdmin } = useAuth();
+  const { toggleIvvab, openIvvab } = useIvvabChat();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -253,6 +256,14 @@ export function TopNav() {
 
           {/* Actions */}
           <div className="hidden min-[1100px]:flex items-center justify-end gap-3 shrink-0">
+            <button
+              onClick={() => toggleIvvab()}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/25 text-white text-xs font-semibold tracking-wide active:scale-[0.98] transition-all cursor-pointer select-none shadow-xs"
+              aria-label="Open IVVAB AI Assistant"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-white" />
+              <span>IVVAB</span>
+            </button>
             <ThemeToggle />
             {user ? (
               <>
@@ -337,6 +348,17 @@ export function TopNav() {
                   {l.label}
                 </Link>
               ))}
+
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  openIvvab();
+                }}
+                className="h-12 flex items-center gap-2.5 text-base font-semibold text-nisq-blue border-b border-nisq-border w-full text-left cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-nisq-blue" />
+                <span>IVVAB AI Assistant</span>
+              </button>
 
               <div className="flex flex-col gap-3 pt-4 pb-2">
                 {user ? (

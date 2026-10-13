@@ -21,7 +21,7 @@ import { generateResponse, getDefaultResponseForThreat } from "./response-agent"
 import { callChatModel } from "../api-helpers.server";
 
 const ORCHESTRATOR_SYSTEM_PROMPT =
- "You are the NISQ Vanguard Orchestrator — coordinating a multi-agent AI security analysis.\n\n" +
+ "You are the IVVAB Orchestrator — coordinating a multi-agent AI security analysis for the IVVAB AI Assistant.\n\n" +
  "Your role:\n" +
  "1. Classify the type of security input\n" +
  "2. Route to appropriate agents\n" +
@@ -251,7 +251,7 @@ function checkForThreatIndicators(message: string): boolean {
  */
 export function formatAnalysisSummary(analysis: OrchestratedAnalysis): string {
  const lines: string[] = [];
- lines.push("NISQ Vanguard AI Analysis");
+ lines.push("IVVAB AI Security Analysis");
  lines.push("");
 
  if (analysis.detection?.findings.length) {

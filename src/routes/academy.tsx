@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
+import { useIvvabChat } from "@/lib/ivvab-chat";
 import { CourseCard, CourseData } from "@/components/academy/CourseCard";
 import { GridSkeleton } from "@/components/common/SkeletonLoaders";
 import { getLockedComingSoonCoursesStatic } from "@/lib/course-accessibility";
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/academy")({
 
 function AcademyPage() {
   const { user, isAdmin, adminView } = useAuth();
+  const { openIvvab } = useIvvabChat();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -173,6 +175,17 @@ function AcademyPage() {
         title="Learn Cybersecurity by Understanding How Systems Actually Work"
         subtitle="Cybersecurity cannot be mastered by memorizing definitions. Develop the ability to observe a system, understand its behaviour, identify abnormal activity, investigate evidence, and make informed security decisions."
         breadcrumbs={[{ label: "Home", to: "/" }, { label: "Academy" }]}
+        action={
+          <button
+            onClick={() =>
+              openIvvab("Which cybersecurity course do you recommend for my skill level and background?")
+            }
+            className="inline-flex items-center gap-1.5 px-3.5 min-h-[40px] rounded-[8px] border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all active:scale-[0.98] cursor-pointer shadow-xs"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>ASK IVVAB AI</span>
+          </button>
+        }
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-12">

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Shield, Target, Crosshair, Server, Activity, ChevronRight, Search, FileCode2, Map, LayoutDashboard } from "lucide-react";
+import { Shield, Target, Crosshair, Server, Activity, ChevronRight, Search, FileCode2, Map, LayoutDashboard, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/common/PageHeader";
+import { useIvvabChat } from "@/lib/ivvab-chat";
 
 export const Route = createFileRoute("/services")({
  head: () => ({
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/services")({
 });
 
 function ServicesPage() {
+ const { openIvvab } = useIvvabChat();
  const services = [
  {
  id: "security-assessment",
@@ -99,6 +101,17 @@ function ServicesPage() {
  badgeVariant="primary"
  title="Consulting for Organizations"
  subtitle="Organizations need more than vulnerability reports. They need a clear understanding of their security exposure and a practical path toward improvement."
+ action={
+ <button
+ onClick={() =>
+ openIvvab("Which security assessment or consulting engagement fits our organization's architecture?")
+ }
+ className="inline-flex items-center gap-1.5 px-3.5 min-h-[40px] rounded-[8px] border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all active:scale-[0.98] cursor-pointer shadow-xs"
+ >
+ <Sparkles className="w-3.5 h-3.5" />
+ <span>ASK IVVAB AI</span>
+ </button>
+ }
  />
 
  {/* Web & App Security Focus */}

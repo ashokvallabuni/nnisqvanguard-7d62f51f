@@ -22,6 +22,8 @@ import { CommandPalette } from "@/components/common/CommandPalette";
 import { PALETTE } from "@/lib/palette";
 import { Footer } from "@/components/common/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { IvvabChatProvider } from "@/lib/ivvab-chat";
+import { IvvabAssistant } from "@/components/chat/IvvabAssistant";
 import {
  Shield,
  LogOut,
@@ -282,10 +284,12 @@ function RootComponent() {
  <QueryClientProvider client={queryClient}>
  <ThemeProvider defaultTheme="light" storageKey="nisq-theme">
  <AuthProvider>
+ <IvvabChatProvider>
  <PWARegister />
  <AuthListener />
  <AdminTacticalPreviewBarWrapper />
  <Toaster theme="light" />
+ </IvvabChatProvider>
  </AuthProvider>
  </ThemeProvider>
  </QueryClientProvider>
@@ -320,6 +324,7 @@ function AdminTacticalPreviewBarWrapper() {
  </AnimatePresence>
  </div>
       <Footer />
+      <IvvabAssistant />
  </div>
  );
 }
