@@ -155,7 +155,7 @@ function ServicesPage() {
  {services.map((service) => (
  <div
  key={service.id}
- className="nv-card p-8 group flex flex-col justify-between hover:border-primary/40 transition-all duration-300"
+ className="nv-card-interactive nv-glow-border p-8 group flex flex-col justify-between transition-all duration-300"
  >
  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
  <service.icon className="w-6 h-6 text-primary" />

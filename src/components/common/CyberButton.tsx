@@ -20,7 +20,7 @@ export const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>
 
     const variants = {
       primary:
-        "bg-nisq-blue text-nisq-white px-6 py-2.5 shadow-card hover:bg-nisq-blue-bright hover:shadow-md hover:-translate-y-0.5 active:translate-y-0",
+        "nv-sweep bg-nisq-blue text-nisq-white px-6 py-2.5 shadow-card hover:bg-nisq-blue-bright hover:shadow-md hover:-translate-y-0.5 active:translate-y-0",
       secondary:
         "bg-nisq-white text-nisq-blue border border-nisq-blue/50 px-6 py-2.5 hover:bg-nisq-blue-tint hover:border-nisq-blue hover:-translate-y-0.5 active:translate-y-0",
       tertiary:

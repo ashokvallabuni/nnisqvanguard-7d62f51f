@@ -66,7 +66,7 @@ export function LabCard({ lab }: LabCardProps) {
  return (
  <article
  aria-label={`Lab: ${lab.title}`}
- className={`group h-full rounded-xl border bg-card hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between overflow-hidden ${
+ className={`group nv-glow-border h-full rounded-xl border bg-card hover:shadow-card hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 flex flex-col justify-between overflow-hidden ${
  lab.is_active_session
  ? "border-primary ring-1 ring-primary/40 shadow-xs"
  : "border-border hover:border-primary/40"

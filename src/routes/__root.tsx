@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { RouteProgress, RouteTransition } from "@/components/common/RouteTransition";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -316,24 +317,16 @@ function AdminTacticalPreviewBarWrapper() {
  >
  <header className="sticky top-0 z-50 w-full flex flex-col bg-nisq-white">
  {isAdmin && <AdminTacticalPreviewBar />}
+        <RouteProgress />
  <TopNav />
  </header>
  <BottomNav />
  <CommandPalette />
 
  <div className="relative z-10 flex-1">
- <AnimatePresence mode="wait">
- <motion.div
- key={location.pathname}
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.3 }}
- className="relative"
- >
-                <Outlet />
- </motion.div>
- </AnimatePresence>
+        <RouteTransition>
+          <Outlet />
+        </RouteTransition>
  </div>
       <Footer />
       <IvvabAssistant />

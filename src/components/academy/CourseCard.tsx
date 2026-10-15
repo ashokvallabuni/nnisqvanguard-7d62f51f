@@ -46,7 +46,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
 
   return (
     <div
-      className={`group h-full flex flex-col justify-between overflow-hidden transition-all duration-200 hover:-translate-y-1 ${
+      className={`group nv-glow-border h-full flex flex-col justify-between overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-glow active:scale-[0.99] ${
         notAccessible ? "opacity-70 grayscale-[0.3]" : ""
       }`}
       style={{
@@ -59,7 +59,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
       aria-label={`${course.title} ${notAccessible ? "locked course" : "course"}`}
     >
       {/* Thumbnail Area with Topic Sticker */}
-      <div className="w-full relative overflow-hidden bg-[#050B14] border-b border-[var(--course-card-border)] flex items-center justify-center">
+      <div className="w-full relative overflow-hidden bg-[#050B14] border-b border-[var(--course-card-border)] flex items-center justify-center nv-media">
         <CourseSticker
           courseSlug={course.slug}
           courseId={course.id}

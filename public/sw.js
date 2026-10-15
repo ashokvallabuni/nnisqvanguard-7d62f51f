@@ -7,8 +7,7 @@ const PRECACHE_ASSETS = [
   '/apple-touch-icon.png',
   '/android-chrome-192x192.png',
   '/android-chrome-512x512.png',
-  '/assets/nisq-logo.png',
-  '/assets/nisq-logo.jpeg'
+  '/assets/nisq-logo.png'
 ];
 
 // Install Event: pre-cache critical shell assets
