@@ -27,7 +27,7 @@ export function BackgroundStage({ scrollYProgress }: BackgroundStageProps) {
  <div className="absolute inset-0 z-0">
  <div className="w-full h-full animate-[slowScale_20s_ease-in-out_infinite_alternate] origin-center">
  <img 
- src="/hero-wolf.png" 
+ src="/assets/nisq-logo.png" 
  alt="Hero Background" 
  className="w-full h-full object-cover object-[80%_center] opacity-90 mix-blend-lighten contrast-125"
  />

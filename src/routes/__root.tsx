@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-const nisqLogoUrl = "/assets/nisq-logo.jpeg";
+const nisqLogoUrl = "/assets/nisq-logo.png";
 
 function NotFoundComponent() {
  return (
@@ -147,8 +147,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  },
  { property: "og:type", content: "website" },
  { property: "og:site_name", content: "NISQ Vanguard" },
- { property: "og:image", content: "/assets/nisq-logo.jpeg" },
- { property: "og:image:type", content: "image/jpeg" },
+ { property: "og:image", content: "/assets/nisq-logo.png" },
+ { property: "og:image:type", content: "image/png" },
  { name: "twitter:card", content: "summary_large_image" },
  {
  name: "twitter:title",
@@ -159,7 +159,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  content:
  "Master defensive operations, network forensics, and threat hunting with real data and live IVVAB LABSs.",
  },
- { name: "twitter:image", content: "/assets/nisq-logo.jpeg" },
+ { name: "twitter:image", content: "/assets/nisq-logo.png" },
  { name: "mobile-web-app-capable", content: "yes" },
  { name: "apple-mobile-web-app-capable", content: "yes" },
  { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
@@ -168,7 +168,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  { rel: "manifest", href: "/manifest.json" },
  { rel: "stylesheet", href: appCss },
  { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
- { rel: "apple-touch-icon", href: "/apple-touch-icon.jpeg", sizes: "180x180" },
+    { rel: "icon", href: "/favicon.png", type: "image/png" },
+ { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
  { rel: "preconnect", href: "https://fonts.googleapis.com" },
  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
  {

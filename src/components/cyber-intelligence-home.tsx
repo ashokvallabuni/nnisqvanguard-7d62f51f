@@ -51,11 +51,11 @@ export function CyberIntelligenceHome() {
           >
             <motion.img
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 0.07, scale: 1 }}
+              animate={{ opacity: 0.08, scale: 1 }}
               transition={{ duration: 1.2, ease: EASE }}
-              src="/assets/nisq-logo.jpeg"
+              src="/assets/nisq-logo.png"
               alt=""
-              className="w-[280px] sm:w-[420px] md:w-[620px] lg:w-[720px] aspect-square object-contain opacity-[0.07] mix-blend-multiply dark:invert dark:mix-blend-screen pointer-events-none select-none"
+              className="w-[280px] sm:w-[420px] md:w-[620px] lg:w-[720px] aspect-square object-contain opacity-[0.08] mix-blend-multiply dark:invert dark:mix-blend-screen pointer-events-none select-none"
             />
           </div>
 
@@ -66,6 +66,16 @@ export function CyberIntelligenceHome() {
             className="grid grid-cols-1 md:grid-cols-12 gap-6 min-w-0 items-center relative z-10"
           >
             <div className="col-span-1 md:col-span-12 flex flex-col items-center text-center gap-6 min-w-0 z-10 relative">
+              <motion.div variants={itemVariants} className="flex flex-col items-center gap-2">
+                <div className="relative group p-2 rounded-2xl bg-gradient-to-b from-nisq-blue/15 to-transparent border border-nisq-blue/30 shadow-[0_0_25px_rgba(10,124,255,0.18)]">
+                  <img
+                    src="/assets/nisq-logo.png"
+                    alt="NISQ Vanguard official logo"
+                    className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl object-cover shadow-sm transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              </motion.div>
+
               <motion.div variants={itemVariants} className="font-mono text-sm font-semibold tracking-[0.2em] text-nisq-blue uppercase bg-nisq-offwhite px-4 py-1 rounded-full border border-nisq-border">
                 DEFENCE TECHNOLOGIES · CYBERSECURITY · AI SECURITY
               </motion.div>

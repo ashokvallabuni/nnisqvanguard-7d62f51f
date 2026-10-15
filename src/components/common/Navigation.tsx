@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useIvvabChat } from "@/lib/ivvab-chat";
 import { InstallAppButton } from "./InstallAppButton";
 
-const nisqLogoUrl = "/assets/nisq-logo.jpeg";
+const nisqLogoUrl = "/assets/nisq-logo.png";
 
 type NavItem = { to: string; label: string };
 
@@ -219,15 +219,20 @@ export function TopNav() {
       >
         <div className="container-nv flex h-[72px] items-center justify-between gap-6">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 shrink-0" aria-label="NISQ Vanguard home">
+          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 shrink-0" aria-label="NISQ Vanguard home">
             <img
               src={nisqLogoUrl}
               alt="NISQ Vanguard logo"
-              className="w-10 h-10 rounded-lg object-cover border border-white/30"
+              className="w-10 h-10 rounded-xl object-cover border border-white/30 shadow-xs"
             />
-            <span className="text-base font-bold tracking-tight text-white hidden sm:block">
-              NISQ Vanguard
-            </span>
+            <div className="flex flex-col text-left">
+              <span className="text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
+                NISQ Vanguard
+              </span>
+              <span className="text-[9px] text-white/80 tracking-widest uppercase font-mono hidden min-[440px]:block">
+                Defence Technologies
+              </span>
+            </div>
           </Link>
 
           {/* Links */}
@@ -305,15 +310,15 @@ export function TopNav() {
           </div>
 
           {/* Mobile actions */}
-          <div className="min-[1100px]:hidden flex items-center gap-2">
+          <div className="min-[1100px]:hidden flex items-center gap-1.5 sm:gap-2 shrink-0">
             <InstallAppButton variant="mobile-header" />
             <button
               onClick={() => toggleIvvab()}
-              className="flex items-center gap-1 px-2.5 h-10 rounded-lg bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-bold tracking-wide active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="flex items-center gap-1 px-2 sm:px-2.5 h-10 rounded-lg bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-bold tracking-wide active:scale-95 transition-all cursor-pointer shadow-xs"
               aria-label="Open IVVAB AI Assistant"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#00B8FF]" />
-              <span>IVVAB</span>
+              <span className="hidden min-[380px]:inline">IVVAB</span>
             </button>
             <ThemeToggle />
             <button
@@ -341,6 +346,22 @@ export function TopNav() {
             className="min-[1100px]:hidden absolute inset-x-0 top-full z-[90] bg-nisq-white border-b border-nisq-border shadow-pop max-h-[calc(100svh-72px)] overflow-y-auto"
           >
             <div className="container-nv py-4 flex flex-col">
+              {/* Branded Mobile Menu Header */}
+              <div className="flex items-center gap-3 pb-3.5 mb-2 border-b border-nisq-border">
+                <img
+                  src={nisqLogoUrl}
+                  alt="NISQ Vanguard logo"
+                  className="w-11 h-11 rounded-xl object-cover border border-nisq-blue/20 shadow-xs"
+                />
+                <div className="flex flex-col text-left">
+                  <span className="font-display font-bold text-base text-nisq-ink leading-tight">
+                    NISQ Vanguard
+                  </span>
+                  <span className="font-mono text-[10px] text-nisq-blue tracking-wider uppercase font-semibold">
+                    Defence Technologies
+                  </span>
+                </div>
+              </div>
               {isAdmin && (
                 <Link
                   to={"/admin" as any}
@@ -443,6 +464,7 @@ export function BottomNav() {
       label: "Home",
       icon: Home,
       isActive: pathname === "/",
+      isLogo: true,
     },
     {
       to: "/academy",
@@ -493,11 +515,21 @@ export function BottomNav() {
               }`}
             >
               <div className="relative flex items-center justify-center">
-                <Icon
-                  className={`w-5 h-5 transition-transform duration-200 ${
-                    item.isActive ? "scale-110 stroke-[2.25]" : "stroke-[1.75]"
-                  }`}
-                />
+                {'isLogo' in item && item.isLogo ? (
+                  <img
+                    src={nisqLogoUrl}
+                    alt="NISQ"
+                    className={`w-5 h-5 rounded-md object-cover transition-transform duration-200 ${
+                      item.isActive ? "scale-110 ring-1.5 ring-[#00B8FF] shadow-[0_0_8px_#00B8FF]" : "opacity-85"
+                    }`}
+                  />
+                ) : (
+                  <Icon
+                    className={`w-5 h-5 transition-transform duration-200 ${
+                      item.isActive ? "scale-110 stroke-[2.25]" : "stroke-[1.75]"
+                    }`}
+                  />
+                )}
                 {item.isActive && (
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#00B8FF] shadow-[0_0_8px_#00B8FF]" />
                 )}

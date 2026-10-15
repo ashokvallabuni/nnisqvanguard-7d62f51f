@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Mail } from "lucide-react";
 
-const nisqLogoUrl = "/assets/nisq-logo.jpeg";
+const nisqLogoUrl = "/assets/nisq-logo.png";
 
 type FooterLink = { to: string; label: string };
 

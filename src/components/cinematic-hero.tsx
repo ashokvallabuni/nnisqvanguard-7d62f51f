@@ -10,8 +10,7 @@ import {
  Sparkles,
 } from "lucide-react";
 
-import wolfHero from "@/assets/cyber-wolf-hero.jpg";
-import logoAsset from "@/assets/nisq-logo.asset.json";
+const nisqLogoUrl = "/assets/nisq-logo.png";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
  Dialog,
@@ -148,7 +147,7 @@ export function CinematicHero() {
  aria-label="NISQ Vanguard cyber defence introduction"
  >
  <div className="hero-environment" aria-hidden="true">
- <img src={wolfHero} width={1920} height={1080} alt="" className="hero-wolf-image" />
+ <img src={nisqLogoUrl} width={1920} height={1080} alt="" className="hero-wolf-image" />
  <div className="hero-atmosphere" />
  <div className="hero-security-grid" />
  <div className="hero-network-lines" />
@@ -188,7 +187,7 @@ export function CinematicHero() {
 
  <div className="hero-brand-block">
  <img
- src={logoAsset.url}
+ src={nisqLogoUrl}
  width={220}
  height={220}
  alt="NISQ Vanguard official logo"

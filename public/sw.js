@@ -1,10 +1,13 @@
-const CACHE_NAME = 'nisq-vanguard-v1';
+const CACHE_NAME = 'nisq-vanguard-v2';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
   '/favicon.ico',
+  '/favicon.png',
+  '/apple-touch-icon.png',
   '/android-chrome-192x192.png',
   '/android-chrome-512x512.png',
+  '/assets/nisq-logo.png',
   '/assets/nisq-logo.jpeg'
 ];
 

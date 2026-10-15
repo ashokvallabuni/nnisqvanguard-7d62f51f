@@ -31,9 +31,17 @@
   --elev-nav: 0 2px 12px rgb(15 23 42 / 0.08);
   --elev-pop: 0 12px 32px rgb(15 23 42 / 0.12);
   --elev-glow: 0 8px 28px rgb(10 124 255 / 0.16);
+  --elev-lift: 0 14px 36px -12px rgb(10 124 255 / 0.28), 0 2px 6px rgb(15 23 42 / 0.06);
   --scrim: rgb(15 23 42 / 0.4);
 
   --radius: 0.75rem;
+
+  /* Motion system — one timing/easing vocabulary for the whole product */
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 320ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 [data-theme="dark"] {
@@ -123,7 +131,14 @@
 @layer base {
   * {
     border-color: var(--nisq-border);
-    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  /* Theme switches are animated by the View Transitions API (see ThemeToggle);
+     this fallback only applies while a theme change is in flight. */
+  html.theme-switching * {
+    transition:
+      background-color var(--dur-slow) var(--ease-out),
+      color var(--dur-slow) var(--ease-out),
+      border-color var(--dur-slow) var(--ease-out) !important;
   }
   html {
     -webkit-text-size-adjust: 100%;
@@ -241,27 +256,47 @@
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: var(--elev-card);
-  transition: all 200ms ease;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 }
 
 @utility nv-card-hover {
-  &:hover {
-    border-color: var(--nisq-blue);
-    box-shadow: var(--elev-glow);
+  @media (hover: hover) {
+    &:hover {
+      border-color: color-mix(in srgb, var(--nisq-blue) 55%, var(--nisq-border));
+      box-shadow: var(--elev-lift);
+    }
   }
 }
 
 @utility nv-card-interactive {
+  position: relative;
+  isolation: isolate;
   background: var(--nisq-white);
   border: 1px solid var(--nisq-border);
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: var(--elev-card);
-  transition: all 200ms ease;
-  &:hover {
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+  @media (hover: hover) {
+    &:hover {
+      border-color: color-mix(in srgb, var(--nisq-blue) 55%, var(--nisq-border));
+      box-shadow: var(--elev-lift);
+      transform: translateY(-3px);
+    }
+  }
+  &:active {
+    transform: translateY(0) scale(0.99);
+    transition-duration: var(--dur-fast);
+  }
+  &:focus-within {
     border-color: var(--nisq-blue);
-    box-shadow: var(--elev-glow);
-    transform: translateY(-2px);
   }
 }
 
@@ -387,11 +422,210 @@
   }
 }
 
+/* ==========================================================================
+   INTERACTION & VFX LAYER — palette-only, transform/opacity based
+   ========================================================================== */
+
+/* Button light sweep: a single pass of light on hover (pointer devices only) */
+.nv-sweep {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.nv-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    color-mix(in srgb, #ffffff 28%, transparent) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+}
+@media (hover: hover) {
+  .nv-sweep:hover::after {
+    transform: translateX(120%);
+    transition: transform 700ms var(--ease-out);
+  }
+}
+
+/* Card border highlight that follows the brand gradient on hover/selection */
+.nv-glow-border {
+  position: relative;
+}
+.nv-glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--nisq-blue), var(--nisq-blue-bright) 50%, transparent 80%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+@media (hover: hover) {
+  .nv-glow-border:hover::before {
+    opacity: 1;
+  }
+}
+.nv-glow-border:focus-within::before,
+.nv-glow-border[data-selected="true"]::before {
+  opacity: 1;
+}
+
+/* Gentle media zoom for course/lab thumbnails */
+.nv-media {
+  overflow: hidden;
+}
+.nv-media > * {
+  transition: transform 500ms var(--ease-out);
+}
+@media (hover: hover) {
+  .group:hover .nv-media > * {
+    transform: scale(1.04);
+  }
+}
+
+/* Ambient blue/cyan lighting for hero sections (static — no continuous cost) */
+.nv-ambient {
+  position: relative;
+  isolation: isolate;
+}
+.nv-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 22rem at 15% 0%, color-mix(in srgb, var(--nisq-blue) 14%, transparent), transparent 70%),
+    radial-gradient(34rem 20rem at 90% 20%, color-mix(in srgb, var(--nisq-blue-bright) 12%, transparent), transparent 70%);
+}
+
+/* Circuit / digital grid that slowly drifts on desktop only */
+.nv-circuit {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--nisq-blue) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--nisq-blue) 8%, transparent) 1px, transparent 1px),
+    radial-gradient(circle, color-mix(in srgb, var(--nisq-blue-bright) 35%, transparent) 1.5px, transparent 2px);
+  background-size:
+    48px 48px,
+    48px 48px,
+    96px 96px;
+  background-position:
+    0 0,
+    0 0,
+    24px 24px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .nv-circuit {
+    animation: nv-grid-drift 40s linear infinite;
+  }
+}
+@keyframes nv-grid-drift {
+  to {
+    background-position:
+      48px 48px,
+      48px 48px,
+      120px 120px;
+  }
+}
+
+/* Route content entrance (used by the root layout) */
+@keyframes nv-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Top route progress indicator */
+.nv-route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 100;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--nisq-blue), var(--nisq-blue-bright));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--nisq-blue-bright) 60%, transparent);
+  transform-origin: left;
+}
+
+/* Logo entrance */
+@keyframes nv-logo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+.nv-logo-in {
+  animation: nv-logo-in 600ms var(--ease-out) both;
+}
+
+/* Skeleton loading shimmer */
+.nv-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--nisq-border) 70%, transparent);
+  border-radius: 0.5rem;
+}
+.nv-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--nisq-white) 55%, transparent), transparent);
+  animation: nv-shimmer 1.4s var(--ease-in-out) infinite;
+}
+@keyframes nv-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Pressed feedback for tappable elements without hover */
+.nv-press {
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.nv-press:active {
+  transform: scale(0.97);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }

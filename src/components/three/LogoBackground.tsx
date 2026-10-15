@@ -30,7 +30,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode, fallbac
 // ----------------------------------------------------------------------------
 function LogoScene() {
  const meshRef = useRef<THREE.Mesh>(null);
- const texture = useTexture('/assets/nisq-logo.jpeg');
+ const texture = useTexture('/assets/nisq-logo.png');
  
  // Custom material for brushed-chrome look
  const material = useMemo(() => {
@@ -102,7 +102,7 @@ function LogoScene() {
 const StaticFallback = () => (
  <div className="absolute inset-0 z-0 flex items-center justify-center opacity-40 pointer-events-none mix-blend-screen">
  <img 
- src="/hero-wolf.png" 
+ src="/assets/nisq-logo.png" 
  alt="NISQ Vanguard" 
  className="w-[80vw] max-w-[800px] h-auto object-contain rounded-full shadow-[0_0_50px_rgba(32,217,245,0.4)]"
  onError={(e) => { e.currentTarget.style.display = 'none'; }}
