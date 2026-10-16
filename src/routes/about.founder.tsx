@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import { teamData, founderPhilosophy, founderArchitecturalContributions } from "@/data/team";
-import nisqLogo from "@/assets/nisq-logo.png";
+import nisqLogo from "@/assets/nisq-logo.webp";
 
 export const Route = createFileRoute("/about/founder")({
   head: () => ({

@@ -133,7 +133,7 @@ function CyberLabsCatalogPage() {
  queryFn: async () => {
  const { data, error } = await supabase
  .from("labs")
- .select("*")
+ .select("id,slug,title,description,difficulty,lab_type,estimated_time_minutes,mitre_attack_ids,reward_points,status,created_at")
  .eq("status", "PUBLISHED")
  .order("created_at", { ascending: false });
  if (error) return [];

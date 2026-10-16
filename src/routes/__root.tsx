@@ -8,7 +8,7 @@ import {
  Scripts,
  useRouterState,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RouteProgress, RouteTransition } from "@/components/common/RouteTransition";
 
@@ -19,28 +19,27 @@ import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { TopNav, BottomNav } from "@/components/common/Navigation";
-import { CommandPalette } from "@/components/common/CommandPalette";
 import { PALETTE } from "@/lib/palette";
 import { Footer } from "@/components/common/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { IvvabChatProvider } from "@/lib/ivvab-chat";
-import { IvvabAssistant } from "@/components/chat/IvvabAssistant";
-import {
- Shield,
- LogOut,
- Menu,
- X,
- Home,
- BookOpen,
- Terminal,
- Radar,
- User,
- Award,
- LineChart,
-} from "lucide-react";
+import { Shield } from "lucide-react";
 import { useState } from "react";
 
-const nisqLogoUrl = "/assets/nisq-logo.png";
+// Defer non-critical floating assistant and command palette out of the initial critical chunk
+const CommandPalette = lazy(() =>
+  import("@/components/common/CommandPalette").then((m) => ({
+    default: m.CommandPalette,
+  }))
+);
+
+const IvvabAssistant = lazy(() =>
+  import("@/components/chat/IvvabAssistant").then((m) => ({
+    default: m.IvvabAssistant,
+  }))
+);
+
+const nisqLogoUrl = "/assets/nisq-logo.webp";
 
 function NotFoundComponent() {
  return (
@@ -321,7 +320,9 @@ function AdminTacticalPreviewBarWrapper() {
  <TopNav />
  </header>
  <BottomNav />
- <CommandPalette />
+ <Suspense fallback={null}>
+   <CommandPalette />
+ </Suspense>
 
  <div className="relative z-10 flex-1">
         <RouteTransition>
@@ -329,7 +330,9 @@ function AdminTacticalPreviewBarWrapper() {
         </RouteTransition>
  </div>
       <Footer />
-      <IvvabAssistant />
+      <Suspense fallback={null}>
+        <IvvabAssistant />
+      </Suspense>
  </div>
  );
 }

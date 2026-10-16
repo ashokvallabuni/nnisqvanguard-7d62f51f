@@ -100,7 +100,7 @@ function SignupPage() {
       <div className="w-full max-w-md glass rounded-[16px] p-8">
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-b from-nisq-blue/15 to-transparent border border-nisq-blue/30 shadow-[0_0_20px_rgba(10,124,255,0.15)] p-1.5 flex items-center justify-center mb-4">
-            <img src="/assets/nisq-logo.png" alt="NISQ Vanguard" className="w-full h-full rounded-xl object-cover" />
+            <img src="/assets/nisq-logo.webp" alt="NISQ Vanguard" width={64} height={64} className="w-full h-full rounded-xl object-cover" />
           </div>
           <h1 className="text-2xl font-bold text-nisq-ink">Create an Account</h1>
           <p className="text-sm text-nisq-muted mt-2">Join NISQ Vanguard today</p>

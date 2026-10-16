@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useIvvabChat } from "@/lib/ivvab-chat";
 import { InstallAppButton } from "./InstallAppButton";
 
-const nisqLogoUrl = "/assets/nisq-logo.png";
+const nisqLogoUrl = "/assets/nisq-logo.webp";
 
 type NavItem = { to: string; label: string };
 
@@ -223,6 +223,9 @@ export function TopNav() {
             <img
               src={nisqLogoUrl}
               alt="NISQ Vanguard logo"
+              width={40}
+              height={40}
+              fetchPriority="high"
               className="w-10 h-10 rounded-xl object-cover border border-white/30 shadow-xs"
             />
             <div className="flex flex-col text-left">
@@ -519,6 +522,8 @@ export function BottomNav() {
                   <img
                     src={nisqLogoUrl}
                     alt="NISQ"
+                    width={20}
+                    height={20}
                     className={`w-5 h-5 rounded-md object-cover transition-transform duration-200 ${
                       item.isActive ? "scale-110 ring-1.5 ring-[#00B8FF] shadow-[0_0_8px_#00B8FF]" : "opacity-85"
                     }`}

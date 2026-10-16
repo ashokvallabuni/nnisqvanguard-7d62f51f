@@ -1,4 +1,4 @@
-import founderImg from "@/assets/founder.jpeg";
+import founderImg from "@/assets/founder.webp";
 
 export type TeamMember = {
   name: string;

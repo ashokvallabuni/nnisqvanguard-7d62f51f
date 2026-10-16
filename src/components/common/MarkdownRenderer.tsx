@@ -1,44 +1,47 @@
 import React, { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import mermaid from 'mermaid';
-
-// Initialize mermaid with NISQ Vanguard styling
-mermaid.initialize({
- startOnLoad: false,
- theme: 'base',
- themeVariables: {
- fontFamily: 'Inter, sans-serif',
- primaryColor: '#0052cc', // NISQ Blue
- primaryTextColor: '#ffffff',
- primaryBorderColor: '#0052cc',
- lineColor: '#3b82f6',
- secondaryColor: '#1e293b',
- tertiaryColor: '#0f172a',
- },
- securityLevel: 'loose',
-});
-
+// Mermaid is dynamically imported on demand only when a mermaid code block exists.
+// This prevents bundling ~3.5MB of Elk/Cytoscape into the initial client bundle.
 const MermaidChart = ({ chart }: { chart: string }) => {
- const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
- useEffect(() => {
- if (ref.current && chart) {
- const id = `mermaid-${Math.random().toString(36).substring(2, 9)}`;
- try {
- mermaid.render(id, chart).then(({ svg }) => {
- if (ref.current) {
- ref.current.innerHTML = svg;
- }
- });
- } catch (error) {
- console.error("Mermaid parsing failed", error);
- if (ref.current) {
- ref.current.innerHTML = `<div class="text-destructive text-sm p-4 border border-destructive/20 rounded bg-destructive/10">Diagram syntax error</div>`;
- }
- }
- }
- }, [chart]);
+  useEffect(() => {
+    let active = true;
+    if (ref.current && chart) {
+      import("mermaid").then(({ default: mermaid }) => {
+        if (!active) return;
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: "base",
+          themeVariables: {
+            fontFamily: "Inter, sans-serif",
+            primaryColor: "#0052cc",
+            primaryTextColor: "#ffffff",
+            primaryBorderColor: "#0052cc",
+            lineColor: "#3b82f6",
+            secondaryColor: "#1e293b",
+            tertiaryColor: "#0f172a",
+          },
+          securityLevel: "loose",
+        });
+        const id = `mermaid-${Math.random().toString(36).substring(2, 9)}`;
+        return mermaid.render(id, chart);
+      }).then((result) => {
+        if (active && ref.current && result?.svg) {
+          ref.current.innerHTML = result.svg;
+        }
+      }).catch((error) => {
+        console.error("Mermaid parsing failed", error);
+        if (active && ref.current) {
+          ref.current.innerHTML = `<div class="text-destructive text-sm p-4 border border-destructive/20 rounded bg-destructive/10">Diagram syntax error</div>`;
+        }
+      });
+    }
+    return () => {
+      active = false;
+    };
+  }, [chart]);
 
  return (
  <div className="my-8">

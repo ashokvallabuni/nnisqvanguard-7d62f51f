@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Mail } from "lucide-react";
 
-const nisqLogoUrl = "/assets/nisq-logo.png";
+const nisqLogoUrl = "/assets/nisq-logo.webp";
 
 type FooterLink = { to: string; label: string };
 
@@ -62,6 +62,9 @@ export function Footer() {
               <img
                 src={nisqLogoUrl}
                 alt="NISQ Vanguard logo"
+                width={40}
+                height={40}
+                loading="lazy"
                 className="w-10 h-10 rounded-lg object-cover border border-nisq-border"
               />
               <span className="text-base font-bold tracking-tight text-nisq-ink">

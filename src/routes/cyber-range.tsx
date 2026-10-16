@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Database, Network, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const nisqLogoUrl = "/assets/nisq-logo.png";
+const nisqLogoUrl = "/assets/nisq-logo.webp";
 import { buttonVariants } from "@/components/ui/button";
 import { getCyberLabsCounts, type CyberLabsCounts } from "@/lib/cyber-labs";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,7 @@ function CyberRangePage() {
  src={nisqLogoUrl}
  width={112}
  height={112}
+ fetchPriority="high"
  alt="NISQ Vanguard official logo"
  className="size-24 object-cover mx-auto lg:mx-0 mb-5 rounded-2xl border border-white/20 shadow-glow"
  />

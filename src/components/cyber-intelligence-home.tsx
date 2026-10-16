@@ -53,8 +53,11 @@ export function CyberIntelligenceHome() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 0.08, scale: 1 }}
               transition={{ duration: 1.2, ease: EASE }}
-              src="/assets/nisq-logo.png"
+              src="/assets/nisq-logo.webp"
               alt=""
+              width={720}
+              height={720}
+              decoding="async"
               className="w-[280px] sm:w-[420px] md:w-[620px] lg:w-[720px] aspect-square object-contain opacity-[0.08] mix-blend-multiply dark:invert dark:mix-blend-screen pointer-events-none select-none"
             />
           </div>
@@ -69,8 +72,11 @@ export function CyberIntelligenceHome() {
               <motion.div variants={itemVariants} className="flex flex-col items-center gap-2">
                 <div className="relative group p-2 rounded-2xl bg-gradient-to-b from-nisq-blue/15 to-transparent border border-nisq-blue/30 shadow-[0_0_25px_rgba(10,124,255,0.18)]">
                   <img
-                    src="/assets/nisq-logo.png"
+                    src="/assets/nisq-logo.webp"
                     alt="NISQ Vanguard official logo"
+                    width={112}
+                    height={112}
+                    fetchPriority="high"
                     className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl object-cover shadow-sm transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -144,7 +150,14 @@ export function CyberIntelligenceHome() {
               >
                 <div className="w-24 h-24 rounded-full border border-nisq-border flex items-center justify-center mb-6 overflow-hidden bg-nisq-white shrink-0">
                   {member.imageUrl ? (
-                    <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover object-top" />
+                    <img
+                      src={member.imageUrl}
+                      alt={member.name}
+                      width={96}
+                      height={96}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-top"
+                    />
                   ) : (
                     <span className="font-mono text-2xl text-nisq-blue font-bold">
                       {member.name.split(' ').map(n => n[0]).join('')}
