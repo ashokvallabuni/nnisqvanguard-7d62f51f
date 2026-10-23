@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { AuthChangeEvent, Session, User } from "@supabase/supabase-js";
 import { supabase, warmUpSupabaseSession } from "@/lib/supabase";
+import { sanitizeRedirectPath } from "@/lib/utils";
 
 export type Profile = {
  id: string;
@@ -162,7 +163,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
  }, []);
 
  const signInWithGoogle = async (next = "/dashboard") => {
- if (typeof window !== "undefined") sessionStorage.setItem("nisq:auth-next", next);
+ const safeNext = sanitizeRedirectPath(next, "/dashboard");
+ if (typeof window !== "undefined") sessionStorage.setItem("nisq:auth-next", safeNext);
  const { error } = await supabase.auth.signInWithOAuth({
  provider: "google",
  options: { redirectTo: `${window.location.origin}/auth/callback` },

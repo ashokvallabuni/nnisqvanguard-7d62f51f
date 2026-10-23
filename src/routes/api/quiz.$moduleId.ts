@@ -28,7 +28,10 @@ export const Route = createFileRoute("/api/quiz/$moduleId")({
  .select("id,quiz,course_id,locked")
  .eq("id", params.moduleId)
  .maybeSingle();
- if (error) return json({ error: error.message }, 500);
+ if (error) {
+ console.error("Quiz module lookup error:", error);
+ return json({ error: "Failed to load quiz module" }, 500);
+ }
  if (!mod) return json({ error: "Module not found" }, 404);
  if (mod.locked) return json({ error: "Module locked" }, 403);
 
@@ -60,7 +63,10 @@ export const Route = createFileRoute("/api/quiz/$moduleId")({
  },
  { onConflict: "user_id,module_id" },
  );
- if (upErr) return json({ error: upErr.message }, 500);
+ if (upErr) {
+ console.error("Quiz progress record error:", upErr);
+ return json({ error: "Failed to record quiz results" }, 500);
+ }
 
  return json({ score, passed, total: quiz.length, correct: correctCount, results });
  },

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { sendNewLoginEmail } from "@/lib/email.functions";
+import { sanitizeRedirectPath } from "@/lib/utils";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({ next: z.string().optional() }),
@@ -18,7 +19,7 @@ function LoginPage() {
   const { signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const next = search.next || "/dashboard";
+  const next = sanitizeRedirectPath(search.next, "/dashboard");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -36,3 +36,12 @@ dist-ssr
 .vercel
 .env*
 lab-runner/.env
+
+# Keys & Secrets
+*.key
+*.pub
+*.pem
+lab_runner_deploy_key*
+
+# Scratch & Temporary Testing Files
+scratch/

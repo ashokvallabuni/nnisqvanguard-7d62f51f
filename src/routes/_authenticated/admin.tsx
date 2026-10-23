@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
- head: () => ({ meta: [{ title: "Admin Console — CyberShield India" }] }),
+ head: () => ({ meta: [{ title: "Admin Console — NISQ Vanguard" }] }),
  component: AdminLayout,
 });
 
@@ -51,7 +51,7 @@ function AdminLayout() {
  <Link to="/" className="flex items-center gap-2 p-5 border-b border-sidebar-border">
  <Shield className="w-6 h-6 text-cyber" />
  <div>
- <div className="display text-sm tracking-widest text-cyber">CYBERSHIELD</div>
+ <div className="display text-sm tracking-widest text-cyber">NISQ VANGUARD</div>
  <div className="mono text-[0.55rem] text-muted-foreground">ADMIN CONSOLE</div>
  </div>
  </Link>

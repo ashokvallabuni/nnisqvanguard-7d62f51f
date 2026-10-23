@@ -70,7 +70,10 @@ export const Route = createFileRoute("/api/lessons/$slug/$moduleSlug")({
  .eq("course_id", course.id)
  .eq("slug", params.moduleSlug)
  .maybeSingle();
- if (error) return json({ error: error.message }, 500);
+ if (error) {
+ console.error("Lesson module fetch error:", error);
+ return json({ error: "Failed to load module" }, 500);
+ }
  if (!mod) return json({ error: "Module not found" }, 404);
  if (mod.locked || course.tier === "paid") return json({ error: "Module locked" }, 403);
 

@@ -10,7 +10,7 @@ import { Upload, ScanSearch, ShieldAlert, ShieldCheck, AlertTriangle } from "luc
 export const Route = createFileRoute("/fraud-check")({
  head: () => ({
  meta: [
- { title: "AI Fraud Detection — CyberShield India" },
+ { title: "AI Fraud Detection — NISQ Vanguard" },
  {
  name: "description",
  content: "Upload a screenshot and get instant AI-powered fraud analysis.",

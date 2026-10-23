@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { ensureUserProfile } from "@/lib/auth-context";
+import { sanitizeRedirectPath } from "@/lib/utils";
 
 export const Route = createFileRoute("/auth/callback")({
  component: AuthCallback,
@@ -29,7 +30,7 @@ function AuthCallback() {
  } finally {
  const storedNext = sessionStorage.getItem("nisq:auth-next");
  sessionStorage.removeItem("nisq:auth-next");
- const next = storedNext?.startsWith("/") ? storedNext : "/dashboard";
+ const next = sanitizeRedirectPath(storedNext, "/dashboard");
  if (active) {
  void navigate({ to: next, replace: true });
  }

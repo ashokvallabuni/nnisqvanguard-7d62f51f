@@ -8,7 +8,7 @@ import { Search, Calendar, ChevronDown } from "lucide-react";
 export const Route = createFileRoute("/programs")({
  head: () => ({
  meta: [
- { title: "Book a Cyber Awareness Program — CyberShield India" },
+ { title: "Book a Cyber Awareness Program — NISQ Vanguard" },
  {
  name: "description",
  content:

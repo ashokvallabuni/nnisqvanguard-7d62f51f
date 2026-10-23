@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Shield, User, Building } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
+import { sanitizeRedirectPath } from "@/lib/utils";
 
 export const Route = createFileRoute("/auth")({
  head: () => ({ meta: [{ title: "Sign in — NISQ Vanguard" }] }),
@@ -18,7 +19,7 @@ export function AuthPage() {
 
  useEffect(() => {
  const requested = new URLSearchParams(window.location.search).get("next");
- if (requested?.startsWith("/")) setNext(requested);
+ if (requested) setNext(sanitizeRedirectPath(requested, "/dashboard"));
  }, []);
 
  useEffect(() => {

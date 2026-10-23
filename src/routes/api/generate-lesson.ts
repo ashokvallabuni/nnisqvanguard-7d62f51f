@@ -1,25 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json, callChatModel, getAuth, clientKey, rateLimit } from "@/lib/api-helpers.server";
-import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/api/generate-lesson")({
- server: {
- handlers: {
- POST: async ({ request }) => {
- try {
- const ctx = await getAuth(request);
- if (!rateLimit(`generate:${clientKey(request, ctx.userId)}`, 20, 60_000)) {
- return json({ error: "Rate limit exceeded." }, 429);
- }
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        try {
+          const ctx = await getAuth(request);
+          if (!ctx.supabase || !ctx.userId) {
+            return json({ error: "Unauthorized" }, 401);
+          }
 
- const body = await request.json();
- const { courseSlug, moduleSlug, courseTitle, moduleTitle, currentContent } = body;
+          if (!rateLimit(`generate:${clientKey(request, ctx.userId)}`, 20, 60_000)) {
+            return json({ error: "Rate limit exceeded." }, 429);
+          }
 
- if (!courseSlug || !moduleSlug) {
- return json({ error: "Missing required fields" }, 400);
- }
+          const { data: profile, error: profErr } = await ctx.supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", ctx.userId)
+            .single();
 
-const prompt = `
+          if (profErr || profile?.role !== "admin") {
+            return json({ error: "Forbidden: Administrator privileges required." }, 403);
+          }
+
+          const body = await request.json();
+          const { courseSlug, moduleSlug, courseTitle, moduleTitle, currentContent } = body;
+
+          if (!courseSlug || !moduleSlug) {
+            return json({ error: "Missing required fields" }, 400);
+          }
+
+          const prompt = `
 You are a professional cybersecurity instructor authoring a textbook-quality lesson. 
 
 Course: ${courseTitle}
@@ -57,39 +70,40 @@ ${currentContent || "No existing notes provided."}
 Return ONLY the Markdown content. Do not wrap the entire response in \`\`\`markdown, but YOU MUST use \`\`\`mermaid blocks for your diagrams.
 `;
 
- const generatedMarkdown = await callChatModel([
- { role: "system", content: "You are an expert cybersecurity instructor." },
- { role: "user", content: prompt }
- ]);
- 
- const cleanContent = generatedMarkdown.replace(/^```markdown\n/, "").replace(/\n```$/, "").trim();
+          const generatedMarkdown = await callChatModel([
+            { role: "system", content: "You are an expert cybersecurity instructor." },
+            { role: "user", content: prompt },
+          ]);
 
- const { data: courseData, error: courseError } = await supabase
- .from("courses")
- .select("id")
- .eq("slug", courseSlug)
- .single();
- 
- if (courseError || !courseData) {
- return json({ error: "Course not found in database. Ensure it is seeded first." }, 404);
- }
+          const cleanContent = generatedMarkdown.replace(/^```markdown\n/, "").replace(/\n```$/, "").trim();
 
- const { error: updateError } = await supabase
- .from("modules")
- .update({ notes_md: cleanContent })
- .eq("course_id", courseData.id)
- .eq("slug", moduleSlug);
+          const { data: courseData, error: courseError } = await ctx.supabase
+            .from("courses")
+            .select("id")
+            .eq("slug", courseSlug)
+            .single();
 
- if (updateError) {
- return json({ error: "Failed to save to database", details: updateError.message }, 500);
- }
+          if (courseError || !courseData) {
+            return json({ error: "Course not found." }, 404);
+          }
 
- return json({ success: true, content: cleanContent });
- } catch (error: any) {
- console.error("Error generating lesson:", error);
- return json({ error: error.message }, 500);
- }
- }
- }
- }
+          const { error: updateError } = await ctx.supabase
+            .from("modules")
+            .update({ notes_md: cleanContent })
+            .eq("course_id", courseData.id)
+            .eq("slug", moduleSlug);
+
+          if (updateError) {
+            console.error("Failed to update module notes:", updateError);
+            return json({ error: "Failed to save generated lesson content." }, 500);
+          }
+
+          return json({ success: true, content: cleanContent });
+        } catch (error: any) {
+          console.error("Error generating lesson:", error);
+          return json({ error: "Internal server error occurred." }, 500);
+        }
+      },
+    },
+  },
 });

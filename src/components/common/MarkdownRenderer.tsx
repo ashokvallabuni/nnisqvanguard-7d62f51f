@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import DOMPurify from 'dompurify';
+
 // Mermaid is dynamically imported on demand only when a mermaid code block exists.
 // This prevents bundling ~3.5MB of Elk/Cytoscape into the initial client bundle.
 const MermaidChart = ({ chart }: { chart: string }) => {
@@ -23,13 +25,15 @@ const MermaidChart = ({ chart }: { chart: string }) => {
             secondaryColor: "#1e293b",
             tertiaryColor: "#0f172a",
           },
-          securityLevel: "loose",
+          securityLevel: "strict",
         });
         const id = `mermaid-${Math.random().toString(36).substring(2, 9)}`;
         return mermaid.render(id, chart);
       }).then((result) => {
         if (active && ref.current && result?.svg) {
-          ref.current.innerHTML = result.svg;
+          ref.current.innerHTML = DOMPurify.sanitize(result.svg, {
+            USE_PROFILES: { svg: true, svgFilters: true },
+          });
         }
       }).catch((error) => {
         console.error("Mermaid parsing failed", error);
