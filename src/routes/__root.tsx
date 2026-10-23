@@ -194,12 +194,17 @@ function RootShell({ children }: { children: ReactNode }) {
      __html: `
        (function() {
          try {
-           var saved = localStorage.getItem('course-theme');
-           if (saved) {
-             document.documentElement.setAttribute('data-theme', saved);
-           } else {
-             document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('dark');
-           }
+           var saved = localStorage.getItem('nisq-theme') || localStorage.getItem('course-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+            if (saved === 'dark') {
+              document.documentElement.classList.add('dark');
+              document.documentElement.classList.remove('light');
+              document.documentElement.style.colorScheme = 'dark';
+            } else {
+              document.documentElement.classList.add('light');
+              document.documentElement.classList.remove('dark');
+              document.documentElement.style.colorScheme = 'light';
+            }
          } catch (e) {}
        })();
      `

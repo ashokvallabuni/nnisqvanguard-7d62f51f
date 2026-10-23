@@ -301,7 +301,7 @@ export function CyberIntelligenceHome() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10 border-t border-[#E2E8F0] dark:border-[#16283A]">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#081522] border border-[#16283A] text-xs font-mono text-[#00B8FF] mb-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF4FF] dark:bg-[#081522] border border-[#CFE4FF] dark:border-[#16283A] text-xs font-mono text-[#0A7CFF] dark:text-[#00B8FF] mb-2">
               <Terminal className="w-3.5 h-3.5" />
               <span>LIVE SCENARIOS</span>
             </div>
@@ -352,7 +352,7 @@ export function CyberIntelligenceHome() {
               category: "INCIDENT RESPONSE",
             },
           ].map((lab) => (
-            <Interactive3DCard key={lab.id} className="p-5 flex flex-col justify-between h-full bg-[#081522]/80">
+            <Interactive3DCard key={lab.id} className="p-5 flex flex-col justify-between h-full">
               <div>
                 <div className="flex items-center justify-between text-xs font-mono mb-3">
                   <span className="px-2 py-0.5 rounded bg-[#EAF4FF] dark:bg-[#0A7CFF]/15 text-[#0A7CFF] dark:text-[#38BDF8] border border-[#CFE4FF] dark:border-[#0A7CFF]/30 font-semibold">
@@ -387,7 +387,7 @@ export function CyberIntelligenceHome() {
           ========================================================================= */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto relative z-10 border-t border-[#E2E8F0] dark:border-[#16283A]">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#081522] border border-[#16283A] text-xs font-mono text-[#00B8FF] mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF4FF] dark:bg-[#081522] border border-[#CFE4FF] dark:border-[#16283A] text-xs font-mono text-[#0A7CFF] dark:text-[#00B8FF] mb-3">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>EXECUTIVE ARCHITECTURE</span>
           </div>
@@ -419,7 +419,7 @@ export function CyberIntelligenceHome() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {teamData.map((member, i) => (
             <Interactive3DCard key={i} className="p-7 flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-full border border-[#00B8FF]/40 flex items-center justify-center mb-5 overflow-hidden bg-[#050B14] shadow-[0_0_15px_rgba(10,124,255,0.2)]">
+              <div className="w-20 h-20 rounded-full border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 flex items-center justify-center mb-5 overflow-hidden bg-[#EAF4FF] dark:bg-[#050B14] shadow-[0_0_15px_rgba(10,124,255,0.2)]">
                 {member.imageUrl ? (
                   <img
                     src={member.imageUrl}

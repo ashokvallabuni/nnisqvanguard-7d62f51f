@@ -2,6 +2,8 @@
 @source "../src";
 @import "tw-animate-css";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
 /* ==========================================================================
    NISQ VANGUARD — DESIGN TOKENS (single source of truth)
    Light theme only. White + Nano Blue. Hex values live ONLY in this block.
