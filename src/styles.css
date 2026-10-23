@@ -34,6 +34,10 @@
   --elev-lift: 0 14px 36px -12px rgb(10 124 255 / 0.28), 0 2px 6px rgb(15 23 42 / 0.06);
   --scrim: rgb(15 23 42 / 0.4);
 
+  --nisq-bg: var(--nisq-white);
+  --nisq-card: var(--nisq-white);
+  --nisq-on-primary: #ffffff;
+
   --radius: 0.75rem;
 
   /* Motion system — one timing/easing vocabulary for the whole product */
@@ -48,15 +52,21 @@
   color-scheme: dark;
   --nisq-white: #081522; /* Cards */
   --nisq-offwhite: #050b14; /* Navy background */
-  --nisq-ink: #f8fafc; /* White text */
-  --nisq-text: #cbd5e1; /* Ash text */
-  --nisq-muted: #94a3b8;
+  --nisq-bg: #050b14; /* Deep sovereign cybersecurity navy background */
+  --nisq-card: #081522; /* Distinct layered card surface */
+  --nisq-on-primary: #ffffff; /* High contrast white on primary blue */
+  --nisq-ink: #f8fafc; /* Pure white text for headings */
+  --nisq-text: #cbd5e1; /* Ash readable text for secondary content */
+  --nisq-muted: #94a3b8; /* Muted metadata text (WCAG AA compliant) */
   --nisq-border: #16283a;
   --nisq-blue-tint: #071a33; /* Darker blue tint for hover */
   --nisq-btn-secondary-text: #38bdf8;
-  --elev-card: 0 1px 3px rgb(0 0 0 / 0.5);
-  --elev-nav: 0 2px 12px rgb(0 0 0 / 0.5);
-  --elev-pop: 0 12px 32px rgb(0 0 0 / 0.5);
+  --scrim: rgb(0 0 0 / 0.75);
+  --elev-card: 0 4px 20px -2px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(22 40 58 / 0.8);
+  --elev-nav: 0 4px 24px rgb(0 0 0 / 0.65);
+  --elev-pop: 0 16px 40px rgb(0 0 0 / 0.75);
+  --elev-glow: 0 0 25px rgb(0 184 255 / 0.18);
+  --elev-lift: 0 12px 32px -8px rgb(0 184 255 / 0.22), 0 4px 12px rgb(0 0 0 / 0.5);
 }
 
 @theme {
@@ -87,22 +97,22 @@
   --shadow-glow: var(--elev-glow);
 
   /* shadcn/ui semantic tokens → palette */
-  --color-background: var(--nisq-white);
+  --color-background: var(--nisq-bg);
   --color-foreground: var(--nisq-ink);
-  --color-card: var(--nisq-white);
+  --color-card: var(--nisq-card);
   --color-card-foreground: var(--nisq-ink);
-  --color-popover: var(--nisq-white);
+  --color-popover: var(--nisq-card);
   --color-popover-foreground: var(--nisq-ink);
   --color-primary: var(--nisq-blue);
-  --color-primary-foreground: var(--nisq-white);
+  --color-primary-foreground: var(--nisq-on-primary);
   --color-secondary: var(--nisq-offwhite);
   --color-secondary-foreground: var(--nisq-ink);
   --color-muted: var(--nisq-offwhite);
   --color-muted-foreground: var(--nisq-muted);
   --color-accent: var(--nisq-blue);
-  --color-accent-foreground: var(--nisq-white);
+  --color-accent-foreground: var(--nisq-on-primary);
   --color-destructive: var(--nisq-danger);
-  --color-destructive-foreground: var(--nisq-white);
+  --color-destructive-foreground: var(--nisq-on-primary);
   --color-success: var(--nisq-blue);
   --color-warning: var(--nisq-text);
   --color-info: var(--nisq-blue);
@@ -110,10 +120,10 @@
   --color-border: var(--nisq-border);
   --color-input: var(--nisq-border);
   --color-ring: var(--nisq-blue-soft);
-  --color-sidebar: var(--nisq-white);
+  --color-sidebar: var(--nisq-card);
   --color-sidebar-foreground: var(--nisq-text);
   --color-sidebar-primary: var(--nisq-blue);
-  --color-sidebar-primary-foreground: var(--nisq-white);
+  --color-sidebar-primary-foreground: var(--nisq-on-primary);
   --color-sidebar-accent: var(--nisq-blue-tint);
   --color-sidebar-accent-foreground: var(--nisq-blue);
   --color-sidebar-border: var(--nisq-border);
@@ -1376,4 +1386,58 @@
   .transform-style-3d {
     transform-style: flat !important;
   }
+}
+
+/* ==========================================================================
+   DARK-MODE SPECIFIC REFINEMENTS (Scoped strictly to [data-theme="dark"])
+   ========================================================================== */
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background-color: #081522;
+  border-color: #1e3a5f;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #64748b;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  border-color: #00b8ff;
+  box-shadow: 0 0 0 2px rgba(0, 184, 255, 0.25);
+}
+
+[data-theme="dark"] .glass {
+  background: #081522;
+  border-color: #16283a;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 184, 255, 0.08);
+}
+
+[data-theme="dark"] .nv-card {
+  background: #081522;
+  border-color: #16283a;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .nv-card-interactive {
+  background: #081522;
+  border-color: #16283a;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .nv-card-interactive:hover {
+  border-color: rgba(0, 184, 255, 0.45);
+  box-shadow: 0 12px 36px -8px rgba(0, 184, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] [role="dialog"],
+[data-theme="dark"] .dialog-content {
+  background-color: #081522;
+  border-color: #16283a;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 184, 255, 0.12);
+  color: #f8fafc;
 }
