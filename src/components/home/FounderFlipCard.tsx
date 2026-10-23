@@ -72,7 +72,7 @@ export function FounderFlipCard() {
           transformStyle: "preserve-3d",
         }}
         className={cn(
-          "relative w-full min-h-[580px] rounded-3xl transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#00B8FF] focus-visible:ring-offset-4 focus-visible:ring-offset-[#050B14]"
+          "relative w-full min-h-[580px] rounded-3xl transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#0A7CFF] dark:focus-visible:ring-[#00B8FF] focus-visible:ring-offset-4 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#050B14]"
         )}
       >
         {/* =========================================================================
@@ -81,7 +81,7 @@ export function FounderFlipCard() {
         <div
           style={{ backfaceVisibility: "hidden" }}
           aria-hidden={isFlipped}
-          className="absolute inset-0 w-full h-full rounded-3xl bg-[#081522]/95 border border-[#16283A] p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col justify-between overflow-hidden"
+          className="absolute inset-0 w-full h-full rounded-3xl bg-white/95 dark:bg-[#081522]/95 border border-[#E2E8F0] dark:border-[#16283A] p-6 sm:p-8 md:p-10 shadow-card dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col justify-between overflow-hidden"
         >
           {/* Subtle Ambient Circuit Glow & Watermark */}
           <div
@@ -96,14 +96,14 @@ export function FounderFlipCard() {
           />
 
           {/* Top Status Header */}
-          <div className="flex items-center justify-between border-b border-[#16283A] pb-4 mb-6">
+          <div className="flex items-center justify-between border-b border-[#E2E8F0] dark:border-[#16283A] pb-4 mb-6">
             <div className="flex items-center gap-2.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#00B8FF] animate-pulse shadow-[0_0_8px_#00B8FF]" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[#00B8FF] font-semibold">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#0A7CFF] dark:text-[#00B8FF] font-semibold">
                 ARCHITECT DOSSIER · VERIFIED
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#94A3B8] bg-[#050B14] px-3 py-1 rounded-full border border-[#16283A]">
+            <div className="flex items-center gap-2 text-xs font-mono text-[#0A7CFF] dark:text-[#94A3B8] bg-[#EAF4FF] dark:bg-[#050B14] px-3 py-1 rounded-full border border-[#CFE4FF] dark:border-[#16283A]">
               <RotateCcw className="w-3.5 h-3.5 text-[#38BDF8]" />
               <span className="hidden sm:inline">CLICK OR TAP TO FLIP</span>
             </div>
@@ -113,7 +113,7 @@ export function FounderFlipCard() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center flex-1">
             {/* Founder Portrait with Holographic Frame */}
             <div className="md:col-span-5 flex flex-col items-center">
-              <div className="relative group/photo p-2.5 rounded-2xl bg-gradient-to-b from-[#0A7CFF]/25 via-[#00B8FF]/10 to-transparent border border-[#00B8FF]/40 shadow-[0_0_30px_rgba(10,124,255,0.25)]">
+              <div className="relative group/photo p-2.5 rounded-2xl bg-gradient-to-b from-[#0A7CFF]/15 dark:from-[#0A7CFF]/25 via-[#00B8FF]/5 dark:via-[#00B8FF]/10 to-transparent border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 shadow-sm dark:shadow-[0_0_30px_rgba(10,124,255,0.25)]">
                 {/* Cyber Corner Markers */}
                 <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00B8FF] rounded-tl" />
                 <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00B8FF] rounded-tr" />
@@ -125,10 +125,10 @@ export function FounderFlipCard() {
                   alt="Ashok Vallabhuni — Founder & Chief Architect"
                   width={280}
                   height={320}
-                  className="w-48 sm:w-56 md:w-60 h-auto aspect-[4/5] object-cover object-top rounded-xl shadow-lg border border-[#16283A]"
+                  className="w-48 sm:w-56 md:w-60 h-auto aspect-[4/5] object-cover object-top rounded-xl shadow-md border border-[#E2E8F0] dark:border-[#16283A]"
                 />
               </div>
-              <div className="mt-3 flex items-center gap-2 font-mono text-[11px] text-[#38BDF8]">
+              <div className="mt-3 flex items-center gap-2 font-mono text-[11px] text-[#0A7CFF] dark:text-[#38BDF8]">
                 <Shield className="w-3.5 h-3.5 text-[#00B8FF]" />
                 <span>NISQ DEFENCE TECHNOLOGIES</span>
               </div>
@@ -137,21 +137,21 @@ export function FounderFlipCard() {
             {/* Profile Bio & Skills */}
             <div className="md:col-span-7 flex flex-col justify-center text-left">
               <div className="space-y-1 mb-4">
-                <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-white tracking-tight">
+                <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-[#050B14] dark:text-white tracking-tight">
                   Ashok Vallabhuni
                 </h3>
-                <p className="font-mono text-sm sm:text-base font-semibold text-[#00B8FF] tracking-wider">
+                <p className="font-mono text-sm sm:text-base font-semibold text-[#0A7CFF] dark:text-[#00B8FF] tracking-wider">
                   Founder · Chief Architect
                 </p>
               </div>
 
-              <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed mb-6">
+              <p className="text-sm sm:text-base text-[#475569] dark:text-[#94A3B8] leading-relaxed mb-6">
                 Founder of NISQ Vanguard, focused on cybersecurity, AI security, security engineering, and practical cybersecurity education. His work explores the intersection of modern cyber defence and emerging technologies including LLMs, AI agents, and intelligent infrastructure.
               </p>
 
               {/* Verified Expertise Tags */}
               <div className="space-y-2 mb-6">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-[#94A3B8] block">
+                <span className="font-mono text-[11px] uppercase tracking-wider text-[#64748B] dark:text-[#94A3B8] block">
                   Core Architectural Domains:
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -165,7 +165,7 @@ export function FounderFlipCard() {
                   ].map((skill, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 rounded-lg bg-[#050B14] border border-[#16283A] text-xs font-mono text-[#F8FAFC] flex items-center gap-1.5"
+                      className="px-2.5 py-1 rounded-lg bg-[#F8FAFC] dark:bg-[#050B14] border border-[#E2E8F0] dark:border-[#16283A] text-xs font-mono text-[#050B14] dark:text-[#F8FAFC] flex items-center gap-1.5 shadow-2xs"
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-[#0A7CFF]" />
                       {skill}
@@ -176,7 +176,7 @@ export function FounderFlipCard() {
 
               {/* Flip Button CTA */}
               <div className="pt-2">
-                <span className="inline-flex items-center gap-2 text-xs font-mono text-[#00B8FF] font-semibold hover:underline group-hover:text-white transition-colors">
+                <span className="inline-flex items-center gap-2 text-xs font-mono text-[#0A7CFF] dark:text-[#00B8FF] font-semibold hover:underline group-hover:text-[#0A7CFF] dark:group-hover:text-white transition-colors">
                   <span>INSPECT MISSION MATRIX & CORE PHILOSOPHY</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </span>
@@ -185,7 +185,7 @@ export function FounderFlipCard() {
           </div>
 
           {/* Card Footer Bar */}
-          <div className="border-t border-[#16283A] pt-4 mt-6 flex flex-wrap items-center justify-between text-xs font-mono text-[#94A3B8] gap-2">
+          <div className="border-t border-[#E2E8F0] dark:border-[#16283A] pt-4 mt-6 flex flex-wrap items-center justify-between text-xs font-mono text-[#64748B] dark:text-[#94A3B8] gap-2">
             <span>NISQ VANGUARD · HYDERABAD / INDIA</span>
             <span className="text-[#38BDF8]">SPACE / ENTER OR TAP TO FLIP ↵</span>
           </div>
@@ -200,10 +200,10 @@ export function FounderFlipCard() {
             backfaceVisibility: "hidden",
           }}
           aria-hidden={!isFlipped}
-          className="absolute inset-0 w-full h-full rounded-3xl bg-[#081522]/98 border border-[#00B8FF]/40 p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,184,255,0.15)] flex flex-col justify-between overflow-y-auto"
+          className="absolute inset-0 w-full h-full rounded-3xl bg-white/98 dark:bg-[#081522]/98 border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 p-6 sm:p-8 md:p-10 shadow-lg dark:shadow-[0_20px_50px_rgba(0,184,255,0.15)] flex flex-col justify-between overflow-y-auto"
         >
           {/* Top Return Header */}
-          <div className="flex items-center justify-between border-b border-[#16283A] pb-4 mb-4">
+          <div className="flex items-center justify-between border-b border-[#E2E8F0] dark:border-[#16283A] pb-4 mb-4">
             <div className="flex items-center gap-2.5">
               <Sparkles className="w-4 h-4 text-[#00B8FF]" />
               <span className="font-mono text-xs uppercase tracking-widest text-[#00B8FF] font-bold">
@@ -217,7 +217,7 @@ export function FounderFlipCard() {
                 e.stopPropagation();
                 toggleFlip();
               }}
-              className="flex items-center gap-1.5 text-xs font-mono text-[#38BDF8] hover:text-white bg-[#050B14] px-3 py-1 rounded-full border border-[#16283A] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-mono text-[#0A7CFF] dark:text-[#38BDF8] hover:text-[#0A7CFF] dark:hover:text-white bg-[#EAF4FF] dark:bg-[#050B14] px-3 py-1 rounded-full border border-[#CFE4FF] dark:border-[#16283A] transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>RETURN TO DOSSIER</span>
@@ -228,7 +228,7 @@ export function FounderFlipCard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left mb-6">
             {/* Core Philosophy Section */}
             <div className="space-y-3.5">
-              <h4 className="font-mono text-xs uppercase tracking-wider text-[#38BDF8] font-semibold flex items-center gap-1.5">
+              <h4 className="font-mono text-xs uppercase tracking-wider text-[#0A7CFF] dark:text-[#38BDF8] font-semibold flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5 text-[#00B8FF]" />
                 <span>Foundational Principles</span>
               </h4>
@@ -236,12 +236,12 @@ export function FounderFlipCard() {
                 {founderPhilosophy.slice(0, 3).map((item, i) => (
                   <div
                     key={i}
-                    className="p-3 rounded-xl bg-[#050B14]/70 border border-[#16283A] text-xs space-y-1"
+                    className="p-3 rounded-xl bg-[#F8FAFC] dark:bg-[#050B14]/70 border border-[#E2E8F0] dark:border-[#16283A] text-xs space-y-1 shadow-2xs"
                   >
-                    <span className="font-bold text-[#F8FAFC] font-mono block">
+                    <span className="font-bold text-[#050B14] dark:text-[#F8FAFC] font-mono block">
                       {item.heading}
                     </span>
-                    <p className="text-[#94A3B8] leading-relaxed">{item.body}</p>
+                    <p className="text-[#475569] dark:text-[#94A3B8] leading-relaxed">{item.body}</p>
                   </div>
                 ))}
               </div>
@@ -249,7 +249,7 @@ export function FounderFlipCard() {
 
             {/* Platform Contributions */}
             <div className="space-y-3.5">
-              <h4 className="font-mono text-xs uppercase tracking-wider text-[#38BDF8] font-semibold flex items-center gap-1.5">
+              <h4 className="font-mono text-xs uppercase tracking-wider text-[#0A7CFF] dark:text-[#38BDF8] font-semibold flex items-center gap-1.5">
                 <Cpu className="w-3.5 h-3.5 text-[#00B8FF]" />
                 <span>Key Platform Inventions</span>
               </h4>
@@ -257,12 +257,12 @@ export function FounderFlipCard() {
                 {founderArchitecturalContributions.slice(0, 3).map((item, i) => (
                   <div
                     key={i}
-                    className="p-3 rounded-xl bg-[#050B14]/70 border border-[#16283A] text-xs space-y-1"
+                    className="p-3 rounded-xl bg-[#F8FAFC] dark:bg-[#050B14]/70 border border-[#E2E8F0] dark:border-[#16283A] text-xs space-y-1 shadow-2xs"
                   >
-                    <span className="font-bold text-[#F8FAFC] font-mono block">
+                    <span className="font-bold text-[#050B14] dark:text-[#F8FAFC] font-mono block">
                       {item.title}
                     </span>
-                    <p className="text-[#94A3B8] leading-relaxed">{item.body}</p>
+                    <p className="text-[#475569] dark:text-[#94A3B8] leading-relaxed">{item.body}</p>
                   </div>
                 ))}
               </div>
@@ -270,12 +270,12 @@ export function FounderFlipCard() {
           </div>
 
           {/* Bottom Call to Action */}
-          <div className="border-t border-[#16283A] pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="border-t border-[#E2E8F0] dark:border-[#16283A] pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-left">
-              <p className="font-mono text-xs text-[#F8FAFC] font-semibold">
+              <p className="font-mono text-xs text-[#050B14] dark:text-[#F8FAFC] font-semibold">
                 Interested in strategic cybersecurity collaboration or campus training?
               </p>
-              <p className="text-[11px] text-[#94A3B8]">
+              <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">
                 Connect directly with our security architects.
               </p>
             </div>

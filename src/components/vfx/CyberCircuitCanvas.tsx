@@ -141,6 +141,9 @@ export function CyberCircuitCanvas({
         pulseTimer = 0;
       }
 
+      // Determine current theme
+      const isDark = document.documentElement.getAttribute("data-theme") !== "light";
+
       // Update & Draw Nodes
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
@@ -172,9 +175,15 @@ export function CyberCircuitCanvas({
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, currentRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0, 184, 255, 0.75)";
-        ctx.shadowColor = "rgba(0, 184, 255, 0.9)";
-        ctx.shadowBlur = 8;
+        if (isDark) {
+          ctx.fillStyle = "rgba(0, 184, 255, 0.8)";
+          ctx.shadowColor = "rgba(0, 184, 255, 0.9)";
+          ctx.shadowBlur = 8;
+        } else {
+          ctx.fillStyle = "rgba(10, 124, 255, 0.75)";
+          ctx.shadowColor = "rgba(10, 124, 255, 0.4)";
+          ctx.shadowBlur = 6;
+        }
         ctx.fill();
         ctx.shadowBlur = 0;
       }
@@ -188,7 +197,7 @@ export function CyberCircuitCanvas({
           const dist = Math.hypot(dx, dy);
 
           if (dist < maxDistance) {
-            const alpha = (1 - dist / maxDistance) * 0.22;
+            const alpha = (1 - dist / maxDistance) * (isDark ? 0.22 : 0.18);
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
 
@@ -228,9 +237,15 @@ export function CyberCircuitCanvas({
 
         ctx.beginPath();
         ctx.arc(px, py, 2.4, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "#00B8FF";
-        ctx.shadowBlur = 10;
+        if (isDark) {
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowColor = "#00B8FF";
+          ctx.shadowBlur = 10;
+        } else {
+          ctx.fillStyle = "#0A7CFF";
+          ctx.shadowColor = "rgba(0, 184, 255, 0.8)";
+          ctx.shadowBlur = 8;
+        }
         ctx.fill();
         ctx.shadowBlur = 0;
       }
@@ -245,8 +260,13 @@ export function CyberCircuitCanvas({
           pointer.y,
           pointer.radius
         );
-        grad.addColorStop(0, "rgba(0, 184, 255, 0.08)");
-        grad.addColorStop(0.5, "rgba(10, 124, 255, 0.03)");
+        if (isDark) {
+          grad.addColorStop(0, "rgba(0, 184, 255, 0.08)");
+          grad.addColorStop(0.5, "rgba(10, 124, 255, 0.03)");
+        } else {
+          grad.addColorStop(0, "rgba(10, 124, 255, 0.06)");
+          grad.addColorStop(0.5, "rgba(0, 184, 255, 0.02)");
+        }
         grad.addColorStop(1, "transparent");
         ctx.fillStyle = grad;
         ctx.beginPath();

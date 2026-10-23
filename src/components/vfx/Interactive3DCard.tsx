@@ -64,7 +64,7 @@ export function Interactive3DCard({
       onPointerLeave={handlePointerLeave}
       style={style}
       className={cn(
-        "relative rounded-2xl overflow-hidden border border-[#16283A] bg-[#081522]/90 backdrop-blur-md shadow-card transition-colors duration-200 group",
+        "relative rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-[#16283A] bg-white/95 dark:bg-[#081522]/90 backdrop-blur-md shadow-card dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] transition-all duration-200 group",
         className
       )}
     >
@@ -73,16 +73,16 @@ export function Interactive3DCard({
         className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300 rounded-2xl"
         style={{
           opacity: glowPos.opacity,
-          background: `radial-gradient(circle 260px at ${glowPos.x}% ${glowPos.y}%, ${glowColor}, transparent 70%)`,
+          background: `radial-gradient(circle 260px at ${glowPos.x}% ${glowPos.y}%, ${glowColor || "var(--nisq-blue-tint)"}, transparent 70%)`,
         }}
         aria-hidden="true"
       />
 
       {/* Cyber Corner Accents */}
-      <div className="pointer-events-none absolute top-0 left-0 w-3 h-3 border-t border-l border-[#00B8FF]/40 rounded-tl-lg transition-colors group-hover:border-[#00B8FF]" aria-hidden="true" />
-      <div className="pointer-events-none absolute top-0 right-0 w-3 h-3 border-t border-r border-[#00B8FF]/40 rounded-tr-lg transition-colors group-hover:border-[#00B8FF]" aria-hidden="true" />
-      <div className="pointer-events-none absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#00B8FF]/40 rounded-bl-lg transition-colors group-hover:border-[#00B8FF]" aria-hidden="true" />
-      <div className="pointer-events-none absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#00B8FF]/40 rounded-br-lg transition-colors group-hover:border-[#00B8FF]" aria-hidden="true" />
+      <div className="pointer-events-none absolute top-0 left-0 w-3 h-3 border-t border-l border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 rounded-tl-lg transition-colors group-hover:border-[#0A7CFF] dark:group-hover:border-[#00B8FF]" aria-hidden="true" />
+      <div className="pointer-events-none absolute top-0 right-0 w-3 h-3 border-t border-r border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 rounded-tr-lg transition-colors group-hover:border-[#0A7CFF] dark:group-hover:border-[#00B8FF]" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 rounded-bl-lg transition-colors group-hover:border-[#0A7CFF] dark:group-hover:border-[#00B8FF]" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 rounded-br-lg transition-colors group-hover:border-[#0A7CFF] dark:group-hover:border-[#00B8FF]" aria-hidden="true" />
 
       <div className="relative z-10 h-full">{children}</div>
     </div>

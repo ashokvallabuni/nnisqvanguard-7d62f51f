@@ -43,19 +43,19 @@ export const PremiumButton = React.forwardRef<HTMLButtonElement, PremiumButtonPr
     };
 
     const baseClasses =
-      "relative inline-flex items-center justify-center font-mono font-semibold tracking-wide rounded-xl select-none transition-all duration-200 cursor-pointer overflow-hidden active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00B8FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050B14] disabled:opacity-50 disabled:pointer-events-none";
+      "relative inline-flex items-center justify-center font-mono font-semibold tracking-wide rounded-xl select-none transition-all duration-200 cursor-pointer overflow-hidden active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7CFF] dark:focus-visible:ring-[#00B8FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#050B14] disabled:opacity-50 disabled:pointer-events-none";
 
     const variantClasses = {
       primary:
-        "bg-gradient-to-r from-[#0A7CFF] to-[#00B8FF] text-white shadow-[0_0_20px_rgba(10,124,255,0.35)] hover:shadow-[0_0_28px_rgba(0,184,255,0.55)] hover:brightness-105 active:brightness-95 border border-white/20 group",
+        "bg-gradient-to-r from-[#0A7CFF] to-[#00B8FF] text-white shadow-[0_4px_16px_rgba(10,124,255,0.28)] dark:shadow-[0_0_20px_rgba(10,124,255,0.35)] hover:shadow-[0_6px_22px_rgba(10,124,255,0.4)] dark:hover:shadow-[0_0_28px_rgba(0,184,255,0.55)] hover:brightness-105 active:brightness-95 border border-white/20 group",
       "cyber-glow":
-        "bg-gradient-to-r from-[#0A7CFF] via-[#00B8FF] to-[#0A7CFF] bg-[length:200%_auto] animate-[gradientShift_6s_ease_infinite] text-white shadow-[0_0_25px_rgba(0,184,255,0.45)] hover:shadow-[0_0_35px_rgba(0,184,255,0.7)] hover:scale-[1.02] border border-[#00B8FF]/60 group",
+        "bg-gradient-to-r from-[#0A7CFF] via-[#00B8FF] to-[#0A7CFF] bg-[length:200%_auto] animate-[gradientShift_6s_ease_infinite] text-white shadow-[0_4px_20px_rgba(0,184,255,0.35)] dark:shadow-[0_0_25px_rgba(0,184,255,0.45)] hover:shadow-[0_6px_28px_rgba(0,184,255,0.55)] dark:hover:shadow-[0_0_35px_rgba(0,184,255,0.7)] hover:scale-[1.02] border border-[#00B8FF]/60 group",
       secondary:
-        "bg-[#081522] text-[#38BDF8] border border-[#00B8FF]/40 hover:border-[#00B8FF] hover:bg-[#00B8FF]/10 shadow-card hover:shadow-[0_0_20px_rgba(0,184,255,0.25)] group",
+        "bg-[#EAF4FF] dark:bg-[#081522] text-[#0A7CFF] dark:text-[#38BDF8] border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 hover:border-[#0A7CFF] dark:hover:border-[#00B8FF] hover:bg-[#0A7CFF]/15 dark:hover:bg-[#00B8FF]/10 shadow-xs dark:shadow-card group",
       outline:
-        "bg-transparent text-[#F8FAFC] border border-[#16283A] hover:border-[#38BDF8]/60 hover:bg-[#081522] hover:text-[#00B8FF] group",
+        "bg-white dark:bg-transparent text-[#050B14] dark:text-[#F8FAFC] border border-[#E2E8F0] dark:border-[#16283A] hover:border-[#0A7CFF] dark:hover:border-[#38BDF8]/60 hover:bg-[#EAF4FF] dark:hover:bg-[#081522] hover:text-[#0A7CFF] dark:hover:text-[#00B8FF] group",
       text:
-        "bg-transparent text-[#38BDF8] hover:text-[#00B8FF] hover:underline underline-offset-4 px-2 py-1 shadow-none",
+        "bg-transparent text-[#0A7CFF] dark:text-[#38BDF8] hover:text-[#00B8FF] hover:underline underline-offset-4 px-2 py-1 shadow-none",
     };
 
     const combinedClasses = cn(

@@ -45,12 +45,12 @@ export function InstallAppButton({
         type="button"
         onClick={() => void promptInstall()}
         className={cn(
-          "flex items-center gap-1 px-2.5 h-10 rounded-lg bg-white/15 hover:bg-white/25 border border-[#00B8FF]/40 text-white text-xs font-bold tracking-wide active:scale-95 transition-all cursor-pointer shadow-xs",
+          "flex items-center gap-1 px-2.5 h-10 rounded-lg bg-[#EAF4FF] dark:bg-white/15 hover:bg-[#0A7CFF]/15 dark:hover:bg-white/25 border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 text-[#0A7CFF] dark:text-white text-xs font-bold tracking-wide active:scale-95 transition-all cursor-pointer shadow-xs",
           className,
         )}
         aria-label="Install NISQ Vanguard App"
       >
-        <Download className="w-3.5 h-3.5 text-[#00B8FF]" />
+        <Download className="w-3.5 h-3.5 text-[#0A7CFF] dark:text-[#00B8FF]" />
         <span>Install</span>
       </button>
     );
@@ -62,12 +62,12 @@ export function InstallAppButton({
       type="button"
       onClick={() => void promptInstall()}
       className={cn(
-        "flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/15 hover:bg-white/25 border border-[#00B8FF]/40 text-white text-xs font-semibold tracking-wide active:scale-[0.98] transition-all cursor-pointer select-none shadow-xs animate-in fade-in duration-300",
+        "flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#EAF4FF] dark:bg-white/15 hover:bg-[#0A7CFF]/15 dark:hover:bg-white/25 border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 text-[#0A7CFF] dark:text-white text-xs font-semibold tracking-wide active:scale-[0.98] transition-all cursor-pointer select-none shadow-xs animate-in fade-in duration-300",
         className,
       )}
       aria-label="Install NISQ Vanguard App"
     >
-      <Download className="w-3.5 h-3.5 text-[#00B8FF] shrink-0" />
+      <Download className="w-3.5 h-3.5 text-[#0A7CFF] dark:text-[#00B8FF] shrink-0" />
       <span>Install App</span>
     </button>
   );

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState, useCallback } from "react"
 
 export type Theme = "dark" | "light"
 
@@ -11,11 +11,13 @@ type ThemeProviderProps = {
 type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
+  toggleTheme: () => void
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>({
   theme: "dark",
   setTheme: () => null,
+  toggleTheme: () => null,
 })
 
 export function ThemeProvider({
@@ -26,16 +28,17 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
     try {
-      const stored = localStorage.getItem(storageKey)
+      const stored =
+        localStorage.getItem(storageKey) || localStorage.getItem("course-theme")
       if (stored === "light" || stored === "dark") return stored
     } catch {}
     return defaultTheme
   })
 
-  useEffect(() => {
+  const applyDomTheme = useCallback((targetTheme: Theme) => {
     const root = window.document.documentElement
-    root.setAttribute("data-theme", theme)
-    if (theme === "dark") {
+    root.setAttribute("data-theme", targetTheme)
+    if (targetTheme === "dark") {
       root.classList.add("dark")
       root.classList.remove("light")
       root.style.colorScheme = "dark"
@@ -44,17 +47,44 @@ export function ThemeProvider({
       root.classList.remove("dark")
       root.style.colorScheme = "light"
     }
-  }, [theme])
+    window.dispatchEvent(new CustomEvent("nisq-theme-change", { detail: targetTheme }))
+  }, [])
 
-  const setTheme = (newTheme: Theme) => {
-    try {
-      localStorage.setItem(storageKey, newTheme)
-    } catch {}
-    setThemeState(newTheme)
-  }
+  useEffect(() => {
+    applyDomTheme(theme)
+  }, [theme, applyDomTheme])
+
+  const setTheme = useCallback(
+    (newTheme: Theme) => {
+      try {
+        localStorage.setItem(storageKey, newTheme)
+        localStorage.setItem("course-theme", newTheme)
+      } catch {}
+
+      if (document.startViewTransition) {
+        document.documentElement.classList.add("theme-switching")
+        document
+          .startViewTransition(() => {
+            setThemeState(newTheme)
+            applyDomTheme(newTheme)
+          })
+          .finished.finally(() => {
+            document.documentElement.classList.remove("theme-switching")
+          })
+      } else {
+        setThemeState(newTheme)
+        applyDomTheme(newTheme)
+      }
+    },
+    [storageKey, applyDomTheme]
+  )
+
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }, [theme, setTheme])
 
   return (
-    <ThemeProviderContext.Provider {...props} value={{ theme, setTheme }}>
+    <ThemeProviderContext.Provider value={{ theme, setTheme, toggleTheme }} {...props}>
       {children}
     </ThemeProviderContext.Provider>
   )

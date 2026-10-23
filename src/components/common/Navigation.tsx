@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { PremiumButton } from "@/components/common/PremiumButton";
 import { useIvvabChat } from "@/lib/ivvab-chat";
 import { InstallAppButton } from "./InstallAppButton";
+import { useTheme } from "@/components/theme-provider";
 
 const nisqLogoUrl = "/assets/nisq-logo.webp";
 
@@ -79,7 +80,7 @@ function AccountDropdown() {
   }, []);
 
   const itemClass =
-    "flex items-center gap-3 px-3.5 h-10 mx-1 rounded-lg text-sm font-medium text-[#cbd5e1] hover:bg-[#00B8FF]/15 hover:text-[#00B8FF] transition-colors select-none";
+    "flex items-center gap-3 px-3.5 h-10 mx-1 rounded-lg text-sm font-medium text-[#334155] dark:text-[#cbd5e1] hover:bg-[#EAF4FF] dark:hover:bg-[#00B8FF]/15 hover:text-[#0A7CFF] dark:hover:text-[#00B8FF] transition-colors select-none";
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -87,9 +88,9 @@ function AccountDropdown() {
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="menu"
         aria-expanded={isOpen}
-        className="flex items-center gap-2.5 bg-[#081522] border border-[#16283A] hover:border-[#00B8FF] transition-all px-3 h-10 rounded-xl shadow-xs active:scale-[0.98] cursor-pointer select-none text-white"
+        className="flex items-center gap-2.5 bg-[#F8FAFC] dark:bg-[#081522] border border-[#E2E8F0] dark:border-[#16283A] hover:border-[#0A7CFF] dark:hover:border-[#00B8FF] transition-all px-3 h-10 rounded-xl shadow-xs active:scale-[0.98] cursor-pointer select-none text-[#050B14] dark:text-white"
       >
-        <div className="w-7 h-7 rounded-full overflow-hidden bg-[#0A7CFF]/20 border border-[#00B8FF]/40 flex items-center justify-center">
+        <div className="w-7 h-7 rounded-full overflow-hidden bg-[#0A7CFF]/15 dark:bg-[#0A7CFF]/20 border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 flex items-center justify-center">
           {profile?.avatar_url ? (
             <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
           ) : (
@@ -97,10 +98,10 @@ function AccountDropdown() {
           )}
         </div>
         <div className="flex flex-col items-start text-left leading-tight">
-          <span className="text-xs text-white font-semibold truncate max-w-[110px]">
+          <span className="text-xs text-[#050B14] dark:text-white font-semibold truncate max-w-[110px]">
             {displayName}
           </span>
-          <span className="text-[9px] text-[#38BDF8] tracking-wider uppercase font-mono">
+          <span className="text-[9px] text-[#0A7CFF] dark:text-[#38BDF8] tracking-wider uppercase font-mono">
             {accountType}
           </span>
         </div>
@@ -115,7 +116,7 @@ function AccountDropdown() {
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.15 }}
             role="menu"
-            className="absolute right-0 mt-2 w-56 bg-[#081522]/98 backdrop-blur-xl border border-[#16283A] rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.6)] z-50 flex flex-col py-1.5 overflow-hidden"
+            className="absolute right-0 mt-2 w-56 bg-white/98 dark:bg-[#081522]/98 backdrop-blur-xl border border-[#E2E8F0] dark:border-[#16283A] rounded-xl shadow-pop dark:shadow-[0_12px_36px_rgba(0,0,0,0.6)] z-50 flex flex-col py-1.5 overflow-hidden"
           >
             {isAdmin && (
               <Link
@@ -140,44 +141,19 @@ function AccountDropdown() {
 }
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-
-  useEffect(() => {
-    const saved = localStorage.getItem("course-theme") as "light" | "dark" | null;
-    if (saved) {
-      setTheme(saved);
-      document.documentElement.setAttribute("data-theme", saved);
-    } else {
-      setTheme("dark");
-      document.documentElement.setAttribute("data-theme", "dark");
-    }
-  }, []);
-
-  const applyTheme = (next: "light" | "dark") => {
-    setTheme(next);
-    localStorage.setItem("course-theme", next);
-    document.documentElement.setAttribute("data-theme", next);
-  };
-
-  const toggle = () => {
-    const next = theme === "light" ? "dark" : "light";
-    if (document.startViewTransition) {
-      document.startViewTransition(() => applyTheme(next));
-    } else {
-      applyTheme(next);
-    }
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
-      onClick={toggle}
-      className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[#081522] border border-[#16283A] text-white hover:border-[#00B8FF]/60 hover:bg-[#0A7CFF]/10 active:scale-95 transition-all cursor-pointer select-none"
-      aria-label="Toggle theme"
+      onClick={toggleTheme}
+      className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[#EAF4FF] dark:bg-[#081522] border border-[#CFE4FF] dark:border-[#16283A] text-[#0A7CFF] dark:text-white hover:border-[#0A7CFF] dark:hover:border-[#00B8FF]/60 hover:bg-[#0A7CFF]/15 dark:hover:bg-[#0A7CFF]/10 active:scale-95 transition-all cursor-pointer select-none shadow-xs"
+      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+      title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
-      <div className={`transition-all duration-300 absolute ${theme === "light" ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"}`}>
-        <Sun className="w-4 h-4 text-[#38BDF8]" />
+      <div className={`transition-all duration-300 absolute ${theme === "light" ? "rotate-0 opacity-100 scale-100" : "-rotate-90 opacity-0 scale-75"}`}>
+        <Sun className="w-4 h-4 text-[#0A7CFF]" />
       </div>
-      <div className={`transition-all duration-300 absolute ${theme === "dark" ? "rotate-0 opacity-100" : "rotate-90 opacity-0"}`}>
+      <div className={`transition-all duration-300 absolute ${theme === "dark" ? "rotate-0 opacity-100 scale-100" : "rotate-90 opacity-0 scale-75"}`}>
         <Moon className="w-4 h-4 text-[#00B8FF]" />
       </div>
     </button>
@@ -217,8 +193,8 @@ export function TopNav() {
   return (
     <>
       <nav
-        className={`w-full bg-[#050B14]/92 backdrop-blur-xl border-b border-[#16283A] transition-all duration-300 sticky top-0 z-50 ${
-          scrolled ? "shadow-[0_4px_30px_rgba(0,0,0,0.55)] border-[#00B8FF]/20" : ""
+        className={`w-full bg-white/92 dark:bg-[#050B14]/92 backdrop-blur-xl border-b border-[#E2E8F0] dark:border-[#16283A] transition-all duration-300 sticky top-0 z-50 ${
+          scrolled ? "shadow-[0_4px_24px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.55)] border-[#0A7CFF]/20 dark:border-[#00B8FF]/20" : ""
         }`}
         aria-label="Main navigation"
       >
@@ -236,10 +212,10 @@ export function TopNav() {
               />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-base font-display font-extrabold tracking-tight text-white leading-tight group-hover:text-[#00B8FF] transition-colors">
+              <span className="text-base font-display font-extrabold tracking-tight text-[#050B14] dark:text-white leading-tight group-hover:text-[#0A7CFF] dark:group-hover:text-[#00B8FF] transition-colors">
                 NISQ VANGUARD
               </span>
-              <span className="text-[9px] text-[#38BDF8] tracking-widest uppercase font-mono font-semibold hidden min-[440px]:block">
+              <span className="text-[9px] text-[#0A7CFF] dark:text-[#38BDF8] tracking-widest uppercase font-mono font-semibold hidden min-[440px]:block">
                 DEFENCE TECHNOLOGIES
               </span>
             </div>
@@ -266,8 +242,8 @@ export function TopNav() {
                     aria-current={active ? "page" : undefined}
                     className={`relative h-[72px] flex items-center px-3 text-xs font-mono font-medium transition-colors ${
                       active
-                        ? "text-[#00B8FF] font-semibold after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:bg-gradient-to-r after:from-[#0A7CFF] after:to-[#00B8FF] after:shadow-[0_0_8px_#00B8FF]"
-                        : "text-[#94A3B8] hover:text-white"
+                        ? "text-[#0A7CFF] dark:text-[#00B8FF] font-semibold after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:bg-gradient-to-r after:from-[#0A7CFF] after:to-[#00B8FF] after:shadow-[0_0_8px_rgba(10,124,255,0.4)] dark:after:shadow-[0_0_8px_#00B8FF]"
+                        : "text-[#64748B] hover:text-[#050B14] dark:text-[#94A3B8] dark:hover:text-white"
                     }`}
                   >
                     {l.label}
@@ -283,7 +259,7 @@ export function TopNav() {
 
             <button
               onClick={() => toggleIvvab()}
-              className="flex items-center gap-1.5 px-3.5 h-10 rounded-xl bg-[#081522] hover:bg-[#00B8FF]/15 border border-[#00B8FF]/40 text-[#00B8FF] hover:text-white text-xs font-mono font-semibold tracking-wider active:scale-[0.98] transition-all cursor-pointer select-none shadow-[0_0_15px_rgba(0,184,255,0.15)]"
+              className="flex items-center gap-1.5 px-3.5 h-10 rounded-xl bg-[#EAF4FF] dark:bg-[#081522] hover:bg-[#0A7CFF]/15 dark:hover:bg-[#00B8FF]/15 border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 text-[#0A7CFF] dark:text-[#00B8FF] hover:text-[#0A7CFF] dark:hover:text-white text-xs font-mono font-semibold tracking-wider active:scale-[0.98] transition-all cursor-pointer select-none shadow-xs dark:shadow-[0_0_15px_rgba(0,184,255,0.15)]"
               aria-label="Open IVVAB AI Assistant"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#00B8FF] animate-pulse" />
@@ -358,7 +334,7 @@ export function TopNav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="min-[1100px]:hidden fixed inset-x-0 top-[72px] z-[90] bg-[#050B14]/98 backdrop-blur-2xl border-b border-[#16283A] shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[calc(100svh-72px)] overflow-y-auto"
+            className="min-[1100px]:hidden fixed inset-x-0 top-[72px] z-[90] bg-white/98 dark:bg-[#050B14]/98 backdrop-blur-2xl border-b border-[#E2E8F0] dark:border-[#16283A] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[calc(100svh-72px)] overflow-y-auto"
           >
             <div className="max-w-md mx-auto py-6 px-4 flex flex-col space-y-1">
               {/* Branded Drawer Top */}
@@ -369,7 +345,7 @@ export function TopNav() {
                   className="w-10 h-10 rounded-xl object-cover border border-[#00B8FF]/30"
                 />
                 <div className="flex flex-col text-left">
-                  <span className="font-display font-bold text-base text-white leading-tight">
+                  <span className="font-display font-bold text-base text-[#050B14] dark:text-white leading-tight">
                     NISQ Vanguard
                   </span>
                   <span className="font-mono text-[10px] text-[#00B8FF] tracking-wider uppercase font-semibold">
@@ -521,7 +497,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Mobile Bottom Navigation"
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#050B14]/95 backdrop-blur-2xl border-t border-[#16283A] shadow-[0_-8px_30px_rgba(0,0,0,0.6)] px-2 pt-1 pb-[calc(env(safe-area-inset-bottom,0px)+0.3rem)]"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-[#050B14]/95 backdrop-blur-2xl border-t border-[#E2E8F0] dark:border-[#16283A] shadow-[0_-4px_20px_rgba(15,23,42,0.08)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.6)] px-2 pt-1 pb-[calc(env(safe-area-inset-bottom,0px)+0.3rem)] transition-colors duration-200"
     >
       <div className="grid grid-cols-5 h-14 max-w-md mx-auto items-center">
         {items.map((item) => {
@@ -532,22 +508,22 @@ export function BottomNav() {
               to={item.to as any}
               aria-current={item.isActive ? "page" : undefined}
               className={`flex flex-col items-center justify-center h-full min-h-[44px] py-1 select-none transition-all duration-200 active:scale-95 ${
-                item.isActive ? "text-[#00B8FF]" : "text-[#94A3B8] hover:text-white"
+                item.isActive ? "text-[#0A7CFF] dark:text-[#00B8FF]" : "text-[#64748B] dark:text-[#94A3B8] hover:text-[#050B14] dark:hover:text-white"
               }`}
             >
               <div className="relative flex items-center justify-center">
                 <Icon
                   className={`w-5 h-5 transition-transform duration-200 ${
-                    item.isActive ? "scale-110 stroke-[2.25] text-[#00B8FF]" : "stroke-[1.75]"
+                    item.isActive ? "scale-110 stroke-[2.25] text-[#0A7CFF] dark:text-[#00B8FF]" : "stroke-[1.75]"
                   }`}
                 />
                 {item.isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#00B8FF] shadow-[0_0_8px_#00B8FF]" />
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#0A7CFF] dark:bg-[#00B8FF] shadow-[0_0_8px_rgba(10,124,255,0.5)] dark:shadow-[0_0_8px_#00B8FF]" />
                 )}
               </div>
               <span
                 className={`text-[10px] tracking-tight mt-1 font-mono transition-colors ${
-                  item.isActive ? "font-bold text-[#00B8FF]" : "text-[#94A3B8] font-normal"
+                  item.isActive ? "font-bold text-[#0A7CFF] dark:text-[#00B8FF]" : "text-[#64748B] dark:text-[#94A3B8] font-normal"
                 }`}
               >
                 {item.label}
