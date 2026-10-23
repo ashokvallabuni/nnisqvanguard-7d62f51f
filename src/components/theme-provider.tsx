@@ -1,11 +1,6 @@
-import { createContext, useContext, useEffect } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
-/**
- * NISQ Vanguard ships a single, light theme. The provider is kept (so existing
- * `useTheme` callers keep working) but it can never switch to dark mode.
- * To add a dark theme later, extend `Theme` and the token block in styles.css.
- */
-type Theme = "light"
+export type Theme = "dark" | "light"
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -19,22 +14,47 @@ type ThemeProviderState = {
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>({
-  theme: "light",
+  theme: "dark",
   setTheme: () => null,
 })
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+export function ThemeProvider({
+  children,
+  defaultTheme = "dark",
+  storageKey = "nisq-theme",
+  ...props
+}: ThemeProviderProps) {
+  const [theme, setThemeState] = useState<Theme>(() => {
+    try {
+      const stored = localStorage.getItem(storageKey)
+      if (stored === "light" || stored === "dark") return stored
+    } catch {}
+    return defaultTheme
+  })
+
   useEffect(() => {
     const root = window.document.documentElement
-    root.classList.remove("dark")
-    root.classList.add("light")
-    root.style.colorScheme = "light"
-  }, [])
+    root.setAttribute("data-theme", theme)
+    if (theme === "dark") {
+      root.classList.add("dark")
+      root.classList.remove("light")
+      root.style.colorScheme = "dark"
+    } else {
+      root.classList.add("light")
+      root.classList.remove("dark")
+      root.style.colorScheme = "light"
+    }
+  }, [theme])
 
-  const value: ThemeProviderState = { theme: "light", setTheme: () => null }
+  const setTheme = (newTheme: Theme) => {
+    try {
+      localStorage.setItem(storageKey, newTheme)
+    } catch {}
+    setThemeState(newTheme)
+  }
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider {...props} value={{ theme, setTheme }}>
       {children}
     </ThemeProviderContext.Provider>
   )

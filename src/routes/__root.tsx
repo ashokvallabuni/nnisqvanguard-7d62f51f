@@ -186,7 +186,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
  return (
- <html lang="en">
+ <html lang="en" data-theme="dark" className="dark">
  <head>
  <HeadContent />
  <script
@@ -198,7 +198,7 @@ function RootShell({ children }: { children: ReactNode }) {
            if (saved) {
              document.documentElement.setAttribute('data-theme', saved);
            } else {
-             document.documentElement.setAttribute('data-theme', 'light');
+             document.documentElement.setAttribute('data-theme', 'dark'); document.documentElement.classList.add('dark');
            }
          } catch (e) {}
        })();
@@ -287,13 +287,13 @@ function RootComponent() {
  const { queryClient } = Route.useRouteContext();
  return (
  <QueryClientProvider client={queryClient}>
- <ThemeProvider defaultTheme="light" storageKey="nisq-theme">
+ <ThemeProvider defaultTheme="dark" storageKey="nisq-theme">
  <AuthProvider>
  <IvvabChatProvider>
  <PWARegister />
  <AuthListener />
  <AdminTacticalPreviewBarWrapper />
- <Toaster theme="light" />
+ <Toaster theme="dark" />
  </IvvabChatProvider>
  </AuthProvider>
  </ThemeProvider>

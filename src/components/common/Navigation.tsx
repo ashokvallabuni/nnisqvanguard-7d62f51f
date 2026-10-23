@@ -16,9 +16,12 @@ import {
   Home,
   GraduationCap,
   Terminal,
-  TrendingUp,
+  Calendar,
+  Layers,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PremiumButton } from "@/components/common/PremiumButton";
 import { useIvvabChat } from "@/lib/ivvab-chat";
 import { InstallAppButton } from "./InstallAppButton";
 
@@ -31,6 +34,7 @@ const PUBLIC_LINKS: NavItem[] = [
   { to: "/academy", label: "Academy" },
   { to: "/cyber-range/labs", label: "IVVAB LABS" },
   { to: "/services", label: "Services" },
+  { to: "/appointments", label: "Briefings" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
@@ -39,7 +43,7 @@ const LEARNER_LINKS: NavItem[] = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/academy", label: "Academy" },
   { to: "/cyber-range/labs", label: "IVVAB LABS" },
-  { to: "/programs", label: "Programs" },
+  { to: "/appointments", label: "Briefings" },
   { to: "/cyber-range/my-progress", label: "Progress" },
 ];
 
@@ -47,7 +51,7 @@ const ORG_LINKS: NavItem[] = [
   { to: "/organization/dashboard", label: "Dashboard" },
   { to: "/services", label: "Consulting" },
   { to: "/academy", label: "Academy" },
-  { to: "/programs", label: "Programs" },
+  { to: "/appointments", label: "Briefings" },
   { to: "/campus", label: "Campus" },
 ];
 
@@ -75,7 +79,7 @@ function AccountDropdown() {
   }, []);
 
   const itemClass =
-    "flex items-center gap-3 px-3.5 h-10 mx-1 rounded-lg text-sm font-medium text-nisq-text hover:bg-nisq-blue-tint hover:text-nisq-blue transition-colors select-none";
+    "flex items-center gap-3 px-3.5 h-10 mx-1 rounded-lg text-sm font-medium text-[#cbd5e1] hover:bg-[#00B8FF]/15 hover:text-[#00B8FF] transition-colors select-none";
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -83,35 +87,35 @@ function AccountDropdown() {
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="menu"
         aria-expanded={isOpen}
-        className="flex items-center gap-2.5 bg-nisq-white border border-nisq-border hover:border-nisq-blue transition-all px-3 h-10 rounded-[10px] shadow-xs active:scale-[0.98] cursor-pointer select-none"
+        className="flex items-center gap-2.5 bg-[#081522] border border-[#16283A] hover:border-[#00B8FF] transition-all px-3 h-10 rounded-xl shadow-xs active:scale-[0.98] cursor-pointer select-none text-white"
       >
-        <div className="w-7 h-7 rounded-full overflow-hidden bg-nisq-blue-tint flex items-center justify-center">
+        <div className="w-7 h-7 rounded-full overflow-hidden bg-[#0A7CFF]/20 border border-[#00B8FF]/40 flex items-center justify-center">
           {profile?.avatar_url ? (
             <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
           ) : (
-            <UserIcon className="w-4 h-4 text-nisq-blue" />
+            <UserIcon className="w-4 h-4 text-[#00B8FF]" />
           )}
         </div>
         <div className="flex flex-col items-start text-left leading-tight">
-          <span className="text-sm text-nisq-ink font-semibold truncate max-w-[120px]">
+          <span className="text-xs text-white font-semibold truncate max-w-[110px]">
             {displayName}
           </span>
-          <span className="text-[10px] text-nisq-muted tracking-wider uppercase">
+          <span className="text-[9px] text-[#38BDF8] tracking-wider uppercase font-mono">
             {accountType}
           </span>
         </div>
-        <ChevronDown className="w-4 h-4 text-nisq-muted" />
+        <ChevronDown className="w-3.5 h-3.5 text-[#94A3B8]" />
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 8, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.15 }}
             role="menu"
-            className="absolute right-0 mt-2 w-56 bg-nisq-white border border-nisq-border rounded-xl shadow-pop z-50 flex flex-col py-1 overflow-hidden"
+            className="absolute right-0 mt-2 w-56 bg-[#081522]/98 backdrop-blur-xl border border-[#16283A] rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.6)] z-50 flex flex-col py-1.5 overflow-hidden"
           >
             {isAdmin && (
               <Link
@@ -119,14 +123,14 @@ function AccountDropdown() {
                 className={itemClass}
                 onClick={() => setIsOpen(false)}
               >
-                <ShieldCheck className="w-4 h-4" /> Admin Console
+                <ShieldCheck className="w-4 h-4 text-[#00B8FF]" /> Admin Console
               </Link>
             )}
             <Link to={dashboardLink as any} className={itemClass} onClick={() => setIsOpen(false)}>
-              <LayoutDashboard className="w-4 h-4" /> Dashboard
+              <LayoutDashboard className="w-4 h-4 text-[#38BDF8]" /> Dashboard
             </Link>
             <Link to={"/profile" as any} className={itemClass} onClick={() => setIsOpen(false)}>
-              <UserIcon className="w-4 h-4" /> Profile
+              <UserIcon className="w-4 h-4 text-[#38BDF8]" /> Profile
             </Link>
           </motion.div>
         )}
@@ -136,7 +140,7 @@ function AccountDropdown() {
 }
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     const saved = localStorage.getItem("course-theme") as "light" | "dark" | null;
@@ -144,7 +148,8 @@ function ThemeToggle() {
       setTheme(saved);
       document.documentElement.setAttribute("data-theme", saved);
     } else {
-      document.documentElement.setAttribute("data-theme", "light");
+      setTheme("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
     }
   }, []);
 
@@ -166,14 +171,14 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 border border-white/25 text-white hover:bg-white/20 active:scale-95 transition-all backdrop-blur-sm cursor-pointer select-none"
+      className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[#081522] border border-[#16283A] text-white hover:border-[#00B8FF]/60 hover:bg-[#0A7CFF]/10 active:scale-95 transition-all cursor-pointer select-none"
       aria-label="Toggle theme"
     >
       <div className={`transition-all duration-300 absolute ${theme === "light" ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"}`}>
-        <Sun className="w-4 h-4" />
+        <Sun className="w-4 h-4 text-[#38BDF8]" />
       </div>
       <div className={`transition-all duration-300 absolute ${theme === "dark" ? "rotate-0 opacity-100" : "rotate-90 opacity-0"}`}>
-        <Moon className="w-4 h-4" />
+        <Moon className="w-4 h-4 text-[#00B8FF]" />
       </div>
     </button>
   );
@@ -212,112 +217,119 @@ export function TopNav() {
   return (
     <>
       <nav
-        className={`w-full bg-gradient-to-r from-[#0A7CFF] to-[#00B8FF] border-b border-white/10 transition-all duration-300 sticky top-0 z-50 ${
-          scrolled ? "shadow-glow backdrop-blur-md bg-opacity-90" : ""
+        className={`w-full bg-[#050B14]/92 backdrop-blur-xl border-b border-[#16283A] transition-all duration-300 sticky top-0 z-50 ${
+          scrolled ? "shadow-[0_4px_30px_rgba(0,0,0,0.55)] border-[#00B8FF]/20" : ""
         }`}
         aria-label="Main navigation"
       >
-        <div className="container-nv flex h-[72px] items-center justify-between gap-6">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 shrink-0" aria-label="NISQ Vanguard home">
-            <img
-              src={nisqLogoUrl}
-              alt="NISQ Vanguard logo"
-              width={40}
-              height={40}
-              fetchPriority="high"
-              className="w-10 h-10 rounded-xl object-cover border border-white/30 shadow-xs"
-            />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-[72px] items-center justify-between gap-6">
+          {/* Logo Brand */}
+          <Link to="/" className="flex items-center gap-3 shrink-0 group" aria-label="NISQ Vanguard home">
+            <div className="relative p-1 rounded-xl bg-gradient-to-b from-[#0A7CFF]/20 to-transparent border border-[#00B8FF]/30 group-hover:border-[#00B8FF] transition-colors shadow-[0_0_15px_rgba(10,124,255,0.2)]">
+              <img
+                src={nisqLogoUrl}
+                alt="NISQ Vanguard logo"
+                width={36}
+                height={36}
+                fetchPriority="high"
+                className="w-9 h-9 rounded-lg object-cover"
+              />
+            </div>
             <div className="flex flex-col text-left">
-              <span className="text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
-                NISQ Vanguard
+              <span className="text-base font-display font-extrabold tracking-tight text-white leading-tight group-hover:text-[#00B8FF] transition-colors">
+                NISQ VANGUARD
               </span>
-              <span className="text-[9px] text-white/80 tracking-widest uppercase font-mono hidden min-[440px]:block">
-                Defence Technologies
+              <span className="text-[9px] text-[#38BDF8] tracking-widest uppercase font-mono font-semibold hidden min-[440px]:block">
+                DEFENCE TECHNOLOGIES
               </span>
             </div>
           </Link>
 
-          {/* Links */}
+          {/* Desktop Center Links */}
           <ul className="hidden min-[1100px]:flex items-center gap-1 flex-1 justify-center">
             {isAdmin && (
               <li>
                 <Link
                   to={"/admin" as any}
-                  className="relative h-[72px] flex items-center px-3 text-sm font-semibold text-nisq-blue hover:text-nisq-blue-bright"
+                  className="relative h-[72px] flex items-center px-3.5 text-xs font-mono font-semibold text-[#00B8FF] hover:text-white"
                 >
-                  Admin Console
+                  ADMIN CONSOLE
                 </Link>
               </li>
             )}
-            {links.map((l) => (
-              <li key={l.to + l.label}>
-                <Link
-                  to={l.to as any}
-                  aria-current={isActive(l.to) ? "page" : undefined}
-                  className={`relative h-[72px] flex items-center px-3 text-sm font-medium transition-all duration-300 after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:transition-all ${
-                    isActive(l.to)
-                      ? "text-white after:bg-white"
-                      : "text-white/80 hover:text-white hover:shadow-[0_0_12px_rgba(255,255,255,0.2)] after:bg-transparent"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
+            {links.map((l) => {
+              const active = isActive(l.to);
+              return (
+                <li key={l.to + l.label}>
+                  <Link
+                    to={l.to as any}
+                    aria-current={active ? "page" : undefined}
+                    className={`relative h-[72px] flex items-center px-3 text-xs font-mono font-medium transition-colors ${
+                      active
+                        ? "text-[#00B8FF] font-semibold after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:bg-gradient-to-r after:from-[#0A7CFF] after:to-[#00B8FF] after:shadow-[0_0_8px_#00B8FF]"
+                        : "text-[#94A3B8] hover:text-white"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
-          {/* Actions */}
+          {/* Desktop Actions */}
           <div className="hidden min-[1100px]:flex items-center justify-end gap-3 shrink-0">
             <InstallAppButton variant="header" />
+
             <button
               onClick={() => toggleIvvab()}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/25 text-white text-xs font-semibold tracking-wide active:scale-[0.98] transition-all cursor-pointer select-none shadow-xs"
+              className="flex items-center gap-1.5 px-3.5 h-10 rounded-xl bg-[#081522] hover:bg-[#00B8FF]/15 border border-[#00B8FF]/40 text-[#00B8FF] hover:text-white text-xs font-mono font-semibold tracking-wider active:scale-[0.98] transition-all cursor-pointer select-none shadow-[0_0_15px_rgba(0,184,255,0.15)]"
               aria-label="Open IVVAB AI Assistant"
             >
-              <Sparkles className="w-3.5 h-3.5 text-white" />
-              <span>IVVAB</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#00B8FF] animate-pulse" />
+              <span>IVVAB AI</span>
             </button>
+
             <ThemeToggle />
+
             {user ? (
               <>
                 <AccountDropdown />
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-white/10 border-white/40 text-white hover:bg-white hover:text-nisq-blue active:scale-[0.98] transition-all shadow-none"
+                  className="bg-[#081522] border-[#16283A] text-[#94A3B8] hover:text-white hover:border-red-500/40 hover:bg-red-500/10 active:scale-[0.98] transition-all font-mono text-xs"
                   onClick={() => signOut()}
                 >
+                  <LogOut className="w-3.5 h-3.5 mr-1" />
                   Sign Out
                 </Button>
               </>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white hover:bg-white/15 hover:text-white active:scale-[0.98] transition-all"
-                  asChild
+                <Link
+                  to="/login"
+                  className="h-10 px-3.5 inline-flex items-center text-xs font-mono font-semibold text-[#94A3B8] hover:text-white transition-colors"
                 >
-                  <Link to="/login">Login</Link>
-                </Button>
-                <Button
+                  Sign In
+                </Link>
+                <PremiumButton
+                  variant="primary"
                   size="sm"
-                  className="bg-white text-nisq-blue hover:bg-white/95 shadow-sm active:scale-[0.98] transition-all"
-                  asChild
+                  to="/signup"
+                  iconRight={<ArrowRight className="w-3.5 h-3.5" />}
                 >
-                  <Link to="/signup">Get Started</Link>
-                </Button>
+                  GET STARTED
+                </PremiumButton>
               </>
             )}
           </div>
 
-          {/* Mobile actions */}
-          <div className="min-[1100px]:hidden flex items-center gap-1.5 sm:gap-2 shrink-0">
-            <InstallAppButton variant="mobile-header" />
+          {/* Mobile Right Controls */}
+          <div className="min-[1100px]:hidden flex items-center gap-2 shrink-0">
             <button
               onClick={() => toggleIvvab()}
-              className="flex items-center gap-1 px-2 sm:px-2.5 h-10 rounded-lg bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-bold tracking-wide active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="flex items-center gap-1 px-2.5 h-9 rounded-lg bg-[#081522] border border-[#00B8FF]/40 text-[#00B8FF] text-xs font-mono font-bold active:scale-95 transition-all cursor-pointer shadow-xs"
               aria-label="Open IVVAB AI Assistant"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#00B8FF]" />
@@ -325,63 +337,67 @@ export function TopNav() {
             </button>
             <ThemeToggle />
             <button
-              className="h-10 w-10 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg border border-white/30 text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+              className="h-10 w-10 flex items-center justify-center rounded-xl bg-[#081522] border border-[#16283A] text-white hover:border-[#00B8FF] active:scale-95 transition-all cursor-pointer"
               onClick={() => setOpen(!open)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls="mobile-menu"
             >
-              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {open ? <X className="w-5 h-5 text-[#00B8FF]" /> : <Menu className="w-5 h-5 text-white" />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Expandable Mobile Secondary Drawer */}
       <AnimatePresence>
         {open && (
           <motion.div
             id="mobile-menu"
-            initial={{ opacity: 0, y: -12 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.18 }}
-            className="min-[1100px]:hidden absolute inset-x-0 top-full z-[90] bg-nisq-white border-b border-nisq-border shadow-pop max-h-[calc(100svh-72px)] overflow-y-auto"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="min-[1100px]:hidden fixed inset-x-0 top-[72px] z-[90] bg-[#050B14]/98 backdrop-blur-2xl border-b border-[#16283A] shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[calc(100svh-72px)] overflow-y-auto"
           >
-            <div className="container-nv py-4 flex flex-col">
-              {/* Branded Mobile Menu Header */}
-              <div className="flex items-center gap-3 pb-3.5 mb-2 border-b border-nisq-border">
+            <div className="max-w-md mx-auto py-6 px-4 flex flex-col space-y-1">
+              {/* Branded Drawer Top */}
+              <div className="flex items-center gap-3 pb-4 mb-3 border-b border-[#16283A]">
                 <img
                   src={nisqLogoUrl}
-                  alt="NISQ Vanguard logo"
-                  className="w-11 h-11 rounded-xl object-cover border border-nisq-blue/20 shadow-xs"
+                  alt="NISQ Vanguard"
+                  className="w-10 h-10 rounded-xl object-cover border border-[#00B8FF]/30"
                 />
                 <div className="flex flex-col text-left">
-                  <span className="font-display font-bold text-base text-nisq-ink leading-tight">
+                  <span className="font-display font-bold text-base text-white leading-tight">
                     NISQ Vanguard
                   </span>
-                  <span className="font-mono text-[10px] text-nisq-blue tracking-wider uppercase font-semibold">
+                  <span className="font-mono text-[10px] text-[#00B8FF] tracking-wider uppercase font-semibold">
                     Defence Technologies
                   </span>
                 </div>
               </div>
+
               {isAdmin && (
                 <Link
                   to={"/admin" as any}
                   onClick={() => setOpen(false)}
-                  className="h-12 flex items-center text-base font-semibold text-nisq-blue"
+                  className="h-12 flex items-center px-3 rounded-xl font-mono text-sm font-semibold text-[#00B8FF] hover:bg-[#081522]"
                 >
                   Admin Console
                 </Link>
               )}
+
               {links.map((l) => (
                 <Link
                   key={l.to + l.label}
                   to={l.to as any}
                   onClick={() => setOpen(false)}
                   aria-current={isActive(l.to) ? "page" : undefined}
-                  className={`h-12 flex items-center text-base font-medium border-b border-nisq-border last:border-b-0 ${
-                    isActive(l.to) ? "text-nisq-blue" : "text-nisq-ink"
+                  className={`h-12 flex items-center px-3 rounded-xl font-mono text-sm font-medium transition-colors ${
+                    isActive(l.to)
+                      ? "bg-[#0A7CFF]/15 text-[#00B8FF] font-semibold border-l-2 border-[#00B8FF]"
+                      : "text-[#cbd5e1] hover:bg-[#081522] hover:text-white"
                   }`}
                 >
                   {l.label}
@@ -393,50 +409,55 @@ export function TopNav() {
                   setOpen(false);
                   openIvvab();
                 }}
-                className="h-12 flex items-center gap-2.5 text-base font-semibold text-nisq-blue border-b border-nisq-border w-full text-left cursor-pointer"
+                className="h-12 flex items-center gap-2.5 px-3 rounded-xl font-mono text-sm font-semibold text-[#00B8FF] hover:bg-[#081522] w-full text-left cursor-pointer"
               >
-                <Sparkles className="w-4 h-4 text-nisq-blue" />
-                <span>IVVAB AI Assistant</span>
+                <Sparkles className="w-4 h-4 text-[#00B8FF]" />
+                <span>IVVAB AI Threat Assistant</span>
               </button>
 
-              <div className="flex flex-col gap-3 pt-4 pb-2">
+              <div className="flex flex-col gap-3 pt-6 pb-4 border-t border-[#16283A] mt-4">
                 <InstallAppButton variant="drawer" />
+
                 {user ? (
                   <>
                     <Link
                       to={"/profile" as any}
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-3 p-3 border border-nisq-border rounded-xl bg-nisq-offwhite"
+                      className="flex items-center gap-3 p-3.5 border border-[#16283A] rounded-xl bg-[#081522]"
                     >
-                      <div className="w-9 h-9 rounded-full overflow-hidden bg-nisq-blue-tint flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-[#0A7CFF]/20 border border-[#00B8FF]/40 flex items-center justify-center">
                         {profile?.avatar_url ? (
                           <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
                         ) : (
-                          <UserIcon className="w-4 h-4 text-nisq-blue" />
+                          <UserIcon className="w-5 h-5 text-[#00B8FF]" />
                         )}
                       </div>
                       <div className="flex flex-col text-left leading-tight">
-                        <span className="text-sm text-nisq-ink font-semibold">
+                        <span className="text-sm text-white font-semibold">
                           {profile?.full_name || user?.email?.split("@")[0] || "User"}
                         </span>
-                        <span className="text-[11px] text-nisq-muted uppercase tracking-wider">
+                        <span className="text-[10px] text-[#38BDF8] uppercase tracking-wider font-mono">
                           {isOrg ? "Organization" : "Student"}
                         </span>
                       </div>
                     </Link>
-                    <Button variant="outline" className="w-full" onClick={() => signOut()}>
-                      <LogOut className="w-4 h-4" /> Sign Out
+                    <Button
+                      variant="outline"
+                      className="w-full h-11 bg-[#081522] border-[#16283A] text-[#94A3B8] hover:text-white"
+                      onClick={() => signOut()}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" /> Sign Out
                     </Button>
                   </>
                 ) : (
-                  <>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link to="/login">Login</Link>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Button variant="outline" className="h-11 bg-[#081522] border-[#16283A] text-white" asChild>
+                      <Link to="/login" onClick={() => setOpen(false)}>Sign In</Link>
                     </Button>
-                    <Button className="w-full" asChild>
-                      <Link to="/signup">Get Started</Link>
-                    </Button>
-                  </>
+                    <PremiumButton variant="primary" to="/signup" onClick={() => setOpen(false)}>
+                      Get Started
+                    </PremiumButton>
+                  </div>
                 )}
               </div>
             </div>
@@ -447,13 +468,13 @@ export function TopNav() {
   );
 }
 
+/* ─── App-Style Mobile Bottom Navigation ────────────────────────────── */
 export function BottomNav() {
   const { user } = useAuth();
   const location = useRouterState({ select: (s) => s.location });
   const pathname = location.pathname;
 
   // Do not display bottom bar on active interactive cyber range terminal labs
-  // to prevent covering command inputs, submission buttons, or software keyboard
   if (
     pathname.startsWith("/cyber-range/lab/") ||
     pathname.startsWith("/cyber-range/interactive/")
@@ -467,7 +488,6 @@ export function BottomNav() {
       label: "Home",
       icon: Home,
       isActive: pathname === "/",
-      isLogo: true,
     },
     {
       to: "/academy",
@@ -482,10 +502,10 @@ export function BottomNav() {
       isActive: pathname.startsWith("/cyber-range/labs"),
     },
     {
-      to: user ? "/cyber-range/my-progress" : "/programs",
-      label: user ? "Progress" : "Programs",
-      icon: TrendingUp,
-      isActive: pathname.startsWith("/cyber-range/my-progress") || pathname.startsWith("/programs"),
+      to: "/appointments",
+      label: "Briefing",
+      icon: Calendar,
+      isActive: pathname.startsWith("/appointments") || pathname.startsWith("/programs"),
     },
     {
       to: user ? "/profile" : "/login",
@@ -501,7 +521,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Mobile Bottom Navigation"
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#050B14]/95 backdrop-blur-xl border-t border-[#16283A] shadow-[0_-6px_25px_rgba(0,0,0,0.45)] px-2 pt-1 pb-[calc(env(safe-area-inset-bottom,0px)+0.25rem)]"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#050B14]/95 backdrop-blur-2xl border-t border-[#16283A] shadow-[0_-8px_30px_rgba(0,0,0,0.6)] px-2 pt-1 pb-[calc(env(safe-area-inset-bottom,0px)+0.3rem)]"
     >
       <div className="grid grid-cols-5 h-14 max-w-md mx-auto items-center">
         {items.map((item) => {
@@ -512,38 +532,22 @@ export function BottomNav() {
               to={item.to as any}
               aria-current={item.isActive ? "page" : undefined}
               className={`flex flex-col items-center justify-center h-full min-h-[44px] py-1 select-none transition-all duration-200 active:scale-95 ${
-                item.isActive
-                  ? "text-[#00B8FF]"
-                  : "text-[#94A3B8] hover:text-white"
+                item.isActive ? "text-[#00B8FF]" : "text-[#94A3B8] hover:text-white"
               }`}
             >
               <div className="relative flex items-center justify-center">
-                {'isLogo' in item && item.isLogo ? (
-                  <img
-                    src={nisqLogoUrl}
-                    alt="NISQ"
-                    width={20}
-                    height={20}
-                    className={`w-5 h-5 rounded-md object-cover transition-transform duration-200 ${
-                      item.isActive ? "scale-110 ring-1.5 ring-[#00B8FF] shadow-[0_0_8px_#00B8FF]" : "opacity-85"
-                    }`}
-                  />
-                ) : (
-                  <Icon
-                    className={`w-5 h-5 transition-transform duration-200 ${
-                      item.isActive ? "scale-110 stroke-[2.25]" : "stroke-[1.75]"
-                    }`}
-                  />
-                )}
+                <Icon
+                  className={`w-5 h-5 transition-transform duration-200 ${
+                    item.isActive ? "scale-110 stroke-[2.25] text-[#00B8FF]" : "stroke-[1.75]"
+                  }`}
+                />
                 {item.isActive && (
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#00B8FF] shadow-[0_0_8px_#00B8FF]" />
                 )}
               </div>
               <span
                 className={`text-[10px] tracking-tight mt-1 font-mono transition-colors ${
-                  item.isActive
-                    ? "font-bold text-[#00B8FF]"
-                    : "text-[#94A3B8] font-normal"
+                  item.isActive ? "font-bold text-[#00B8FF]" : "text-[#94A3B8] font-normal"
                 }`}
               >
                 {item.label}
