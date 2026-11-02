@@ -282,6 +282,174 @@ export const COURSE_IMAGE_MANIFEST: Record<string, CourseImageEntry> = {
 };
 
 /**
+ * 2D CYBERSECURITY COURSE STICKERS MANIFEST
+ * Verified local 2D stickers with transparent backgrounds for top-right corner badges.
+ */
+export interface CourseStickerEntry {
+  identifier: string;
+  name: string;
+  stickerPath: string;
+  altText: string;
+}
+
+export const COURSE_STICKER_MANIFEST: Record<string, CourseStickerEntry> = {
+  // 1. Cyber Awareness
+  "cyber-awareness": {
+    identifier: "cyber-awareness",
+    name: "Cyber Awareness",
+    stickerPath: "/images/course-stickers/cyber-awareness.png",
+    altText: "Cyber Awareness 2D cybersecurity sticker emblem",
+  },
+  "absolute-beginner-cyber-awareness": {
+    identifier: "absolute-beginner-cyber-awareness",
+    name: "Cyber Awareness",
+    stickerPath: "/images/course-stickers/cyber-awareness.png",
+    altText: "Cyber Awareness 2D cybersecurity sticker emblem",
+  },
+
+  // 2. Networking Fundamentals
+  "networking-fundamentals": {
+    identifier: "networking-fundamentals",
+    name: "Networking Fundamentals",
+    stickerPath: "/images/course-stickers/networking-fundamentals.png",
+    altText: "Networking Fundamentals 2D cybersecurity sticker emblem",
+  },
+  "c-net-fund": {
+    identifier: "c-net-fund",
+    name: "Networking Fundamentals",
+    stickerPath: "/images/course-stickers/networking-fundamentals.png",
+    altText: "Networking Fundamentals 2D cybersecurity sticker emblem",
+  },
+  "basics-in-networking": {
+    identifier: "basics-in-networking",
+    name: "Networking Fundamentals",
+    stickerPath: "/images/course-stickers/networking-fundamentals.png",
+    altText: "Networking Fundamentals 2D cybersecurity sticker emblem",
+  },
+  "networking-fundamentals-part-1": {
+    identifier: "networking-fundamentals-part-1",
+    name: "Networking Fundamentals",
+    stickerPath: "/images/course-stickers/networking-fundamentals.png",
+    altText: "Networking Fundamentals 2D cybersecurity sticker emblem",
+  },
+  "networking-fundamentals-part-2": {
+    identifier: "networking-fundamentals-part-2",
+    name: "Networking Fundamentals",
+    stickerPath: "/images/course-stickers/networking-fundamentals.png",
+    altText: "Networking Fundamentals 2D cybersecurity sticker emblem",
+  },
+
+  // 3. Social Engineering & Phishing
+  "social-engineering-phishing": {
+    identifier: "social-engineering-phishing",
+    name: "Social Engineering & Phishing",
+    stickerPath: "/images/course-stickers/social-engineering-phishing.png",
+    altText: "Social Engineering and Phishing Defense 2D cybersecurity sticker emblem",
+  },
+  "social-engineering-phishing-defense": {
+    identifier: "social-engineering-phishing-defense",
+    name: "Social Engineering & Phishing Defense",
+    stickerPath: "/images/course-stickers/social-engineering-phishing.png",
+    altText: "Social Engineering and Phishing Defense 2D cybersecurity sticker emblem",
+  },
+  "social-engineering-human-hacking": {
+    identifier: "social-engineering-human-hacking",
+    name: "Social Engineering & Phishing",
+    stickerPath: "/images/course-stickers/social-engineering-phishing.png",
+    altText: "Social Engineering and Phishing Defense 2D cybersecurity sticker emblem",
+  },
+
+  // 4. Cybersecurity Foundations
+  "cybersecurity-foundations": {
+    identifier: "cybersecurity-foundations",
+    name: "Cybersecurity Foundations",
+    stickerPath: "/images/course-stickers/cybersecurity-foundations.png",
+    altText: "Cybersecurity Foundations 2D cybersecurity sticker emblem",
+  },
+  "c-cyber-found": {
+    identifier: "c-cyber-found",
+    name: "Cybersecurity Foundations",
+    stickerPath: "/images/course-stickers/cybersecurity-foundations.png",
+    altText: "Cybersecurity Foundations 2D cybersecurity sticker emblem",
+  },
+
+  // 5. Digital Safety & Hygiene
+  "digital-safety-hygiene": {
+    identifier: "digital-safety-hygiene",
+    name: "Digital Safety & Hygiene",
+    stickerPath: "/images/course-stickers/digital-safety-hygiene.png",
+    altText: "Digital Safety & Hygiene 2D cybersecurity sticker emblem",
+  },
+  "digital-safety": {
+    identifier: "digital-safety",
+    name: "Digital Safety & Hygiene",
+    stickerPath: "/images/course-stickers/digital-safety-hygiene.png",
+    altText: "Digital Safety & Hygiene 2D cybersecurity sticker emblem",
+  },
+};
+
+/**
+ * Resolves verified 2D course sticker if one exists for the course.
+ * Returns null if the course has no matching sticker (Requirement 8).
+ */
+export function getCourseSticker(
+  identifier?: string | null,
+  title?: string | null,
+): CourseStickerEntry | null {
+  const cleanId = (identifier || "").trim().toLowerCase();
+  if (cleanId && COURSE_STICKER_MANIFEST[cleanId]) {
+    return COURSE_STICKER_MANIFEST[cleanId];
+  }
+
+  const cleanTitle = (title || "").toLowerCase();
+  if (cleanTitle) {
+    if (cleanTitle.includes("cyber awareness") || cleanTitle.includes("cyber-awareness")) {
+      return COURSE_STICKER_MANIFEST["cyber-awareness"];
+    }
+    if (
+      cleanTitle.includes("networking fundamental") ||
+      cleanTitle.includes("basics of networking") ||
+      cleanTitle.includes("basics in networking")
+    ) {
+      return COURSE_STICKER_MANIFEST["networking-fundamentals"];
+    }
+    if (cleanTitle.includes("social engineering") || cleanTitle.includes("phishing")) {
+      return COURSE_STICKER_MANIFEST["social-engineering-phishing"];
+    }
+    if (
+      cleanTitle.includes("cybersecurity foundation") ||
+      cleanTitle.includes("cyber security foundation")
+    ) {
+      return COURSE_STICKER_MANIFEST["cybersecurity-foundations"];
+    }
+    if (cleanTitle.includes("digital safety") || cleanTitle.includes("safety & hygiene")) {
+      return COURSE_STICKER_MANIFEST["digital-safety-hygiene"];
+    }
+  }
+
+  // Check fuzzy / partial matches in cleanId
+  if (cleanId) {
+    if (cleanId.includes("cyber-awareness") || cleanId.includes("cyberawareness")) {
+      return COURSE_STICKER_MANIFEST["cyber-awareness"];
+    }
+    if (cleanId.includes("networking-fundamental")) {
+      return COURSE_STICKER_MANIFEST["networking-fundamentals"];
+    }
+    if (cleanId.includes("social-engineering") || cleanId.includes("phishing")) {
+      return COURSE_STICKER_MANIFEST["social-engineering-phishing"];
+    }
+    if (cleanId.includes("cybersecurity-foundation")) {
+      return COURSE_STICKER_MANIFEST["cybersecurity-foundations"];
+    }
+    if (cleanId.includes("digital-safety")) {
+      return COURSE_STICKER_MANIFEST["digital-safety-hygiene"];
+    }
+  }
+
+  return null;
+}
+
+/**
  * Get verified local image path for a course slug or ID with fallback
  */
 export function getCourseImage(identifier?: string | null): string {

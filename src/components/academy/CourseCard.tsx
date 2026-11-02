@@ -10,6 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { CourseSticker } from "./CourseSticker";
+import { getCourseSticker } from "@/data/course-images";
 
 export interface CourseData {
   id: string;
@@ -43,6 +44,8 @@ export function CourseCard({ course, progress }: CourseCardProps) {
   const isLocked = !!course.isLocked;
   const isComingSoon = !!course.comingSoon;
   const notAccessible = isLocked || isComingSoon;
+
+  const sticker = getCourseSticker(course.slug || course.id, course.title);
 
   return (
     <div
@@ -82,6 +85,22 @@ export function CourseCard({ course, progress }: CourseCardProps) {
             </span>
           )}
         </div>
+
+        {/* 2D Cybersecurity Course Sticker (Top-Right Corner) */}
+        {sticker && (
+          <div
+            className="absolute top-2.5 right-2.5 z-20 pointer-events-none transition-transform duration-300 group-hover:scale-105"
+            title={`${sticker.name} Official Sticker`}
+          >
+            <img
+              src={sticker.stickerPath}
+              alt={sticker.altText}
+              loading="lazy"
+              decoding="async"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain bg-transparent drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)] filter select-none"
+            />
+          </div>
+        )}
       </div>
 
       <div className="p-6 flex flex-col flex-1 justify-between">

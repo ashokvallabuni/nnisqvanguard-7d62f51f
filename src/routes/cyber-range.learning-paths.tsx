@@ -865,7 +865,7 @@ function LearningPathsPage() {
                 </div>
 
                 <Link
-                  to={`/cyber-range/lab/${path.associatedLab.slug}`}
+                  to={`/cyber-range/lab/${path.associatedLab.slug}` as any}
                   className="inline-flex items-center gap-1.5 text-primary font-semibold hover:underline shrink-0"
                 >
                   <Play className="w-3.5 h-3.5" />
@@ -914,7 +914,7 @@ function LearningPathsPage() {
                         Sequential Progression (01 → 0{path.steps.length})
                       </h4>
                       <span className="text-xs font-mono text-muted-foreground">
-                        Verified Course: <Link to={`/learn/${path.courseSlug}`} className="text-primary hover:underline">{path.courseTitle}</Link>
+                        Verified Course: <Link to={`/learn/${path.courseSlug}` as any} className="text-primary hover:underline">{path.courseTitle}</Link>
                       </span>
                     </div>
 

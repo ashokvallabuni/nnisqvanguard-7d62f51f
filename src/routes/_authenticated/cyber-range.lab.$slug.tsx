@@ -16,6 +16,7 @@ import {
   ChevronRight,
   ChevronDown,
   ArrowLeft,
+  ArrowRight,
   ListChecks,
   BarChart3,
   Home,
@@ -450,7 +451,7 @@ function CyberLabWorkbenchPage() {
     if (!vfs) return;
     try {
       const content = vfs.readFile(path);
-      setSelectedFilePreview({ path, content });
+      setSelectedFilePreview({ path, content: content ?? "" });
       setActiveTab("dataset");
       setMobileTab("dataset");
     } catch {

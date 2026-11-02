@@ -49,7 +49,7 @@ function AppointmentsPage() {
     }
     setBusy(true);
     try {
-      const { error } = await supabase.from("consultations").insert({
+      const { error } = await (supabase as any).from("consultations").insert({
         representative_name: representativeName.trim(),
         email: email.trim(),
         organization_name: organizationName.trim(),
