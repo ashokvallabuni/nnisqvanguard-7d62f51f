@@ -92,15 +92,22 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  }
  }
 
- if (correctOption === null) {
- return {
- error: "QUIZ_NOT_FOUND",
- is_correct: false,
- score: 0,
- attempt_number: 0,
- explanation: "Quiz not found. Please refresh and try again.",
- };
- }
+  // ── 2b. Default synthetic quiz fallback for modules without static/DB quiz rows
+  if (correctOption === null && data.quizId.startsWith("q-") && data.quizId.endsWith("-default")) {
+    correctOption = 0;
+    quizExplanation =
+      "Applying the principle of least privilege and maintaining tamper-evident audit logs is the core security standard.";
+  }
+
+  if (correctOption === null) {
+    return {
+      error: "QUIZ_NOT_FOUND",
+      is_correct: false,
+      score: 0,
+      attempt_number: 0,
+      explanation: `Quiz assessment not found for ID '${data.quizId}'. Please refresh your browser to load the latest curriculum questions.`,
+    };
+  }
 
  // ── 3. Count existing attempts
  let attemptNumber = 1;

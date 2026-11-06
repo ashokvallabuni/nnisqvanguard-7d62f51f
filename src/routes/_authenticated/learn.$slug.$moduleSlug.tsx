@@ -675,14 +675,17 @@ function ModuleLearningPage() {
  }));
  setCheckedQuizzes((prev) => ({ ...prev, [quizId]: true }));
 
- if (result.is_correct) {
- toast.success("Correct answer! +10 XP");
- if ((result as any).certificateNumber) {
- toast.success(`🎓 Course Complete! Certificate issued: ${(result as any).certificateNumber}`, {
- duration: 8000,
- });
- queryClient.invalidateQueries({ queryKey: ["my-certificates"] });
- }
+    if (result.is_correct) {
+      toast.success("Correct answer! +10 XP");
+      // Invalidate course and module status queries immediately
+      queryClient.invalidateQueries({ queryKey: ["course-certificate-status", course?.slug] });
+      queryClient.invalidateQueries({ queryKey: ["module-user-progress"] });
+      queryClient.invalidateQueries({ queryKey: ["my-certificates"] });
+      if ((result as any).certificateNumber) {
+        toast.success(`🎓 Course Complete! Certificate issued: ${(result as any).certificateNumber}`, {
+          duration: 8000,
+        });
+      }
  // Warn if session expired but result still computed
  if ((result as any).warning === "SESSION_EXPIRED") {
  toast.warning("Your session has expired. Sign in again to save your progress.", {
