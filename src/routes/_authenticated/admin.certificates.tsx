@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Shield, Search, RefreshCw, XCircle, CheckCircle2, AlertTriangle, FileSpreadsheet, Mail } from "lucide-react";
+import { Shield, Search, RefreshCw, XCircle, CheckCircle2, AlertTriangle, FileSpreadsheet, Mail, Activity, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/common/PageHeader";
 import { toast } from "sonner";
@@ -42,6 +42,23 @@ function AdminCertificatesPage() {
     },
   });
 
+  const { data: auditLogs, isLoading: isLoadingLogs, refetch: refetchLogs } = useQuery({
+    queryKey: ["admin-certificate-audit-logs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("certificate_audit_logs")
+        .select("id, event_type, details, created_at, user_id, certificate_id")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        console.error("Failed to load audit logs:", error);
+        return [];
+      }
+      return data || [];
+    },
+  });
+
   const revokeMutation = useMutation({
     mutationFn: async ({ id, reason }: { id: string; reason: string }) => {
       const { error } = await supabase
@@ -66,6 +83,7 @@ function AdminCertificatesPage() {
       setRevokingId(null);
       setRevokeReason("");
       queryClient.invalidateQueries({ queryKey: ["admin-certificates"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-certificate-audit-logs"] });
     },
     onError: (err: any) => {
       toast.error(`Revocation failed: ${err.message}`);
@@ -103,7 +121,7 @@ function AdminCertificatesPage() {
         breadcrumbs={[{ label: "ADMIN", to: "/admin" }, { label: "CERTIFICATES" }]}
       />
 
-      <div className="px-4 md:px-8 py-8 max-w-7xl mx-auto space-y-6">
+      <div className="px-4 md:px-8 py-8 max-w-7xl mx-auto space-y-8">
         {/* Controls Bar */}
         <div className="glass rounded-xl p-6 border border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-1 items-center gap-3 w-full">
@@ -138,16 +156,24 @@ function AdminCertificatesPage() {
               <FileSpreadsheet className="w-3.5 h-3.5" /> Export CSV
             </button>
             <button
-              onClick={() => refetch()}
+              onClick={() => {
+                refetch();
+                refetchLogs();
+              }}
               className="flex items-center gap-1.5 text-xs font-mono bg-primary hover:bg-primary/90 text-white px-3 py-2 rounded-lg transition-colors cursor-pointer"
             >
-              <RefreshCw className="w-3.5 h-3.5" /> Refresh
+              <RefreshCw className="w-3.5 h-3.5" /> Refresh All
             </button>
           </div>
         </div>
 
         {/* Certificate Table */}
         <div className="glass rounded-xl border border-border overflow-hidden">
+          <div className="p-4 border-b border-border/50 bg-white/[0.02] flex items-center justify-between">
+            <h3 className="font-mono text-xs uppercase tracking-wider text-slate-300 font-semibold flex items-center gap-2">
+              <Shield className="w-4 h-4 text-primary" /> Issued Credentials ({filteredCerts.length})
+            </h3>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-white/5 border-b border-border text-muted-foreground font-mono uppercase">
@@ -217,6 +243,95 @@ function AdminCertificatesPage() {
           </div>
         </div>
 
+        {/* Step 5: Completion Tracking & Audit Logs Section */}
+        <div className="glass rounded-xl border border-border overflow-hidden">
+          <div className="p-4 border-b border-border/50 bg-white/[0.02] flex items-center justify-between">
+            <h3 className="font-mono text-xs uppercase tracking-wider text-slate-300 font-semibold flex items-center gap-2">
+              <Activity className="w-4 h-4 text-emerald-400" /> Completion Tracking & Assessment Verification Logs
+            </h3>
+            <span className="text-[11px] font-mono text-muted-foreground">Real-time audit trail of evaluation decisions</span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-white/5 border-b border-border text-muted-foreground font-mono uppercase">
+                <tr>
+                  <th className="p-4">Timestamp</th>
+                  <th className="p-4">Event Type</th>
+                  <th className="p-4">User / Actor</th>
+                  <th className="p-4">Evaluation Details & Diagnostic Reason</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/50 font-mono text-[11px]">
+                {isLoadingLogs ? (
+                  <tr>
+                    <td colSpan={4} className="p-8 text-center text-muted-foreground">
+                      Loading audit logs...
+                    </td>
+                  </tr>
+                ) : !auditLogs || auditLogs.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="p-8 text-center text-muted-foreground">
+                      No verification or issuance audit events recorded yet.
+                    </td>
+                  </tr>
+                ) : (
+                  auditLogs.map((log) => {
+                    const isRejected = log.event_type.startsWith("COMPLETION_REJECTED");
+                    const isIssued = log.event_type.includes("ISSUED");
+                    const isRevoked = log.event_type.includes("REVOKED");
+
+                    let badgeColor = "bg-white/5 text-slate-300 border-border";
+                    if (isRejected) badgeColor = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+                    if (isIssued) badgeColor = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+                    if (isRevoked) badgeColor = "bg-red-500/10 text-red-400 border-red-500/20";
+
+                    return (
+                      <tr key={log.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="p-4 text-slate-400 whitespace-nowrap">
+                          {new Date(log.created_at).toLocaleString()}
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-2 py-0.5 rounded border text-[10px] font-semibold ${badgeColor}`}>
+                            {log.event_type}
+                          </span>
+                        </td>
+                        <td className="p-4 text-slate-400 max-w-[160px] truncate" title={log.user_id}>
+                          {log.user_id ? log.user_id.slice(0, 8) + "..." : "System"}
+                        </td>
+                        <td className="p-4 text-slate-300">
+                          {isRejected ? (
+                            <div className="flex items-center gap-1.5 text-amber-300">
+                              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                              <span>
+                                {log.details?.courseSlug ? `[${log.details.courseSlug}] ` : ""}
+                                {log.event_type === "COMPLETION_REJECTED_MODULES_INCOMPLETE"
+                                  ? `Modules incomplete: ${log.details?.completed ?? 0} of ${log.details?.required ?? 0} completed.`
+                                  : log.event_type === "COMPLETION_REJECTED_QUIZZES_FAILED"
+                                  ? `Assessments not passed: ${log.details?.passedQuizzes ?? 0} of ${log.details?.requiredQuizzes ?? 0} passed (70% pass threshold).`
+                                  : JSON.stringify(log.details)}
+                              </span>
+                            </div>
+                          ) : isIssued ? (
+                            <div className="flex items-center gap-1.5 text-emerald-300">
+                              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                              <span>
+                                Certificate: <strong className="text-white">{log.details?.certificateNumber}</strong> | Score: {log.details?.finalScore}% | SHA-256: {log.details?.pdfSha256?.slice(0, 12)}...
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-slate-400">{JSON.stringify(log.details)}</span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* Revocation Modal */}
         {revokingId && (
           <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -263,4 +378,3 @@ function AdminCertificatesPage() {
     </main>
   );
 }
-

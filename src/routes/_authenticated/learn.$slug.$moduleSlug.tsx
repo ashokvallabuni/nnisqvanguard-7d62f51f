@@ -676,6 +676,12 @@ function ModuleLearningPage() {
 
  if (result.is_correct) {
  toast.success("Correct answer! +10 XP");
+ if ((result as any).certificateNumber) {
+ toast.success(`🎓 Course Complete! Certificate issued: ${(result as any).certificateNumber}`, {
+ duration: 8000,
+ });
+ queryClient.invalidateQueries({ queryKey: ["my-certificates"] });
+ }
  // Warn if session expired but result still computed
  if ((result as any).warning === "SESSION_EXPIRED") {
  toast.warning("Your session has expired. Sign in again to save your progress.", {

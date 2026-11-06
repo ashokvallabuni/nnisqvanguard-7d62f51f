@@ -1,12 +1,11 @@
 /**
- * Server-side durable email queue & dispatcher for certificates.
- * Architecture:
- * - Uses Resend API via server environment variables (RESEND_API_KEY).
- * - Fallback to verified SMTP if RESEND_API_KEY is not configured.
- * - Queue worker: uses SKIP LOCKED semantics and exponential backoff.
- * - Constraints: UNIQUE(certificate_id) ensures at most one email record per certificate.
+ * Server-side durable email queue & dispatcher for certificates using the official Resend SDK.
+ * Follows Resend Node.js setup specification:
+ * - Uses `import { Resend } from "resend"`
+ * - Client instantiated with process.env.RESEND_API_KEY
+ * - Supports verified custom domains (e.g. certificates@nisqvanguard.in) or testing via onboarding@resend.dev
  */
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 export interface EmailJobResult {
   status: "SENT" | "FAILED";
@@ -118,79 +117,39 @@ export async function sendCertificateEmail(data: {
   downloadUrl?: string;
   blockchainConfirmed?: boolean;
 }): Promise<EmailJobResult> {
-  const resendApiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY;
 
-  const { subject, html, text } = buildCertificateEmailTemplate(data);
-
-  // Path 1: Primary provider = Resend
-  if (resendApiKey) {
-    try {
-      const response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: process.env.MAIL_FROM || "NISQ Vanguard Academy <certificates@nisqvanguard.in>",
-          to: [data.recipientEmail],
-          subject,
-          html,
-          text,
-        }),
-      });
-
-      const resData = await response.json();
-      if (!response.ok) {
-        return {
-          status: "FAILED",
-          error: resData?.message || `Resend HTTP error ${response.status}`,
-        };
-      }
-
-      return {
-        status: "SENT",
-        providerMessageId: resData?.id,
-      };
-    } catch (err: any) {
-      return {
-        status: "FAILED",
-        error: err?.message || String(err),
-      };
-    }
-  }
-
-  // Path 2: Fallback provider = SMTP
-  const host = process.env.SMTP_HOST;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-
-  if (!host || !user || !pass) {
+  if (!apiKey) {
     return {
       status: "FAILED",
-      error: "Neither RESEND_API_KEY nor SMTP credentials configured in server environment.",
+      error: "RESEND_API_KEY is not configured in server environment.",
     };
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      host,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: process.env.SMTP_PORT === "465",
-      auth: { user, pass },
-    });
+    const resend = new Resend(apiKey);
+    const { subject, html, text } = buildCertificateEmailTemplate(data);
 
-    const info = await transporter.sendMail({
-      from: process.env.MAIL_FROM || "ashokvallabuni@nisqvanguard.in",
-      to: data.recipientEmail,
+    const fromAddress = process.env.MAIL_FROM || "NISQ Vanguard Academy <onboarding@resend.dev>";
+
+    const { data: resData, error: resError } = await resend.emails.send({
+      from: fromAddress,
+      to: [data.recipientEmail],
       subject,
       html,
       text,
     });
 
+    if (resError) {
+      return {
+        status: "FAILED",
+        error: resError.message || JSON.stringify(resError),
+      };
+    }
+
     return {
       status: "SENT",
-      providerMessageId: info.messageId,
+      providerMessageId: resData?.id,
     };
   } catch (err: any) {
     return {
