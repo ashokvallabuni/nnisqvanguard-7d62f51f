@@ -30,14 +30,12 @@ CREATE TRIGGER trg_protect_profile_role
   EXECUTE FUNCTION public.protect_profile_role();
 
 -- Tighten the RLS policy on public.profiles UPDATE
+-- Note: Role tampering is strictly prevented by the BEFORE UPDATE trigger trg_protect_profile_role above.
 DROP POLICY IF EXISTS "Users update own profile" ON public.profiles;
 CREATE POLICY "Users update own profile" ON public.profiles
   FOR UPDATE TO authenticated
   USING (id = auth.uid() OR public.has_role(auth.uid(), 'admin'))
-  WITH CHECK (
-    (id = auth.uid() AND (role = OLD.role OR public.has_role(auth.uid(), 'admin')))
-    OR public.has_role(auth.uid(), 'admin')
-  );
+  WITH CHECK (id = auth.uid() OR public.has_role(auth.uid(), 'admin'));
 
 -- ------------------------------------------------------------
 -- 2. ASSESSMENT INTEGRITY: Protect answer keys and solutions

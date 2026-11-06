@@ -59,10 +59,12 @@ import { Route as CyberRangeLearningPathsRouteImport } from './routes/cyber-rang
 import { Route as InnovationCybershieldaiRouteImport } from './routes/innovation.cybershieldai'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as LearnSlugRouteImport } from './routes/learn.$slug'
+import { Route as VerifyCertificateCertificateIdRouteImport } from './routes/verify-certificate.$certificateId'
 import { Route as VerifyCertificateIdRouteImport } from './routes/verify.$certificateId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminSectionRouteImport } from './routes/_authenticated/admin.$section'
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
+import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
 import { Route as AuthenticatedAdminCollegesRouteImport } from './routes/_authenticated/admin.colleges'
 import { Route as AuthenticatedAdminComplaintsRouteImport } from './routes/_authenticated/admin.complaints'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
@@ -330,6 +332,12 @@ const LearnSlugRoute = LearnSlugRouteImport.update({
   path: '/learn/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyCertificateCertificateIdRoute =
+  VerifyCertificateCertificateIdRouteImport.update({
+    id: '/verify-certificate/$certificateId',
+    path: '/verify-certificate/$certificateId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const VerifyCertificateIdRoute = VerifyCertificateIdRouteImport.update({
   id: '/verify/$certificateId',
   path: '/verify/$certificateId',
@@ -350,6 +358,12 @@ const AuthenticatedAdminBookingsRoute =
   AuthenticatedAdminBookingsRouteImport.update({
     id: '/bookings',
     path: '/bookings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCertificatesRoute =
+  AuthenticatedAdminCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminCollegesRoute =
@@ -493,10 +507,12 @@ export interface FileRoutesByFullPath {
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
   '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
+  '/verify-certificate/$certificateId': typeof VerifyCertificateCertificateIdRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn/': typeof LearnIndexRoute
   '/admin/$section': typeof AuthenticatedAdminSectionRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
@@ -563,10 +579,12 @@ export interface FileRoutesByTo {
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
   '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
+  '/verify-certificate/$certificateId': typeof VerifyCertificateCertificateIdRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn': typeof LearnIndexRoute
   '/admin/$section': typeof AuthenticatedAdminSectionRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
@@ -636,10 +654,12 @@ export interface FileRoutesById {
   '/cyber-range/learning-paths': typeof CyberRangeLearningPathsRoute
   '/innovation/cybershieldai': typeof InnovationCybershieldaiRoute
   '/learn/$slug': typeof LearnSlugRoute
+  '/verify-certificate/$certificateId': typeof VerifyCertificateCertificateIdRoute
   '/verify/$certificateId': typeof VerifyCertificateIdRoute
   '/learn/': typeof LearnIndexRoute
   '/_authenticated/admin/$section': typeof AuthenticatedAdminSectionRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/_authenticated/admin/colleges': typeof AuthenticatedAdminCollegesRoute
   '/_authenticated/admin/complaints': typeof AuthenticatedAdminComplaintsRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
@@ -709,10 +729,12 @@ export interface FileRouteTypes {
     | '/cyber-range/learning-paths'
     | '/innovation/cybershieldai'
     | '/learn/$slug'
+    | '/verify-certificate/$certificateId'
     | '/verify/$certificateId'
     | '/learn/'
     | '/admin/$section'
     | '/admin/bookings'
+    | '/admin/certificates'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
@@ -779,10 +801,12 @@ export interface FileRouteTypes {
     | '/cyber-range/learning-paths'
     | '/innovation/cybershieldai'
     | '/learn/$slug'
+    | '/verify-certificate/$certificateId'
     | '/verify/$certificateId'
     | '/learn'
     | '/admin/$section'
     | '/admin/bookings'
+    | '/admin/certificates'
     | '/admin/colleges'
     | '/admin/complaints'
     | '/admin/content'
@@ -851,10 +875,12 @@ export interface FileRouteTypes {
     | '/cyber-range/learning-paths'
     | '/innovation/cybershieldai'
     | '/learn/$slug'
+    | '/verify-certificate/$certificateId'
     | '/verify/$certificateId'
     | '/learn/'
     | '/_authenticated/admin/$section'
     | '/_authenticated/admin/bookings'
+    | '/_authenticated/admin/certificates'
     | '/_authenticated/admin/colleges'
     | '/_authenticated/admin/complaints'
     | '/_authenticated/admin/content'
@@ -910,6 +936,7 @@ export interface RootRouteChildren {
   ApiScoreRoute: typeof ApiScoreRoute
   ApiUploadRoute: typeof ApiUploadRoute
   LearnSlugRoute: typeof LearnSlugRoute
+  VerifyCertificateCertificateIdRoute: typeof VerifyCertificateCertificateIdRoute
   VerifyCertificateIdRoute: typeof VerifyCertificateIdRoute
   LearnIndexRoute: typeof LearnIndexRoute
   ApiAgentsAnalyzeRoute: typeof ApiAgentsAnalyzeRoute
@@ -1270,6 +1297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify-certificate/$certificateId': {
+      id: '/verify-certificate/$certificateId'
+      path: '/verify-certificate/$certificateId'
+      fullPath: '/verify-certificate/$certificateId'
+      preLoaderRoute: typeof VerifyCertificateCertificateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify/$certificateId': {
       id: '/verify/$certificateId'
       path: '/verify/$certificateId'
@@ -1296,6 +1330,13 @@ declare module '@tanstack/react-router' {
       path: '/bookings'
       fullPath: '/admin/bookings'
       preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/certificates': {
+      id: '/_authenticated/admin/certificates'
+      path: '/certificates'
+      fullPath: '/admin/certificates'
+      preLoaderRoute: typeof AuthenticatedAdminCertificatesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/colleges': {
@@ -1416,6 +1457,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminSectionRoute: typeof AuthenticatedAdminSectionRoute
   AuthenticatedAdminBookingsRoute: typeof AuthenticatedAdminBookingsRoute
+  AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
   AuthenticatedAdminCollegesRoute: typeof AuthenticatedAdminCollegesRoute
   AuthenticatedAdminComplaintsRoute: typeof AuthenticatedAdminComplaintsRoute
   AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
@@ -1427,6 +1469,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminSectionRoute: AuthenticatedAdminSectionRoute,
   AuthenticatedAdminBookingsRoute: AuthenticatedAdminBookingsRoute,
+  AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
   AuthenticatedAdminCollegesRoute: AuthenticatedAdminCollegesRoute,
   AuthenticatedAdminComplaintsRoute: AuthenticatedAdminComplaintsRoute,
   AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
@@ -1583,6 +1626,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiScoreRoute: ApiScoreRoute,
   ApiUploadRoute: ApiUploadRoute,
   LearnSlugRoute: LearnSlugRoute,
+  VerifyCertificateCertificateIdRoute: VerifyCertificateCertificateIdRoute,
   VerifyCertificateIdRoute: VerifyCertificateIdRoute,
   LearnIndexRoute: LearnIndexRoute,
   ApiAgentsAnalyzeRoute: ApiAgentsAnalyzeRoute,
