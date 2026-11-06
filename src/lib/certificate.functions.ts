@@ -317,42 +317,34 @@ async function doEvaluateAndIssueCertificateInternal({
   let providerMsgId: string | undefined;
 
   if (verifiedEmail) {
-    // Create short-lived download link
-    const { data: signedData } = await supabaseAdmin.storage
-      .from("certificates")
-      .createSignedUrl(pdfStoragePath, 60 * 60 * 24); // 24 hours
+    // 13a. Create email job row immediately in PENDING status
+    // Ensures scheduled worker will pick it up if immediate send fails or request is killed
+    const { data: jobRow } = await supabaseAdmin
+      .from("certificate_email_jobs")
+      .upsert(
+        {
+          certificate_id: certificateId,
+          recipient_email: verifiedEmail,
+          delivery_status: "PENDING",
+          attempts: 0,
+        },
+        { onConflict: "certificate_id" }
+      )
+      .select("id")
+      .single();
 
-    const emailResult = await sendCertificateEmail({
-      recipientEmail: verifiedEmail,
-      recipientName,
-      courseTitle: course.title,
-      completionDate: new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
-      certificateId: certNumber,
-      verificationUrl,
-      downloadUrl: signedData?.signedUrl,
-    });
-
-    emailStatus = emailResult.status;
-    providerMsgId = emailResult.providerMessageId;
-
-    // Update certificate email status
-    await supabaseAdmin
-      .from("certificates")
-      .update({ email_status: emailStatus })
-      .eq("id", certificateId);
-
-    // Record in certificate_email_jobs
-    await supabaseAdmin.from("certificate_email_jobs").upsert(
-      {
-        certificate_id: certificateId,
-        recipient_email: verifiedEmail,
-        delivery_status: emailStatus,
-        attempts: 1,
-        provider_message_id: providerMsgId,
-        last_error: emailResult.error,
-      },
-      { onConflict: "certificate_id" }
-    );
+    // 13b. Attempt immediate dispatch
+    try {
+      if (jobRow?.id) {
+        const sendResult = await retryCertificateEmailJob({ jobId: jobRow.id });
+        if (sendResult.status === "SENT") {
+          emailStatus = "SENT";
+          providerMsgId = sendResult.providerMessageId;
+        }
+      }
+    } catch (err: any) {
+      console.error("[Immediate Email Dispatch Failed - Scheduled worker will retry]", err);
+    }
   }
 
   // 14. Immutable Audit Trail

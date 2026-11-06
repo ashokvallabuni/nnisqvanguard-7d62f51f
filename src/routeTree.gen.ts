@@ -75,8 +75,10 @@ import { Route as AuthenticatedCyberRangeMyProgressRouteImport } from './routes/
 import { Route as AuthenticatedOrganizationDashboardRouteImport } from './routes/_authenticated/organization.dashboard'
 import { Route as ApiAgentsAnalyzeRouteImport } from './routes/api/agents.analyze'
 import { Route as ApiAgentsReportRouteImport } from './routes/api/agents.report'
+import { Route as ApiCronCertificatesEmailRouteImport } from './routes/api/cron.certificates-email'
 import { Route as ApiLessonsSlugRouteImport } from './routes/api/lessons.$slug'
 import { Route as ApiQuizModuleIdRouteImport } from './routes/api/quiz.$moduleId'
+import { Route as ApiWebhooksResendRouteImport } from './routes/api/webhooks.resend'
 import { Route as AuthenticatedCyberRangeChallengeSlugRouteImport } from './routes/_authenticated/cyber-range.challenge.$slug'
 import { Route as AuthenticatedCyberRangeLabSlugRouteImport } from './routes/_authenticated/cyber-range.lab.$slug'
 import { Route as AuthenticatedLearnSlugModuleSlugRouteImport } from './routes/_authenticated/learn.$slug.$moduleSlug'
@@ -423,6 +425,12 @@ const ApiAgentsReportRoute = ApiAgentsReportRouteImport.update({
   path: '/api/agents/report',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCronCertificatesEmailRoute =
+  ApiCronCertificatesEmailRouteImport.update({
+    id: '/api/cron/certificates-email',
+    path: '/api/cron/certificates-email',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiLessonsSlugRoute = ApiLessonsSlugRouteImport.update({
   id: '/api/lessons/$slug',
   path: '/api/lessons/$slug',
@@ -431,6 +439,11 @@ const ApiLessonsSlugRoute = ApiLessonsSlugRouteImport.update({
 const ApiQuizModuleIdRoute = ApiQuizModuleIdRouteImport.update({
   id: '/api/quiz/$moduleId',
   path: '/api/quiz/$moduleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWebhooksResendRoute = ApiWebhooksResendRouteImport.update({
+  id: '/api/webhooks/resend',
+  path: '/api/webhooks/resend',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedCyberRangeChallengeSlugRoute =
@@ -523,8 +536,10 @@ export interface FileRoutesByFullPath {
   '/organization/dashboard': typeof AuthenticatedOrganizationDashboardRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
+  '/api/cron/certificates-email': typeof ApiCronCertificatesEmailRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
+  '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/cyber-range/challenge/$slug': typeof AuthenticatedCyberRangeChallengeSlugRoute
   '/cyber-range/lab/$slug': typeof AuthenticatedCyberRangeLabSlugRoute
@@ -595,8 +610,10 @@ export interface FileRoutesByTo {
   '/organization/dashboard': typeof AuthenticatedOrganizationDashboardRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
+  '/api/cron/certificates-email': typeof ApiCronCertificatesEmailRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
+  '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/cyber-range/challenge/$slug': typeof AuthenticatedCyberRangeChallengeSlugRoute
   '/cyber-range/lab/$slug': typeof AuthenticatedCyberRangeLabSlugRoute
@@ -670,8 +687,10 @@ export interface FileRoutesById {
   '/_authenticated/organization/dashboard': typeof AuthenticatedOrganizationDashboardRoute
   '/api/agents/analyze': typeof ApiAgentsAnalyzeRoute
   '/api/agents/report': typeof ApiAgentsReportRoute
+  '/api/cron/certificates-email': typeof ApiCronCertificatesEmailRoute
   '/api/lessons/$slug': typeof ApiLessonsSlugRouteWithChildren
   '/api/quiz/$moduleId': typeof ApiQuizModuleIdRoute
+  '/api/webhooks/resend': typeof ApiWebhooksResendRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/cyber-range/challenge/$slug': typeof AuthenticatedCyberRangeChallengeSlugRoute
   '/_authenticated/cyber-range/lab/$slug': typeof AuthenticatedCyberRangeLabSlugRoute
@@ -745,8 +764,10 @@ export interface FileRouteTypes {
     | '/organization/dashboard'
     | '/api/agents/analyze'
     | '/api/agents/report'
+    | '/api/cron/certificates-email'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
+    | '/api/webhooks/resend'
     | '/admin/'
     | '/cyber-range/challenge/$slug'
     | '/cyber-range/lab/$slug'
@@ -817,8 +838,10 @@ export interface FileRouteTypes {
     | '/organization/dashboard'
     | '/api/agents/analyze'
     | '/api/agents/report'
+    | '/api/cron/certificates-email'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
+    | '/api/webhooks/resend'
     | '/admin'
     | '/cyber-range/challenge/$slug'
     | '/cyber-range/lab/$slug'
@@ -891,8 +914,10 @@ export interface FileRouteTypes {
     | '/_authenticated/organization/dashboard'
     | '/api/agents/analyze'
     | '/api/agents/report'
+    | '/api/cron/certificates-email'
     | '/api/lessons/$slug'
     | '/api/quiz/$moduleId'
+    | '/api/webhooks/resend'
     | '/_authenticated/admin/'
     | '/_authenticated/cyber-range/challenge/$slug'
     | '/_authenticated/cyber-range/lab/$slug'
@@ -941,8 +966,10 @@ export interface RootRouteChildren {
   LearnIndexRoute: typeof LearnIndexRoute
   ApiAgentsAnalyzeRoute: typeof ApiAgentsAnalyzeRoute
   ApiAgentsReportRoute: typeof ApiAgentsReportRoute
+  ApiCronCertificatesEmailRoute: typeof ApiCronCertificatesEmailRoute
   ApiLessonsSlugRoute: typeof ApiLessonsSlugRouteWithChildren
   ApiQuizModuleIdRoute: typeof ApiQuizModuleIdRoute
+  ApiWebhooksResendRoute: typeof ApiWebhooksResendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1409,6 +1436,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAgentsReportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/cron/certificates-email': {
+      id: '/api/cron/certificates-email'
+      path: '/api/cron/certificates-email'
+      fullPath: '/api/cron/certificates-email'
+      preLoaderRoute: typeof ApiCronCertificatesEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/lessons/$slug': {
       id: '/api/lessons/$slug'
       path: '/api/lessons/$slug'
@@ -1421,6 +1455,13 @@ declare module '@tanstack/react-router' {
       path: '/api/quiz/$moduleId'
       fullPath: '/api/quiz/$moduleId'
       preLoaderRoute: typeof ApiQuizModuleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/webhooks/resend': {
+      id: '/api/webhooks/resend'
+      path: '/api/webhooks/resend'
+      fullPath: '/api/webhooks/resend'
+      preLoaderRoute: typeof ApiWebhooksResendRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/cyber-range/challenge/$slug': {
@@ -1631,8 +1672,10 @@ const rootRouteChildren: RootRouteChildren = {
   LearnIndexRoute: LearnIndexRoute,
   ApiAgentsAnalyzeRoute: ApiAgentsAnalyzeRoute,
   ApiAgentsReportRoute: ApiAgentsReportRoute,
+  ApiCronCertificatesEmailRoute: ApiCronCertificatesEmailRoute,
   ApiLessonsSlugRoute: ApiLessonsSlugRouteWithChildren,
   ApiQuizModuleIdRoute: ApiQuizModuleIdRoute,
+  ApiWebhooksResendRoute: ApiWebhooksResendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

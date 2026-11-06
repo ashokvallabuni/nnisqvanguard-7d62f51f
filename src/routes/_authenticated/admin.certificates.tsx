@@ -5,6 +5,7 @@ import { Shield, Search, RefreshCw, XCircle, CheckCircle2, AlertTriangle, FileSp
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/common/PageHeader";
 import { toast } from "sonner";
+import { retryEmailJob } from "@/lib/certificate.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/certificates")({
   component: AdminCertificatesPage,
@@ -87,6 +88,28 @@ function AdminCertificatesPage() {
     },
     onError: (err: any) => {
       toast.error(`Revocation failed: ${err.message}`);
+    },
+  });
+
+  const retryEmailMutation = useMutation({
+    mutationFn: async (certId: string) => {
+      const { data: job } = await supabase
+        .from("certificate_email_jobs")
+        .select("id")
+        .eq("certificate_id", certId)
+        .maybeSingle();
+
+      if (!job) throw new Error("Email job not found for this certificate");
+      const res = await retryEmailJob({ data: { jobId: job.id } });
+      if (res.status === "FAILED") throw new Error(res.error || "Retry failed");
+      return res;
+    },
+    onSuccess: () => {
+      toast.success("Certificate email successfully dispatched");
+      queryClient.invalidateQueries({ queryKey: ["admin-certificates"] });
+    },
+    onError: (err: any) => {
+      toast.error(`Email retry failed: ${err.message}`);
     },
   });
 
@@ -213,15 +236,28 @@ function AdminCertificatesPage() {
                         </span>
                       </td>
                       <td className="p-4">
-                        <span
-                          className={`font-mono text-[11px] px-2 py-0.5 rounded border ${
-                            cert.email_status === "SENT"
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                              : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                          }`}
-                        >
-                          {cert.email_status}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span
+                            className={`font-mono text-[11px] px-2 py-0.5 rounded border ${
+                              cert.email_status === "SENT" || cert.email_status === "DELIVERED"
+                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                            }`}
+                          >
+                            {cert.email_status}
+                          </span>
+                          {cert.email_status === "FAILED" && (
+                            <button
+                              onClick={() => retryEmailMutation.mutate(cert.id)}
+                              disabled={retryEmailMutation.isPending}
+                              className="text-[10px] font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 px-1.5 py-0.5 rounded border border-cyan-500/20 transition-colors inline-flex items-center gap-1 cursor-pointer"
+                              title="Retry email delivery"
+                            >
+                              <RefreshCw className={`w-2.5 h-2.5 ${retryEmailMutation.isPending ? "animate-spin" : ""}`} />
+                              Retry
+                            </button>
+                          )}
+                        </div>
                       </td>
                       <td className="p-4 text-right">
                         {cert.revoked ? (

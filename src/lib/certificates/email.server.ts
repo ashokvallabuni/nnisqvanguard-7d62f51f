@@ -73,7 +73,13 @@ export function buildCertificateEmailTemplate(data: {
           ? `<a href="${data.downloadUrl}" class="btn" style="margin-right: 12px;">Download Official PDF</a>`
           : ""
       }
-      <a href="${data.verificationUrl}" class="btn" style="background-color: transparent; border: 1px solid #00e5ff; color: #00e5ff !important;">Verify Authenticity</a>
+      <a href="${data.verificationUrl}" class="btn" style="background-color: transparent; border: 1px solid #00e5ff; color: #00e5ff !important; margin-right: 12px;">Verify Authenticity</a>
+      <a href="https://nisqvanguard.in/courses" class="btn" style="background-color: #16283a; border: 1px solid #334155; color: #f8fafc !important;">Continue Learning &rarr;</a>
+    </div>
+
+    <div style="background-color: #07101d; border-left: 3px solid #0a7cff; padding: 12px 16px; margin-top: 24px; border-radius: 4px;">
+      <div style="font-size: 13px; font-weight: 600; color: #f8fafc;">Continue Your Tactical Journey</div>
+      <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Ready for your next mission? Explore advanced specialized modules and master tracks in the NISQ Vanguard Cyber Academy catalog.</div>
     </div>
 
     <p style="font-size: 12px; color: #64748b; margin-top: 20px; text-align: center;">
@@ -99,6 +105,7 @@ Blockchain Status: ${chainStatusText}
 
 Public Verification: ${data.verificationUrl}
 ${data.downloadUrl ? `Download Certificate: ${data.downloadUrl}\n` : ""}
+Continue Learning: https://nisqvanguard.in/courses
 
 Secure Today. Defend Tomorrow. Empower Forever.
 NISQ Vanguard Cyber Academy — Defence Technologies
@@ -331,4 +338,307 @@ export async function retryCertificateEmailJob({
       error: sendResult.error,
     };
   }
+}
+
+/**
+ * Scheduled Worker: Claims and processes pending and retry-due email jobs with row locking.
+ * Self-healing: releases jobs stuck in PROCESSING older than timeoutSeconds.
+ */
+export async function processQueuedCertificateEmailJobs(options?: {
+  batchSize?: number;
+  timeoutSeconds?: number;
+}): Promise<{
+  claimed: number;
+  processed: number;
+  sent: number;
+  failed: number;
+  results: Array<{
+    jobId: string;
+    recipient: string;
+    status: string;
+    providerMessageId?: string;
+    error?: string;
+  }>;
+}> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const batchSize = options?.batchSize || 10;
+  const timeoutSeconds = options?.timeoutSeconds || 300;
+
+  // 1. Claim jobs atomically via PostgreSQL claim_next_email_jobs RPC (SKIP LOCKED)
+  const { data: claimedJobs, error: claimErr } = await supabaseAdmin.rpc("claim_next_email_jobs", {
+    batch_size: batchSize,
+    timeout_seconds: timeoutSeconds,
+  });
+
+  if (claimErr) {
+    console.error("[Email Worker Claim Error]", claimErr);
+    return { claimed: 0, processed: 0, sent: 0, failed: 0, results: [] };
+  }
+
+  const jobs = claimedJobs || [];
+  const results: Array<{
+    jobId: string;
+    recipient: string;
+    status: string;
+    providerMessageId?: string;
+    error?: string;
+  }> = [];
+
+  let sentCount = 0;
+  let failedCount = 0;
+
+  for (const job of jobs) {
+    const certId = job.certificate_id;
+    const { data: cert } = await supabaseAdmin
+      .from("certificates")
+      .select("id, user_id, certificate_number, recipient_name, course_title, issued_at, blockchain_status, pdf_path")
+      .eq("id", certId)
+      .maybeSingle();
+
+    if (!cert) {
+      await supabaseAdmin
+        .from("certificate_email_jobs")
+        .update({
+          delivery_status: "FAILED",
+          last_error: "Certificate record missing",
+          locked_at: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", job.id);
+      failedCount++;
+      results.push({ jobId: job.id, recipient: job.recipient_email, status: "FAILED", error: "Certificate record missing" });
+      continue;
+    }
+
+    // Never send before PDF exists in storage!
+    if (!cert.pdf_path) {
+      await supabaseAdmin
+        .from("certificate_email_jobs")
+        .update({
+          delivery_status: "PENDING",
+          locked_at: null,
+          last_error: "Waiting for PDF generation",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", job.id);
+      results.push({ jobId: job.id, recipient: job.recipient_email, status: "WAITING_PDF" });
+      continue;
+    }
+
+    const { data: signedData, error: signErr } = await supabaseAdmin.storage
+      .from("certificates")
+      .createSignedUrl(cert.pdf_path, 60 * 60 * 24); // 24-hour signed link for initial email
+
+    if (signErr || !signedData?.signedUrl) {
+      await supabaseAdmin
+        .from("certificate_email_jobs")
+        .update({
+          delivery_status: "PENDING",
+          locked_at: null,
+          last_error: "Unable to sign PDF download URL",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", job.id);
+      results.push({ jobId: job.id, recipient: job.recipient_email, status: "WAITING_PDF_SIGNED_URL" });
+      continue;
+    }
+
+    const nextAttempts = (job.attempts || 0) + 1;
+    const baseUrl = process.env.SITE_URL || "https://nisqvanguard.in";
+    const verificationUrl = `${baseUrl}/verify-certificate/${cert.certificate_number}`;
+
+    const sendRes = await sendCertificateEmail({
+      recipientEmail: job.recipient_email,
+      recipientName: cert.recipient_name,
+      courseTitle: cert.course_title,
+      completionDate: new Date(cert.issued_at).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }),
+      certificateId: cert.certificate_number,
+      verificationUrl,
+      downloadUrl: signedData.signedUrl,
+      blockchainConfirmed: cert.blockchain_status === "CONFIRMED",
+    });
+
+    if (sendRes.status === "SENT") {
+      const nowIso = new Date().toISOString();
+      await supabaseAdmin
+        .from("certificate_email_jobs")
+        .update({
+          delivery_status: "SENT",
+          sent_at: nowIso,
+          attempts: nextAttempts,
+          provider_message_id: sendRes.providerMessageId,
+          last_error: null,
+          next_retry_at: null,
+          locked_at: null,
+          updated_at: nowIso,
+        })
+        .eq("id", job.id);
+
+      await supabaseAdmin
+        .from("certificates")
+        .update({ email_status: "SENT" })
+        .eq("id", cert.id);
+
+      await supabaseAdmin.from("certificate_audit_logs").insert({
+        certificate_id: cert.id,
+        user_id: cert.user_id,
+        actor_id: cert.user_id,
+        event_type: "CERTIFICATE_EMAIL_WORKER_SENT",
+        details: {
+          jobId: job.id,
+          providerMessageId: sendRes.providerMessageId,
+          attempts: nextAttempts,
+          sentAt: nowIso,
+        },
+      });
+
+      sentCount++;
+      results.push({
+        jobId: job.id,
+        recipient: job.recipient_email,
+        status: "SENT",
+        providerMessageId: sendRes.providerMessageId,
+      });
+    } else {
+      const backoffDelayMs = Math.min(1000 * Math.pow(2, nextAttempts), 3600000);
+      const nextRetryAt = new Date(Date.now() + backoffDelayMs).toISOString();
+      const finalFailed = nextAttempts >= 5;
+
+      await supabaseAdmin
+        .from("certificate_email_jobs")
+        .update({
+          delivery_status: "FAILED",
+          attempts: nextAttempts,
+          last_error: sendRes.error,
+          next_retry_at: finalFailed ? null : nextRetryAt,
+          locked_at: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", job.id);
+
+      await supabaseAdmin
+        .from("certificates")
+        .update({ email_status: "FAILED" })
+        .eq("id", cert.id);
+
+      failedCount++;
+      results.push({
+        jobId: job.id,
+        recipient: job.recipient_email,
+        status: "FAILED",
+        error: sendRes.error,
+      });
+    }
+  }
+
+  return {
+    claimed: jobs.length,
+    processed: results.length,
+    sent: sentCount,
+    failed: failedCount,
+    results,
+  };
+}
+
+/**
+ * Self-healing: release jobs stuck in PROCESSING older than timeoutSeconds
+ */
+export async function releaseStuckEmailJobs(timeoutSeconds: number = 300) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const cutoff = new Date(Date.now() - timeoutSeconds * 1000).toISOString();
+
+  const { data: released, error } = await supabaseAdmin
+    .from("certificate_email_jobs")
+    .update({
+      delivery_status: "PENDING",
+      locked_at: null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("delivery_status", "PROCESSING")
+    .lt("locked_at", cutoff)
+    .select("id, recipient_email, locked_at");
+
+  return { released: released || [], error };
+}
+
+/**
+ * Handle Resend Webhooks: email.delivered, email.bounced, email.complained
+ */
+export async function handleResendWebhook({
+  payload,
+  headers,
+}: {
+  payload: string;
+  headers: { id?: string; timestamp?: string; signature?: string };
+}) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const webhookSecret = process.env.RESEND_WEBHOOK_SECRET;
+
+  if (webhookSecret && headers.id && headers.timestamp && headers.signature) {
+    const resend = new Resend(process.env.RESEND_API_KEY || "dummy");
+    try {
+      resend.webhooks.verify({
+        payload,
+        headers: {
+          id: headers.id,
+          timestamp: headers.timestamp,
+          signature: headers.signature,
+        },
+        webhookSecret,
+      });
+    } catch (err: any) {
+      console.error("[Resend Webhook Verification Failed]", err);
+      return { verified: false, error: "INVALID_SIGNATURE" };
+    }
+  }
+
+  const event = typeof payload === "string" ? JSON.parse(payload) : payload;
+  const eventType = event.type; // 'email.delivered', 'email.bounced', 'email.complained'
+  const emailId = event.data?.email_id;
+
+  if (!emailId) {
+    return { verified: true, updated: false, reason: "NO_EMAIL_ID" };
+  }
+
+  if (eventType === "email.delivered") {
+    const deliveredAt = event.created_at || new Date().toISOString();
+    await supabaseAdmin
+      .from("certificate_email_jobs")
+      .update({
+        delivery_status: "DELIVERED",
+        delivered_at: deliveredAt,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("provider_message_id", emailId);
+
+    return { verified: true, updated: true, eventType, status: "DELIVERED" };
+  } else if (eventType === "email.bounced") {
+    const reason = event.data?.bounce?.message || "Email address bounced";
+    await supabaseAdmin
+      .from("certificate_email_jobs")
+      .update({
+        delivery_status: "BOUNCED",
+        last_error: reason,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("provider_message_id", emailId);
+
+    return { verified: true, updated: true, eventType, status: "BOUNCED", reason };
+  } else if (eventType === "email.complained") {
+    await supabaseAdmin
+      .from("certificate_email_jobs")
+      .update({
+        delivery_status: "COMPLAINED",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("provider_message_id", emailId);
+
+    return { verified: true, updated: true, eventType, status: "COMPLAINED" };
+  }
+
+  return { verified: true, updated: false, eventType };
 }
