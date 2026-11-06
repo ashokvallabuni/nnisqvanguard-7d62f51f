@@ -15,7 +15,7 @@ import { z } from "zod";
 import crypto from "crypto";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { generateCertificatePdf } from "./certificates/pdf-generator";
-import { sendCertificateEmail } from "./certificates/email.server";
+import { sendCertificateEmail, retryCertificateEmailJob } from "./certificates/email.server";
 
 const issueCertSchema = z.object({
   courseSlug: z.string().min(1),
@@ -34,7 +34,38 @@ const downloadCertSchema = z.object({
  * Callable server-side internal function with comprehensive validation,
  * deterministic PDF generation, SHA-256 anchoring, and full idempotency.
  */
+/**
+ * In-flight single-flight coalescing cache to prevent duplicate work
+ * when multiple rapid concurrent claims occur for the same user & course.
+ */
+const inFlightEvaluations = new Map<string, Promise<any>>();
+
 export async function evaluateAndIssueCertificateInternal({
+  userId,
+  courseSlug,
+}: {
+  userId: string;
+  courseSlug: string;
+}) {
+  const lockKey = `${userId}:${courseSlug}`;
+  const existingPromise = inFlightEvaluations.get(lockKey);
+  if (existingPromise) {
+    return await existingPromise;
+  }
+
+  const promise = (async () => {
+    try {
+      return await doEvaluateAndIssueCertificateInternal({ userId, courseSlug });
+    } finally {
+      inFlightEvaluations.delete(lockKey);
+    }
+  })();
+
+  inFlightEvaluations.set(lockKey, promise);
+  return await promise;
+}
+
+async function doEvaluateAndIssueCertificateInternal({
   userId,
   courseSlug,
 }: {
@@ -225,6 +256,24 @@ export async function evaluateAndIssueCertificateInternal({
     .single();
 
   if (certInsertError || !newCert) {
+    // Unique violation or concurrent insert fallback
+    const { data: retryCert } = await supabaseAdmin
+      .from("certificates")
+      .select("id, certificate_number, issued_at, final_score, pdf_sha256")
+      .eq("user_id", userId)
+      .eq("course_id", course.id)
+      .maybeSingle();
+
+    if (retryCert) {
+      return {
+        certificateNumber: retryCert.certificate_number,
+        alreadyIssued: true,
+        issuedAt: retryCert.issued_at,
+        finalScore: retryCert.final_score,
+        pdfSha256: retryCert.pdf_sha256,
+        verificationUrl: `${baseUrl}/verify-certificate/${retryCert.certificate_number}`,
+      };
+    }
     console.error("[Certificate Insert Failed]", certInsertError);
     return { error: "CERTIFICATE_INSERT_FAILED", certificateNumber: null };
   }
@@ -383,41 +432,219 @@ export const getCertificate = createServerFn({ method: "GET" })
   });
 
 /**
+ * Generate Secure Time-Limited Signed Download URL (Internal Logic)
+ */
+export async function getCertificateDownloadUrlInternal({
+  userId,
+  certificateNumber,
+}: {
+  userId: string;
+  certificateNumber: string;
+}) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const { data: cert } = await supabaseAdmin
+    .from("certificates")
+    .select("id, user_id, pdf_path, certificate_number, revoked, revoked_reason")
+    .eq("certificate_number", certificateNumber)
+    .maybeSingle();
+
+  if (!cert) {
+    return { error: "CERTIFICATE_NOT_FOUND", downloadUrl: null };
+  }
+
+  // Verify ownership
+  if (cert.user_id !== userId) {
+    return { error: "UNAUTHORIZED_ACCESS", downloadUrl: null };
+  }
+
+  // Disallow download if revoked
+  if (cert.revoked) {
+    return { error: "CERTIFICATE_REVOKED", downloadUrl: null, revokedReason: cert.revoked_reason };
+  }
+
+  if (!cert.pdf_path) {
+    return { error: "PDF_NOT_FOUND", downloadUrl: null };
+  }
+
+  const { data: signedData, error } = await supabaseAdmin.storage
+    .from("certificates")
+    .createSignedUrl(cert.pdf_path, 60 * 15); // 15 minutes validity
+
+  if (error || !signedData) {
+    return { error: "SIGNED_URL_FAILED", downloadUrl: null };
+  }
+
+  return { downloadUrl: signedData.signedUrl };
+}
+
+/**
  * Generate Secure Time-Limited Signed Download URL (Students only, own certificates)
  */
 export const getCertificateDownloadUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((value: unknown) => downloadCertSchema.parse(value))
   .handler(async ({ data, context }) => {
+    return getCertificateDownloadUrlInternal({
+      userId: context.userId,
+      certificateNumber: data.certificateNumber,
+    });
+  });
+
+const courseCertStatusSchema = z.object({
+  courseSlug: z.string().min(1),
+});
+
+/**
+ * Stage 7: Real-time Course Certificate Status Evaluator
+ * Computes exact server-driven eligibility, missing requirements, or issued credentials.
+ * Driven by database state only — never trusts client claims.
+ */
+export const getCourseCertificateStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((value: unknown) => courseCertStatusSchema.parse(value))
+  .handler(async ({ data, context }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: cert } = await supabaseAdmin
-      .from("certificates")
-      .select("id, user_id, pdf_path, certificate_number")
-      .eq("certificate_number", data.certificateNumber)
+    // 1. Fetch course
+    const { data: course } = await supabaseAdmin
+      .from("courses")
+      .select("id, slug, title")
+      .eq("slug", data.courseSlug)
       .maybeSingle();
 
-    if (!cert) {
-      return { error: "CERTIFICATE_NOT_FOUND", downloadUrl: null };
+    if (!course) {
+      return { error: "COURSE_NOT_FOUND", status: "NOT_FOUND" as const };
     }
 
-    // Verify ownership
-    if (cert.user_id !== userId) {
-      return { error: "UNAUTHORIZED_ACCESS", downloadUrl: null };
-    }
-
-    if (!cert.pdf_path) {
-      return { error: "PDF_NOT_FOUND", downloadUrl: null };
-    }
-
-    const { data: signedData, error } = await supabaseAdmin.storage
+    // 2. Check if certificate exists for this user and course
+    const { data: cert } = await supabaseAdmin
       .from("certificates")
-      .createSignedUrl(cert.pdf_path, 60 * 15); // 15 minutes validity
+      .select("id, certificate_number, issued_at, final_score, blockchain_status, blockchain_tx_hash, revoked, revoked_reason")
+      .eq("user_id", userId)
+      .eq("course_id", course.id)
+      .maybeSingle();
 
-    if (error || !signedData) {
-      return { error: "SIGNED_URL_FAILED", downloadUrl: null };
+    if (cert) {
+      if (cert.revoked) {
+        return {
+          status: "REVOKED" as const,
+          certificateNumber: cert.certificate_number,
+          revokedReason: cert.revoked_reason,
+          message: "Certificate has been revoked by administration.",
+        };
+      }
+
+      return {
+        status: "ISSUED" as const,
+        certificateNumber: cert.certificate_number,
+        finalScore: cert.final_score,
+        issuedAt: cert.issued_at,
+        blockchainStatus: cert.blockchain_status || "NOT_CONFIGURED",
+        blockchainTxHash: cert.blockchain_tx_hash,
+        verificationUrl: `/verify-certificate/${cert.certificate_number}`,
+        message: "Certificate issued and available for download.",
+      };
     }
 
-    return { downloadUrl: signedData.signedUrl };
+    // 3. Check requirements: modules & quizzes
+    const { data: modules } = await supabaseAdmin
+      .from("modules")
+      .select("id, sort_order")
+      .eq("course_id", course.id)
+      .order("sort_order");
+
+    const totalModules = modules?.length || 0;
+    if (totalModules === 0) {
+      return {
+        status: "NOT_COMPLETE" as const,
+        canClaim: false,
+        missingReason: "No modules configured for this course.",
+        message: "No modules configured for this course.",
+      };
+    }
+
+    const moduleIds = (modules || []).map((m) => m.id);
+
+    // Module progress
+    const { count: completedCount } = await supabaseAdmin
+      .from("module_progress")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId)
+      .eq("completed", true)
+      .in("module_id", moduleIds);
+
+    const completedModules = completedCount ?? 0;
+    const isModulesComplete = completedModules >= totalModules;
+
+    // Quizzes check
+    const { data: quizzes } = await supabaseAdmin
+      .from("quizzes")
+      .select("id, module_id")
+      .in("module_id", moduleIds);
+
+    const totalQuizzes = quizzes?.length || 0;
+    let isQuizzesComplete = true;
+    let passedQuizzesCount = 0;
+
+    if (totalQuizzes > 0) {
+      const quizIds = quizzes.map((q) => q.id);
+      const { data: attempts } = await supabaseAdmin
+        .from("quiz_attempts")
+        .select("quiz_id, is_correct, score")
+        .eq("user_id", userId)
+        .in("quiz_id", quizIds);
+
+      const passedQuizIds = new Set(
+        attempts?.filter((a) => a.is_correct || (a.score ?? 0) >= 70).map((a) => a.quiz_id)
+      );
+      passedQuizzesCount = passedQuizIds.size;
+      isQuizzesComplete = passedQuizzesCount >= totalQuizzes;
+    }
+
+    // Evaluate overall completion
+    if (isModulesComplete && isQuizzesComplete) {
+      return {
+        status: "READY_TO_CLAIM" as const,
+        canClaim: true,
+        completedModules,
+        totalModules,
+        passedQuizzes: passedQuizzesCount,
+        totalQuizzes,
+        message: "All course requirements met! Click below to claim your certificate.",
+      };
+    }
+
+    // Construct precise missing-requirements reason
+    const missingParts: string[] = [];
+    if (!isModulesComplete) {
+      missingParts.push(`${completedModules} of ${totalModules} modules done`);
+    }
+    if (!isQuizzesComplete) {
+      missingParts.push(`quiz not passed`);
+    }
+
+    const missingReason = missingParts.join(", ");
+
+    return {
+      status: "NOT_COMPLETE" as const,
+      canClaim: false,
+      completedModules,
+      totalModules,
+      passedQuizzes: passedQuizzesCount,
+      totalQuizzes,
+      missingReason,
+      message: missingReason,
+    };
+  });
+
+/**
+ * Stage 8: Trigger Retry for Certificate Email Job
+ */
+export const retryEmailJob = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((value: unknown) => z.object({ jobId: z.string().uuid() }).parse(value))
+  .handler(async ({ data }) => {
+    return retryCertificateEmailJob({ jobId: data.jobId });
   });

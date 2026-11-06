@@ -130,11 +130,12 @@ export async function sendCertificateEmail(data: {
     const resend = new Resend(apiKey);
     const { subject, html, text } = buildCertificateEmailTemplate(data);
 
-    const fromAddress = process.env.MAIL_FROM || "NISQ Vanguard Academy <onboarding@resend.dev>";
+    const fromAddress = process.env.MAIL_FROM || "NISQ Vanguard Academy <ashokvallabuni@nisqvanguard.in>";
 
     const { data: resData, error: resError } = await resend.emails.send({
       from: fromAddress,
       to: [data.recipientEmail],
+      reply_to: "ashokvallabuni@nisqvanguard.in",
       subject,
       html,
       text,
@@ -155,6 +156,179 @@ export async function sendCertificateEmail(data: {
     return {
       status: "FAILED",
       error: err?.message || String(err),
+    };
+  }
+}
+
+/**
+ * Durable retry worker for certificate email jobs with backoff and deduplication.
+ */
+export async function retryCertificateEmailJob({
+  jobId,
+  forceFailure,
+}: {
+  jobId: string;
+  forceFailure?: boolean;
+}): Promise<{
+  status: "SENT" | "FAILED" | "ALREADY_SENT";
+  providerMessageId?: string;
+  from?: string;
+  recipient?: string;
+  attempts?: number;
+  sentAt?: string;
+  nextRetryAt?: string;
+  backoffDelayMs?: number;
+  error?: string;
+}> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const { data: job, error: jobErr } = await supabaseAdmin
+    .from("certificate_email_jobs")
+    .select("*, certificates(*)")
+    .eq("id", jobId)
+    .maybeSingle();
+
+  if (jobErr || !job) {
+    return { status: "FAILED", error: "JOB_NOT_FOUND" };
+  }
+
+  // Idempotency: If already successfully SENT, never duplicate email
+  if (job.delivery_status === "SENT") {
+    return {
+      status: "ALREADY_SENT",
+      providerMessageId: job.provider_message_id,
+      from: process.env.MAIL_FROM || "NISQ Vanguard Academy <ashokvallabuni@nisqvanguard.in>",
+      recipient: job.recipient_email,
+      attempts: job.attempts,
+      sentAt: job.updated_at,
+    };
+  }
+
+  const cert = job.certificates;
+  if (!cert) {
+    return { status: "FAILED", error: "CERTIFICATE_NOT_FOUND" };
+  }
+
+  const nextAttempts = (job.attempts || 0) + 1;
+
+  if (forceFailure) {
+    const errorMsg = "Simulated provider network timeout / 503 Service Unavailable";
+    const backoffDelayMs = Math.min(1000 * Math.pow(2, nextAttempts), 60000);
+    const nextRetryAt = new Date(Date.now() + backoffDelayMs).toISOString();
+
+    await supabaseAdmin
+      .from("certificate_email_jobs")
+      .update({
+        delivery_status: "FAILED",
+        attempts: nextAttempts,
+        last_error: errorMsg,
+        next_retry_at: nextRetryAt,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", jobId);
+
+    return {
+      status: "FAILED",
+      attempts: nextAttempts,
+      backoffDelayMs,
+      nextRetryAt,
+      error: errorMsg,
+    };
+  }
+
+  // Generate fresh download link
+  let downloadUrl: string | undefined;
+  if (cert.pdf_path) {
+    const { data: signedData } = await supabaseAdmin.storage
+      .from("certificates")
+      .createSignedUrl(cert.pdf_path, 60 * 15);
+    downloadUrl = signedData?.signedUrl;
+  }
+
+  const baseUrl = process.env.SITE_URL || "https://nisqvanguard.in";
+  const verificationUrl = `${baseUrl}/verify-certificate/${cert.certificate_number}`;
+
+  const sendResult = await sendCertificateEmail({
+    recipientEmail: job.recipient_email,
+    recipientName: cert.recipient_name,
+    courseTitle: cert.course_title,
+    completionDate: new Date(cert.issued_at).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }),
+    certificateId: cert.certificate_number,
+    verificationUrl,
+    downloadUrl,
+    blockchainConfirmed: cert.blockchain_status === "CONFIRMED",
+  });
+
+  if (sendResult.status === "SENT") {
+    const sentAt = new Date().toISOString();
+    await supabaseAdmin
+      .from("certificate_email_jobs")
+      .update({
+        delivery_status: "SENT",
+        attempts: nextAttempts,
+        provider_message_id: sendResult.providerMessageId,
+        last_error: null,
+        next_retry_at: null,
+        updated_at: sentAt,
+      })
+      .eq("id", jobId);
+
+    await supabaseAdmin
+      .from("certificates")
+      .update({ email_status: "SENT" })
+      .eq("id", cert.id);
+
+    await supabaseAdmin.from("certificate_audit_logs").insert({
+      certificate_id: cert.id,
+      user_id: cert.user_id,
+      actor_id: cert.user_id,
+      event_type: "CERTIFICATE_EMAIL_SENT",
+      details: {
+        jobId,
+        providerMessageId: sendResult.providerMessageId,
+        attempts: nextAttempts,
+        sentAt,
+      },
+    });
+
+    return {
+      status: "SENT",
+      providerMessageId: sendResult.providerMessageId,
+      from: process.env.MAIL_FROM || "NISQ Vanguard Academy <ashokvallabuni@nisqvanguard.in>",
+      recipient: job.recipient_email,
+      attempts: nextAttempts,
+      sentAt,
+    };
+  } else {
+    const backoffDelayMs = Math.min(1000 * Math.pow(2, nextAttempts), 60000);
+    const nextRetryAt = new Date(Date.now() + backoffDelayMs).toISOString();
+
+    await supabaseAdmin
+      .from("certificate_email_jobs")
+      .update({
+        delivery_status: "FAILED",
+        attempts: nextAttempts,
+        last_error: sendResult.error,
+        next_retry_at: nextRetryAt,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", jobId);
+
+    await supabaseAdmin
+      .from("certificates")
+      .update({ email_status: "FAILED" })
+      .eq("id", cert.id);
+
+    return {
+      status: "FAILED",
+      attempts: nextAttempts,
+      backoffDelayMs,
+      nextRetryAt,
+      error: sendResult.error,
     };
   }
 }

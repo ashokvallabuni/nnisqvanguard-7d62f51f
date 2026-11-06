@@ -20,6 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/common/PageHeader";
 import { CourseSticker } from "@/components/academy/CourseSticker";
+import { CertificateActionButton } from "@/components/academy/CertificateActionButton";
 import { getLabsForCourse } from "@/data/lab-registry";
 import { LabCard } from "@/components/cyber-range/LabCard";
 import { DetailPageSkeleton } from "@/components/common/SkeletonLoaders";
@@ -266,6 +267,12 @@ function CourseDetailPage() {
  </div>
  )}
 
+ {/* Persistent Course Certificate Action Bar */}
+ <CertificateActionButton
+ courseSlug={course.slug}
+ courseTitle={course.title}
+ />
+
  <h2 className="font-display font-bold text-xl text-foreground">
  Course Curriculum Overview
  </h2>
@@ -429,6 +436,13 @@ function CourseDetailPage() {
  />
  </div>
  </div>
+
+ {/* Persistent Certificate Action Widget */}
+ <CertificateActionButton
+ courseSlug={course.slug}
+ courseTitle={course.title}
+ compact
+ />
 
  {nextModule && (
  <div className="pt-2">

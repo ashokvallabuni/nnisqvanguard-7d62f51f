@@ -39,6 +39,7 @@ import { CiaTriadSecurityDiagram } from "@/components/diagrams/CiaTriadSecurityD
 import { SocPipelineDiagram } from "@/components/diagrams/SocPipelineDiagram";
 import { NETWORKING_MODULES, LINUX_MODULES } from "@/data/courses-curriculum";
 import { completeModule } from "@/lib/academy.functions";
+import { CertificateActionButton } from "@/components/academy/CertificateActionButton";
 import { submitQuizAnswer } from "@/lib/quiz.functions";
 import { isCourseAccessible, describeAccessError } from "@/lib/course-accessibility";
 import { useIvvabChat } from "@/lib/ivvab-chat";
@@ -985,6 +986,13 @@ function ModuleLearningPage() {
 
  {/* Authoritative Sources & Citations */}
  <AuthoritativeSources sources={lessonSources} />
+
+ {/* Course Completion & Persistent Certificate Action Widget */}
+ <CertificateActionButton
+ courseSlug={course.slug}
+ courseTitle={course.title}
+ className="my-4"
+ />
 
  {/* Bottom Actions: Previous / Next / Complete */}
  <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
