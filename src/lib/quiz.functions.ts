@@ -92,18 +92,12 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  }
  }
 
-  // ── 2b. Default synthetic quiz fallback for modules without static/DB quiz rows
-  if (correctOption === null && data.quizId.startsWith("q-") && data.quizId.endsWith("-default")) {
-    correctOption = 0;
-    quizExplanation =
-      "Applying the principle of least privilege and maintaining tamper-evident audit logs is the core security standard.";
-  }
-
   if (correctOption === null) {
     return {
       error: "QUIZ_NOT_FOUND",
       is_correct: false,
       score: 0,
+      status: "FAILED",
       attempt_number: 0,
       explanation: `Quiz assessment not found for ID '${data.quizId}'. Please refresh your browser to load the latest curriculum questions.`,
     };
@@ -125,6 +119,7 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  // ── 4. Server-side correctness evaluation
  const isCorrect = data.selectedOption === correctOption;
  const score = isCorrect ? 100 : 0;
+  const status = isCorrect ? "PASSED" : "FAILED";
 
  // ── 5. Persist quiz attempt (non-fatal if DB unavailable)
  try {
@@ -152,6 +147,28 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  },
  { onConflict: "user_id,module_id,quiz_id,assignment_id,progress_type" },
  );
+
+    // Track latest attempt & best score in module_progress
+    const { data: existingModProgress } = await supabase
+      .from("module_progress")
+      .select("quiz_score, completed")
+      .eq("user_id", userId)
+      .eq("module_id", data.moduleId)
+      .maybeSingle();
+
+    const previousBest = existingModProgress?.quiz_score ?? 0;
+    const bestScore = Math.max(previousBest, score);
+
+    await supabase.from("module_progress").upsert(
+      {
+        user_id: userId,
+        module_id: data.moduleId,
+        quiz_score: bestScore,
+        completed: existingModProgress?.completed ?? false,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id,module_id" },
+    );
  } catch (dbErr: any) {
  const msg: string = dbErr?.message ?? "";
  if (
@@ -163,6 +180,7 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  return {
  is_correct: isCorrect,
  score,
+    status,
  attempt_number: attemptNumber,
  explanation: isCorrect
  ? (quizExplanation ??
@@ -206,6 +224,7 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  return {
  is_correct: isCorrect,
  score,
+    status,
  attempt_number: attemptNumber,
  explanation: isCorrect
  ? (quizExplanation ?? "Correct! Excellent work.")

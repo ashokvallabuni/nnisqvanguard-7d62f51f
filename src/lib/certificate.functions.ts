@@ -140,48 +140,51 @@ async function doEvaluateAndIssueCertificateInternal({
     };
   }
 
-  // 5. Verify required quizzes & compute average score
-  const { data: quizzes } = await supabaseAdmin
-    .from("quizzes")
-    .select("id, module_id")
-    .in("module_id", moduleIds);
-
+  // 5. Verify required quizzes & compute average score (exempt for test courses)
+  const isTestCourse = Boolean(course.is_test || course.slug?.startsWith("zz-") || courseSlug.startsWith("zz-"));
   let finalScore = 100;
-  if (quizzes && quizzes.length > 0) {
-    const quizIds = quizzes.map((q) => q.id);
-    const { data: attempts } = await supabaseAdmin
-      .from("quiz_attempts")
-      .select("quiz_id, is_correct, score")
-      .eq("user_id", userId)
-      .in("quiz_id", quizIds);
+  if (!isTestCourse) {
+    const { data: quizzes } = await supabaseAdmin
+      .from("quizzes")
+      .select("id, module_id")
+      .in("module_id", moduleIds);
 
-    // Check if all quizzes have at least one passing attempt
-    const passedQuizIds = new Set(
-      attempts?.filter((a) => a.is_correct || (a.score ?? 0) >= 70).map((a) => a.quiz_id)
-    );
+    if (quizzes && quizzes.length > 0) {
+      const quizIds = quizzes.map((q) => q.id);
+      const { data: attempts } = await supabaseAdmin
+        .from("quiz_attempts")
+        .select("quiz_id, is_correct, score")
+        .eq("user_id", userId)
+        .in("quiz_id", quizIds);
 
-    if (passedQuizIds.size < quizzes.length) {
-      await supabaseAdmin.from("certificate_audit_logs").insert({
-        user_id: userId,
-        actor_id: userId,
-        event_type: "COMPLETION_REJECTED_QUIZZES_FAILED",
-        details: {
-          courseSlug,
-          passedQuizzes: passedQuizIds.size,
-          requiredQuizzes: quizzes.length,
-        },
-      });
+      // Check if all quizzes have at least one passing attempt
+      const passedQuizIds = new Set(
+        attempts?.filter((a) => a.is_correct || (a.score ?? 0) >= 70).map((a) => a.quiz_id)
+      );
 
-      return {
-        error: "ASSESSMENT_NOT_PASSED",
-        certificateNumber: null,
-        detail: `Passed ${passedQuizIds.size} of ${quizzes.length} required assessments with minimum 70% score.`,
-      };
+      if (passedQuizIds.size < quizzes.length) {
+        await supabaseAdmin.from("certificate_audit_logs").insert({
+          user_id: userId,
+          actor_id: userId,
+          event_type: "COMPLETION_REJECTED_QUIZZES_FAILED",
+          details: {
+            courseSlug,
+            passedQuizzes: passedQuizIds.size,
+            requiredQuizzes: quizzes.length,
+          },
+        });
+
+        return {
+          error: "ASSESSMENT_NOT_PASSED",
+          certificateNumber: null,
+          detail: `Passed ${passedQuizIds.size} of ${quizzes.length} required assessments with minimum 70% score.`,
+        };
+      }
+
+      // Calculate final score
+      const totalScore = attempts?.reduce((acc, a) => acc + (a.score ?? 0), 0) || 0;
+      finalScore = Math.min(100, Math.round(totalScore / (attempts?.length || 1)));
     }
-
-    // Calculate final score
-    const totalScore = attempts?.reduce((acc, a) => acc + (a.score ?? 0), 0) || 0;
-    finalScore = Math.min(100, Math.round(totalScore / (attempts?.length || 1)));
   }
 
   // 6. Idempotency Check: Return existing certificate if already issued
@@ -570,29 +573,34 @@ export const getCourseCertificateStatus = createServerFn({ method: "POST" })
     const completedModules = completedCount ?? 0;
     const isModulesComplete = completedModules >= totalModules;
 
-    // Quizzes check
-    const { data: quizzes } = await supabaseAdmin
-      .from("quizzes")
-      .select("id, module_id")
-      .in("module_id", moduleIds);
-
-    const totalQuizzes = quizzes?.length || 0;
+    // Quizzes check (exempt for test courses)
+    const isTestCourse = Boolean(course.is_test || course.slug?.startsWith("zz-") || courseSlug.startsWith("zz-"));
+    let totalQuizzes = 0;
     let isQuizzesComplete = true;
     let passedQuizzesCount = 0;
 
-    if (totalQuizzes > 0) {
-      const quizIds = quizzes.map((q) => q.id);
-      const { data: attempts } = await supabaseAdmin
-        .from("quiz_attempts")
-        .select("quiz_id, is_correct, score")
-        .eq("user_id", userId)
-        .in("quiz_id", quizIds);
+    if (!isTestCourse) {
+      const { data: quizzes } = await supabaseAdmin
+        .from("quizzes")
+        .select("id, module_id")
+        .in("module_id", moduleIds);
 
-      const passedQuizIds = new Set(
-        attempts?.filter((a) => a.is_correct || (a.score ?? 0) >= 70).map((a) => a.quiz_id)
-      );
-      passedQuizzesCount = passedQuizIds.size;
-      isQuizzesComplete = passedQuizzesCount >= totalQuizzes;
+      totalQuizzes = quizzes?.length || 0;
+
+      if (totalQuizzes > 0) {
+        const quizIds = quizzes.map((q) => q.id);
+        const { data: attempts } = await supabaseAdmin
+          .from("quiz_attempts")
+          .select("quiz_id, is_correct, score")
+          .eq("user_id", userId)
+          .in("quiz_id", quizIds);
+
+        const passedQuizIds = new Set(
+          attempts?.filter((a) => a.is_correct || (a.score ?? 0) >= 70).map((a) => a.quiz_id)
+        );
+        passedQuizzesCount = passedQuizIds.size;
+        isQuizzesComplete = passedQuizzesCount >= totalQuizzes;
+      }
     }
 
     // Evaluate overall completion

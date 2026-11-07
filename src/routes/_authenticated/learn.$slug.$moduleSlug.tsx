@@ -370,80 +370,69 @@ function ModuleLearningPage() {
  },
  enabled: !!course,
  });
+  const isTestCourse = Boolean(course?.is_test || course?.slug?.startsWith("zz-") || slug.startsWith("zz-"));
 
- // 4. Fetch Quizzes for this module
- const { data: quizzes } = useQuery({
- queryKey: ["module-quizzes", currentModule?.id],
- queryFn: async () => {
- const { data } = await supabase
- .from("quizzes")
- .select("id,module_id,question,options,correct_option,explanation,sort_order")
- .eq("module_id", currentModule!.id)
- .order("sort_order");
+  // 4. Fetch Quizzes for this module (completely omitted for test courses)
+  const { data: quizzes } = useQuery({
+    queryKey: ["module-quizzes", currentModule?.id, isTestCourse],
+    queryFn: async () => {
+      if (isTestCourse) {
+        return [];
+      }
 
- if (data && data.length > 0) return data;
+      const { data } = await supabase
+        .from("quizzes")
+        .select("id,module_id,question,options,correct_option,explanation,sort_order")
+        .eq("module_id", currentModule!.id)
+        .order("sort_order");
 
- const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
- const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug || c.id === course?.id);
- const staticMod = staticCourse?.modules?.find((m) => m.slug === moduleSlug);
- if (staticMod?.quizzes?.length) {
- return staticMod.quizzes.map((q, idx) => ({
- id: q.id ?? `q-${moduleSlug}-${idx}`,
- module_id: currentModule!.id,
- question: q.question,
- options: q.options,
- correct_option: q.correct_option,
- explanation: q.explanation,
- sort_order: idx + 1,
- }));
- }
+      if (data && data.length > 0) return data;
 
- const foundInNet = NETWORKING_MODULES.find((m) => m.slug === moduleSlug);
- if (foundInNet?.quizzes) {
- return foundInNet.quizzes.map((q, idx) => ({
- id: `q-${moduleSlug}-${idx}`,
- module_id: currentModule!.id,
- question: q.question,
- options: q.options,
- correct_option: q.correct_option,
- explanation: q.explanation,
- sort_order: idx + 1,
- }));
- }
+      const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
+      const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug || c.id === course?.id);
+      const staticMod = staticCourse?.modules?.find((m) => m.slug === moduleSlug);
+      if (staticMod?.quizzes?.length) {
+        return staticMod.quizzes.map((q, idx) => ({
+          id: q.id ?? `q-${moduleSlug}-${idx}`,
+          module_id: currentModule!.id,
+          question: q.question,
+          options: q.options,
+          correct_option: q.correct_option,
+          explanation: q.explanation,
+          sort_order: idx + 1,
+        }));
+      }
 
- const foundInLin = LINUX_MODULES.find((m) => m.slug === moduleSlug);
- if (foundInLin?.quizzes) {
- return foundInLin.quizzes.map((q, idx) => ({
- id: `q-${moduleSlug}-lin-${idx}`,
- module_id: currentModule!.id,
- question: q.question,
- options: q.options,
- correct_option: q.correct_option,
- explanation: q.explanation,
- sort_order: idx + 1,
- }));
- }
+      const foundInNet = NETWORKING_MODULES.find((m) => m.slug === moduleSlug);
+      if (foundInNet?.quizzes) {
+        return foundInNet.quizzes.map((q, idx) => ({
+          id: `q-${moduleSlug}-${idx}`,
+          module_id: currentModule!.id,
+          question: q.question,
+          options: q.options,
+          correct_option: q.correct_option,
+          explanation: q.explanation,
+          sort_order: idx + 1,
+        }));
+      }
 
- return [
- {
- id: `q-${moduleSlug}-default`,
- module_id: currentModule!.id,
- question: `What is the primary security objective when configuring ${currentModule?.title || "this protocol"}?`,
- options: [
- "Ensure least privilege, accurate authentication, and audit logging",
- "Disable all encryption to increase processing speed",
- "Allow all incoming anonymous traffic by default",
- "Delete system logs every hour",
- ],
- correct_option: 0,
- explanation:
- "Applying the principle of least privilege and maintaining tamper-evident audit logs is the core security standard.",
- sort_order: 1,
- },
- ];
- },
- enabled: !!currentModule,
- });
+      const foundInLin = LINUX_MODULES.find((m) => m.slug === moduleSlug);
+      if (foundInLin?.quizzes) {
+        return foundInLin.quizzes.map((q, idx) => ({
+          id: `q-${moduleSlug}-lin-${idx}`,
+          module_id: currentModule!.id,
+          question: q.question,
+          options: q.options,
+          correct_option: q.correct_option,
+          explanation: q.explanation,
+          sort_order: idx + 1,
+        }));
+      }
+
+      return [];
+    },
+    enabled: Boolean(currentModule && !isTestCourse),
+  });
 
  // 5. Fetch User Progress
  const { data: userProgress } = useQuery({
@@ -580,7 +569,7 @@ function ModuleLearningPage() {
  });
 
  if (result.error) {
- throw new Error(result.error);
+ throw new Error(result.message || result.error);
  }
 
  if (result.awardedBadges && result.awardedBadges.length > 0) {

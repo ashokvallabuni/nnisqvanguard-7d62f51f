@@ -42,7 +42,7 @@ export const completeModule = createServerFn({ method: "POST" })
  try {
  const { data: dbCourse } = await supabase
  .from("courses")
- .select("id, title, slug")
+ .select("id, title, slug, is_test")
  .eq("slug", data.courseSlug)
  .maybeSingle();
 
@@ -131,9 +131,39 @@ export const completeModule = createServerFn({ method: "POST" })
  message: "Module not found. Please refresh and try again.",
  };
  }
+  // ── 2b. Check module quiz requirements (exempt for test courses) ─────────
+  const isTestCourse = Boolean(dbCourse?.is_test || data.courseSlug.startsWith("zz-"));
 
- // ── 3. Persist module completion ────────────────────────────────────────
- try {
+  if (!isTestCourse) {
+    const { data: dbQuizzes } = await supabase
+      .from("quizzes")
+      .select("id")
+      .eq("module_id", moduleId);
+
+    if (dbQuizzes && dbQuizzes.length > 0) {
+      const quizIds = dbQuizzes.map((q) => q.id);
+      const { data: attempts } = await supabase
+        .from("quiz_attempts")
+        .select("quiz_id, is_correct, score")
+        .eq("user_id", userId)
+        .in("quiz_id", quizIds);
+
+      const passedQuizIds = new Set(
+        attempts?.filter((a) => a.is_correct || (a.score ?? 0) >= 70).map((a) => a.quiz_id)
+      );
+
+      if (passedQuizIds.size < dbQuizzes.length) {
+        return {
+          error: "QUIZ_REQUIRED",
+          completed: false,
+          message: `You must pass all required module knowledge checks (scoring at least 70%) before completing this module (${passedQuizIds.size} of ${dbQuizzes.length} passed).`,
+        };
+      }
+    }
+  }
+
+  // ── 3. Persist module completion ────────────────────────────────────────
+  try {
  await supabase.from("module_progress").upsert(
  {
  user_id: userId,
@@ -144,6 +174,19 @@ export const completeModule = createServerFn({ method: "POST" })
  },
  { onConflict: "user_id,module_id" },
  );
+
+    await supabase.from("user_course_progress").upsert(
+      {
+        user_id: userId,
+        course_id: courseId,
+        module_id: moduleId,
+        progress_type: "module",
+        completed: true,
+        completed_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id,module_id,quiz_id,assignment_id,progress_type" },
+    );
  } catch (err: any) {
  const msg: string = err?.message ?? "";
  if (
