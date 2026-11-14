@@ -15,7 +15,6 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import type { Json } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/academy")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -105,6 +104,18 @@ type Progress = {
   completed: boolean;
   score: number | null;
 };
+type AiCourse = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  level: string;
+  duration: number;
+  learning_objectives: string[];
+  thumbnail_url: string | null;
+  module_count: number;
+  lesson_count: number;
+};
 
 function Academy() {
   const { user } = useAuth();
@@ -124,7 +135,6 @@ function Academy() {
         categoriesResult,
         coursesResult,
         modulesResult,
-        quizzesResult,
         assignmentsResult,
         progressResult,
         sourcesResult,
@@ -141,10 +151,6 @@ function Academy() {
           .select(
             "id,course_id,slug,title,notes_md,locked,tags,difficulty,duration_minutes,practice_labs,sort_order",
           )
-          .order("sort_order"),
-        supabase
-          .from("quizzes")
-          .select("id,module_id,question,options,correct_option,explanation")
           .order("sort_order"),
         supabase
           .from("assignments")
@@ -164,7 +170,6 @@ function Academy() {
         categoriesResult,
         coursesResult,
         modulesResult,
-        quizzesResult,
         assignmentsResult,
         progressResult,
         sourcesResult,
@@ -176,10 +181,7 @@ function Academy() {
         categories: (categoriesResult.data ?? []) as CourseCategory[],
         courses: (coursesResult.data ?? []) as Course[],
         modules: (modulesResult.data ?? []) as Module[],
-        quizzes: (quizzesResult.data ?? []).map((quiz) => ({
-          ...quiz,
-          options: jsonStrings(quiz.options),
-        })) as Quiz[],
+        quizzes: [] as Quiz[],
         assignments: (assignmentsResult.data ?? []) as Assignment[],
         progress: (progressResult.data ?? []) as Progress[],
         sources: (sourcesResult.data ?? []) as Source[],
@@ -188,12 +190,61 @@ function Academy() {
     },
   });
 
+  const {
+    data: aiCourses,
+    error: aiCoursesError,
+    refetch: refetchAiCourses,
+  } = useQuery({
+    queryKey: ["academy-ai-courses"],
+    queryFn: async () => {
+      const [{ data: coursesData, error: coursesError }, { data: modulesData, error: modulesError }, { data: lessonsData, error: lessonsError }] =
+        await Promise.all([
+          supabase
+            .from("academy_courses")
+            .select("id,slug,title,description,level,duration,learning_objectives,thumbnail_url")
+            .eq("is_published", true)
+            .eq("is_available", true)
+            .order("display_order"),
+          supabase.from("academy_modules").select("id,course_id"),
+          supabase.from("academy_lessons").select("id,module_id"),
+        ]);
+      const firstError = coursesError ?? modulesError ?? lessonsError;
+      if (firstError) throw new Error(firstError.message);
+
+      const moduleCourseIds = new Map(
+        (modulesData ?? []).map((module) => [module.id, module.course_id]),
+      );
+      const moduleCounts = new Map<string, number>();
+      const lessonCounts = new Map<string, number>();
+      for (const module of modulesData ?? []) {
+        moduleCounts.set(module.course_id, (moduleCounts.get(module.course_id) ?? 0) + 1);
+      }
+      for (const lesson of lessonsData ?? []) {
+        const courseId = moduleCourseIds.get(lesson.module_id);
+        if (courseId) lessonCounts.set(courseId, (lessonCounts.get(courseId) ?? 0) + 1);
+      }
+
+      return (coursesData ?? []).map((course) => ({
+        ...course,
+        learning_objectives: Array.isArray(course.learning_objectives)
+          ? course.learning_objectives.filter((item): item is string => typeof item === "string")
+          : [],
+        module_count: moduleCounts.get(course.id) ?? 0,
+        lesson_count: lessonCounts.get(course.id) ?? 0,
+      })) as AiCourse[];
+    },
+  });
+
   const phases = data?.phases ?? [];
   const activePhase =
     phases.find((phase) => phase.slug === search.phase) ??
     phases.find((phase) => phase.slug === "cybersecurity") ??
     phases[0];
-  const courses = (data?.courses ?? []).filter((course) => course.phase_id === activePhase?.id);
+  const isAiPhase = activePhase?.slug === "ai";
+  const legacyCourses = (data?.courses ?? []).filter(
+    (course) => course.phase_id === activePhase?.id,
+  );
+  const courses = isAiPhase ? [] : legacyCourses;
   const activeCourse = courses.find((course) => course.id === selectedCourseId) ?? courses[0];
   const modules = useMemo(
     () => (data?.modules ?? []).filter((module) => module.course_id === activeCourse?.id),
@@ -344,7 +395,8 @@ function Academy() {
                 <h2 className="mt-2 font-display text-xl font-semibold text-white">{phase.name}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-slate-400">{phase.description}</p>
                 <div className="mt-4 font-mono text-[10px] text-slate-300">
-                  {phaseCourses.length} COURSES · {completed} LESSONS COMPLETED
+                  {(isAi ? (aiCourses ?? []).length : phaseCourses.length)} COURSES ·{" "}
+                  {completed} LESSONS COMPLETED
                 </div>
               </button>
             );
@@ -363,6 +415,69 @@ function Academy() {
           </div>
         )}
 
+        {isAiPhase ? (
+          <section className="mb-8">
+            {aiCoursesError ? (
+              <div className="border border-red-400/40 bg-red-400/10 p-5 text-sm text-red-200">
+                <p>AI courses could not be loaded: {aiCoursesError.message}</p>
+                <button
+                  type="button"
+                  onClick={() => void refetchAiCourses()}
+                  className="mt-3 border border-red-300/60 px-3 py-2 font-mono text-xs text-red-100"
+                >
+                  RETRY
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-4 lg:grid-cols-3">
+                {(aiCourses ?? []).map((course) => (
+                  <article
+                    key={course.id}
+                    className="border border-violet-400/30 bg-[#0a0f1d] p-5 transition hover:border-violet-300"
+                  >
+                    <div className="mb-4 h-28 overflow-hidden border border-slate-700 bg-slate-900">
+                      {course.thumbnail_url ? (
+                        <img
+                          src={course.thumbnail_url}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center font-mono text-xs text-violet-300">
+                          AI &amp; EMERGING TECHNOLOGIES
+                        </div>
+                      )}
+                    </div>
+                    <div className="font-mono text-[10px] tracking-widest text-violet-300">
+                      {course.level} · {course.duration} MIN
+                    </div>
+                    <h2 className="mt-3 font-display text-xl font-semibold text-white">
+                      {course.title}
+                    </h2>
+                    <p className="mt-2 min-h-12 text-xs leading-relaxed text-slate-400">
+                      {course.description}
+                    </p>
+                    <div className="mt-3 font-mono text-[10px] text-slate-400">
+                      {course.module_count} MODULES · {course.lesson_count} LESSONS
+                    </div>
+                    <ul className="mt-3 space-y-1 text-xs text-slate-300">
+                      {course.learning_objectives.slice(0, 3).map((objective) => (
+                        <li key={objective}>· {objective}</li>
+                      ))}
+                    </ul>
+                    <Link
+                      to="/learn/$slug"
+                      params={{ slug: course.slug }}
+                      className="mt-5 inline-flex w-full justify-center bg-violet-400 px-3 py-3 font-mono text-xs font-semibold text-slate-950"
+                    >
+                      START LEARNING →
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+        ) : (
         <section className="mb-8 grid gap-4 lg:grid-cols-3">
           {courses.map((course) => {
             const courseModules = (data?.modules ?? []).filter(
@@ -401,6 +516,7 @@ function Academy() {
             );
           })}
         </section>
+        )}
 
         {activeCourse && (
           <section className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
@@ -630,12 +746,6 @@ function Academy() {
 function quizzesForModules(quizzes: Quiz[], modules: Module[]) {
   const moduleIds = new Set(modules.map((module) => module.id));
   return quizzes.filter((quiz) => moduleIds.has(quiz.module_id));
-}
-
-function jsonStrings(value: Json): string[] {
-  return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === "string")
-    : [];
 }
 
 function ProgressBar({ value, label }: { value: number; label: string }) {
