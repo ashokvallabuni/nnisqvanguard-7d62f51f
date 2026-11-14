@@ -24,4 +24,5 @@ export interface LabEnvironmentProvider {
   stopEnvironment(environmentId: string): Promise<void>;
   destroyEnvironment(environmentId: string): Promise<void>;
   getEnvironmentStatus(environmentId: string): Promise<EnvironmentStatus>;
+  isDockerAvailable?(): Promise<boolean>;
 }

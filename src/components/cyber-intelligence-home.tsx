@@ -1,241 +1,484 @@
+import React from "react";
 import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import {
-  ArrowRight,
-  BookOpen,
-  Building2,
-  ChartNoAxesCombined,
-  ChevronRight,
-  Crosshair,
-  FlaskConical,
-  GraduationCap,
-  Network,
-  Radar,
-  Shield,
-  ShieldCheck,
-  Sparkles,
   Terminal,
-  UserRound,
-  type LucideIcon,
+  GraduationCap,
+  Sparkles,
+  ShieldCheck,
+  Radar,
+  ArrowRight,
+  Activity,
+  Cpu,
+  Lock,
+  Layers,
+  ChevronRight,
+  School,
+  Building2,
+  CheckCircle2,
+  Clock,
 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { teamData } from "@/data/team";
+import { CyberCircuitCanvas } from "@/components/vfx/CyberCircuitCanvas";
+import { Interactive3DCard } from "@/components/vfx/Interactive3DCard";
+import { PremiumButton } from "@/components/common/PremiumButton";
+import { FounderFlipCard } from "@/components/home/FounderFlipCard";
 
-import wolfHero from "@/assets/cyber-wolf-hero.jpg";
-const navItems = [
-  { to: "/", label: "Home" },
-  { to: "/solutions", label: "Solutions" },
-  { to: "/campus", label: "Campus" },
-  { to: "/academy", label: "Academy" },
-  { to: "/intelligence", label: "Telemetry" },
-] as const;
+const nisqLogo = "/assets/nisq-logo.webp";
 
-const solutions = [
-  {
-    icon: ShieldCheck,
-    title: "Autonomous Defence",
-    body: "AI-assisted threat analysis, incident triage and practical response workflows for modern teams.",
-    to: "/fraud-check",
+const EASE = [0.22, 1, 0.36, 1] as const;
+const TRANSITION = { duration: 0.6, ease: EASE };
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
   },
-  {
-    icon: GraduationCap,
-    title: "Vanguard Academy",
-    body: "Structured learning paths, labs and assessments that turn cyber awareness into capability.",
-    to: "/learn",
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: TRANSITION,
   },
-  {
-    icon: Network,
-    title: "Vanguard Mesh",
-    body: "Operational guidance for safer systems, stronger people and resilient digital campuses.",
-    to: "/solutions/consulting",
-  },
-];
+};
 
 export function CyberIntelligenceHome() {
+  const { user } = useAuth();
+
   return (
-    <main className="intel-home min-h-screen overflow-x-hidden bg-[#030712] text-slate-200">
-      <section id="hero" className="intel-hero relative flex min-h-[780px] items-center overflow-hidden pt-20">
-        <div className="intel-grid absolute inset-0" aria-hidden="true" />
-        <div className="intel-scanlines absolute inset-0" aria-hidden="true" />
-        <div className="absolute left-1/2 top-1/4 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-[130px]" aria-hidden="true" />
+    <div className="relative bg-[#F8FAFC] dark:bg-[#050B14] text-[#050B14] dark:text-[#F8FAFC] selection:bg-[#00B8FF]/30 selection:text-white overflow-x-hidden min-h-screen transition-colors duration-200">
+      {/* =========================================================================
+          HERO COMMAND CENTER SECTION
+          ========================================================================= */}
+      <section className="relative min-h-[92vh] flex items-center justify-center pt-24 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-[#E2E8F0] dark:border-[#16283A]">
+        {/* Live Interactive Circuit Canvas VFX */}
+        <CyberCircuitCanvas className="absolute inset-0 w-full h-full z-0 opacity-75" density="medium" />
 
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12">
-          <div className="space-y-7 lg:col-span-7">
-            <div className="inline-flex items-center gap-2 border border-cyan-400/30 bg-cyan-400/10 px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] text-cyan-300">
-              <Radar className="h-3.5 w-3.5 animate-pulse" />
-              QUANTUM THREAT MATRIX ONLINE · 99.98% DEFENCE EFFICIENCY
+        {/* Ambient Radial Lighting */}
+        <div
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-b from-[#0A7CFF]/10 dark:from-[#0A7CFF]/15 via-[#00B8FF]/5 dark:via-[#00B8FF]/10 to-transparent blur-[120px] pointer-events-none -z-10"
+          aria-hidden="true"
+        />
+
+        {/* Subtle Cyber Grid Floor Effect */}
+        <div
+          className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,124,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,124,255,0.06)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(22,40,58,0.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(22,40,58,0.35)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none -z-10"
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center text-center">
+          {/* Live Telemetry Status Ticker */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/90 dark:bg-[#081522]/90 border border-[#CFE4FF] dark:border-[#16283A] shadow-xs dark:shadow-[0_0_15px_rgba(10,124,255,0.2)] mb-6"
+          >
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00B8FF] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00B8FF]" />
+            </span>
+            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#0A7CFF] dark:text-[#38BDF8]">
+              NISQ VANGUARD PLATFORM · ACTIVE DEFENCE ENGINE
+            </span>
+          </motion.div>
+
+          {/* Branded Emblem */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative mb-6"
+          >
+            <div className="relative p-2.5 rounded-2xl bg-gradient-to-b from-[#0A7CFF]/20 to-transparent border border-[#00B8FF]/40 shadow-[0_0_35px_rgba(10,124,255,0.3)]">
+              <img
+                src={nisqLogo}
+                alt="NISQ Vanguard official emblem"
+                width={96}
+                height={96}
+                fetchPriority="high"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover shadow-inner"
+              />
             </div>
-            <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight text-white sm:text-7xl">
-              NEXT-GEN{" "}
-              <span className="bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent">
-                CYBER WARFARE
-              </span>{" "}
-              &amp; INTELLIGENCE
-            </h1>
-            <p className="max-w-2xl font-mono text-sm leading-relaxed text-slate-300 sm:text-base">
-              Deploy practical, AI-assisted defence workflows, cyber education and proactive threat
-              awareness across your people, campus and organisation.
-            </p>
+          </motion.div>
 
-            <div className="intel-hud-border relative max-w-2xl border border-cyan-400/30 bg-slate-950/80 p-5">
-              <span className="absolute -top-3 left-4 bg-[#030712] px-2 font-mono text-[10px] tracking-widest text-cyan-300">
-                <Terminal className="mr-1 inline h-3 w-3" />
-                VANGUARD THREAT ADVISORY
-              </span>
-              <p className="font-mono text-xs italic leading-relaxed text-cyan-100 sm:text-sm">
-                “Security is not a product. It is a process built around people, signals and
-                decisive action.”
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="font-display font-extrabold text-[clamp(2.4rem,6.5vw,5rem)] leading-[1.08] tracking-tight text-[#050B14] dark:text-white mb-6"
+          >
+            Secure Today. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0A7CFF] via-[#00B8FF] to-[#38BDF8] drop-shadow-[0_0_35px_rgba(0,184,255,0.4)]">
+              Defend Tomorrow.
+            </span> <br />
+            Empower Forever.
+          </motion.h1>
+
+          {/* Mission Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-base sm:text-lg md:text-xl text-[#475569] dark:text-[#94A3B8] max-w-3xl leading-relaxed mb-10"
+          >
+            NISQ Vanguard is a cyber defence and intelligence technology company protecting digital infrastructure. We unite institutional cybersecurity education, containerized hands-on IVVAB LABS, and AI-assisted threat analysis into one sovereign training ecosystem.
+          </motion.p>
+
+          {/* Premium CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
+          >
+            <PremiumButton
+              variant="cyber-glow"
+              size="lg"
+              to="/cyber-range/labs"
+              icon={<Terminal className="w-4 h-4 text-[#00B8FF]" />}
+              iconRight={<ArrowRight className="w-4 h-4" />}
+              pulse
+            >
+              EXPLORE IVVAB LABS
+            </PremiumButton>
+
+            <PremiumButton
+              variant="secondary"
+              size="lg"
+              to="/academy"
+              icon={<GraduationCap className="w-4 h-4 text-[#38BDF8]" />}
+            >
+              EXPLORE ACADEMY
+            </PremiumButton>
+
+            <PremiumButton
+              variant="outline"
+              size="lg"
+              to="/innovation/cybershieldai"
+              icon={<Sparkles className="w-4 h-4 text-[#00B8FF]" />}
+            >
+              EXPLORE IVVAB AI
+            </PremiumButton>
+          </motion.div>
+
+          {/* Live System Metrics Footer */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.45 }}
+            className="mt-14 pt-8 border-t border-[#E2E8F0] dark:border-[#16283A] grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 text-center w-full max-w-4xl"
+          >
+            <div>
+              <div className="font-display font-extrabold text-2xl md:text-3xl text-[#050B14] dark:text-white">4+</div>
+              <div className="font-mono text-[11px] text-[#0A7CFF] dark:text-[#38BDF8] uppercase tracking-wider mt-1">Canonical Pathways</div>
+            </div>
+            <div>
+              <div className="font-display font-extrabold text-2xl md:text-3xl text-[#00B8FF]">100%</div>
+              <div className="font-mono text-[11px] text-[#0A7CFF] dark:text-[#38BDF8] uppercase tracking-wider mt-1">Isolated Virtual Labs</div>
+            </div>
+            <div>
+              <div className="font-display font-extrabold text-2xl md:text-3xl text-[#050B14] dark:text-white">Offline</div>
+              <div className="font-mono text-[11px] text-[#0A7CFF] dark:text-[#38BDF8] uppercase tracking-wider mt-1">First Lab Runtime</div>
+            </div>
+            <div>
+              <div className="font-display font-extrabold text-2xl md:text-3xl text-[#00B8FF]">Zero-Trust</div>
+              <div className="font-mono text-[11px] text-[#0A7CFF] dark:text-[#38BDF8] uppercase tracking-wider mt-1">Architecture Verified</div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          PILLARS MATRIX: 4 Core Platform Capabilities (Layered 3D Cards)
+          ========================================================================= */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF4FF] dark:bg-[#081522] border border-[#CFE4FF] dark:border-[#16283A] text-xs font-mono text-[#0A7CFF] dark:text-[#00B8FF] mb-3">
+            <Layers className="w-3.5 h-3.5" />
+            <span>OPERATIONAL CAPABILITIES</span>
+          </div>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-[#050B14] dark:text-white tracking-tight mb-4">
+            Unified Cyber Defence Architecture
+          </h2>
+          <p className="text-[#475569] dark:text-[#94A3B8] text-base leading-relaxed">
+            From foundational network packet inspection to enterprise threat simulation, NISQ Vanguard provides continuous skills progression.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Pillar 1: Academy */}
+          <Interactive3DCard className="p-6 flex flex-col justify-between h-full">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-[#0A7CFF]/15 border border-[#0A7CFF]/40 flex items-center justify-center text-[#00B8FF] mb-5 shadow-[0_0_15px_rgba(10,124,255,0.25)]">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-bold text-xl text-[#050B14] dark:text-white mb-2">NISQ Academy</h3>
+              <p className="text-sm text-[#475569] dark:text-[#94A3B8] leading-relaxed mb-6">
+                Structured cybersecurity curriculum covering Networking Fundamentals, Linux Command Quest, and Cybersecurity Foundations.
               </p>
             </div>
+            <Link
+              to="/academy"
+              className="inline-flex items-center gap-2 font-mono text-xs text-[#0A7CFF] dark:text-[#00B8FF] font-semibold hover:text-[#050B14] dark:hover:text-white transition-colors group"
+            >
+              <span>EXPLORE COURSES</span>
+              <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Interactive3DCard>
 
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/cyber-range"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 px-5 py-3 font-display text-xs font-bold tracking-wider text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
-              >
-                ENTER CYBER RANGE <Shield className="h-4 w-4" />
-              </Link>
-              <Link
-                to="/cyber-range/labs"
-                className="inline-flex items-center gap-2 border border-cyan-400/70 bg-slate-950/70 px-5 py-3 font-display text-xs font-bold tracking-wider text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-950"
-              >
-                EXPLORE CYBER LABS <FlaskConical className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="grid max-w-xl grid-cols-3 gap-4 border-t border-slate-700/70 pt-6">
-              <IntelStat value="1,492" label="Threat signals reviewed" />
-              <IntelStat value="0.04ms" label="Signal response target" />
-              <IntelStat value="100%" label="Learning access uptime" />
-            </div>
-          </div>
-
-          <div className="relative flex min-h-[390px] items-center justify-center lg:col-span-5">
-            <div className="absolute bottom-12 h-24 w-72 rounded-[100%] bg-cyan-400/20 blur-2xl" />
-            <div className="absolute bottom-14 h-14 w-56 rounded-[100%] border border-cyan-400/60 animate-ping" />
-            <div className="relative w-full max-w-[480px] animate-[float_5s_ease-in-out_infinite]">
-              <div className="absolute inset-8 rounded-full bg-cyan-400/20 blur-3xl" />
-              <img
-                src={wolfHero}
-                alt="Cyber wolf representing the NISQ Vanguard defence platform"
-                className="relative z-10 w-full object-contain drop-shadow-[0_0_30px_rgba(0,210,255,0.55)]"
-              />
-              <div className="absolute bottom-1 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap border border-cyan-400 bg-slate-950/90 px-4 py-1.5 font-mono text-[10px] tracking-wider text-cyan-300 shadow-[0_0_24px_rgba(0,210,255,0.3)]">
-                <Crosshair className="mr-1 inline h-3 w-3" />
-                UNIT: FENRIR-AI // ACTIVE
+          {/* Pillar 2: IVVAB LABS */}
+          <Interactive3DCard className="p-6 flex flex-col justify-between h-full">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-[#00B8FF]/15 border border-[#00B8FF]/40 flex items-center justify-center text-[#00B8FF] mb-5 shadow-[0_0_15px_rgba(0,184,255,0.25)]">
+                <Terminal className="w-6 h-6" />
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="solutions" className="border-t border-slate-800 bg-slate-950/90 py-24">
-        <SectionHeading
-          eyebrow="VANGUARD DEFENCE SUITE"
-          title="ADVANCED CYBER SOLUTIONS"
-          body="Connect the platform's practical tools to your next security, learning or response objective."
-        />
-        <div className="mx-auto grid max-w-7xl gap-6 px-5 sm:px-8 md:grid-cols-3">
-          {solutions.map((solution) => {
-            const Icon = solution.icon;
-            return (
-              <Link
-                key={solution.title}
-                to={solution.to}
-                className="intel-card intel-hud-border group border border-slate-700 bg-[#0a0f1d] p-7 transition hover:border-cyan-400/70 hover:shadow-[0_0_24px_rgba(0,210,255,0.16)]"
-              >
-                <div className="mb-6 flex h-12 w-12 items-center justify-center border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-slate-950">
-                  <Icon />
-                </div>
-                <h3 className="font-display text-xl font-semibold text-white">{solution.title}</h3>
-                <p className="mt-3 min-h-20 font-mono text-xs leading-relaxed text-slate-400">{solution.body}</p>
-                <span className="mt-6 inline-flex items-center gap-1 font-display text-xs font-bold tracking-wider text-cyan-300">
-                  OPEN MODULE <ChevronRight className="h-4 w-4" />
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section id="campus" className="border-t border-slate-800 bg-[#030712] py-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-2">
-          <div>
-            <span className="intel-eyebrow">GLOBAL OPERATIONS CAMPUS</span>
-            <h2 className="mt-5 font-display text-4xl font-bold text-white sm:text-5xl">
-              PRACTICAL <span className="text-cyan-300">CYBER READINESS</span>
-            </h2>
-            <p className="mt-5 max-w-xl font-mono text-sm leading-relaxed text-slate-300">
-              Give colleges, teams and digital citizens a clear path from awareness to action with
-              guided programs, labs and incident support.
-            </p>
-            <div className="mt-8 grid max-w-md grid-cols-2 gap-4">
-              <IntelMetric value="24/7" label="Learning access" />
-              <IntelMetric value="3" label="Response pathways" />
+              <h3 className="font-display font-bold text-xl text-[#050B14] dark:text-white mb-2">IVVAB LABS</h3>
+              <p className="text-sm text-[#475569] dark:text-[#94A3B8] leading-relaxed mb-6">
+                Interactive in-browser cyber range terminal. Practice real Linux investigation, NIDS traffic analysis, and exploit forensics safely.
+              </p>
             </div>
             <Link
-              to="/programs"
-              className="mt-8 inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 px-5 py-3 font-display text-xs font-bold tracking-wider text-slate-950"
+              to="/cyber-range/labs"
+              className="inline-flex items-center gap-2 font-mono text-xs text-[#0A7CFF] dark:text-[#00B8FF] font-semibold hover:text-[#050B14] dark:hover:text-white transition-colors group"
             >
-              REQUEST A CAMPUS PROGRAM <ArrowRight className="h-4 w-4" />
+              <span>LAUNCH LAB RUNNER</span>
+              <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
             </Link>
-          </div>
-          <div className="intel-hud-border border border-cyan-400/40 bg-[#0a0f1d] p-6 shadow-[0_0_25px_rgba(0,210,255,0.12)]">
-            <div className="mb-5 flex items-center justify-between border-b border-slate-700 pb-4 font-mono text-xs text-cyan-300">
-              <span><Terminal className="mr-2 inline h-4 w-4" />VANGUARD_DIAGNOSTIC_FEED.LOG</span>
-              <span className="flex gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-red-400" /><i className="h-2.5 w-2.5 rounded-full bg-amber-400" /><i className="h-2.5 w-2.5 rounded-full bg-emerald-400" /></span>
+          </Interactive3DCard>
+
+          {/* Pillar 3: IVVAB AI Threat Defense */}
+          <Interactive3DCard className="p-6 flex flex-col justify-between h-full">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-[#0A7CFF]/15 border border-[#00B8FF]/40 flex items-center justify-center text-[#38BDF8] mb-5 shadow-[0_0_15px_rgba(10,124,255,0.25)]">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-bold text-xl text-[#050B14] dark:text-white mb-2">IVVAB AI Defense</h3>
+              <p className="text-sm text-[#475569] dark:text-[#94A3B8] leading-relaxed mb-6">
+                AI-driven threat correlation, automated incident triage, malware screenshot analysis, and intelligent adversary modeling.
+              </p>
             </div>
-            <div className="space-y-3 font-mono text-xs leading-relaxed text-slate-300">
-              <p className="text-cyan-300">&gt; initializing awareness pathway...</p>
-              <p>&gt; mapping learner objectives: <span className="text-emerald-400">READY</span></p>
-              <p className="text-cyan-300">&gt; scanning response playbooks...</p>
-              <p>&gt; guided labs connected to academy network.</p>
-              <p className="text-amber-300">&gt; NOTICE: practice before the incident.</p>
-              <p className="text-emerald-400">&gt; status: VANGUARD PERIMETER READY.</p>
+            <Link
+              to="/innovation/cybershieldai"
+              className="inline-flex items-center gap-2 font-mono text-xs text-[#0A7CFF] dark:text-[#00B8FF] font-semibold hover:text-[#050B14] dark:hover:text-white transition-colors group"
+            >
+              <span>AI THREAT DEFENSE</span>
+              <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Interactive3DCard>
+
+          {/* Pillar 4: Campus & Enterprise Consultations */}
+          <Interactive3DCard className="p-6 flex flex-col justify-between h-full">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-[#00B8FF]/15 border border-[#00B8FF]/40 flex items-center justify-center text-[#00B8FF] mb-5 shadow-[0_0_15px_rgba(0,184,255,0.25)]">
+                <Building2 className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-bold text-xl text-[#050B14] dark:text-white mb-2">Advisory & Campus</h3>
+              <p className="text-sm text-[#475569] dark:text-[#94A3B8] leading-relaxed mb-6">
+                Tactical cybersecurity consultations, enterprise red/blue drills, and college awareness programs across India.
+              </p>
             </div>
-          </div>
+            <Link
+              to="/appointments"
+              className="inline-flex items-center gap-2 font-mono text-xs text-[#0A7CFF] dark:text-[#00B8FF] font-semibold hover:text-[#050B14] dark:hover:text-white transition-colors group"
+            >
+              <span>BOOK BRIEFING</span>
+              <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Interactive3DCard>
         </div>
       </section>
 
-      <section id="academy" className="border-t border-slate-800 bg-slate-950/80 py-24">
-        <SectionHeading
-          eyebrow="VANGUARD ELITE ACADEMY"
-          title="MASTER THE CYBER FRONTIER"
-          body="Follow a real learning path, then continue into authenticated labs and progress tracking."
-        />
-        <div className="mx-auto grid max-w-7xl gap-6 px-5 sm:px-8 md:grid-cols-3">
-          <AcademyCard level="PATHWAY 01" title="Cyber foundations" to="/learn" icon={BookOpen} />
-          <AcademyCard level="PATHWAY 02" title="Guided cyber labs" to="/cyber-range/labs" icon={FlaskConical} />
-          <AcademyCard level="PATHWAY 03" title="Learning progress" to="/cyber-range/my-progress" icon={ChartNoAxesCombined} />
-        </div>
-      </section>
-
-      <section id="telemetry" className="border-t border-slate-800 bg-[#030712] py-16">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-5 sm:px-8">
+      {/* =========================================================================
+          FEATURED LAB SHOWCASE SECTION
+          ========================================================================= */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10 border-t border-[#E2E8F0] dark:border-[#16283A]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <span className="intel-eyebrow">PLATFORM TELEMETRY</span>
-            <h2 className="mt-3 font-display text-2xl font-semibold text-white">READY FOR YOUR NEXT SIGNAL</h2>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF4FF] dark:bg-[#081522] border border-[#CFE4FF] dark:border-[#16283A] text-xs font-mono text-[#0A7CFF] dark:text-[#00B8FF] mb-2">
+              <Terminal className="w-3.5 h-3.5" />
+              <span>LIVE SCENARIOS</span>
+            </div>
+            <h2 className="font-display font-extrabold text-3xl text-[#050B14] dark:text-white tracking-tight">
+              Featured IVVAB Cyber Labs
+            </h2>
+            <p className="text-[#475569] dark:text-[#94A3B8] text-sm mt-1">
+              Hands-on containerized environments. Execute real commands in an isolated virtual filesystem.
+            </p>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/intelligence" className="intel-outline-link"><ChartNoAxesCombined className="h-4 w-4" /> VIEW INTELLIGENCE</Link>
-            <Link to="/complaint" className="intel-outline-link"><Shield className="h-4 w-4" /> REPORT AN INCIDENT</Link>
-            <Link to="/login" search={{ next: "/dashboard" }} className="intel-outline-link"><UserRound className="h-4 w-4" /> SIGN IN</Link>
+          <PremiumButton variant="outline" size="sm" to="/cyber-range/labs" icon={<Terminal className="w-3.5 h-3.5" />}>
+            VIEW ALL LABS →
+          </PremiumButton>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            {
+              id: "lab-ssh-bruteforce",
+              title: "SSH Brute-Force Triage",
+              course: "Linux Command Quest",
+              difficulty: "BEGINNER",
+              duration: "25 MIN",
+              category: "AUTHENTICATION",
+            },
+            {
+              id: "lab-suricata-nids",
+              title: "Suricata NIDS Detection",
+              course: "Basics of Networking",
+              difficulty: "INTERMEDIATE",
+              duration: "40 MIN",
+              category: "NETWORK DEFENCE",
+            },
+            {
+              id: "lab-sqli-investigation",
+              title: "SQL Injection Analysis",
+              course: "Cybersecurity Foundations",
+              difficulty: "INTERMEDIATE",
+              duration: "35 MIN",
+              category: "APP SECURITY",
+            },
+            {
+              id: "lab-memory-forensics",
+              title: "Memory Volatility Forensics",
+              course: "Cybersecurity Masterclass",
+              difficulty: "ADVANCED",
+              duration: "50 MIN",
+              category: "INCIDENT RESPONSE",
+            },
+          ].map((lab) => (
+            <Interactive3DCard key={lab.id} className="p-5 flex flex-col justify-between h-full">
+              <div>
+                <div className="flex items-center justify-between text-xs font-mono mb-3">
+                  <span className="px-2 py-0.5 rounded bg-[#EAF4FF] dark:bg-[#0A7CFF]/15 text-[#0A7CFF] dark:text-[#38BDF8] border border-[#CFE4FF] dark:border-[#0A7CFF]/30 font-semibold">
+                    {lab.difficulty}
+                  </span>
+                  <span className="text-[#94A3B8] flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-[#00B8FF]" />
+                    {lab.duration}
+                  </span>
+                </div>
+                <h4 className="font-bold text-[#050B14] dark:text-white text-lg mb-1">{lab.title}</h4>
+                <p className="text-xs font-mono text-[#0A7CFF] dark:text-[#00B8FF] mb-4">{lab.course}</p>
+                <div className="text-xs text-[#94A3B8] mb-6">
+                  Category: <span className="text-[#050B14] dark:text-white font-mono">{lab.category}</span>
+                </div>
+              </div>
+
+              <Link
+                to={`/cyber-range/lab/${lab.id}` as any}
+                className="w-full py-2.5 px-3 rounded-lg bg-[#EAF4FF] dark:bg-[#050B14] hover:bg-[#0A7CFF] text-[#0A7CFF] dark:text-white hover:text-white border border-[#CFE4FF] dark:border-[#16283A] hover:border-[#0A7CFF] font-mono text-xs font-semibold text-center transition-all flex items-center justify-center gap-2 group"
+              >
+                <span>ENTER LAB</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Interactive3DCard>
+          ))}
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SIGNATURE FOUNDER 3D FLIP CARD SECTION (Standout Homepage Feature)
+          ========================================================================= */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto relative z-10 border-t border-[#E2E8F0] dark:border-[#16283A]">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF4FF] dark:bg-[#081522] border border-[#CFE4FF] dark:border-[#16283A] text-xs font-mono text-[#0A7CFF] dark:text-[#00B8FF] mb-3">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>EXECUTIVE ARCHITECTURE</span>
+          </div>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-[#050B14] dark:text-white tracking-tight mb-3">
+            Founder & Chief Architect
+          </h2>
+          <p className="text-[#94A3B8] text-sm sm:text-base leading-relaxed">
+            The architectural vision driving sovereign cyber defence, youth empowerment, and practical security education.
+          </p>
+        </div>
+
+        {/* Signature Interactive 3D Flip Card */}
+        <FounderFlipCard />
+      </section>
+
+      {/* =========================================================================
+          COMMAND TEAM SECTION
+          ========================================================================= */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10 border-t border-[#E2E8F0] dark:border-[#16283A]">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <h2 className="font-display font-extrabold text-3xl text-[#050B14] dark:text-white tracking-tight mb-2">
+            Command Leadership
+          </h2>
+          <p className="text-[#94A3B8] text-sm">
+            Guiding NISQ Vanguard's mission to protect critical systems and train the next generation of defenders.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {teamData.map((member, i) => (
+            <Interactive3DCard key={i} className="p-7 flex flex-col items-center text-center">
+              <div className="w-20 h-20 rounded-full border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 flex items-center justify-center mb-5 overflow-hidden bg-[#EAF4FF] dark:bg-[#050B14] shadow-[0_0_15px_rgba(10,124,255,0.2)]">
+                {member.imageUrl ? (
+                  <img
+                    src={member.imageUrl}
+                    alt={member.name}
+                    width={80}
+                    height={80}
+                    loading="lazy"
+                    className="w-full h-full object-cover object-top"
+                  />
+                ) : (
+                  <span className="font-mono text-xl text-[#00B8FF] font-bold">
+                    {member.name.split(" ").map((n) => n[0]).join("")}
+                  </span>
+                )}
+              </div>
+              <h3 className="text-lg font-bold text-[#050B14] dark:text-white mb-1">{member.name}</h3>
+              <p className="font-mono text-xs uppercase tracking-wider text-[#00B8FF] mb-3">{member.role}</p>
+              <p className="text-[#94A3B8] text-xs leading-relaxed line-clamp-3">{member.bio}</p>
+            </Interactive3DCard>
+          ))}
+        </div>
+      </section>
+
+      {/* =========================================================================
+          CALL TO ACTION: Enterprise Briefing & Consultation
+          ========================================================================= */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+        <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#EAF4FF] via-white to-[#EAF4FF] dark:from-[#081522] dark:via-[#050B14] dark:to-[#081522] border border-[#0A7CFF]/30 dark:border-[#00B8FF]/40 shadow-card dark:shadow-[0_0_40px_rgba(0,184,255,0.15)] text-center relative overflow-hidden">
+          <div
+            className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-radial from-[#0A7CFF]/20 to-transparent blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
+
+          <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#00B8FF] block mb-3">
+            TACTICAL CYBER DEFENCE BRIEFINGS
+          </span>
+          <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-[#050B14] dark:text-white tracking-tight mb-4">
+            Ready to Strengthen Your Security Posture?
+          </h2>
+          <p className="text-sm sm:text-base text-[#475569] dark:text-[#94A3B8] max-w-2xl mx-auto leading-relaxed mb-8">
+            Schedule a strategic operations briefing with our senior security architects to evaluate your organization's cyber defense or deploy campus training.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <PremiumButton
+              variant="cyber-glow"
+              size="lg"
+              to="/appointments"
+              icon={<ShieldCheck className="w-4 h-4 text-[#00B8FF]" />}
+              iconRight={<ArrowRight className="w-4 h-4" />}
+            >
+              SCHEDULE BRIEFING
+            </PremiumButton>
+            <PremiumButton variant="outline" size="lg" to="/services">
+              EXPLORE SERVICES
+            </PremiumButton>
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
-}
-
-function IntelStat({ value, label }: { value: string; label: string }) {
-  return <div><div className="font-display text-xl font-bold text-white sm:text-2xl">{value}</div><div className="mt-1 font-mono text-[9px] uppercase tracking-widest text-cyan-300">{label}</div></div>;
-}
-
-function IntelMetric({ value, label }: { value: string; label: string }) {
-  return <div className="border border-slate-700 bg-[#0a0f1d] p-4"><div className="font-display text-2xl font-bold text-cyan-300">{value}</div><div className="mt-1 font-mono text-[10px] text-slate-400">{label}</div></div>;
-}
-
-function SectionHeading({ eyebrow, title, body }: { eyebrow: string; title: string; body: string }) {
-  return <div className="mx-auto mb-14 max-w-3xl px-5 text-center sm:px-8"><span className="intel-eyebrow">{eyebrow}</span><h2 className="mt-5 font-display text-3xl font-bold tracking-wide text-white sm:text-5xl">{title}</h2><p className="mt-4 font-mono text-sm leading-relaxed text-slate-400">{body}</p></div>;
-}
-
-function AcademyCard({ level, title, to, icon: Icon }: { level: string; title: string; to: string; icon: LucideIcon }) {
-  return <Link to={to} className="intel-card group border border-slate-700 bg-[#0a0f1d] p-6 transition hover:border-cyan-400/70"><Icon className="mb-5 h-8 w-8 text-cyan-300" /><div className="font-mono text-[10px] tracking-widest text-cyan-300">{level}</div><h3 className="mt-2 font-display text-lg font-semibold text-white">{title}</h3><div className="mt-8 flex items-center justify-between border-t border-slate-700 pt-4 font-mono text-xs text-slate-400"><span>Continue pathway</span><ArrowRight className="h-4 w-4 text-cyan-300 transition group-hover:translate-x-1" /></div></Link>;
 }

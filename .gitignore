@@ -35,6 +35,13 @@ dist-ssr
 *.sw?
 .vercel
 .env*
+lab-runner/.env
 
-# Auxly - AI Task Management (internal data)
-.auxly/
+# Keys & Secrets
+*.key
+*.pub
+*.pem
+lab_runner_deploy_key*
+
+# Scratch & Temporary Testing Files
+scratch/

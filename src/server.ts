@@ -18,6 +18,21 @@ async function getServerEntry(): Promise<ServerEntry> {
   return serverEntryPromise;
 }
 
+function applySecurityHeaders(res: Response): Response {
+  const headers = new Headers(res.headers);
+  if (!headers.has("X-Frame-Options")) headers.set("X-Frame-Options", "DENY");
+  if (!headers.has("X-Content-Type-Options")) headers.set("X-Content-Type-Options", "nosniff");
+  if (!headers.has("Referrer-Policy")) headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  if (!headers.has("Permissions-Policy")) headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (!headers.has("X-XSS-Protection")) headers.set("X-XSS-Protection", "1; mode=block");
+
+  return new Response(res.body, {
+    status: res.status,
+    statusText: res.statusText,
+    headers,
+  });
+}
+
 // h3 swallows in-handler throws into a normal 500 Response with body
 // {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
 async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
@@ -49,13 +64,16 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return applySecurityHeaders(normalized);
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      return applySecurityHeaders(
+        new Response(renderErrorPage(), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };

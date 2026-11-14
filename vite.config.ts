@@ -1,15 +1,56 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
-//     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
-//     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
     server: { entry: "server" },
+  },
+  nitro: {
+    preset: "vercel",
+    routeRules: {
+      "/**": {
+        headers: {
+          "X-Frame-Options": "DENY",
+          "X-Content-Type-Options": "nosniff",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+        },
+      },
+    },
+  } as any,
+  vite: {
+    resolve: {
+      dedupe: ['react', 'react-dom', 'three', '@react-three/fiber'],
+    },
+    plugins: [
+      VitePWA({
+        strategies: "injectManifest",
+        srcDir: "src",
+        filename: "sw.ts",
+        registerType: "autoUpdate",
+        devOptions: {
+          enabled: true,
+        },
+        injectManifest: {
+          globPatterns: ["**/*.{js,css,html,ico,png,svg,json,wasm}"],
+          maximumFileSizeToCacheInBytes: 10485760, // 10MB
+        },
+        manifest: {
+          name: "IVVAB LABS",
+          short_name: "IVVAB",
+          description: "Offline-First Cybersecurity Practical Environment",
+          theme_color: "#e8eef6",
+          background_color: "#e8eef6",
+          display: "standalone",
+          icons: [
+            {
+              src: "/favicon.ico",
+              sizes: "64x64 32x32 24x24 16x16",
+              type: "image/x-icon",
+            },
+          ],
+        },
+      }),
+    ],
   },
 });
