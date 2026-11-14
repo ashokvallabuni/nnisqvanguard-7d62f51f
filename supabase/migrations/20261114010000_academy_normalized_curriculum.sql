@@ -268,12 +268,10 @@ DECLARE
   ai_division uuid;
   cyber_division uuid;
   category_id uuid;
-  course_id uuid;
-  module_id uuid;
-  lesson_id uuid;
-  quiz_id uuid;
+  v_course_id uuid;
+  v_quiz_id uuid;
   dataset_id uuid;
-  source_id uuid;
+  course_order integer := 0;
   course_record record;
   module_record record;
   lesson_record record;
@@ -355,23 +353,24 @@ BEGIN
   ON CONFLICT (name) DO UPDATE SET official_url = EXCLUDED.official_url;
 
   FOR course_record IN SELECT * FROM jsonb_to_recordset(course_catalog) AS x(slug text,title text,level text,description text,objectives text[]) LOOP
+    course_order := course_order + 1;
     INSERT INTO public.academy_courses(category_id,title,slug,description,level,duration,learning_objectives,prerequisites,is_published,is_available,display_order)
     VALUES (category_id,course_record.title,course_record.slug,course_record.description,course_record.level,
       CASE WHEN course_record.slug = 'retrieval-augmented-generation' THEN 480 ELSE 180 END,
       course_record.objectives, ARRAY['A working authenticated account'], true, true,
-      row_number() OVER (ORDER BY course_record.slug))
+      course_order)
     ON CONFLICT (slug) DO UPDATE SET category_id = EXCLUDED.category_id, title = EXCLUDED.title,
       description = EXCLUDED.description, level = EXCLUDED.level, learning_objectives = EXCLUDED.learning_objectives,
       is_published = true, is_available = true, updated_at = now()
-    RETURNING id INTO course_id;
-    IF course_id IS NULL THEN SELECT id INTO course_id FROM public.academy_courses WHERE slug = course_record.slug; END IF;
+    RETURNING id INTO v_course_id;
+    IF v_course_id IS NULL THEN SELECT id INTO v_course_id FROM public.academy_courses WHERE slug = course_record.slug; END IF;
 
     IF course_record.slug = 'retrieval-augmented-generation' THEN
       FOR module_record IN SELECT * FROM jsonb_to_recordset(rag_modules) AS x(slug text,title text) LOOP
         INSERT INTO public.academy_modules(course_id,slug,title,description,display_order)
-        VALUES (course_id,module_record.slug,module_record.title,
+        VALUES (v_course_id,module_record.slug,module_record.title,
           'Learn the concepts, implementation decisions, failure modes, and verification practices for ' || lower(module_record.title) || '.', 
-          (SELECT count(*) + 1 FROM public.academy_modules WHERE academy_modules.course_id = course_id))
+          (SELECT count(*) + 1 FROM public.academy_modules WHERE academy_modules.course_id = v_course_id))
         ON CONFLICT (course_id,slug) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
       END LOOP;
     ELSE
@@ -379,14 +378,14 @@ BEGIN
         '[{"slug":"concepts-and-architecture","title":"Concepts and Architecture"},{"slug":"guided-implementation","title":"Guided Implementation"},{"slug":"evaluation-and-project","title":"Evaluation and Practical Project"}]'
       )::jsonb) AS x(slug text,title text) LOOP
         INSERT INTO public.academy_modules(course_id,slug,title,description,display_order)
-        VALUES (course_id,module_record.slug,module_record.title,
+        VALUES (v_course_id,module_record.slug,module_record.title,
           'Build a reliable understanding of ' || course_record.title || ', then apply it in a bounded practical exercise.',
-          (SELECT count(*) + 1 FROM public.academy_modules WHERE academy_modules.course_id = course_id))
+          (SELECT count(*) + 1 FROM public.academy_modules WHERE academy_modules.course_id = v_course_id))
         ON CONFLICT (course_id,slug) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
       END LOOP;
     END IF;
 
-    FOR module_record IN SELECT * FROM public.academy_modules WHERE academy_modules.course_id = course_id ORDER BY display_order LOOP
+    FOR module_record IN SELECT * FROM public.academy_modules WHERE academy_modules.course_id = v_course_id ORDER BY display_order LOOP
       INSERT INTO public.academy_lessons(module_id,slug,title,content,lesson_type,estimated_minutes,display_order,is_published)
       VALUES
         (module_record.id,'explain-' || module_record.slug,'Explain ' || module_record.title,
@@ -408,7 +407,7 @@ BEGIN
         estimated_minutes = EXCLUDED.estimated_minutes, is_published = true;
     END LOOP;
 
-    FOR lesson_record IN SELECT l.* FROM public.academy_lessons l JOIN public.academy_modules m ON m.id = l.module_id WHERE m.course_id = course_id LOOP
+    FOR lesson_record IN SELECT l.* FROM public.academy_lessons l JOIN public.academy_modules m ON m.id = l.module_id WHERE m.course_id = v_course_id LOOP
       SELECT id INTO dataset_id FROM public.academy_datasets ORDER BY name LIMIT 1;
       INSERT INTO public.academy_exercises(lesson_id,title,instructions,exercise_type,dataset_id,expected_output,evaluation_criteria)
       VALUES (lesson_record.id,'Evidence-based ' || lesson_record.title,
@@ -429,20 +428,20 @@ BEGIN
       ON CONFLICT (lesson_id,source_id) DO UPDATE SET topic = EXCLUDED.topic, accessed_on = EXCLUDED.accessed_on;
     END LOOP;
 
-    FOR module_record IN SELECT * FROM public.academy_modules WHERE academy_modules.course_id = course_id LOOP
+    FOR module_record IN SELECT * FROM public.academy_modules WHERE academy_modules.course_id = v_course_id LOOP
       INSERT INTO public.academy_quizzes(course_id,module_id,title,passing_score,is_published)
-      VALUES (course_id,module_record.id,course_record.title || ' — ' || module_record.title || ' Check',70,true)
+      VALUES (v_course_id,module_record.id,course_record.title || ' — ' || module_record.title || ' Check',70,true)
       ON CONFLICT (module_id,title) DO UPDATE SET passing_score = 70, is_published = true
-      RETURNING id INTO quiz_id;
-      IF quiz_id IS NULL THEN SELECT id INTO quiz_id FROM public.academy_quizzes WHERE module_id = module_record.id AND title = course_record.title || ' — ' || module_record.title || ' Check'; END IF;
+      RETURNING id INTO v_quiz_id;
+      IF v_quiz_id IS NULL THEN SELECT id INTO v_quiz_id FROM public.academy_quizzes WHERE module_id = module_record.id AND title = course_record.title || ' — ' || module_record.title || ' Check'; END IF;
       INSERT INTO public.academy_quiz_questions(quiz_id,question,options,correct_answer,explanation,display_order)
-      SELECT quiz_id,
+      SELECT v_quiz_id,
         'Which practice best improves the reliability of work in ' || course_record.title || '?',
         '["Use a reproducible baseline and inspect errors","Skip evaluation when the output looks plausible","Copy an example without checking versions"]'::jsonb,
         0,
         'A baseline, explicit inputs, and error inspection make technical claims testable.',
         1
-      WHERE NOT EXISTS (SELECT 1 FROM public.academy_quiz_questions WHERE academy_quiz_questions.quiz_id = quiz_id);
+      WHERE NOT EXISTS (SELECT 1 FROM public.academy_quiz_questions WHERE academy_quiz_questions.quiz_id = v_quiz_id);
     END LOOP;
   END LOOP;
 END $$;
