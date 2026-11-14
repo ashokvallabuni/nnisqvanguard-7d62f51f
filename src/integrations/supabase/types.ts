@@ -1,5 +1,20 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
+type AcademyDivisionRow = { id: string; name: string; slug: string; description: string; display_order: number; is_active: boolean; created_at: string; updated_at: string };
+type AcademyCategoryRow = { id: string; division_id: string; name: string; slug: string; description: string; display_order: number; created_at: string };
+type AcademyCourseRow = { id: string; category_id: string; title: string; slug: string; description: string; level: string; duration: number; thumbnail_url: string | null; learning_objectives: string[]; prerequisites: string[]; is_published: boolean; is_available: boolean; display_order: number; created_at: string; updated_at: string };
+type AcademyModuleRow = { id: string; course_id: string; slug: string; title: string; description: string; display_order: number; created_at: string };
+type AcademyLessonRow = { id: string; module_id: string; slug: string; title: string; content: string; lesson_type: string; estimated_minutes: number; video_url: string | null; document_url: string | null; display_order: number; is_published: boolean; created_at: string; updated_at: string };
+type AcademyDatasetRow = { id: string; name: string; description: string; original_source: string; source_url: string; license: string; format: string; schema_description: string; safety_classification: string; last_validated_on: string; created_at: string };
+type AcademyExerciseRow = { id: string; lesson_id: string; title: string; instructions: string; exercise_type: string; dataset_id: string | null; expected_output: string; evaluation_criteria: string; display_order: number };
+type AcademyQuizRow = { id: string; course_id: string; module_id: string; title: string; passing_score: number; is_published: boolean };
+type AcademyQuizQuestionRow = { id: string; quiz_id: string; question: string; options: Json; correct_answer: number; explanation: string; display_order: number };
+type AcademySourceRow = { id: string; name: string; official_url: string; source_type: string; created_at: string };
+type AcademyLessonSourceRow = { lesson_id: string; source_id: string; topic: string; accessed_on: string };
+type AcademyEnrollmentRow = { id: string; user_id: string; course_id: string; enrolled_at: string; status: string };
+type AcademyProgressRow = { id: string; user_id: string; course_id: string; lesson_id: string; completion_status: string; completed_at: string | null; updated_at: string };
+type AcademyQuizAttemptRow = { id: string; user_id: string; quiz_id: string; score: number; passed: boolean; answers: Json; attempted_at: string };
+
 export type Database = {
  // Allows to automatically instantiate createClient with right options
  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
@@ -33,6 +48,20 @@ export type Database = {
  };
  public: {
  Tables: {
+ academy_divisions: { Row: AcademyDivisionRow; Insert: Partial<AcademyDivisionRow>; Update: Partial<AcademyDivisionRow>; Relationships: []; };
+ academy_categories: { Row: AcademyCategoryRow; Insert: Partial<AcademyCategoryRow>; Update: Partial<AcademyCategoryRow>; Relationships: []; };
+ academy_courses: { Row: AcademyCourseRow; Insert: Partial<AcademyCourseRow>; Update: Partial<AcademyCourseRow>; Relationships: []; };
+ academy_modules: { Row: AcademyModuleRow; Insert: Partial<AcademyModuleRow>; Update: Partial<AcademyModuleRow>; Relationships: []; };
+ academy_lessons: { Row: AcademyLessonRow; Insert: Partial<AcademyLessonRow>; Update: Partial<AcademyLessonRow>; Relationships: []; };
+ academy_datasets: { Row: AcademyDatasetRow; Insert: Partial<AcademyDatasetRow>; Update: Partial<AcademyDatasetRow>; Relationships: []; };
+ academy_exercises: { Row: AcademyExerciseRow; Insert: Partial<AcademyExerciseRow>; Update: Partial<AcademyExerciseRow>; Relationships: []; };
+ academy_quizzes: { Row: AcademyQuizRow; Insert: Partial<AcademyQuizRow>; Update: Partial<AcademyQuizRow>; Relationships: []; };
+ academy_quiz_questions: { Row: AcademyQuizQuestionRow; Insert: Partial<AcademyQuizQuestionRow>; Update: Partial<AcademyQuizQuestionRow>; Relationships: []; };
+ academy_sources: { Row: AcademySourceRow; Insert: Partial<AcademySourceRow>; Update: Partial<AcademySourceRow>; Relationships: []; };
+ academy_lesson_sources: { Row: AcademyLessonSourceRow; Insert: Partial<AcademyLessonSourceRow>; Update: Partial<AcademyLessonSourceRow>; Relationships: []; };
+ academy_enrollments: { Row: AcademyEnrollmentRow; Insert: Partial<AcademyEnrollmentRow>; Update: Partial<AcademyEnrollmentRow>; Relationships: []; };
+ academy_learning_progress: { Row: AcademyProgressRow; Insert: Partial<AcademyProgressRow>; Update: Partial<AcademyProgressRow>; Relationships: []; };
+ academy_quiz_attempts: { Row: AcademyQuizAttemptRow; Insert: Partial<AcademyQuizAttemptRow>; Update: Partial<AcademyQuizAttemptRow>; Relationships: []; };
  ai_analyses: {
  Row: {
  analysis_result: Json | null;

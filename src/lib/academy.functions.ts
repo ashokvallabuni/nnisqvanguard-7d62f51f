@@ -25,6 +25,49 @@ export const completeModule = createServerFn({ method: "POST" })
  .handler(async ({ data, context }) => {
  const { supabase, userId } = context;
 
+ const { data: academyCourse } = await supabase
+ .from("academy_courses")
+ .select("id,title")
+ .eq("slug", data.courseSlug)
+ .eq("is_published", true)
+ .eq("is_available", true)
+ .maybeSingle();
+ if (academyCourse) {
+ const { data: academyModule } = await supabase
+ .from("academy_modules")
+ .select("id")
+ .eq("course_id", academyCourse.id)
+ .eq("slug", data.moduleSlug)
+ .maybeSingle();
+ if (!academyModule) {
+ return { error: "MODULE_NOT_FOUND", completed: false, message: "Module not found." };
+ }
+ const { data: lessons, error: lessonsError } = await supabase
+ .from("academy_lessons")
+ .select("id")
+ .eq("module_id", academyModule.id)
+ .eq("is_published", true);
+ if (lessonsError) throw new Error(lessonsError.message);
+ const timestamp = new Date().toISOString();
+ if ((lessons ?? []).length > 0) {
+ const { error: progressError } = await supabase
+ .from("academy_learning_progress")
+ .upsert(
+  (lessons ?? []).map((lesson) => ({
+  user_id: userId,
+  course_id: academyCourse.id,
+  lesson_id: lesson.id,
+  completion_status: "completed",
+  completed_at: timestamp,
+  updated_at: timestamp,
+  })),
+  { onConflict: "user_id,lesson_id" },
+ );
+ if (progressError) throw new Error(progressError.message);
+ }
+ return { completed: true, awardedBadges: [], certificateNumber: null };
+ }
+
  // Import admin client lazily (server-only)
  let supabaseAdmin: any;
  try {

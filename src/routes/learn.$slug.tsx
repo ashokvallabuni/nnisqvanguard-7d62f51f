@@ -68,6 +68,24 @@ function CourseDetailPage() {
  const { data: course, isLoading: courseLoading } = useQuery({
  queryKey: ["course-detail", slug],
  queryFn: async () => {
+ const { data: academyCourse } = await supabase
+ .from("academy_courses")
+ .select("id,slug,title,description,level,duration")
+ .eq("slug", slug)
+ .eq("is_published", true)
+ .eq("is_available", true)
+ .maybeSingle();
+ if (academyCourse) {
+ return {
+ ...academyCourse,
+ tier: "free",
+ sort_order: 0,
+ isLocked: false,
+ comingSoon: false,
+ isAcademy: true,
+ };
+ }
+
  // 1. Check centralized course accessibility predicate (server-side friendly)
  const accessResult = await isCourseAccessible(slug, {
  user: { isAdmin, id: user?.id ?? null, role: null },
@@ -87,6 +105,7 @@ function CourseDetailPage() {
  sort_order: 99,
  isLocked: true,
  comingSoon: true,
+ isAcademy: false,
  };
  }
 
@@ -98,13 +117,14 @@ function CourseDetailPage() {
  .maybeSingle();
 
  if (data) {
- if (accessResult.ok) return { ...data, isLocked: false, comingSoon: false };
+ if (accessResult.ok) return { ...data, isLocked: false, comingSoon: false, isAcademy: false };
  // DB has course but predicate locked it
  return {
  ...data,
  description: describeAccessError(accessResult.reason),
  isLocked: true,
  comingSoon: accessResult.reason !== "locked",
+ isAcademy: false,
  };
  }
 
@@ -122,6 +142,7 @@ function CourseDetailPage() {
  sort_order: 1,
  isLocked: false,
  comingSoon: false,
+ isAcademy: false,
  };
  }
 
@@ -133,6 +154,27 @@ function CourseDetailPage() {
  queryKey: ["course-modules", course?.id, slug],
  queryFn: async () => {
  if (course?.isLocked) return [];
+
+ if (course?.isAcademy) {
+ const { data, error } = await supabase
+ .from("academy_modules")
+ .select("id,course_id,slug,title,description,display_order")
+ .eq("course_id", course.id)
+ .order("display_order");
+ if (error) throw error;
+ return (data ?? []).map((module) => ({
+ id: module.id,
+ course_id: module.course_id,
+ slug: module.slug,
+ title: module.title,
+ notes_md: module.description,
+ difficulty: "Intermediate",
+ duration_minutes: 30,
+ tags: ["AI"],
+ practice_labs: [],
+ sort_order: module.display_order,
+ }));
+ }
 
  const { data } = await supabase
  .from("modules")

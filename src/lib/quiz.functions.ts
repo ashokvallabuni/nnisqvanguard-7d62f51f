@@ -31,6 +31,7 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  // ── 1. Fetch quiz with correct_option server-side (never trust the client)
  let correctOption: number | null = null;
  let quizExplanation: string | null = null;
+ let academyQuizId: string | null = null;
 
  try {
  const { data: dbQuiz } = await supabase
@@ -68,6 +69,35 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  attempt_number: 0,
  explanation: "Your session has expired. Please sign in again to continue.",
  };
+ }
+
+ if (correctOption === null) {
+ const { data: academyQuestion } = await supabase
+ .from("academy_quiz_questions")
+ .select("quiz_id,question,correct_answer,explanation")
+ .eq("id", data.quizId)
+ .maybeSingle();
+ if (academyQuestion) {
+ const { data: academyQuiz } = await supabase
+ .from("academy_quizzes")
+ .select("id,module_id,course_id")
+ .eq("id", academyQuestion.quiz_id)
+ .eq("module_id", data.moduleId)
+ .eq("course_id", data.courseId)
+ .maybeSingle();
+ if (!academyQuiz) {
+ return {
+ error: "QUIZ_INVALID",
+ is_correct: false,
+ score: 0,
+ attempt_number: 0,
+ explanation: "This quiz does not belong to the specified course module.",
+ };
+ }
+ correctOption = academyQuestion.correct_answer;
+ quizExplanation = academyQuestion.explanation;
+ academyQuizId = academyQuiz.id;
+ }
  }
  }
 
@@ -121,6 +151,16 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
 
  // ── 5. Persist quiz attempt (non-fatal if DB unavailable)
  try {
+ if (correctOption !== null) {
+ if (academyQuizId) {
+ await supabase.from("academy_quiz_attempts").insert({
+ user_id: userId,
+ quiz_id: academyQuizId,
+ score,
+ passed: isCorrect,
+ answers: { question_id: data.quizId, selected_option: data.selectedOption },
+ });
+ } else {
  await supabase.from("quiz_attempts").insert({
  user_id: userId,
  quiz_id: data.quizId,
@@ -129,7 +169,9 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  score,
  attempt_number: attemptNumber,
  });
+ }
 
+ if (!academyQuizId) {
  await supabase.from("user_course_progress").upsert(
  {
  user_id: userId,
@@ -145,6 +187,8 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  },
  { onConflict: "user_id,module_id,quiz_id,assignment_id,progress_type" },
  );
+ }
+ }
  } catch (dbErr: any) {
  const msg: string = dbErr?.message ?? "";
  if (

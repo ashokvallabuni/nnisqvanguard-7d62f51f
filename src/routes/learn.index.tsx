@@ -36,6 +36,19 @@ function LearnIndex() {
       return data ?? [];
     },
   });
+  const { data: aiCourses, isLoading: aiLoading } = useQuery({
+    queryKey: ["academy-ai-courses"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("academy_courses")
+        .select("id,slug,title,description,level,duration,learning_objectives")
+        .eq("is_published", true)
+        .eq("is_available", true)
+        .order("display_order");
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+  });
 
   return (
     <main className="pt-24 pb-20 px-4 md:px-8">
@@ -47,6 +60,10 @@ function LearnIndex() {
           labs. Explore the independent AI division from the Academy navigation.
         </p>
 
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="display text-2xl">Cybersecurity Division</h2>
+          <span className="mono text-[0.6rem] text-cyber">LEGACY CATALOG PRESERVED</span>
+        </div>
         <div className="grid md:grid-cols-3 gap-5">
           {(courses ?? []).map((c) => (
             <Link
@@ -78,6 +95,40 @@ function LearnIndex() {
             </Link>
           ))}
         </div>
+
+        <section className="mt-14">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <div className="mono text-xs text-cyber mb-2">// PHASE 1</div>
+              <h2 className="display text-2xl">Artificial Intelligence & Emerging Technologies</h2>
+            </div>
+            <span className="mono text-[0.6rem] text-cyber">{aiCourses?.length ?? 0} COURSES</span>
+          </div>
+          {aiLoading ? (
+            <div className="glass rounded-xl p-6 text-sm text-muted-foreground">Loading AI catalog…</div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-5">
+              {(aiCourses ?? []).map((course) => (
+                <Link
+                  key={course.id}
+                  to="/learn/$slug"
+                  params={{ slug: course.slug }}
+                  className="glass rounded-xl p-6 hover:glow-cyber transition group"
+                >
+                  <div className="mono text-[0.55rem] text-violet-300 mb-2">
+                    {course.level.toUpperCase()} · {course.duration} MIN
+                  </div>
+                  <h3 className="display text-2xl mb-2 group-hover:text-cyber transition">{course.title}</h3>
+                  <p className="text-sm text-muted-foreground">{course.description}</p>
+                  <div className="mt-4 mono text-[0.55rem] text-muted-foreground">
+                    {course.learning_objectives.slice(0, 2).join(" · ")}
+                  </div>
+                  <div className="mono text-[0.6rem] text-cyber mt-4">OPEN DATABASE COURSE →</div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
 
         <section className="mt-16 glass rounded-2xl p-8">
           <h2 className="display text-2xl mb-4">Free vs Premium</h2>

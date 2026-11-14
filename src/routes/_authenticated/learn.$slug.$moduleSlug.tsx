@@ -191,6 +191,17 @@ function ModuleLearningPage() {
  const { data: course, isLoading: courseLoading } = useQuery({
  queryKey: ["course-by-slug", slug],
  queryFn: async () => {
+ const { data: academyCourse } = await supabase
+ .from("academy_courses")
+ .select("id,slug,title,description,level")
+ .eq("slug", slug)
+ .eq("is_published", true)
+ .eq("is_available", true)
+ .maybeSingle();
+ if (academyCourse) {
+ return { ...academyCourse, tier: "free", isAcademy: true };
+ }
+
  // Security Check: Enforce course locking via centralized predicate for direct URL access
  const accessResult = await isCourseAccessible(slug, {
  user: { isAdmin, id: user?.id ?? null, role: null },
@@ -210,7 +221,7 @@ function ModuleLearningPage() {
  .eq("slug", slug)
  .maybeSingle();
 
- if (data) return data;
+ if (data) return { ...data, isAcademy: false };
 
  const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
  const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug);
@@ -222,6 +233,7 @@ function ModuleLearningPage() {
  description: staticCourse.description,
  level: staticCourse.level,
  tier: staticCourse.tier,
+ isAcademy: false,
  };
  }
 
@@ -235,6 +247,7 @@ function ModuleLearningPage() {
  description: "Authoritative cybersecurity curriculum.",
  level: "Beginner",
  tier: "free",
+ isAcademy: false,
  };
  },
  });
@@ -243,6 +256,25 @@ function ModuleLearningPage() {
  const { data: allModules } = useQuery({
  queryKey: ["course-all-modules", course?.id],
  queryFn: async () => {
+ if (course?.isAcademy) {
+ const { data, error } = await supabase
+ .from("academy_modules")
+ .select("id,course_id,slug,title,description,display_order")
+ .eq("course_id", course.id)
+ .order("display_order");
+ if (error) throw error;
+ return (data ?? []).map((module) => ({
+ id: module.id,
+ course_id: module.course_id,
+ slug: module.slug,
+ title: module.title,
+ difficulty: "INTERMEDIATE",
+ duration_minutes: 30,
+ practice_labs: [],
+ sort_order: module.display_order,
+ }));
+ }
+
  const { data } = await supabase
  .from("modules")
  .select("id,course_id,slug,title,difficulty,duration_minutes,practice_labs,sort_order")
@@ -284,6 +316,38 @@ function ModuleLearningPage() {
  const { data: currentModule, isLoading: moduleLoading } = useQuery({
  queryKey: ["module-detail", course?.id, moduleSlug],
  queryFn: async () => {
+ if (course?.isAcademy) {
+ const { data: academyModule, error: moduleError } = await supabase
+ .from("academy_modules")
+ .select("id,course_id,slug,title,description,display_order")
+ .eq("course_id", course.id)
+ .eq("slug", moduleSlug)
+ .maybeSingle();
+ if (moduleError) throw moduleError;
+ if (!academyModule) return null;
+ const { data: lessons, error: lessonError } = await supabase
+ .from("academy_lessons")
+ .select("id,title,content,estimated_minutes,display_order")
+ .eq("module_id", academyModule.id)
+ .eq("is_published", true)
+ .order("display_order");
+ if (lessonError) throw lessonError;
+ return {
+ id: academyModule.id,
+ course_id: academyModule.course_id,
+ slug: academyModule.slug,
+ title: academyModule.title,
+ notes_md: (lessons ?? []).map((lesson) => `## ${lesson.title}\n\n${lesson.content}`).join("\n\n"),
+ locked: false,
+ tags: ["AI", "Database lesson"],
+ difficulty: "INTERMEDIATE",
+ duration_minutes: (lessons ?? []).reduce((total, lesson) => total + lesson.estimated_minutes, 0),
+ practice_labs: [],
+ sort_order: academyModule.display_order,
+ academyLessons: lessons ?? [],
+ };
+ }
+
  const { data } = await supabase
  .from("modules")
  .select(
@@ -293,7 +357,7 @@ function ModuleLearningPage() {
  .eq("slug", moduleSlug)
  .maybeSingle();
 
- if (data) return data;
+ if (data) return { ...data, academyLessons: [] };
 
  const { AVAILABLE_COURSES } = await import("@/data/courses-curriculum");
  const staticCourse = AVAILABLE_COURSES.find((c) => c.slug === slug || c.id === course!.id);
@@ -365,6 +429,7 @@ function ModuleLearningPage() {
  duration_minutes: 25,
  practice_labs: [],
  sort_order: 1,
+ academyLessons: [],
  };
  },
  enabled: !!course,
@@ -374,6 +439,32 @@ function ModuleLearningPage() {
  const { data: quizzes } = useQuery({
  queryKey: ["module-quizzes", currentModule?.id],
  queryFn: async () => {
+ if (course?.isAcademy) {
+ const { data, error } = await supabase
+ .from("academy_quizzes")
+ .select("id,module_id,title")
+ .eq("module_id", currentModule!.id)
+ .eq("is_published", true)
+ .maybeSingle();
+ if (error) throw error;
+ if (!data) return [];
+ const { data: questions, error: questionError } = await supabase
+ .from("academy_quiz_questions")
+ .select("id,quiz_id,question,options,correct_answer,explanation,display_order")
+ .eq("quiz_id", data.id)
+ .order("display_order");
+ if (questionError) throw questionError;
+ return (questions ?? []).map((question) => ({
+ id: question.id,
+ module_id: currentModule!.id,
+ question: question.question,
+ options: Array.isArray(question.options) ? question.options.filter((option): option is string => typeof option === "string") : [],
+ correct_option: question.correct_answer,
+ explanation: question.explanation,
+ sort_order: question.display_order,
+ }));
+ }
+
  const { data } = await supabase
  .from("quizzes")
  .select("id,module_id,question,options,correct_option,explanation,sort_order")
@@ -449,6 +540,23 @@ function ModuleLearningPage() {
  queryKey: ["module-user-progress", user?.id, course?.id],
  queryFn: async () => {
  if (!user) return [];
+ if (course?.isAcademy) {
+ const { data: lessons, error: lessonError } = await supabase
+ .from("academy_lessons")
+ .select("id,module_id")
+ .eq("module_id", currentModule?.id ?? "");
+ if (lessonError) throw lessonError;
+ const lessonIds = (lessons ?? []).map((lesson) => lesson.id);
+ if (lessonIds.length === 0) return [];
+ const { data: progress, error } = await supabase
+ .from("academy_learning_progress")
+ .select("lesson_id,completion_status")
+ .eq("user_id", user.id)
+ .in("lesson_id", lessonIds);
+ if (error) throw error;
+ const complete = new Set((progress ?? []).filter((item) => item.completion_status === "completed").map((item) => item.lesson_id));
+ return complete.size === lessonIds.length ? [{ module_id: currentModule?.id ?? "", completed: true, quiz_score: null }] : [];
+ }
  const { data } = await supabase
  .from("module_progress")
  .select("module_id,completed,quiz_score")
@@ -571,6 +679,22 @@ function ModuleLearningPage() {
 
  try {
  setCompleting(true);
+
+ if (course.isAcademy) {
+ const result = await completeModule({
+ data: { courseSlug: course.slug, moduleSlug: currentModule.slug },
+ });
+ if (result.error) throw new Error(result.error);
+ toast.success("Lesson progress saved.");
+ queryClient.invalidateQueries({ queryKey: ["module-user-progress"] });
+ if (nextModule) {
+ navigate({
+ to: "/learn/$slug/$moduleSlug",
+ params: { slug: course.slug, moduleSlug: nextModule.slug },
+ });
+ }
+ return;
+ }
 
  // Server function verifies course/module, persists completion,
  // evaluates badges, and issues certificate — browser cannot forge this
