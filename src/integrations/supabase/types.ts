@@ -301,11 +301,13 @@ export type Database = {
       };
       courses: {
         Row: {
+          category_id: string;
           cover_url: string | null;
           created_at: string;
           description: string | null;
           id: string;
           level: string;
+          phase_id: string;
           slug: string;
           sort_order: number;
           tier: string;
@@ -313,11 +315,13 @@ export type Database = {
           updated_at: string;
         };
         Insert: {
+          category_id: string;
           cover_url?: string | null;
           created_at?: string;
           description?: string | null;
           id?: string;
           level?: string;
+          phase_id: string;
           slug: string;
           sort_order?: number;
           tier?: string;
@@ -325,11 +329,13 @@ export type Database = {
           updated_at?: string;
         };
         Update: {
+          category_id?: string;
           cover_url?: string | null;
           created_at?: string;
           description?: string | null;
           id?: string;
           level?: string;
+          phase_id?: string;
           slug?: string;
           sort_order?: number;
           tier?: string;
@@ -338,6 +344,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      learning_phases: SimpleTable<{
+        id: string;
+        slug: string;
+        name: string;
+        description: string;
+        sort_order: number;
+        created_at: string;
+      }>;
+      course_categories: SimpleTable<{
+        id: string;
+        phase_id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        sort_order: number;
+        created_at: string;
+      }>;
+      source_registry: SimpleTable<{
+        id: string;
+        name: string;
+        official_url: string;
+        source_type: string;
+        created_at: string;
+      }>;
+      module_sources: SimpleTable<{
+        module_id: string;
+        source_id: string;
+        relevant_topic: string;
+        accessed_on: string;
+      }>;
       campus_consultations: {
         Row: {
           college_id: string;

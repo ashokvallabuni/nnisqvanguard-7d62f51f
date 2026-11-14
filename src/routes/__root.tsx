@@ -165,7 +165,7 @@ function TopNav() {
     { to: "/", label: "Home" },
     { to: "/solutions", label: "Solutions" },
     { to: "/cyber-range", label: "Cyber Range" },
-    { to: "/academy", label: "Academy" },
+    { to: "/academy", label: "Cyber Academy" },
     { to: "/campus", label: "Campus" },
     { to: "/intelligence", label: "Intelligence" },
     { to: "/complaint", label: "Report" },
@@ -194,6 +194,15 @@ function TopNav() {
             </Link>
           </li>
         ))}
+        <li>
+          <Link
+            to="/academy"
+            search={{ phase: "ai" }}
+            className="mono text-[0.7rem] text-muted-foreground hover:text-cyber transition"
+          >
+            AI Academy
+          </Link>
+        </li>
       </ul>
       <div className="hidden lg:flex gap-2 items-center">
         {user ? (
@@ -237,6 +246,14 @@ function TopNav() {
               {l.label}
             </Link>
           ))}
+          <Link
+            to="/academy"
+            search={{ phase: "ai" }}
+            onClick={() => setOpen(false)}
+            className="mono text-xs text-muted-foreground hover:text-cyber"
+          >
+            AI Academy
+          </Link>
           <div className="border-t pt-3 flex gap-2 flex-wrap">
             {user ? (
               <>

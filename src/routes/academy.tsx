@@ -18,12 +18,16 @@ import { useAuth } from "@/lib/auth-context";
 import type { Json } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/academy")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    phase: typeof search.phase === "string" ? search.phase : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "NISQ Academy — Structured Cybersecurity Learning" },
       {
         name: "description",
-        content: "Explore structured cybersecurity learning paths, practice labs and knowledge checks.",
+        content:
+          "Explore structured cybersecurity learning paths, practice labs and knowledge checks.",
       },
     ],
   }),
@@ -38,6 +42,31 @@ type Course = {
   level: string;
   tier: string;
   sort_order: number;
+  phase_id: string;
+  category_id: string;
+};
+type LearningPhase = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+};
+type CourseCategory = {
+  id: string;
+  phase_id: string;
+  name: string;
+};
+type Source = {
+  id: string;
+  name: string;
+  official_url: string;
+  source_type: string;
+};
+type ModuleSource = {
+  module_id: string;
+  source_id: string;
+  relevant_topic: string;
+  accessed_on: string;
 };
 type Module = {
   id: string;
@@ -80,6 +109,7 @@ type Progress = {
 function Academy() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const queryClient = useQueryClient();
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
@@ -89,21 +119,61 @@ function Academy() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["academy-structured", user?.id],
     queryFn: async () => {
-      const [coursesResult, modulesResult, quizzesResult, assignmentsResult, progressResult] =
-        await Promise.all([
-          supabase.from("courses").select("id,slug,title,description,level,tier,sort_order").order("sort_order"),
-          supabase.from("modules").select("id,course_id,slug,title,notes_md,locked,tags,difficulty,duration_minutes,practice_labs,sort_order").order("sort_order"),
-          supabase.from("quizzes").select("id,module_id,question,options,correct_option,explanation").order("sort_order"),
-          supabase.from("assignments").select("id,module_id,title,instructions,task_type,expected_answer").order("sort_order"),
-          user
-            ? supabase.from("user_course_progress").select("module_id,quiz_id,assignment_id,progress_type,completed,score").eq("user_id", user.id)
-            : Promise.resolve({ data: [], error: null }),
-        ]);
-      const firstError = [coursesResult, modulesResult, quizzesResult, assignmentsResult, progressResult].find(
-        (result) => result.error,
-      );
+      const [
+        phasesResult,
+        categoriesResult,
+        coursesResult,
+        modulesResult,
+        quizzesResult,
+        assignmentsResult,
+        progressResult,
+        sourcesResult,
+        moduleSourcesResult,
+      ] = await Promise.all([
+        supabase.from("learning_phases").select("id,slug,name,description").order("sort_order"),
+        supabase.from("course_categories").select("id,phase_id,name").order("sort_order"),
+        supabase
+          .from("courses")
+          .select("id,slug,title,description,level,tier,sort_order,phase_id,category_id")
+          .order("sort_order"),
+        supabase
+          .from("modules")
+          .select(
+            "id,course_id,slug,title,notes_md,locked,tags,difficulty,duration_minutes,practice_labs,sort_order",
+          )
+          .order("sort_order"),
+        supabase
+          .from("quizzes")
+          .select("id,module_id,question,options,correct_option,explanation")
+          .order("sort_order"),
+        supabase
+          .from("assignments")
+          .select("id,module_id,title,instructions,task_type,expected_answer")
+          .order("sort_order"),
+        user
+          ? supabase
+              .from("user_course_progress")
+              .select("module_id,quiz_id,assignment_id,progress_type,completed,score")
+              .eq("user_id", user.id)
+          : Promise.resolve({ data: [], error: null }),
+        supabase.from("source_registry").select("id,name,official_url,source_type").order("name"),
+        supabase.from("module_sources").select("module_id,source_id,relevant_topic,accessed_on"),
+      ]);
+      const firstError = [
+        phasesResult,
+        categoriesResult,
+        coursesResult,
+        modulesResult,
+        quizzesResult,
+        assignmentsResult,
+        progressResult,
+        sourcesResult,
+        moduleSourcesResult,
+      ].find((result) => result.error);
       if (firstError?.error) throw new Error(firstError.error.message);
       return {
+        phases: (phasesResult.data ?? []) as LearningPhase[],
+        categories: (categoriesResult.data ?? []) as CourseCategory[],
         courses: (coursesResult.data ?? []) as Course[],
         modules: (modulesResult.data ?? []) as Module[],
         quizzes: (quizzesResult.data ?? []).map((quiz) => ({
@@ -112,11 +182,18 @@ function Academy() {
         })) as Quiz[],
         assignments: (assignmentsResult.data ?? []) as Assignment[],
         progress: (progressResult.data ?? []) as Progress[],
+        sources: (sourcesResult.data ?? []) as Source[],
+        moduleSources: (moduleSourcesResult.data ?? []) as ModuleSource[],
       };
     },
   });
 
-  const courses = data?.courses ?? [];
+  const phases = data?.phases ?? [];
+  const activePhase =
+    phases.find((phase) => phase.slug === search.phase) ??
+    phases.find((phase) => phase.slug === "cybersecurity") ??
+    phases[0];
+  const courses = (data?.courses ?? []).filter((course) => course.phase_id === activePhase?.id);
   const activeCourse = courses.find((course) => course.id === selectedCourseId) ?? courses[0];
   const modules = useMemo(
     () => (data?.modules ?? []).filter((module) => module.course_id === activeCourse?.id),
@@ -124,14 +201,31 @@ function Academy() {
   );
   const activeModule = modules.find((module) => module.id === selectedModuleId) ?? modules[0];
   const quizzes = (data?.quizzes ?? []).filter((quiz) => quiz.module_id === activeModule?.id);
-  const assignments = (data?.assignments ?? []).filter((assignment) => assignment.module_id === activeModule?.id);
+  const assignments = (data?.assignments ?? []).filter(
+    (assignment) => assignment.module_id === activeModule?.id,
+  );
+  const lessonSources = (data?.moduleSources ?? []).filter(
+    (source) => source.module_id === activeModule?.id,
+  );
   const progress = data?.progress ?? [];
-  const completedModules = new Set(progress.filter((item) => item.progress_type === "module" && item.completed).map((item) => item.module_id));
-  const completedQuizzes = new Set(progress.filter((item) => item.progress_type === "quiz" && item.completed).map((item) => item.quiz_id));
+  const completedModules = new Set(
+    progress
+      .filter((item) => item.progress_type === "module" && item.completed)
+      .map((item) => item.module_id),
+  );
+  const completedQuizzes = new Set(
+    progress
+      .filter((item) => item.progress_type === "quiz" && item.completed)
+      .map((item) => item.quiz_id),
+  );
   const courseCompleted = modules.filter((module) => completedModules.has(module.id)).length;
   const courseQuizTotal = quizzesForModules(data?.quizzes ?? [], modules).length;
   const courseQuizCompleted = modules.reduce(
-    (total, module) => total + (data?.quizzes ?? []).filter((quiz) => quiz.module_id === module.id && completedQuizzes.has(quiz.id)).length,
+    (total, module) =>
+      total +
+      (data?.quizzes ?? []).filter(
+        (quiz) => quiz.module_id === module.id && completedQuizzes.has(quiz.id),
+      ).length,
     0,
   );
 
@@ -152,7 +246,12 @@ function Academy() {
   }) => {
     if (!user || !activeCourse) return;
     setSaving(payload.quiz_id ?? payload.assignment_id ?? payload.module_id);
-    const query = supabase.from("user_course_progress").select("id").eq("user_id", user.id).eq("module_id", payload.module_id).eq("progress_type", payload.progress_type);
+    const query = supabase
+      .from("user_course_progress")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("module_id", payload.module_id)
+      .eq("progress_type", payload.progress_type);
     if (payload.quiz_id) query.eq("quiz_id", payload.quiz_id);
     if (payload.assignment_id) query.eq("assignment_id", payload.assignment_id);
     const { data: existing, error: readError } = await query.maybeSingle();
@@ -182,31 +281,121 @@ function Academy() {
       return;
     }
     await queryClient.invalidateQueries({ queryKey: ["academy-structured"] });
-    toast.success(payload.progress_type === "module" ? "Module completed." : "Knowledge check completed.");
+    toast.success(
+      payload.progress_type === "module" ? "Module completed." : "Knowledge check completed.",
+    );
   };
 
   if (isLoading) return <main className="pt-24 px-4">Loading academy pathways…</main>;
-  if (error) return <main className="pt-24 px-4 text-center text-destructive">{(error as Error).message}</main>;
+  if (error)
+    return (
+      <main className="pt-24 px-4 text-center text-destructive">{(error as Error).message}</main>
+    );
 
   return (
     <main className="min-h-screen bg-[#030712] px-4 pb-20 pt-28 text-slate-200 md:px-8">
       <div className="mx-auto max-w-7xl">
         <header className="mb-10">
-          <div className="mono text-xs tracking-[0.18em] text-cyan-300">// VANGUARD ELITE ACADEMY</div>
-          <h1 className="mt-3 font-display text-4xl font-bold text-white md:text-6xl">MASTER THE CYBER FRONTIER</h1>
-          <p className="mt-4 max-w-3xl font-mono text-sm leading-relaxed text-slate-400">Structured learning paths inspired by modern cyber rooms and practical data-learning tracks. Read, practise, answer and build evidence of progress.</p>
+          <div className="mono text-xs tracking-[0.18em] text-cyan-300">
+            // VANGUARD ELITE ACADEMY
+          </div>
+          <h1 className="mt-3 font-display text-4xl font-bold text-white md:text-6xl">
+            CHOOSE YOUR LEARNING DIVISION
+          </h1>
+          <p className="mt-4 max-w-3xl font-mono text-sm leading-relaxed text-slate-400">
+            Study artificial intelligence or cybersecurity in separate catalogs, with phase-specific
+            courses and cited lesson references.
+          </p>
         </header>
+
+        <section aria-label="Learning divisions" className="mb-8 grid gap-4 md:grid-cols-2">
+          {phases.map((phase) => {
+            const phaseCourses = (data?.courses ?? []).filter(
+              (course) => course.phase_id === phase.id,
+            );
+            const phaseCourseIds = new Set(phaseCourses.map((course) => course.id));
+            const phaseModuleIds = new Set(
+              (data?.modules ?? [])
+                .filter((module) => phaseCourseIds.has(module.course_id))
+                .map((module) => module.id),
+            );
+            const completed = [...completedModules].filter((moduleId) =>
+              phaseModuleIds.has(moduleId),
+            ).length;
+            const selected = activePhase?.id === phase.id;
+            const isAi = phase.slug === "ai";
+            return (
+              <button
+                key={phase.id}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => {
+                  void navigate({ to: "/academy", search: { phase: phase.slug } });
+                  setSelectedCourseId(null);
+                  setSelectedModuleId(null);
+                }}
+                className={`min-h-40 border p-5 text-left transition ${selected ? (isAi ? "border-violet-400 bg-violet-400/10" : "border-cyan-400 bg-cyan-400/10") : "border-slate-700 bg-[#0a0f1d] hover:border-slate-500"}`}
+              >
+                <div
+                  className={`mono text-[10px] tracking-widest ${isAi ? "text-violet-300" : "text-cyan-300"}`}
+                >
+                  PHASE {String(phase.slug === "ai" ? 1 : 2).padStart(2, "0")}
+                </div>
+                <h2 className="mt-2 font-display text-xl font-semibold text-white">{phase.name}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">{phase.description}</p>
+                <div className="mt-4 font-mono text-[10px] text-slate-300">
+                  {phaseCourses.length} COURSES · {completed} LESSONS COMPLETED
+                </div>
+              </button>
+            );
+          })}
+        </section>
+
+        {activePhase && (
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <div className="mono text-[10px] tracking-widest text-slate-400">ACTIVE CATALOG</div>
+              <h2 className="mt-1 font-display text-2xl font-semibold text-white">
+                {activePhase.name}
+              </h2>
+            </div>
+            <span className="mono text-[10px] text-slate-400">{courses.length} COURSES</span>
+          </div>
+        )}
 
         <section className="mb-8 grid gap-4 lg:grid-cols-3">
           {courses.map((course) => {
-            const courseModules = (data?.modules ?? []).filter((module) => module.course_id === course.id);
+            const courseModules = (data?.modules ?? []).filter(
+              (module) => module.course_id === course.id,
+            );
             const done = courseModules.filter((module) => completedModules.has(module.id)).length;
-            const percent = courseModules.length ? Math.round((done / courseModules.length) * 100) : 0;
+            const percent = courseModules.length
+              ? Math.round((done / courseModules.length) * 100)
+              : 0;
             return (
-              <button key={course.id} onClick={() => { setSelectedCourseId(course.id); setSelectedModuleId(null); }} className={`text-left border p-5 transition ${activeCourse?.id === course.id ? "border-cyan-400 bg-cyan-400/10" : "border-slate-700 bg-[#0a0f1d] hover:border-cyan-400/60"}`}>
-                <div className="flex items-center justify-between"><span className="mono text-[10px] tracking-widest text-cyan-300">{course.level} · {course.tier}</span><BookOpen className="h-5 w-5 text-cyan-300" /></div>
-                <h2 className="mt-4 font-display text-xl font-semibold text-white">{course.title}</h2>
-                <p className="mt-2 min-h-10 text-xs leading-relaxed text-slate-400">{course.description}</p>
+              <button
+                key={course.id}
+                onClick={() => {
+                  setSelectedCourseId(course.id);
+                  setSelectedModuleId(null);
+                }}
+                className={`text-left border p-5 transition ${activeCourse?.id === course.id ? "border-cyan-400 bg-cyan-400/10" : "border-slate-700 bg-[#0a0f1d] hover:border-cyan-400/60"}`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="mono text-[10px] tracking-widest text-cyan-300">
+                    {course.level} · {course.tier}
+                  </span>
+                  <BookOpen className="h-5 w-5 text-cyan-300" />
+                </div>
+                <h2 className="mt-4 font-display text-xl font-semibold text-white">
+                  {course.title}
+                </h2>
+                <p className="mt-2 min-h-10 text-xs leading-relaxed text-slate-400">
+                  {course.description}
+                </p>
+                <div className="mt-3 font-mono text-[9px] text-slate-500">
+                  {data?.categories.find((category) => category.id === course.category_id)?.name}
+                </div>
                 <ProgressBar value={percent} label={`${done}/${courseModules.length} modules`} />
               </button>
             );
@@ -216,33 +405,223 @@ function Academy() {
         {activeCourse && (
           <section className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
             <div>
-              <div className="mb-4 flex items-end justify-between"><div><div className="mono text-[10px] tracking-widest text-cyan-300">ROOM MAP</div><h2 className="mt-2 font-display text-2xl font-semibold text-white">{activeCourse.title}</h2></div><span className="font-mono text-xs text-slate-400">{courseCompleted}/{modules.length} complete</span></div>
-              <ProgressBar value={modules.length ? Math.round((courseCompleted / modules.length) * 100) : 0} label={`${courseQuizCompleted}/${courseQuizTotal} quiz checks passed`} />
+              <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <div className="mono text-[10px] tracking-widest text-cyan-300">ROOM MAP</div>
+                  <h2 className="mt-2 font-display text-2xl font-semibold text-white">
+                    {activeCourse.title}
+                  </h2>
+                  <Link
+                    to="/learn/$slug"
+                    params={{ slug: activeCourse.slug }}
+                    className="mt-2 inline-flex font-mono text-[10px] text-cyan-300 hover:text-white"
+                  >
+                    OPEN COURSE LESSONS →
+                  </Link>
+                </div>
+                <span className="font-mono text-xs text-slate-400">
+                  {courseCompleted}/{modules.length} complete
+                </span>
+              </div>
+              <ProgressBar
+                value={modules.length ? Math.round((courseCompleted / modules.length) * 100) : 0}
+                label={`${courseQuizCompleted}/${courseQuizTotal} quiz checks passed`}
+              />
               <div className="mt-5 space-y-3">
                 {modules.map((module, index) => {
                   const complete = completedModules.has(module.id);
-                  return <button key={module.id} onClick={() => setSelectedModuleId(module.id)} className={`flex w-full items-center gap-4 border p-4 text-left transition ${activeModule?.id === module.id ? "border-cyan-400 bg-cyan-400/10" : "border-slate-700 bg-[#0a0f1d] hover:border-cyan-400/50"}`}><div className="font-mono text-xs text-slate-500">{String(index + 1).padStart(2, "0")}</div><div className="min-w-0 flex-1"><div className="truncate font-display text-base font-semibold text-white">{module.title}</div><div className="mt-1 flex flex-wrap gap-2 font-mono text-[9px] text-slate-400"><span>{module.difficulty}</span><span>·</span><span>{module.duration_minutes} min</span></div></div>{module.locked ? <Lock className="h-4 w-4 text-slate-500" /> : complete ? <CheckCircle2 className="h-5 w-5 text-emerald-400" /> : <PlayCircle className="h-5 w-5 text-cyan-300" />}</button>;
+                  return (
+                    <button
+                      key={module.id}
+                      onClick={() => setSelectedModuleId(module.id)}
+                      className={`flex w-full items-center gap-4 border p-4 text-left transition ${activeModule?.id === module.id ? "border-cyan-400 bg-cyan-400/10" : "border-slate-700 bg-[#0a0f1d] hover:border-cyan-400/50"}`}
+                    >
+                      <div className="font-mono text-xs text-slate-500">
+                        {String(index + 1).padStart(2, "0")}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-display text-base font-semibold text-white">
+                          {module.title}
+                        </div>
+                        <div className="mt-1 flex flex-wrap gap-2 font-mono text-[9px] text-slate-400">
+                          <span>{module.difficulty}</span>
+                          <span>·</span>
+                          <span>{module.duration_minutes} min</span>
+                        </div>
+                      </div>
+                      {module.locked ? (
+                        <Lock className="h-4 w-4 text-slate-500" />
+                      ) : complete ? (
+                        <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                      ) : (
+                        <PlayCircle className="h-5 w-5 text-cyan-300" />
+                      )}
+                    </button>
+                  );
                 })}
               </div>
             </div>
 
             {activeModule ? (
               <div className="border border-slate-700 bg-[#0a0f1d] p-5 md:p-7">
-                <div className="flex flex-wrap items-start justify-between gap-4"><div><div className="mono text-[10px] tracking-widest text-cyan-300">ROOM {String(modules.indexOf(activeModule) + 1).padStart(2, "0")} · {activeModule.difficulty.toUpperCase()}</div><h2 className="mt-2 font-display text-3xl font-semibold text-white">{activeModule.title}</h2></div><div className="flex items-center gap-1 font-mono text-xs text-slate-400"><Clock3 className="h-4 w-4 text-cyan-300" />{activeModule.duration_minutes} min</div></div>
-                <div className="mt-4 flex flex-wrap gap-2">{activeModule.tags.map((tag) => <span key={tag} className="border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 font-mono text-[9px] text-cyan-300">{tag}</span>)}</div>
-                <div className="mt-7 space-y-6">
-                  <Step icon={BookOpen} title="Read the room" body={activeModule.notes_md ?? "Review the module notes before moving to the tasks."} />
-                  <Step icon={Target} title="Walkthrough tasks" body={assignments.filter((assignment) => assignment.task_type === "walkthrough").map((assignment) => assignment.instructions).join(" ") || "Follow the guided practice lab and record the defensive decision you would make."} />
-                  <Step icon={FlaskConical} title="Associated practice labs" body={activeModule.practice_labs.join(" · ") || "Practice lab pathway will be added to this room soon."} />
-                  {assignments.filter((assignment) => assignment.task_type === "read_and_answer").map((assignment) => <AnswerTask key={assignment.id} assignment={assignment} moduleId={activeModule.id} disabled={saving === assignment.id} onSubmit={(response) => saveProgress({ module_id: activeModule.id, assignment_id: assignment.id, progress_type: "assignment", completed: true, score: 100, response })} />)}
-                  {quizzes.map((quiz) => <QuizTask key={quiz.id} quiz={quiz} selected={answers[quiz.id]} completed={completedQuizzes.has(quiz.id)} disabled={saving === quiz.id} onAnswer={(option) => { if (!requireAuth()) return; setAnswers({ ...answers, [quiz.id]: option }); void saveProgress({ module_id: activeModule.id, quiz_id: quiz.id, progress_type: "quiz", completed: option === quiz.correct_option, score: option === quiz.correct_option ? 100 : 0, response: String(option) }); }} />)}
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <div className="mono text-[10px] tracking-widest text-cyan-300">
+                      ROOM {String(modules.indexOf(activeModule) + 1).padStart(2, "0")} ·{" "}
+                      {activeModule.difficulty.toUpperCase()}
+                    </div>
+                    <h2 className="mt-2 font-display text-3xl font-semibold text-white">
+                      {activeModule.title}
+                    </h2>
+                  </div>
+                  <div className="flex items-center gap-1 font-mono text-xs text-slate-400">
+                    <Clock3 className="h-4 w-4 text-cyan-300" />
+                    {activeModule.duration_minutes} min
+                  </div>
                 </div>
-                <button onClick={() => { if (requireAuth()) void saveProgress({ module_id: activeModule.id, progress_type: "module", completed: true, score: 100 }); }} disabled={saving === activeModule.id || completedModules.has(activeModule.id)} className="mt-8 flex w-full items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 py-3 font-display text-xs font-bold tracking-wider text-slate-950 disabled:opacity-50">{completedModules.has(activeModule.id) ? "MODULE COMPLETE" : "MARK ROOM COMPLETE"} <ShieldCheck className="h-4 w-4" /></button>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {activeModule.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 font-mono text-[9px] text-cyan-300"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-7 space-y-6">
+                  <Step
+                    icon={BookOpen}
+                    title="Read the room"
+                    body={
+                      activeModule.notes_md ?? "Review the module notes before moving to the tasks."
+                    }
+                  />
+                  <Step
+                    icon={Target}
+                    title="Walkthrough tasks"
+                    body={
+                      assignments
+                        .filter((assignment) => assignment.task_type === "walkthrough")
+                        .map((assignment) => assignment.instructions)
+                        .join(" ") ||
+                      "Follow the guided practice lab and record the defensive decision you would make."
+                    }
+                  />
+                  <Step
+                    icon={FlaskConical}
+                    title="Associated practice labs"
+                    body={
+                      activeModule.practice_labs.join(" · ") ||
+                      "Practice lab pathway will be added to this room soon."
+                    }
+                  />
+                  {lessonSources.length > 0 && (
+                    <section className="border border-slate-700 bg-slate-900/50 p-4">
+                      <h3 className="mb-3 font-mono text-[10px] tracking-widest text-cyan-300">
+                        REFERENCES · VERIFIED {lessonSources.length} SOURCE
+                        {lessonSources.length === 1 ? "" : "S"}
+                      </h3>
+                      <ul className="space-y-3">
+                        {lessonSources.map((reference) => {
+                          const source = data?.sources.find(
+                            (item) => item.id === reference.source_id,
+                          );
+                          if (!source) return null;
+                          return (
+                            <li key={reference.source_id} className="text-xs">
+                              <a
+                                href={source.official_url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="font-semibold text-white underline decoration-cyan-400/50 underline-offset-2 hover:text-cyan-300"
+                              >
+                                {source.name}
+                              </a>
+                              <div className="mt-1 text-slate-400">
+                                {reference.relevant_topic} · Accessed {reference.accessed_on}
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </section>
+                  )}
+                  {assignments
+                    .filter((assignment) => assignment.task_type === "read_and_answer")
+                    .map((assignment) => (
+                      <AnswerTask
+                        key={assignment.id}
+                        assignment={assignment}
+                        moduleId={activeModule.id}
+                        disabled={saving === assignment.id}
+                        onSubmit={(response) =>
+                          saveProgress({
+                            module_id: activeModule.id,
+                            assignment_id: assignment.id,
+                            progress_type: "assignment",
+                            completed: true,
+                            score: 100,
+                            response,
+                          })
+                        }
+                      />
+                    ))}
+                  {quizzes.map((quiz) => (
+                    <QuizTask
+                      key={quiz.id}
+                      quiz={quiz}
+                      selected={answers[quiz.id]}
+                      completed={completedQuizzes.has(quiz.id)}
+                      disabled={saving === quiz.id}
+                      onAnswer={(option) => {
+                        if (!requireAuth()) return;
+                        setAnswers({ ...answers, [quiz.id]: option });
+                        void saveProgress({
+                          module_id: activeModule.id,
+                          quiz_id: quiz.id,
+                          progress_type: "quiz",
+                          completed: option === quiz.correct_option,
+                          score: option === quiz.correct_option ? 100 : 0,
+                          response: String(option),
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={() => {
+                    if (requireAuth())
+                      void saveProgress({
+                        module_id: activeModule.id,
+                        progress_type: "module",
+                        completed: true,
+                        score: 100,
+                      });
+                  }}
+                  disabled={saving === activeModule.id || completedModules.has(activeModule.id)}
+                  className="mt-8 flex w-full items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-400 py-3 font-display text-xs font-bold tracking-wider text-slate-950 disabled:opacity-50"
+                >
+                  {completedModules.has(activeModule.id) ? "MODULE COMPLETE" : "MARK ROOM COMPLETE"}{" "}
+                  <ShieldCheck className="h-4 w-4" />
+                </button>
               </div>
-            ) : <div className="flex min-h-80 items-center justify-center border border-dashed border-slate-700 font-mono text-sm text-slate-400">Select a room to begin.</div>}
+            ) : (
+              <div className="flex min-h-80 items-center justify-center border border-dashed border-slate-700 font-mono text-sm text-slate-400">
+                Select a room to begin.
+              </div>
+            )}
           </section>
         )}
-        {!user && <p className="mt-8 text-center font-mono text-xs text-slate-400">Progress is saved after <Link to="/login" search={{ next: "/academy" }} className="text-cyan-300">sign in</Link>.</p>}
+        {!user && (
+          <p className="mt-8 text-center font-mono text-xs text-slate-400">
+            Progress is saved after{" "}
+            <Link to="/login" search={{ next: "/academy" }} className="text-cyan-300">
+              sign in
+            </Link>
+            .
+          </p>
+        )}
       </div>
     </main>
   );
@@ -254,30 +633,119 @@ function quizzesForModules(quizzes: Quiz[], modules: Module[]) {
 }
 
 function jsonStrings(value: Json): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
 }
 
 function ProgressBar({ value, label }: { value: number; label: string }) {
-  return <div className="mt-5"><div className="mb-2 flex justify-between font-mono text-[10px] text-slate-400"><span>{label}</span><span>{value}%</span></div><div className="h-1.5 overflow-hidden bg-slate-800"><div className="h-full bg-cyan-400 transition-all" style={{ width: `${value}%` }} /></div></div>;
+  return (
+    <div className="mt-5">
+      <div className="mb-2 flex justify-between font-mono text-[10px] text-slate-400">
+        <span>{label}</span>
+        <span>{value}%</span>
+      </div>
+      <div className="h-1.5 overflow-hidden bg-slate-800">
+        <div className="h-full bg-cyan-400 transition-all" style={{ width: `${value}%` }} />
+      </div>
+    </div>
+  );
 }
 
 function Step({ icon: Icon, title, body }: { icon: typeof BookOpen; title: string; body: string }) {
-  return <div className="border-l-2 border-cyan-400/50 pl-4"><div className="flex items-center gap-2 font-display text-sm font-semibold text-white"><Icon className="h-4 w-4 text-cyan-300" />{title}</div><p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-400">{body}</p></div>;
+  return (
+    <div className="border-l-2 border-cyan-400/50 pl-4">
+      <div className="flex items-center gap-2 font-display text-sm font-semibold text-white">
+        <Icon className="h-4 w-4 text-cyan-300" />
+        {title}
+      </div>
+      <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-400">{body}</p>
+    </div>
+  );
 }
 
-function QuizTask({ quiz, selected, completed, disabled, onAnswer }: { quiz: Quiz; selected?: number; completed: boolean; disabled: boolean; onAnswer: (option: number) => void }) {
-  return <div className="border border-slate-700 bg-slate-950/60 p-4"><div className="mb-3 flex items-center justify-between"><span className="mono text-[10px] tracking-widest text-cyan-300">KNOWLEDGE CHECK</span>{completed && <CheckCircle2 className="h-4 w-4 text-emerald-400" />}</div><p className="text-sm font-semibold text-white">{quiz.question}</p><div className="mt-3 grid gap-2">{quiz.options.map((option, index) => <button key={option} onClick={() => onAnswer(index)} disabled={disabled || completed} className={`border px-3 py-2 text-left text-xs transition ${selected === index ? index === quiz.correct_option && completed ? "border-emerald-400 bg-emerald-400/10 text-emerald-300" : "border-cyan-400 bg-cyan-400/10 text-cyan-200" : "border-slate-700 text-slate-400 hover:border-cyan-400/50"}`}>{option}</button>)}</div>{completed && quiz.explanation && <p className="mt-3 font-mono text-[10px] text-emerald-300">→ {quiz.explanation}</p>}</div>;
+function QuizTask({
+  quiz,
+  selected,
+  completed,
+  disabled,
+  onAnswer,
+}: {
+  quiz: Quiz;
+  selected?: number;
+  completed: boolean;
+  disabled: boolean;
+  onAnswer: (option: number) => void;
+}) {
+  return (
+    <div className="border border-slate-700 bg-slate-950/60 p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <span className="mono text-[10px] tracking-widest text-cyan-300">KNOWLEDGE CHECK</span>
+        {completed && <CheckCircle2 className="h-4 w-4 text-emerald-400" />}
+      </div>
+      <p className="text-sm font-semibold text-white">{quiz.question}</p>
+      <div className="mt-3 grid gap-2">
+        {quiz.options.map((option, index) => (
+          <button
+            key={option}
+            onClick={() => onAnswer(index)}
+            disabled={disabled || completed}
+            className={`border px-3 py-2 text-left text-xs transition ${selected === index ? (index === quiz.correct_option && completed ? "border-emerald-400 bg-emerald-400/10 text-emerald-300" : "border-cyan-400 bg-cyan-400/10 text-cyan-200") : "border-slate-700 text-slate-400 hover:border-cyan-400/50"}`}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+      {completed && quiz.explanation && (
+        <p className="mt-3 font-mono text-[10px] text-emerald-300">→ {quiz.explanation}</p>
+      )}
+    </div>
+  );
 }
 
-function AnswerTask({ assignment, moduleId: _moduleId, disabled, onSubmit }: { assignment: Assignment; moduleId: string; disabled: boolean; onSubmit: (response: string) => void }) {
+function AnswerTask({
+  assignment,
+  moduleId: _moduleId,
+  disabled,
+  onSubmit,
+}: {
+  assignment: Assignment;
+  moduleId: string;
+  disabled: boolean;
+  onSubmit: (response: string) => void;
+}) {
   const [response, setResponse] = useState("");
   const submit = () => {
     if (!response.trim()) return;
-    if (assignment.expected_answer && !response.toLowerCase().includes(assignment.expected_answer.toLowerCase())) {
+    if (
+      assignment.expected_answer &&
+      !response.toLowerCase().includes(assignment.expected_answer.toLowerCase())
+    ) {
       toast.error("Not quite. Re-read the room and try the expected keyword.");
       return;
     }
     onSubmit(response);
   };
-  return <div className="border border-slate-700 bg-slate-950/60 p-4"><div className="mono text-[10px] tracking-widest text-cyan-300">READ &amp; ANSWER</div><p className="mt-2 text-sm font-semibold text-white">{assignment.title}</p><p className="mt-2 text-xs leading-relaxed text-slate-400">{assignment.instructions}</p><div className="mt-3 flex gap-2"><input value={response} onChange={(event) => setResponse(event.target.value)} placeholder="Type your answer..." className="min-w-0 flex-1 border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400" /><button onClick={submit} disabled={disabled || !response.trim()} className="border border-cyan-400 px-3 py-2 font-mono text-[10px] text-cyan-300 disabled:opacity-50">SAVE</button></div></div>;
+  return (
+    <div className="border border-slate-700 bg-slate-950/60 p-4">
+      <div className="mono text-[10px] tracking-widest text-cyan-300">READ &amp; ANSWER</div>
+      <p className="mt-2 text-sm font-semibold text-white">{assignment.title}</p>
+      <p className="mt-2 text-xs leading-relaxed text-slate-400">{assignment.instructions}</p>
+      <div className="mt-3 flex gap-2">
+        <input
+          value={response}
+          onChange={(event) => setResponse(event.target.value)}
+          placeholder="Type your answer..."
+          className="min-w-0 flex-1 border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-cyan-400"
+        />
+        <button
+          onClick={submit}
+          disabled={disabled || !response.trim()}
+          className="border border-cyan-400 px-3 py-2 font-mono text-[10px] text-cyan-300 disabled:opacity-50"
+        >
+          SAVE
+        </button>
+      </div>
+    </div>
+  );
 }
