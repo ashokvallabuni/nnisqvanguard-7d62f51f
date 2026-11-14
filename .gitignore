@@ -45,3 +45,5 @@ lab_runner_deploy_key*
 
 # Scratch & Temporary Testing Files
 scratch/
+.auxly/
+supabase/.temp/

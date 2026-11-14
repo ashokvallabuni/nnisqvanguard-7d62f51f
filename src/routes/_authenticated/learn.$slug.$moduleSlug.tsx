@@ -450,7 +450,7 @@ function ModuleLearningPage() {
  if (!data) return [];
  const { data: questions, error: questionError } = await supabase
  .from("academy_quiz_questions")
- .select("id,quiz_id,question,options,correct_answer,explanation,display_order")
+ .select("id,quiz_id,question,options,explanation,display_order")
  .eq("quiz_id", data.id)
  .order("display_order");
  if (questionError) throw questionError;
@@ -459,7 +459,6 @@ function ModuleLearningPage() {
  module_id: currentModule!.id,
  question: question.question,
  options: Array.isArray(question.options) ? question.options.filter((option): option is string => typeof option === "string") : [],
- correct_option: question.correct_answer,
  explanation: question.explanation,
  sort_order: question.display_order,
  }));
@@ -482,7 +481,6 @@ function ModuleLearningPage() {
  module_id: currentModule!.id,
  question: q.question,
  options: q.options,
- correct_option: q.correct_option,
  explanation: q.explanation,
  sort_order: idx + 1,
  }));
@@ -495,7 +493,6 @@ function ModuleLearningPage() {
  module_id: currentModule!.id,
  question: q.question,
  options: q.options,
- correct_option: q.correct_option,
  explanation: q.explanation,
  sort_order: idx + 1,
  }));
@@ -508,7 +505,6 @@ function ModuleLearningPage() {
  module_id: currentModule!.id,
  question: q.question,
  options: q.options,
- correct_option: q.correct_option,
  explanation: q.explanation,
  sort_order: idx + 1,
  }));
@@ -956,7 +952,8 @@ function ModuleLearningPage() {
  {quizzes.map((q, qIndex) => {
  const selected = selectedAnswers[q.id];
  const isChecked = checkedQuizzes[q.id];
- const isCorrect = selected === q.correct_option;
+ const serverResult = quizResults[q.id];
+ const isCorrect = serverResult?.is_correct ?? false;
  const options = Array.isArray(q.options) ? q.options : [];
 
  return (
@@ -978,7 +975,7 @@ function ModuleLearningPage() {
  "border-border bg-card hover:border-primary/50 text-foreground";
 
  if (isChecked) {
- if (oIndex === q.correct_option) {
+ if (isThisSelected && isCorrect) {
  optionStyle =
  "border-success bg-success/10 text-success font-medium";
  } else if (isThisSelected && !isCorrect) {
@@ -999,7 +996,7 @@ function ModuleLearningPage() {
  className={`w-full text-left p-3 min-h-[48px] rounded-lg border text-xs sm:text-sm flex items-center justify-between transition-all ${optionStyle}`}
  >
  <span>{String(opt)}</span>
- {isChecked && oIndex === q.correct_option && (
+ {isChecked && isThisSelected && isCorrect && (
  <Check className="w-4 h-4 text-success shrink-0" />
  )}
  {isChecked && isThisSelected && !isCorrect && (

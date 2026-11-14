@@ -3,7 +3,7 @@
  *
  * Security contract:
  * - Browser submits ONLY: quizId, selectedOption (number)
- * - Server fetches correct_option from quizzes table server-side
+ * - Server fetches answer keys server-side
  * - is_correct and score are calculated server-side; never trusted from client
  * - correct_option is never returned to the browser
  *
@@ -28,7 +28,7 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  .handler(async ({ data, context }) => {
  const { supabase, userId } = context;
 
- // ── 1. Fetch quiz with correct_option server-side (never trust the client)
+ // ── 1. Fetch legacy quiz answers server-side (never trust the client)
  let correctOption: number | null = null;
  let quizExplanation: string | null = null;
  let academyQuizId: string | null = null;
@@ -70,13 +70,18 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  explanation: "Your session has expired. Please sign in again to continue.",
  };
  }
+ }
 
  if (correctOption === null) {
- const { data: academyQuestion } = await supabase
+ const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+ const { data: academyQuestion, error: academyQuestionError } = await supabaseAdmin
  .from("academy_quiz_questions")
- .select("quiz_id,question,correct_answer,explanation")
+ .select("id,quiz_id,correct_answer,explanation")
  .eq("id", data.quizId)
  .maybeSingle();
+ if (academyQuestionError) {
+ throw academyQuestionError;
+ }
  if (academyQuestion) {
  const { data: academyQuiz } = await supabase
  .from("academy_quizzes")
@@ -97,7 +102,6 @@ export const submitQuizAnswer = createServerFn({ method: "POST" })
  correctOption = academyQuestion.correct_answer;
  quizExplanation = academyQuestion.explanation;
  academyQuizId = academyQuiz.id;
- }
  }
  }
 
